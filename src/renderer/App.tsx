@@ -30,12 +30,23 @@ import { AboutScreen } from './screens/AboutScreen';
 const drawerWidth = 200;
 const mdTheme = createTheme();
 
-export function App() {
-  const linkeStyle = {
-    textDecoration: 'none',
-    color: 'black',
-  };
+const links = [
+  { id: 0, to: '/', icon: <HomeIcon />, text: 'Home' },
+  // eslint-disable-next-line prettier/prettier
+  { id: 1, to: '/wallets', icon: <AccountBalanceWalletIcon />, text: 'Wallets' },
+  { id: 2, to: '/coins', icon: <AddShoppingCartIcon />, text: 'Coins' },
+  { id: 3, to: '/chart', icon: <ShowChartIcon />, text: 'Chart' },
+  { id: 4, to: '/monitor', icon: <MonitorIcon />, text: 'Monitor' },
+  { id: 5, to: '/settings', icon: <SettingsIcon />, text: 'Settings' },
+  { id: 6, to: '/about', icon: <InfoIcon />, text: 'About' },
+];
 
+const linkStyle = {
+  textDecoration: 'none',
+  color: 'black',
+};
+
+export function App() {
   return (
     <Router>
       <ThemeProvider theme={mdTheme}>
@@ -43,62 +54,16 @@ export function App() {
           <CssBaseline />
           <Drawer style={{ width: drawerWidth }} variant="persistent" open>
             <List style={{ width: drawerWidth }}>
-              <Link to="/" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Home" />
-                </ListItem>
-              </Link>
-              <Link to="/wallets" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <AccountBalanceWalletIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Wallets" />
-                </ListItem>
-              </Link>
-              <Link to="/coins" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <AddShoppingCartIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Coins" />
-                </ListItem>
-              </Link>
-              <Link to="/chart" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <ShowChartIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Chart" />
-                </ListItem>
-              </Link>
-              <Link to="/monitor" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <MonitorIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Monitor" />
-                </ListItem>
-              </Link>
-              <Link to="/settings" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <SettingsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Settings" />
-                </ListItem>
-              </Link>
-              <Link to="/about" style={linkeStyle}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <InfoIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="About" />
-                </ListItem>
-              </Link>
+              {links.map((value) => {
+                return (
+                  <Link key={value.id} to={value.to} style={linkStyle}>
+                    <ListItem button>
+                      <ListItemIcon>{value.icon}</ListItemIcon>
+                      <ListItemText primary={value.text} />
+                    </ListItem>
+                  </Link>
+                );
+              })}
             </List>
           </Drawer>
           <Switch>
