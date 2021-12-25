@@ -68,8 +68,7 @@
     "email": "michael.vastarelli@gmail.com"
   },
   "license": "MIT",
-  "keywords": [
-  ],
+  "keywords": [],
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
@@ -173,6 +172,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.5",
     "@mui/styles": "^5.2.3",
+    "@mui/x-data-grid": "^5.2.1",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.1",
     "electron-updater": "^4.6.4",
