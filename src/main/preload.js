@@ -5,6 +5,10 @@ contextBridge.exposeInMainWorld('electron', {
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
     },
+    echo(message) {
+      const result = ipcRenderer.invoke('my-message', message);
+      console.log(`Received reply: ${result}`);
+    },
     on(channel, func) {
       const validChannels = ['ipc-example'];
       if (validChannels.includes(channel)) {
