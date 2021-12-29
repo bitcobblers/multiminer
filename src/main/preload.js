@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld('electron', {
     },
     echo(message) {
       const result = ipcRenderer.invoke('my-message', message);
+
+      // eslint-disable-next-line no-console
       console.log(`Received reply: ${result}`);
     },
     on(channel, func) {

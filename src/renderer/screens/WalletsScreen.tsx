@@ -3,15 +3,14 @@ import { useState } from 'react';
 import { Button, Container } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 
 import { Wallet } from '../../models/Wallet';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { RemoveWalletsConfirmationDialog } from '../components/RemoveWalletsConfirmationDialog';
 
 const data: Wallet[] = [
-  { id: 0, name: 'mywallet1', network: 'ETH', address: '12345' },
-  { id: 1, name: 'mywallet2', network: 'BTC,TRC', address: '54321' },
+  { id: 0, name: 'mywallet1', network: 'ETH', address: '12345', memo: '' },
+  { id: 1, name: 'mywallet2', network: 'BSC', address: '54321', memo: '' },
 ];
 
 export function WalletsScreen() {
@@ -40,26 +39,29 @@ export function WalletsScreen() {
     {
       field: 'network',
       headerName: 'Network',
-      flex: 2,
+      flex: 1,
       editable: true,
-      sortable: false,
-      renderCell: (params: { value: string }) => {
-        const networkRaw: string = params.value.trim();
-
-        if (networkRaw === '') {
-          return <div />;
-        }
-
-        const networks = networkRaw.split(/[\s,;]+/).filter((n) => n.length > 0);
-
-        return (
-          <div>
-            {networks.map((n) => {
-              return <Chip key={n} label={n.toUpperCase()} variant="outlined" />;
-            })}
-          </div>
-        );
+      sortable: true,
+      preProcessEditCellProps: (params) => {
+        const { value } = params.props;
+        const isValid = isNotEmpty(value as string);
+        return { ...params.props, error: !isValid };
       },
+      // renderEditCell: (params) => {
+      //   let { value } = params;
+
+      //   const handleChange = (event: unknown, child: { props: { value: string | number | boolean | object | Date | null | undefined } }) => {
+      //     value = child.props.value;
+      //   };
+
+      //   return (
+      //     <Select id="select-network" label="Network" value={value} sx={{ width: '100%' }} onChange={handleChange}>
+      //       <MenuItem value="ETH">ETH</MenuItem>
+      //       <MenuItem value="BSC">BSC</MenuItem>
+      //       <MenuItem value="TRX">TRX</MenuItem>
+      //     </Select>
+      //   );
+      // },
     },
     {
       field: 'address',
@@ -71,6 +73,16 @@ export function WalletsScreen() {
         const { value } = params.props;
         const isValid = isNotEmpty(value as string);
         return { ...params.props, error: !isValid };
+      },
+    },
+    {
+      field: 'memo',
+      headerName: 'Memo',
+      flex: 2,
+      editable: true,
+      sortable: false,
+      preProcessEditCellProps: (params) => {
+        return { ...params.props, error: false };
       },
     },
   ];
@@ -95,8 +107,9 @@ export function WalletsScreen() {
     const newWallet: Wallet = {
       id: idCounter,
       name: generateWalletName(),
-      network: '',
+      network: 'ETH',
       address: '',
+      memo: '',
     };
 
     setIdCounter(idCounter + 1);
@@ -105,6 +118,7 @@ export function WalletsScreen() {
 
   const deleteWallets = () => setIsDeleteConfirmationOpen(true);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelectionModelChange = (model: number[] | any[]) => {
     setSelectedWallets([...wallets.filter((w: Wallet) => (model as number[]).filter((id) => id === w.id).length > 0)]);
     setNumSelectedWallets(model.length);
