@@ -26,6 +26,14 @@ export default class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
+// IPC Support.
+
+ipcMain.handle('ipc-readSettings', async (event, arg) => {
+  return app.getAppPath();
+});
+
+ipcMain.handle('ipc-writeSettings', (event, arg) => {});
+
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -74,8 +82,10 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1200,
+    height: 800,
+    minWidth: 1000,
+    minHeight: 600,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

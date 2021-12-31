@@ -18,6 +18,9 @@ import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
+// Services.
+import { AppSettingsService } from './services/AppSettingsService';
+
 // Screens.
 import { HomeScreen } from './screens/HomeScreen';
 import { WalletsScreen } from './screens/WalletsScreen';
@@ -32,7 +35,6 @@ const mdTheme = createTheme();
 
 const links = [
   { id: 0, to: '/', icon: <HomeIcon />, text: 'Home' },
-  // eslint-disable-next-line prettier/prettier
   { id: 1, to: '/wallets', icon: <AccountBalanceWalletIcon />, text: 'Wallets' },
   { id: 2, to: '/coins', icon: <AddShoppingCartIcon />, text: 'Coins' },
   { id: 3, to: '/chart', icon: <ShowChartIcon />, text: 'Chart' },
@@ -47,6 +49,8 @@ const linkStyle = {
 };
 
 export function App() {
+  const appSettingsService = new AppSettingsService(window.electron.serviceSettings);
+
   return (
     <Router>
       <ThemeProvider theme={mdTheme}>
@@ -67,7 +71,8 @@ export function App() {
             </List>
           </Drawer>
           <Switch>
-            <Route path="/wallets" component={WalletsScreen} />
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Route path="/wallets" render={(props) => <WalletsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/coins" component={CoinsScreen} />
             <Route path="/chart" component={ChartScreen} />
             <Route path="/monitor" component={MonitorScreen} />

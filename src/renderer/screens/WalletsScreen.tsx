@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FunctionComponent, useState } from 'react';
 
 import { Button, Container } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -8,12 +8,18 @@ import { Wallet } from '../../models/Wallet';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { RemoveWalletsConfirmationDialog } from '../components/RemoveWalletsConfirmationDialog';
 
+import { AppSettingsService } from '../services/AppSettingsService';
+
 const data: Wallet[] = [
   { id: 0, name: 'mywallet1', network: 'ETH', address: '12345', memo: '' },
   { id: 1, name: 'mywallet2', network: 'BSC', address: '54321', memo: '' },
 ];
 
-export function WalletsScreen() {
+interface WalletsScreenProps {
+  appSettingsService: AppSettingsService;
+}
+
+export const WalletsScreen: FunctionComponent<WalletsScreenProps> = () => {
   const [idCounter, setIdCounter] = useState(data.length);
   const [wallets, setWallets] = useState(data);
   const [selectedWallets, setSelectedWallets] = useState([] as Wallet[]);
@@ -33,6 +39,7 @@ export function WalletsScreen() {
       preProcessEditCellProps: (params) => {
         const { value } = params.props;
         const isValid = isNotEmpty(value as string);
+
         return { ...params.props, error: !isValid };
       },
     },
@@ -47,21 +54,6 @@ export function WalletsScreen() {
         const isValid = isNotEmpty(value as string);
         return { ...params.props, error: !isValid };
       },
-      // renderEditCell: (params) => {
-      //   let { value } = params;
-
-      //   const handleChange = (event: unknown, child: { props: { value: string | number | boolean | object | Date | null | undefined } }) => {
-      //     value = child.props.value;
-      //   };
-
-      //   return (
-      //     <Select id="select-network" label="Network" value={value} sx={{ width: '100%' }} onChange={handleChange}>
-      //       <MenuItem value="ETH">ETH</MenuItem>
-      //       <MenuItem value="BSC">BSC</MenuItem>
-      //       <MenuItem value="TRX">TRX</MenuItem>
-      //     </Select>
-      //   );
-      // },
     },
     {
       field: 'address',
@@ -159,4 +151,4 @@ export function WalletsScreen() {
       </Box>
     </Container>
   );
-}
+};
