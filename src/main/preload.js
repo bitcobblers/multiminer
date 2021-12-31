@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
-  serviceSettings: {
+  settings: {
     readSettings() {
       return ipcRenderer.invoke('ipc-readSettings');
     },

@@ -49,7 +49,7 @@ const linkStyle = {
 };
 
 export function App() {
-  const appSettingsService = new AppSettingsService(window.electron.serviceSettings);
+  const appSettingsService = new AppSettingsService(window.electron.settings);
 
   return (
     <Router>

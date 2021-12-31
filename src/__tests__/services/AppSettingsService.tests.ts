@@ -5,8 +5,8 @@ describe('App Settings Service', () => {
   it('should return default on empty string.', async () => {
     // Arrange.
     const api: SettingsApi = {
-      readSettings: () => Promise.resolve(''),
-      writeSettings: () => Promise.resolve(),
+      read: () => Promise.resolve(''),
+      write: () => Promise.resolve(),
     };
 
     const service = new AppSettingsService(api);
@@ -21,11 +21,11 @@ describe('App Settings Service', () => {
   it('should not call api when saving null settings.', async () => {
     // Arrange.
     const api: SettingsApi = {
-      readSettings: () => Promise.resolve(''),
-      writeSettings: () => Promise.resolve(),
+      read: () => Promise.resolve(''),
+      write: () => Promise.resolve(),
     };
 
-    const spy = jest.spyOn(api, 'writeSettings');
+    const spy = jest.spyOn(api, 'write');
     const settings = AppSettingsService.DefaultSettings;
     const service = new AppSettingsService(api);
 

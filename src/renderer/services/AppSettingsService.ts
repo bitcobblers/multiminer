@@ -32,7 +32,7 @@ export class AppSettingsService {
   }
 
   async getSettings(): Promise<AppSettings> {
-    const content = await this.api.readSettings();
+    const content = await this.api.read();
 
     if (content !== '') {
       return JSON.parse(content) as AppSettings;
@@ -43,7 +43,7 @@ export class AppSettingsService {
 
   async saveSettings(settings: AppSettings): Promise<void> {
     if (settings) {
-      await this.api.writeSettings(JSON.stringify(settings));
+      await this.api.write(JSON.stringify(settings));
     }
   }
 }
