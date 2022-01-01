@@ -1,6 +1,6 @@
 export type SettingsApi = {
-  read: () => Promise<string>;
-  write: (settings: string) => Promise<void>;
+  read: (key: string) => Promise<string>;
+  write: (key: string, content: string) => Promise<void>;
 };
 
 export interface IElectronApi {

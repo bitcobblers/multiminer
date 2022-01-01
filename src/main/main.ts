@@ -16,6 +16,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 
+import { LoadSettingsHandlers } from './modules/settings';
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -27,23 +29,7 @@ export default class AppUpdater {
 let mainWindow: BrowserWindow | null = null;
 
 // IPC Support.
-
-ipcMain.handle('ipc-readSettings', async (event, arg) => {
-  return app.getAppPath();
-});
-
-ipcMain.handle('ipc-writeSettings', (event, arg) => {});
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
-ipcMain.on('my-message', async (event, arg) => {
-  console.log(`Message received: ${arg}`);
-  event.reply('my-message', arg);
-});
+LoadSettingsHandlers(ipcMain);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
