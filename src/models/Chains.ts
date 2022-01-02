@@ -7,7 +7,7 @@ export type Chain = {
 
 export const AllChains: Chain[] = [
   { name: 'BSC', description: 'Binance Smart Chain', token_format: '^(0x){0-9A-Fa-f}{40}$' },
-  { name: 'BSCV2', description: 'Binance Smart Chain - SFM V2 Migration', token_format: '^(0x){0-9A-Fa-f}{40}$' },
+  { name: 'BSC-V2', description: 'Binance Smart Chain - SFM V2 Migration', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'ETH', description: 'Ethereum', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'ETC', description: 'Ethereum Classic', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'MATIC', description: 'Polygon', token_format: '^(0x){0-9A-Fa-f}{40}$' },

@@ -1,22 +1,27 @@
 import React from 'react';
 
-import { Button, Container } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
+import { Button, Container, Divider, Stack, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
 
 import { Wallet } from '../../models/Wallet';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { RemoveWalletsConfirmationDialog } from '../components/RemoveWalletsConfirmationDialog';
-
+import { EditWalletDialog } from '../components/EditWalletDialog';
 import { AppSettingsService } from '../services/AppSettingsService';
 
+type WalletRecord = Wallet & { id: number };
+
 interface WalletsScreenState {
-  idCounter: number;
-  wallets: Wallet[];
-  selectedWallets: Wallet[];
-  numSelectedWallets: number;
-  isDeleteDisabled: boolean;
+  currentWallet: WalletRecord;
+  isCurrentWalletNew: boolean;
+  wallets: WalletRecord[];
   isDeleteConfirmationOpen: boolean;
+  isEditDialogOpen: boolean;
 }
 
 interface WalletsScreenProps {
@@ -24,164 +29,138 @@ interface WalletsScreenProps {
 }
 
 export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsScreenState> {
-  static isNotEmpty(value: string) {
-    return value.trim() !== '';
-  }
-
   constructor(props: WalletsScreenProps) {
     super(props);
 
     this.state = {
-      idCounter: 0,
+      currentWallet: this.emptyWallet(),
+      isCurrentWalletNew: true,
       wallets: [],
-      selectedWallets: [],
-      numSelectedWallets: 0,
-      isDeleteDisabled: true,
       isDeleteConfirmationOpen: false,
+      isEditDialogOpen: false,
     };
   }
 
   async componentDidMount() {
     const { appSettingsService } = this.props;
-
-    this.setState({
-      wallets: await appSettingsService.getWallets(),
-    });
+    this.remapWallets(await appSettingsService.getWallets());
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getColumns(): GridColDef[] {
-    return [
-      {
-        field: 'name',
-        headerName: 'Name',
-        flex: 1,
-        editable: true,
-        sortable: true,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        preProcessEditCellProps: (params: any) => {
-          const { value } = params.props;
-          const isValid = WalletsScreen.isNotEmpty(value as string);
-
-          return { ...params.props, error: !isValid };
-        },
-      },
-      {
-        field: 'network',
-        headerName: 'Network',
-        flex: 1,
-        editable: true,
-        sortable: true,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        preProcessEditCellProps: (params: any) => {
-          const { value } = params.props;
-          const isValid = WalletsScreen.isNotEmpty(value as string);
-          return { ...params.props, error: !isValid };
-        },
-      },
-      {
-        field: 'address',
-        headerName: 'Address',
-        flex: 7,
-        editable: true,
-        sortable: true,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        preProcessEditCellProps: (params: any) => {
-          const { value } = params.props;
-          const isValid = WalletsScreen.isNotEmpty(value as string);
-          return { ...params.props, error: !isValid };
-        },
-      },
-      {
-        field: 'memo',
-        headerName: 'Memo',
-        flex: 2,
-        editable: true,
-        sortable: false,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        preProcessEditCellProps: (params: any) => {
-          return { ...params.props, error: false };
-        },
-      },
-    ];
-  }
-
-  addWallet = () => {
-    const { idCounter, wallets } = this.state;
-
-    const newWallet: Wallet = {
-      id: idCounter,
-      name: this.generateWalletName(),
-      network: 'ETH',
-      address: '',
-      memo: '',
-    };
-
-    this.setState({
-      idCounter: idCounter + 1,
-      wallets: [...wallets].concat(newWallet),
-    });
-  };
-
-  deleteWallets = () => {
-    this.setState({
-      isDeleteConfirmationOpen: true,
-    });
-  };
-
-  generateWalletName = () => {
-    const { wallets } = this.state;
-    const baseName = 'new wallet';
-    let index = 1;
-
-    do {
-      const newName = baseName + index;
-      index += 1;
-
-      if (wallets.find((w) => w.name === newName) === undefined) {
-        return newName;
-      }
-
-      // eslint-disable-next-line no-constant-condition
-    } while (true);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleSelectionModelChange = (model: number[] | any[]) => {
-    const { wallets } = this.state;
-
-    this.setState({
-      selectedWallets: [...wallets.filter((w: Wallet) => (model as number[]).filter((id) => id === w.id).length > 0)],
-      numSelectedWallets: model.length,
-      isDeleteDisabled: model.length < 1,
-    });
-  };
-
-  handleOnClose = (result: boolean) => {
-    const { wallets, selectedWallets } = this.state;
-
-    this.setState({
-      isDeleteConfirmationOpen: false,
-    });
+  handleOnRemoveWalletClose = (result: boolean) => {
+    const { wallets, currentWallet } = this.state;
 
     if (result === true) {
-      setTimeout(() => {
-        this.setState({
-          wallets: [...wallets.filter((w: Wallet) => selectedWallets.filter((sw: Wallet) => sw.id === w.id).length < 1)],
-        });
+      this.setState({
+        isDeleteConfirmationOpen: false,
+        wallets: [...wallets.filter((w) => w.id !== currentWallet.id)],
+      });
+    } else {
+      this.setState({
+        isDeleteConfirmationOpen: false,
       });
     }
   };
 
+  handleOnEditWalletClose = (result: boolean) => {
+    const { wallets, currentWallet, isCurrentWalletNew } = this.state;
+
+    this.setState({
+      isEditDialogOpen: false,
+    });
+
+    if (result === false) {
+      return;
+    }
+
+    if (isCurrentWalletNew === true) {
+      this.remapWallets([...wallets, currentWallet]);
+    }
+  };
+
+  handleOnEditWalletSave = (wallet: Wallet) => {
+    const { wallets, currentWallet, isCurrentWalletNew } = this.state;
+    const index = wallets.findIndex((w) => w.id === currentWallet.id);
+
+    if (isCurrentWalletNew) {
+      this.setState({
+        isEditDialogOpen: false,
+      });
+
+      this.remapWallets([...wallets, wallet]);
+    } else {
+      const updatedCurrentWallet = { ...currentWallet, ...wallet };
+      const updatedWallets = [...wallets];
+
+      updatedWallets.splice(index, 1);
+      updatedWallets.splice(index, 0, updatedCurrentWallet);
+
+      this.setState({
+        isEditDialogOpen: false,
+        wallets: updatedWallets,
+      });
+    }
+  };
+
+  handleOnEditWalletCancel = () => {
+    this.setState({
+      isEditDialogOpen: false,
+    });
+  };
+
+  remapWallets = (wallets: Wallet[]) => {
+    let offset = 1;
+
+    const updatedWallets = wallets.map((w) => {
+      // eslint-disable-next-line no-plusplus
+      const id = { id: offset++ };
+      return { ...w, ...id };
+    });
+
+    this.setState({
+      wallets: updatedWallets,
+    });
+  };
+
+  emptyWallet = (): WalletRecord => {
+    return { id: 0, name: '', network: 'ETH', address: '', memo: '' };
+  };
+
+  addWallet = () => {
+    this.setState({
+      currentWallet: this.emptyWallet(),
+      isCurrentWalletNew: true,
+      isEditDialogOpen: true,
+    });
+  };
+
+  editWallet = (id: number) => {
+    const { wallets } = this.state;
+
+    this.setState({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      currentWallet: wallets.find((w) => w.id === id)!,
+      isCurrentWalletNew: false,
+      isEditDialogOpen: true,
+    });
+  };
+
+  deleteWallet = (id: number) => {
+    const { wallets } = this.state;
+
+    this.setState({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      currentWallet: wallets.find((w) => w.id === id)!,
+      isDeleteConfirmationOpen: true,
+    });
+  };
+
   render() {
-    const { isDeleteDisabled, isDeleteConfirmationOpen, numSelectedWallets, wallets } = this.state;
+    const { isDeleteConfirmationOpen, isEditDialogOpen, wallets, currentWallet, isCurrentWalletNew } = this.state;
+
     return (
       <Container>
         <ScreenHeader title="Wallets" />
         <Button onClick={this.addWallet}>Add Wallet</Button>
-        <Button onClick={this.deleteWallets} disabled={isDeleteDisabled}>
-          Delete
-        </Button>
         <Box
           sx={{
             '& .MuiDataGrid-cell--editing': {
@@ -194,8 +173,45 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
             },
           }}
         >
-          <RemoveWalletsConfirmationDialog open={isDeleteConfirmationOpen} onClose={this.handleOnClose} numSelectedWallets={numSelectedWallets} />
-          <DataGrid rows={wallets} columns={this.getColumns()} autoHeight hideFooter checkboxSelection onSelectionModelChange={this.handleSelectionModelChange} />
+          <RemoveWalletsConfirmationDialog open={isDeleteConfirmationOpen} onClose={this.handleOnRemoveWalletClose} />
+          <EditWalletDialog
+            open={isEditDialogOpen}
+            onSave={this.handleOnEditWalletSave}
+            onCancel={this.handleOnEditWalletCancel}
+            wallet={currentWallet}
+            isNew={isCurrentWalletNew}
+            existingWallets={wallets}
+          />
+          <Divider />
+          <TableContainer component={Paper}>
+            <Table aria-label="Wallets">
+              <TableHead>
+                <TableRow>
+                  <TableCell width="80px" />
+                  <TableCell width="15%">Name</TableCell>
+                  <TableCell width="10%">Network</TableCell>
+                  <TableCell width="60%">Address</TableCell>
+                  <TableCell width="15%">Memo</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {wallets.map((w) => (
+                  <TableRow key={w.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell>
+                      <Stack direction="row" spacing={1}>
+                        <DeleteIcon onClick={() => this.deleteWallet(w.id)} />
+                        <EditIcon onClick={() => this.editWallet(w.id)} />
+                      </Stack>
+                    </TableCell>
+                    <TableCell>{w.name}</TableCell>
+                    <TableCell>{w.network}</TableCell>
+                    <TableCell>{w.address}</TableCell>
+                    <TableCell>{w.memo}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </Container>
     );
