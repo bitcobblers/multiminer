@@ -39,29 +39,31 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnNameChange = (e: any) => {
     this.setState({
-      name: e.target.value,
+      name: e.target.value.trim(),
     });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnNetworkChange = (e: any) => {
+    const network = e.target.value.trim();
+
     this.setState({
-      network: e.target.value,
-      chain: AllChains.find((c) => c.name === e.target.value),
+      network,
+      chain: AllChains.find((c) => c.name === network),
     });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnAddressChange = (e: any) => {
     this.setState({
-      address: e.target.value,
+      address: e.target.value.trim(),
     });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnMemoChange = (e: any) => {
     this.setState({
-      memo: e.target.value,
+      memo: e.target.value.trim(),
     });
   };
 
@@ -69,12 +71,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
     const { onSave } = this.props;
     const { name, network, address, memo } = this.state;
 
-    onSave({
-      name: name.trim(),
-      network: network.trim(),
-      address: address.trim(),
-      memo: memo.trim(),
-    });
+    onSave({ name, network, address, memo });
   };
 
   handleOnCancel = () => {
@@ -84,9 +81,8 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   validateName = (): [boolean, string] => {
     const { name } = this.state;
     const { wallet, existingWallets } = this.props;
-    const trimmedName = name.trim();
 
-    if (trimmedName.length === 0) {
+    if (name.length === 0) {
       return [true, 'A wallet name must be provided.'];
     }
 
@@ -99,14 +95,13 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
   validateAddress = (): [boolean, string] => {
     const { address, chain } = this.state;
-    const trimmedAddress = address.trim();
     const addressFormat = chain?.token_format;
 
-    if (trimmedAddress.length === 0) {
+    if (address.length === 0) {
       return [true, 'A network address must be provided.'];
     }
 
-    if (addressFormat === undefined || trimmedAddress.match(addressFormat)) {
+    if (addressFormat === undefined || address.match(addressFormat)) {
       return [false, ''];
     }
 
@@ -115,10 +110,9 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
   validateMemo = (): [boolean, string] => {
     const { memo, chain } = this.state;
-    const trimmedMemo = memo.trim();
     const memoFormat = chain?.memo_format;
 
-    if (trimmedMemo.length === 0 || memoFormat === undefined || trimmedMemo.match(memoFormat)) {
+    if (memo.length === 0 || memoFormat === undefined || memo.match(memoFormat)) {
       return [false, ''];
     }
 

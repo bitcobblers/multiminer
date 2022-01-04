@@ -36,7 +36,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     super(props);
 
     this.state = {
-      newWallet: this.emptyWallet(),
+      newWallet: this.getEmptyWallet(),
       wallets: [],
       deletedWalletId: 0,
       isDeleteConfirmationOpen: false,
@@ -48,10 +48,9 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
   async componentDidMount() {
     const { appSettingsService } = this.props;
     const wallets = await appSettingsService.getWallets();
-    const updatedWallets = this.remapWallets(wallets);
 
     this.setState({
-      wallets: updatedWallets,
+      wallets: this.remapWallets(wallets),
     });
   }
 
@@ -120,7 +119,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
 
   addWallet = () => {
     this.setState({
-      newWallet: this.emptyWallet(),
+      newWallet: this.getEmptyWallet(),
       isEditingNew: true,
     });
   };
@@ -138,7 +137,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     });
   };
 
-  emptyWallet = () => {
+  getEmptyWallet = () => {
     return { id: 0, name: '', network: 'ETH', address: '', memo: '' } as Wallet;
   };
 

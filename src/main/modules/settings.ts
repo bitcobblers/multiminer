@@ -5,6 +5,7 @@ export function LoadSettingsHandlers(ipc: IpcMain) {
   const store = new Store();
 
   ipc.handle('ipc-readSetting', async (event, arg) => {
+    // eslint-disable-next-line no-console
     console.log(`ipc-readSetting invoked with: ${arg}`);
 
     if (store.has(arg)) {
@@ -15,6 +16,7 @@ export function LoadSettingsHandlers(ipc: IpcMain) {
   });
 
   ipc.handle('ipc-writeSetting', (event, arg) => {
+    // eslint-disable-next-line no-console
     console.log(`ipc-writeSetting invoked with: ${arg}`);
   });
 }

@@ -60,6 +60,7 @@ export class AppSettingsService {
   async set<T>(key: string, setting: T): Promise<void> {
     const content = JSON.stringify(setting);
 
+    // eslint-disable-next-line no-console
     console.log(`Calling set with content: ${content}`);
     await this.api.write(key, content);
   }
