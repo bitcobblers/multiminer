@@ -35,9 +35,9 @@ export class AppSettingsService {
   // eslint-disable-next-line class-methods-use-this
   async getWallets(): Promise<Wallet[]> {
     const defaultWallets: Wallet[] = [
-      { id: 0, name: 'mywallet1', network: 'ETH', address: '12345', memo: '' },
-      { id: 1, name: 'mywallet2', network: 'BSC', address: '54321', memo: '' },
-      { id: 2, name: 'mywallet3', network: 'KCC', address: '54321', memo: '' },
+      { name: 'mywallet1', network: 'ETH', address: '0xe141167eb550b999cb59f9ac202d2dfdd240a4a0', memo: '' },
+      { name: 'mywallet2', network: 'XLM', address: 'GD2BLIQF6SF3RJE4QOG64NOPRSEH6ASPEWLH7WJNSVQCP3ATOGQDGUOX', memo: '3128811' },
+      { name: 'mywallet3', network: 'TRX', address: 'TEP6m4AAWBPqLndTJAM1PH3RzkDPKV9D71', memo: '' },
     ];
 
     return this.get<Wallet[]>('wallets', defaultWallets);

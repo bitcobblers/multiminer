@@ -8,7 +8,7 @@ export type Chain = {
 export const AllChains: Chain[] = [
   { name: 'BSC', description: 'Binance Smart Chain', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'BSC-V2', description: 'Binance Smart Chain - SFM V2 Migration', token_format: '^(0x){0-9A-Fa-f}{40}$' },
-  { name: 'ETH', description: 'Ethereum', token_format: '^(0x){0-9A-Fa-f}{40}$' },
+  { name: 'ETH', description: 'Ethereum', token_format: '^(0x)[0-9A-Fa-f]{40}$' },
   { name: 'ETC', description: 'Ethereum Classic', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'MATIC', description: 'Polygon', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'KCC', description: 'Kucoin Community Chain', token_format: '^(0x){0-9A-Fa-f}{40}$' },
@@ -36,7 +36,7 @@ export const AllChains: Chain[] = [
   { name: 'SC', description: 'Siacoin', token_format: '^{A-Za-z0-9}{76}$' },
   { name: 'VET', description: 'VeChain', token_format: '^(0x){0-9A-Fa-f}{40}$' },
   { name: 'WAVES', description: 'Waves', token_format: '^(3P){0-9A-Za-z}{33}$' },
-  { name: 'XLM', description: 'Stellar Lumens', token_format: '^G{A-D}{1}{A-Z2-7}{54}$', memo_format: '^{0-9A-Za-z}{1,28}$' },
+  { name: 'XLM', description: 'Stellar Lumens', token_format: '^G[A-D]{1}[A-Z2-7]{54}$', memo_format: '^[0-9A-Za-z]{1,28}$' },
   { name: 'XMR', description: 'Monero', token_format: '^{48}{a-zA-Z|\\d}{94}({a-zA-Z|\\d}{11})?$' },
   { name: 'XRP', description: 'Ripple', token_format: '^r{1-9A-HJ-NP-Za-km-z}{25,34}$', memo_format: '^((?!0){0-9}{1,19})$' },
   { name: 'XTZ', description: 'Tezos', token_format: '^(tz{1,2,3}|KT1){a-zA-Z0-9}{33}$' },

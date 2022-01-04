@@ -3,7 +3,7 @@ import React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { Button, Container, Divider, Stack, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
+import { Button, Container, Stack, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -14,14 +14,17 @@ import { RemoveWalletsConfirmationDialog } from '../components/RemoveWalletsConf
 import { EditWalletDialog } from '../components/EditWalletDialog';
 import { AppSettingsService } from '../services/AppSettingsService';
 
-type WalletRecord = Wallet & { id: number };
+type WalletRecord = Wallet & {
+  id: number;
+};
 
 interface WalletsScreenState {
-  currentWallet: WalletRecord;
-  isCurrentWalletNew: boolean;
+  newWallet: Wallet;
   wallets: WalletRecord[];
+  deletedWalletId: number;
   isDeleteConfirmationOpen: boolean;
-  isEditDialogOpen: boolean;
+  isEditingNew: boolean;
+  openEditor: number;
 }
 
 interface WalletsScreenProps {
@@ -33,26 +36,32 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     super(props);
 
     this.state = {
-      currentWallet: this.emptyWallet(),
-      isCurrentWalletNew: true,
+      newWallet: this.emptyWallet(),
       wallets: [],
+      deletedWalletId: 0,
       isDeleteConfirmationOpen: false,
-      isEditDialogOpen: false,
+      isEditingNew: false,
+      openEditor: -1,
     };
   }
 
   async componentDidMount() {
     const { appSettingsService } = this.props;
-    this.remapWallets(await appSettingsService.getWallets());
+    const wallets = await appSettingsService.getWallets();
+    const updatedWallets = this.remapWallets(wallets);
+
+    this.setState({
+      wallets: updatedWallets,
+    });
   }
 
   handleOnRemoveWalletClose = (result: boolean) => {
-    const { wallets, currentWallet } = this.state;
+    const { wallets, deletedWalletId } = this.state;
 
     if (result === true) {
       this.setState({
         isDeleteConfirmationOpen: false,
-        wallets: [...wallets.filter((w) => w.id !== currentWallet.id)],
+        wallets: [...wallets.filter((w) => w.id !== deletedWalletId)],
       });
     } else {
       this.setState({
@@ -61,49 +70,39 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     }
   };
 
-  handleOnEditWalletClose = (result: boolean) => {
-    const { wallets, currentWallet, isCurrentWalletNew } = this.state;
+  handleOnAddWalletSave = (wallet: Wallet) => {
+    const { wallets } = this.state;
 
     this.setState({
-      isEditDialogOpen: false,
+      isEditingNew: false,
+      wallets: this.remapWallets([...wallets, wallet]),
     });
-
-    if (result === false) {
-      return;
-    }
-
-    if (isCurrentWalletNew === true) {
-      this.remapWallets([...wallets, currentWallet]);
-    }
   };
 
-  handleOnEditWalletSave = (wallet: Wallet) => {
-    const { wallets, currentWallet, isCurrentWalletNew } = this.state;
-    const index = wallets.findIndex((w) => w.id === currentWallet.id);
+  handleOnAddWalletCancel = () => {
+    this.setState({
+      isEditingNew: false,
+    });
+  };
 
-    if (isCurrentWalletNew) {
-      this.setState({
-        isEditDialogOpen: false,
-      });
+  handleOnEditWalletSave = (id: number, wallet: Wallet) => {
+    const { wallets } = this.state;
+    const index = wallets.findIndex((w) => w.id === id);
+    const updatedWallet = { ...wallet, ...{ id } };
+    const updatedWallets = [...wallets];
 
-      this.remapWallets([...wallets, wallet]);
-    } else {
-      const updatedCurrentWallet = { ...currentWallet, ...wallet };
-      const updatedWallets = [...wallets];
+    updatedWallets.splice(index, 1);
+    updatedWallets.splice(index, 0, updatedWallet);
 
-      updatedWallets.splice(index, 1);
-      updatedWallets.splice(index, 0, updatedCurrentWallet);
-
-      this.setState({
-        isEditDialogOpen: false,
-        wallets: updatedWallets,
-      });
-    }
+    this.setState({
+      wallets: updatedWallets,
+      openEditor: -1,
+    });
   };
 
   handleOnEditWalletCancel = () => {
     this.setState({
-      isEditDialogOpen: false,
+      openEditor: -1,
     });
   };
 
@@ -112,50 +111,42 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
 
     const updatedWallets = wallets.map((w) => {
       // eslint-disable-next-line no-plusplus
-      const id = { id: offset++ };
-      return { ...w, ...id };
+      const meta = { id: offset++, isEditing: false };
+      return { ...w, ...meta };
     });
 
-    this.setState({
-      wallets: updatedWallets,
-    });
-  };
-
-  emptyWallet = (): WalletRecord => {
-    return { id: 0, name: '', network: 'ETH', address: '', memo: '' };
+    return updatedWallets;
   };
 
   addWallet = () => {
     this.setState({
-      currentWallet: this.emptyWallet(),
-      isCurrentWalletNew: true,
-      isEditDialogOpen: true,
+      newWallet: this.emptyWallet(),
+      isEditingNew: true,
     });
   };
 
   editWallet = (id: number) => {
-    const { wallets } = this.state;
-
     this.setState({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      currentWallet: wallets.find((w) => w.id === id)!,
-      isCurrentWalletNew: false,
-      isEditDialogOpen: true,
+      openEditor: id,
     });
   };
 
   deleteWallet = (id: number) => {
-    const { wallets } = this.state;
-
     this.setState({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      currentWallet: wallets.find((w) => w.id === id)!,
+      deletedWalletId: id,
       isDeleteConfirmationOpen: true,
     });
   };
 
+  emptyWallet = () => {
+    return { id: 0, name: '', network: 'ETH', address: '', memo: '' } as Wallet;
+  };
+
+  // eslint-disable-next-line react/destructuring-assignment
+  getOpenEditor = (id: number) => this.state.openEditor === id;
+
   render() {
-    const { isDeleteConfirmationOpen, isEditDialogOpen, wallets, currentWallet, isCurrentWalletNew } = this.state;
+    const { isDeleteConfirmationOpen, newWallet, wallets, isEditingNew } = this.state;
 
     return (
       <Container>
@@ -174,15 +165,18 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
           }}
         >
           <RemoveWalletsConfirmationDialog open={isDeleteConfirmationOpen} onClose={this.handleOnRemoveWalletClose} />
-          <EditWalletDialog
-            open={isEditDialogOpen}
-            onSave={this.handleOnEditWalletSave}
-            onCancel={this.handleOnEditWalletCancel}
-            wallet={currentWallet}
-            isNew={isCurrentWalletNew}
-            existingWallets={wallets}
-          />
-          <Divider />
+          <EditWalletDialog key="edit-wallet-0" open={isEditingNew} onSave={this.handleOnAddWalletSave} onCancel={this.handleOnAddWalletCancel} wallet={newWallet} isNew existingWallets={wallets} />
+          {wallets.map((w) => (
+            <EditWalletDialog
+              key={`edit-wallet-${w.id}`}
+              open={this.getOpenEditor(w.id)}
+              onSave={(updatedWallet) => this.handleOnEditWalletSave(w.id, updatedWallet)}
+              onCancel={this.handleOnEditWalletCancel}
+              wallet={w}
+              isNew={false}
+              existingWallets={wallets}
+            />
+          ))}
           <TableContainer component={Paper}>
             <Table aria-label="Wallets">
               <TableHead>

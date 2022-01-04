@@ -4,15 +4,14 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, Typography, Grid, FormControl, Divider } from '@mui/material';
 import { Wallet } from '../../models/Wallet';
-import { AllChains } from '../../models/Chains';
+import { Chain, AllChains } from '../../models/Chains';
 
 interface EditWalletDialogState {
-  isInvalid: boolean;
-  originalName?: string;
-  name?: string;
-  network?: string;
-  address?: string;
-  memo?: string;
+  name: string;
+  network: string;
+  address: string;
+  memo: string;
+  chain?: Chain;
 }
 
 interface EditWalletDialogProps {
@@ -29,31 +28,26 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
     super(props);
 
     this.state = {
-      isInvalid: false,
+      name: props.wallet.name,
+      network: props.wallet.network,
+      address: props.wallet.address,
+      memo: props.wallet.memo,
+      chain: AllChains.find((c) => c.name === props.wallet.network),
     };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnNameChange = (e: any) => {
-    const { wallet } = this.props;
-    const { originalName } = this.state;
-
-    if (originalName === undefined) {
-      this.setState({
-        originalName: wallet.name,
-        name: e.target.value,
-      });
-    } else {
-      this.setState({
-        name: e.target.value,
-      });
-    }
+    this.setState({
+      name: e.target.value,
+    });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnNetworkChange = (e: any) => {
     this.setState({
       network: e.target.value,
+      chain: AllChains.find((c) => c.name === e.target.value),
     });
   };
 
@@ -72,33 +66,63 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   handleOnSave = () => {
-    const { wallet, onSave } = this.props;
+    const { onSave } = this.props;
     const { name, network, address, memo } = this.state;
 
     onSave({
-      name: name ?? wallet.name,
-      network: network ?? wallet.network,
-      address: address ?? wallet.address,
-      memo: memo ?? wallet.memo,
+      name: name.trim(),
+      network: network.trim(),
+      address: address.trim(),
+      memo: memo.trim(),
     });
-
-    this.clearForm();
   };
 
   handleOnCancel = () => {
-    const { onCancel } = this.props;
-
-    this.clearForm();
-    onCancel();
+    this.props.onCancel();
   };
 
-  clearForm = () => {
-    this.setState({
-      name: undefined,
-      network: undefined,
-      address: undefined,
-      memo: undefined,
-    });
+  validateName = (): [boolean, string] => {
+    const { name } = this.state;
+    const { wallet, existingWallets } = this.props;
+    const trimmedName = name.trim();
+
+    if (trimmedName.length === 0) {
+      return [true, 'A wallet name must be provided.'];
+    }
+
+    if (existingWallets.find((w) => w.name === name) !== undefined && name !== wallet.name) {
+      return [true, 'Wallet name already in use.'];
+    }
+
+    return [false, ''];
+  };
+
+  validateAddress = (): [boolean, string] => {
+    const { address, chain } = this.state;
+    const trimmedAddress = address.trim();
+    const addressFormat = chain?.token_format;
+
+    if (trimmedAddress.length === 0) {
+      return [true, 'A network address must be provided.'];
+    }
+
+    if (addressFormat === undefined || trimmedAddress.match(addressFormat)) {
+      return [false, ''];
+    }
+
+    return [true, 'The address provided does not match the format expected for this network.'];
+  };
+
+  validateMemo = (): [boolean, string] => {
+    const { memo, chain } = this.state;
+    const trimmedMemo = memo.trim();
+    const memoFormat = chain?.memo_format;
+
+    if (trimmedMemo.length === 0 || memoFormat === undefined || trimmedMemo.match(memoFormat)) {
+      return [false, ''];
+    }
+
+    return [true, 'The memo provided does not match the format expected for this network.'];
   };
 
   formatSaveButton = () => (this.props.isNew ? 'Add Wallet' : 'Save Changes');
@@ -106,8 +130,13 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   formatTitle = () => (this.props.isNew ? 'New Wallet' : 'Edit Wallet');
 
   render() {
-    const { open, wallet, onCancel, onSave, isNew, existingWallets, ...other } = this.props;
-    const { isInvalid } = this.state;
+    const { open, wallet, isNew, existingWallets, onSave, onCancel, ...other } = this.props;
+
+    const [isNameInvalid, nameValidationMessage] = this.validateName();
+    const [isAddressInvalid, addressValidationMessage] = this.validateAddress();
+    const [isMemoInvalid, memoValidationMessage] = this.validateMemo();
+
+    const isInvalid = isNameInvalid;
 
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -116,8 +145,8 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
         <DialogContent dividers>
           <FormControl fullWidth>
             <Stack spacing={2}>
-              <TextField required label="Name" defaultValue={wallet.name} onChange={this.handleOnNameChange} />
-              <TextField required label="Network" select defaultValue={wallet.network} onChange={this.handleOnNetworkChange}>
+              <TextField required label="Name" defaultValue={wallet.name} onChange={this.handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
+              <TextField required label="Network" select value={this.state.network} onChange={this.handleOnNetworkChange}>
                 {AllChains.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
                   <MenuItem key={n.name} value={n.name}>
                     <Grid container>
@@ -131,8 +160,8 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField required label="Address" defaultValue={wallet.address} onChange={this.handleOnAddressChange} />
-              <TextField label="Memo" defaultValue={wallet.memo} onChange={this.handleOnMemoChange} />
+              <TextField required label="Address" defaultValue={wallet.address} onChange={this.handleOnAddressChange} error={isAddressInvalid} helperText={addressValidationMessage} />
+              <TextField label="Memo" defaultValue={wallet.memo} onChange={this.handleOnMemoChange} error={isMemoInvalid} helperText={memoValidationMessage} />
               <Divider />
             </Stack>
             <Button onClick={this.handleOnSave} disabled={isInvalid}>
