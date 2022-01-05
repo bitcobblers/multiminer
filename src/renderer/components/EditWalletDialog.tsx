@@ -68,10 +68,10 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   handleOnSave = () => {
-    const { onSave } = this.props;
+    const { wallet, onSave } = this.props;
     const { name, network, address, memo } = this.state;
 
-    onSave({ name, network, address, memo });
+    onSave({ id: wallet.id, name, network, address, memo });
   };
 
   handleOnCancel = () => {
