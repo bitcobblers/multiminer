@@ -2,8 +2,10 @@
 
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, Typography, Grid, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
+import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
 import { Wallet, Coin, AvailableAlgorithms } from '../../models/Configuration';
+import { WalletMenuItem } from './WalletMenuItem';
+import { AlgorithmMenuItem } from './AlgorithmMenuItem';
 
 interface EditCoinDialogState {
   wallet: string;
@@ -17,7 +19,7 @@ interface EditCoinDialogProps {
   open: boolean;
   icon: string;
   symbol: string;
-  networks: string[];
+  blockchains: string[];
   wallets: Wallet[];
   coin: Coin;
 
@@ -119,7 +121,7 @@ export class EditCoinDialog extends React.Component<EditCoinDialogProps, EditCoi
   };
 
   render() {
-    const { open, icon, symbol, wallets, networks, coin, onSave, onCancel, ...other } = this.props;
+    const { open, icon, symbol, wallets, blockchains, coin, onSave, onCancel, ...other } = this.props;
     const { enabled } = this.state;
 
     const [isWalletInvalid, walletValidationMessage] = this.validateWallet();
@@ -137,29 +139,20 @@ export class EditCoinDialog extends React.Component<EditCoinDialogProps, EditCoi
             <Stack spacing={2}>
               <img src={icon} alt={symbol} height={60} />
               <div>
-                {networks
+                {blockchains
                   .sort((a, b) => a.localeCompare(b))
                   .map((n) => (
                     <Chip key={n} label={n} />
                   ))}
               </div>
+              <Divider />
               <FormControlLabel control={<Switch checked={this.state.enabled} onChange={this.handleOnEnabledChange} />} label="Enabled" />
               <TextField disabled={!enabled} required label="Wallet" select value={this.state.wallet} onChange={this.handleOnWalletChange} error={isWalletInvalid} helperText={walletValidationMessage}>
                 {wallets
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((w) => (
                     <MenuItem key={w.name} value={w.name}>
-                      <Grid container>
-                        <Grid item xs={4}>
-                          <Typography>{w.name}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Typography>{w.network}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Typography>{w.memo}</Typography>
-                        </Grid>
-                      </Grid>
+                      <WalletMenuItem wallet={w} />
                     </MenuItem>
                   ))}
               </TextField>
@@ -175,14 +168,7 @@ export class EditCoinDialog extends React.Component<EditCoinDialogProps, EditCoi
               >
                 {AvailableAlgorithms.sort((a, b) => a.name.localeCompare(b.name)).map((alg) => (
                   <MenuItem key={alg.name} value={alg.name}>
-                    <Grid container>
-                      <Grid item xs={4}>
-                        <Typography>{alg.name}</Typography>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <Typography>{alg.kind}</Typography>
-                      </Grid>
-                    </Grid>
+                    <AlgorithmMenuItem algorithm={alg} />
                   </MenuItem>
                 ))}
               </TextField>

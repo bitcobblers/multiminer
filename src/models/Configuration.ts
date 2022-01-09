@@ -51,7 +51,7 @@ export type AlgorithmBundle = {
 export type Wallet = {
   id: string;
   name: string;
-  network: string;
+  blockchain: string;
   address: string;
   memo: string;
 };

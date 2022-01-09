@@ -1,14 +1,15 @@
 /* eslint-disable react/destructuring-assignment */
 
 import React from 'react';
-import Dialog from '@mui/material/Dialog';
-import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, Typography, Grid, FormControl, Divider } from '@mui/material';
-import { Wallet } from '../../models/Configuration';
+import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
+import { Wallet, Coin } from '../../models/Configuration';
 import { Chain, AllChains } from '../../models/Chains';
+import { ChainMenuItem } from './ChainMenuItem';
+import { UsedByCoins } from './UsedByCoins';
 
 interface EditWalletDialogState {
   name: string;
-  network: string;
+  blockchain: string;
   address: string;
   memo: string;
   chain?: Chain;
@@ -16,6 +17,7 @@ interface EditWalletDialogState {
 
 interface EditWalletDialogProps {
   open: boolean;
+  coins: Coin[];
   wallet: Wallet;
   isNew: boolean;
   existingWallets: Wallet[];
@@ -29,10 +31,10 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
     this.state = {
       name: props.wallet.name,
-      network: props.wallet.network,
+      blockchain: props.wallet.blockchain,
       address: props.wallet.address,
       memo: props.wallet.memo,
-      chain: AllChains.find((c) => c.name === props.wallet.network),
+      chain: AllChains.find((c) => c.name === props.wallet.blockchain),
     };
   }
 
@@ -44,12 +46,12 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handleOnNetworkChange = (e: any) => {
-    const network = e.target.value.trim();
+  handleOnBlockchainChange = (e: any) => {
+    const blockchain = e.target.value.trim();
 
     this.setState({
-      network,
-      chain: AllChains.find((c) => c.name === network),
+      blockchain,
+      chain: AllChains.find((c) => c.name === blockchain),
     });
   };
 
@@ -69,9 +71,9 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
   handleOnSave = () => {
     const { wallet, onSave } = this.props;
-    const { name, network, address, memo } = this.state;
+    const { name, blockchain, address, memo } = this.state;
 
-    onSave({ id: wallet.id, name, network, address, memo });
+    onSave({ id: wallet.id, name, blockchain, address, memo });
   };
 
   handleOnCancel = () => {
@@ -98,14 +100,14 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
     const addressFormat = chain?.token_format;
 
     if (address.length === 0) {
-      return [true, 'A network address must be provided.'];
+      return [true, 'A blockchain address must be provided.'];
     }
 
     if (addressFormat === undefined || address.match(addressFormat)) {
       return [false, ''];
     }
 
-    return [true, 'The address provided does not match the format expected for this network.'];
+    return [true, 'The address provided does not match the format expected for this blockchain.'];
   };
 
   validateMemo = (): [boolean, string] => {
@@ -116,7 +118,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
       return [false, ''];
     }
 
-    return [true, 'The memo provided does not match the format expected for this network.'];
+    return [true, 'The memo provided does not match the format expected for this blockchain.'];
   };
 
   formatSaveButton = () => (this.props.isNew ? 'Add Wallet' : 'Save Changes');
@@ -124,8 +126,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   formatTitle = () => (this.props.isNew ? 'New Wallet' : 'Edit Wallet');
 
   render() {
-    const { open, wallet, isNew, existingWallets, onSave, onCancel, ...other } = this.props;
-
+    const { open, wallet, isNew, existingWallets, coins, onSave, onCancel, ...other } = this.props;
     const [isNameInvalid, nameValidationMessage] = this.validateName();
     const [isAddressInvalid, addressValidationMessage] = this.validateAddress();
     const [isMemoInvalid, memoValidationMessage] = this.validateMemo();
@@ -140,22 +141,16 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
           <FormControl fullWidth>
             <Stack spacing={2}>
               <TextField required label="Name" defaultValue={wallet.name} onChange={this.handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
-              <TextField required label="Network" select value={this.state.network} onChange={this.handleOnNetworkChange}>
+              <TextField required label="Blockchain" select value={this.state.blockchain} onChange={this.handleOnBlockchainChange}>
                 {AllChains.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
                   <MenuItem key={n.name} value={n.name}>
-                    <Grid container>
-                      <Grid item xs={3}>
-                        <Typography>{n.name}</Typography>
-                      </Grid>
-                      <Grid>
-                        <Typography>{n.description}</Typography>
-                      </Grid>
-                    </Grid>
+                    <ChainMenuItem chain={n} />
                   </MenuItem>
                 ))}
               </TextField>
               <TextField required label="Address" defaultValue={wallet.address} onChange={this.handleOnAddressChange} error={isAddressInvalid} helperText={addressValidationMessage} />
               <TextField label="Memo" defaultValue={wallet.memo} onChange={this.handleOnMemoChange} error={isMemoInvalid} helperText={memoValidationMessage} />
+              <UsedByCoins coins={coins} />
               <Divider />
             </Stack>
             <Button onClick={this.handleOnSave} disabled={isInvalid}>

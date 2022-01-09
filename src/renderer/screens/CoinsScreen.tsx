@@ -108,7 +108,7 @@ export class CoinsScreen extends React.Component<CoinsScreenProps, CoinsScreenSt
             onCancel={this.handleOnEditCoinCancel}
             icon={c.definition.icon}
             symbol={c.definition.symbol}
-            networks={c.definition.networks}
+            blockchains={c.definition.blockchains}
             wallets={wallets}
             coin={c.coin}
           />
@@ -141,8 +141,8 @@ export class CoinsScreen extends React.Component<CoinsScreenProps, CoinsScreenSt
                     <TableCell>{c.definition.symbol}</TableCell>
                     <TableCell>{c.definition.name}</TableCell>
                     <TableCell>
-                      {c.definition.networks.map((n) => (
-                        <Chip key={`${c.definition.name}-${n}`} label={n} />
+                      {c.definition.blockchains.map((chain) => (
+                        <Chip key={`${c.definition.name}-${chain}`} label={chain} />
                       ))}
                     </TableCell>
                     <TableCell>{c.coin.enabled ? <CheckIcon /> : <></>}</TableCell>
