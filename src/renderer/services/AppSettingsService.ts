@@ -1,32 +1,31 @@
-import { Wallet } from '../../models/Wallet';
+import { Coin, Wallet } from '../../models/Configuration';
 import { SettingsApi } from '../api';
-import { AppSettings } from '../../models/AppSettings';
 
 export class AppSettingsService {
   private readonly api: SettingsApi;
 
-  static DefaultSettings: AppSettings = {
-    worker: 'default',
-    updateInterval: 15,
-    cooldownInterval: 30,
-    urls: {
-      ethash: {
-        url: 'ethash.unmineable.com:3333',
-      },
-      etchash: {
-        url: 'etchash.unmineable.com:3333',
-      },
-      kawpaw: {
-        url: 'kp.unmineable.com:3333',
-      },
-      randomx: {
-        url: 'rx.unmineable.com:3333',
-      },
-    },
-    coins: [],
-    miners: [],
-    wallets: [],
-  };
+  // static DefaultSettings: AppSettings = {
+  //   worker: 'default',
+  //   updateInterval: 15,
+  //   cooldownInterval: 30,
+  //   urls: {
+  //     ethash: {
+  //       url: 'ethash.unmineable.com:3333',
+  //     },
+  //     etchash: {
+  //       url: 'etchash.unmineable.com:3333',
+  //     },
+  //     kawpaw: {
+  //       url: 'kp.unmineable.com:3333',
+  //     },
+  //     randomx: {
+  //       url: 'rx.unmineable.com:3333',
+  //     },
+  //   },
+  //   coins: [],
+  //   miners: [],
+  //   wallets: [],
+  // };
 
   constructor(api: SettingsApi) {
     this.api = api;
@@ -45,6 +44,19 @@ export class AppSettingsService {
 
   async setWallets(wallets: Wallet[]): Promise<void> {
     await this.set<Wallet[]>('wallets', wallets);
+  }
+
+  async getCoins(): Promise<Coin[]> {
+    const defaultCoins: Coin[] = [
+      { symbol: 'ETH', wallet: 'mywallet1', algorithm: 'ethash', enabled: true, duration: 4, referral: 'foo' },
+      { symbol: 'TRX', wallet: 'mywallet3', algorithm: 'ethash', enabled: true, duration: 4, referral: 'bar' },
+    ];
+
+    return this.get<Coin[]>('coins', defaultCoins);
+  }
+
+  async setCoins(coins: Coin[]): Promise<void> {
+    await this.set<Coin[]>('coins', coins);
   }
 
   async get<T>(key: string, defaultValue: T): Promise<T> {

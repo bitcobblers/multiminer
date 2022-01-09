@@ -3,7 +3,7 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, Typography, Grid, FormControl, Divider } from '@mui/material';
-import { Wallet } from '../../models/Wallet';
+import { Wallet } from '../../models/Configuration';
 import { Chain, AllChains } from '../../models/Chains';
 
 interface EditWalletDialogState {

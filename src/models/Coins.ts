@@ -1,6 +1,6 @@
 import { CoinIcons } from './CoinIcons';
 
-export type Coin = {
+export type CoinDefinition = {
   id: string;
   icon: string;
   name: string;
@@ -9,7 +9,7 @@ export type Coin = {
   referral: string;
 };
 
-export const AllCoins: Coin[] = [
+export const AllCoins: CoinDefinition[] = [
   {
     id: '0x',
     icon: CoinIcons.Zrx,

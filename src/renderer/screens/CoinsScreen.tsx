@@ -1,73 +1,159 @@
-import { Container } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Chip from '@mui/material/Chip';
+/* eslint-disable react/destructuring-assignment */
 
-// Components.
-import { AllCoins } from '../../models/Coins';
+import React from 'react';
+
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
+import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table } from '@mui/material';
+import { AllCoins, CoinDefinition } from '../../models/Coins';
+import { Coin, Wallet } from '../../models/Configuration';
+import { AppSettingsService } from '../services/AppSettingsService';
 import { ScreenHeader } from '../components/ScreenHeader';
+import { EditCoinDialog } from '../components/EditCoinDialog';
 
-const columns: GridColDef[] = [
-  {
-    field: 'icon',
-    headerName: '',
-    width: 60,
-    editable: false,
-    sortable: false,
-    renderCell: (params) => {
-      const { value } = params;
-      return <img src={value} alt="unknown" />;
-    },
-  },
-  {
-    field: 'symbol',
-    headerName: 'Symbol',
-    width: 120,
-    editable: false,
-    sortable: true,
-  },
-  {
-    field: 'name',
-    headerName: 'Name',
-    flex: 1,
-    editable: false,
-    sortable: true,
-  },
-  {
-    field: 'networks',
-    headerName: 'Networks',
-    flex: 1,
-    editable: false,
-    sortable: true,
-    renderCell: (params) => {
-      const { value } = params;
+type CoinRecord = {
+  definition: CoinDefinition;
+  coin: Coin;
+};
 
-      if (value.length === 0) {
-        return <></>;
-      }
+interface CoinsScreenState {
+  wallets: Wallet[];
+  coins: CoinRecord[];
+  openEditor: string;
+}
 
-      return (
-        <div>
-          {value.map((n: string) => (
-            <Chip id={n} label={n} />
-          ))}
-        </div>
-      );
-    },
-  },
-  {
-    field: 'referral',
-    headerName: 'Referral',
-    flex: 3,
-    editable: true,
-    sortable: false,
-  },
-];
+interface CoinsScreenProps {
+  appSettingsService: AppSettingsService;
+}
 
-export function CoinsScreen(): JSX.Element {
-  return (
-    <Container>
-      <ScreenHeader title="Coins" />
-      <DataGrid rows={AllCoins} columns={columns} autoHeight />
-    </Container>
-  );
+export class CoinsScreen extends React.Component<CoinsScreenProps, CoinsScreenState> {
+  constructor(props: CoinsScreenProps) {
+    super(props);
+
+    this.state = {
+      wallets: [],
+      coins: [],
+      openEditor: '',
+    };
+  }
+
+  async componentDidMount() {
+    const { appSettingsService } = this.props;
+    const wallets = await appSettingsService.getWallets();
+    const coins = await appSettingsService.getCoins();
+
+    this.setState({
+      wallets,
+      openEditor: '',
+      coins: AllCoins.map((cd) => {
+        const coin = coins.find((c) => c.symbol === cd.symbol);
+
+        return {
+          definition: cd,
+          coin: coin ?? this.blankCoin(cd.symbol, cd.referral),
+        };
+      }),
+    });
+  }
+
+  handleOnEditCoinSave = async (record: CoinRecord, coin: Coin) => {
+    const { appSettingsService } = this.props;
+    const coins = await appSettingsService.getCoins();
+    const index = coins.findIndex((c) => c.symbol === coin.symbol);
+    const updatedCoins = [...coins];
+
+    if (index !== -1) {
+      updatedCoins.splice(index, 1);
+      updatedCoins.splice(index, 0, coin);
+    }
+
+    await appSettingsService.setCoins(updatedCoins);
+    record.coin = coin;
+
+    this.setState({
+      openEditor: '',
+    });
+  };
+
+  handleOnEditCoinCancel = () => {
+    this.setState({ openEditor: '' });
+  };
+
+  blankCoin = (symbol: string, referral: string): Coin => {
+    return {
+      symbol,
+      referral,
+      wallet: '',
+      algorithm: '',
+      enabled: false,
+      duration: '',
+    };
+  };
+
+  getOpenEditor = (symbol: string) => this.state.openEditor === symbol;
+
+  editCoin = (symbol: string) => this.setState({ openEditor: symbol });
+
+  render() {
+    const { wallets, coins } = this.state;
+
+    return (
+      <Container>
+        <ScreenHeader title="Coins" />
+        {coins.map((c) => (
+          <EditCoinDialog
+            key={`edit-coin-${c.definition.symbol}`}
+            open={this.getOpenEditor(c.definition.symbol)}
+            onSave={async (coin) => this.handleOnEditCoinSave(c, coin)}
+            onCancel={this.handleOnEditCoinCancel}
+            icon={c.definition.icon}
+            symbol={c.definition.symbol}
+            networks={c.definition.networks}
+            wallets={wallets}
+            coin={c.coin}
+          />
+        ))}
+        <TableContainer>
+          <Table aria-label="Coins">
+            <TableHead>
+              <TableRow>
+                <TableCell width="80px" />
+                <TableCell width="100px">Icon</TableCell>
+                <TableCell width="10%">Symbol</TableCell>
+                <TableCell width="25%">Name</TableCell>
+                <TableCell width="25%">Networks</TableCell>
+                <TableCell width="40px">Enabled</TableCell>
+                <TableCell width="15%">Wallet</TableCell>
+                <TableCell width="25%">Referral</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {coins
+                .sort((a, b) => a.definition.symbol.localeCompare(b.definition.symbol))
+                .map((c) => (
+                  <TableRow key={c.definition.id}>
+                    <TableCell>
+                      <EditIcon onClick={() => this.editCoin(c.definition.symbol)} />
+                    </TableCell>
+                    <TableCell>
+                      <img src={c.definition.icon} alt="icon" />
+                    </TableCell>
+                    <TableCell>{c.definition.symbol}</TableCell>
+                    <TableCell>{c.definition.name}</TableCell>
+                    <TableCell>
+                      {c.definition.networks.map((n) => (
+                        <Chip key={`${c.definition.name}-${n}`} label={n} />
+                      ))}
+                    </TableCell>
+                    <TableCell>{c.coin.enabled ? <CheckIcon /> : <></>}</TableCell>
+                    <TableCell>{c.coin.wallet}</TableCell>
+                    <TableCell>{c.coin.referral}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+    );
+  }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -71,9 +72,8 @@ export function App() {
             </List>
           </Drawer>
           <Switch>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Route path="/wallets" render={(props) => <WalletsScreen appSettingsService={appSettingsService} {...props} />} />
-            <Route path="/coins" component={CoinsScreen} />
+            <Route path="/coins" render={(props) => <CoinsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/chart" component={ChartScreen} />
             <Route path="/monitor" component={MonitorScreen} />
             <Route path="/settings" component={SettingsScreen} />

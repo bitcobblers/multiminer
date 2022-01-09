@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Container, Stack, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
 
-import { Wallet } from '../../models/Wallet';
+import { Wallet } from '../../models/Configuration';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { RemoveWalletsConfirmationDialog } from '../components/RemoveWalletsConfirmationDialog';
 import { EditWalletDialog } from '../components/EditWalletDialog';
