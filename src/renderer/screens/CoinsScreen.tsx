@@ -9,7 +9,7 @@ import { AllCoins, CoinDefinition } from '../../models/Coins';
 import { Coin, Wallet } from '../../models/Configuration';
 import { AppSettingsService } from '../services/AppSettingsService';
 import { ScreenHeader } from '../components/ScreenHeader';
-import { EditCoinDialog } from '../components/EditCoinDialog';
+import { EditCoinDialog } from '../dialogs/EditCoinDialog';
 
 type CoinRecord = {
   definition: CoinDefinition;

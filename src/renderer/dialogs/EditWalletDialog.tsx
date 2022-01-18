@@ -4,8 +4,8 @@ import React from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
 import { Wallet, Coin } from '../../models/Configuration';
 import { Chain, AllChains } from '../../models/Chains';
-import { ChainMenuItem } from './ChainMenuItem';
-import { UsedByCoins } from './UsedByCoins';
+import { ChainMenuItem } from '../components/ChainMenuItem';
+import { UsedByCoins } from '../components/UsedByCoins';
 
 interface EditWalletDialogState {
   name: string;

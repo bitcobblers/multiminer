@@ -1,9 +1,9 @@
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, Typography, Divider } from '@mui/material';
-import { UsedByCoins } from './UsedByCoins';
+import { UsedByCoins } from '../components/UsedByCoins';
 import { Coin } from '../../models/Configuration';
 
-interface RemoveWalletsConfirmationDialogProps {
+interface RemoveWalletDialogProps {
   open: boolean;
   id: string;
   coins: Coin[];
@@ -19,7 +19,7 @@ const getTitle = (isUsedByCoins: number) => {
   return `Cannot remove this wallet because it is depended on by ${isUsedByCoins} coin(s).`;
 };
 
-export function RemoveWalletsConfirmationDialog(props: RemoveWalletsConfirmationDialogProps) {
+export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
   const { open, id, coins, onRemove, onCancel, ...other } = props;
   const isUsedByCoins = coins.length;
 

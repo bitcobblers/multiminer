@@ -4,8 +4,8 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
 import { Wallet, Coin, AvailableAlgorithms } from '../../models/Configuration';
-import { WalletMenuItem } from './WalletMenuItem';
-import { AlgorithmMenuItem } from './AlgorithmMenuItem';
+import { WalletMenuItem } from '../components/WalletMenuItem';
+import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
 
 interface EditCoinDialogState {
   wallet: string;

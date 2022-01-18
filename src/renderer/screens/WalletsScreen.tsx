@@ -7,8 +7,8 @@ import { Button, Container, Stack, TableContainer, TableCell, TableHead, TableRo
 
 import { Wallet, Coin } from '../../models/Configuration';
 import { ScreenHeader } from '../components/ScreenHeader';
-import { RemoveWalletsConfirmationDialog } from '../components/RemoveWalletsConfirmationDialog';
-import { EditWalletDialog } from '../components/EditWalletDialog';
+import { RemoveWalletDialog } from '../dialogs/RemoveWalletDialog';
+import { EditWalletDialog } from '../dialogs/EditWalletDialog';
 import { AppSettingsService } from '../services/AppSettingsService';
 
 interface WalletsScreenState {
@@ -188,7 +188,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
                   existingWallets={wallets}
                   coins={usedCoins}
                 />
-                <RemoveWalletsConfirmationDialog
+                <RemoveWalletDialog
                   key={`remove-wallet-${w.id}`}
                   id={w.id}
                   coins={usedCoins}
