@@ -15,10 +15,9 @@ interface WalletsScreenState {
   coins: Coin[];
   newWallet: Wallet;
   wallets: Wallet[];
-  deletedWalletId: string;
-  isDeleteConfirmationOpen: boolean;
   isEditingNew: boolean;
   openEditor: string;
+  deleteEditor: string;
 }
 
 interface WalletsScreenProps {
@@ -33,10 +32,9 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
       coins: [],
       newWallet: this.getEmptyWallet(),
       wallets: [],
-      deletedWalletId: '',
-      isDeleteConfirmationOpen: false,
       isEditingNew: false,
       openEditor: '',
+      deleteEditor: '',
     };
   }
 
@@ -49,24 +47,30 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     });
   }
 
-  handleOnRemoveWalletClose = async (result: boolean) => {
+  handleOnRemoveWalletConfirm = async (id: string) => {
     const { appSettingsService } = this.props;
-    const { wallets, deletedWalletId } = this.state;
+    const { wallets } = this.state;
 
-    if (result === true) {
-      const updatedWallets = [...wallets.filter((w) => w.id !== deletedWalletId)];
+    if (id !== '') {
+      const updatedWallets = [...wallets.filter((w) => w.id !== id)];
 
       await appSettingsService.setWallets(updatedWallets);
 
       this.setState({
-        isDeleteConfirmationOpen: false,
+        deleteEditor: '',
         wallets: updatedWallets,
       });
     } else {
       this.setState({
-        isDeleteConfirmationOpen: false,
+        deleteEditor: '',
       });
     }
+  };
+
+  handleOnRemoveWalletCancel = async () => {
+    this.setState({
+      deleteEditor: '',
+    });
   };
 
   handleOnAddWalletSave = async (wallet: Wallet) => {
@@ -126,8 +130,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
 
   deleteWallet = (id: string) => {
     this.setState({
-      deletedWalletId: id,
-      isDeleteConfirmationOpen: true,
+      deleteEditor: id,
     });
   };
 
@@ -138,8 +141,11 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
   // eslint-disable-next-line react/destructuring-assignment
   getOpenEditor = (id: string) => this.state.openEditor === id;
 
+  // eslint-disable-next-line react/destructuring-assignment
+  getDeleteEditor = (id: string) => this.state.deleteEditor === id;
+
   render() {
-    const { isDeleteConfirmationOpen, newWallet, wallets, isEditingNew, coins } = this.state;
+    const { newWallet, wallets, isEditingNew, coins } = this.state;
 
     return (
       <Container>
@@ -157,7 +163,6 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
             },
           }}
         >
-          <RemoveWalletsConfirmationDialog open={isDeleteConfirmationOpen} onClose={this.handleOnRemoveWalletClose} />
           <EditWalletDialog
             key="edit-new-wallet"
             open={isEditingNew}
@@ -168,18 +173,32 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
             existingWallets={wallets}
             coins={[]}
           />
-          {wallets.map((w) => (
-            <EditWalletDialog
-              key={`edit-wallet-${w.id}`}
-              open={this.getOpenEditor(w.id)}
-              onSave={this.handleOnEditWalletSave}
-              onCancel={this.handleOnEditWalletCancel}
-              wallet={w}
-              isNew={false}
-              existingWallets={wallets}
-              coins={coins.filter((c) => c.wallet === w.name)}
-            />
-          ))}
+          {wallets.map((w) => {
+            const usedCoins = coins.filter((c) => c.wallet === w.name);
+
+            return (
+              <div key={`wallet-controls-${w.id}`}>
+                <EditWalletDialog
+                  key={`edit-wallet-${w.id}`}
+                  open={this.getOpenEditor(w.id)}
+                  onSave={this.handleOnEditWalletSave}
+                  onCancel={this.handleOnEditWalletCancel}
+                  wallet={w}
+                  isNew={false}
+                  existingWallets={wallets}
+                  coins={usedCoins}
+                />
+                <RemoveWalletsConfirmationDialog
+                  key={`remove-wallet-${w.id}`}
+                  id={w.id}
+                  coins={usedCoins}
+                  open={this.getDeleteEditor(w.id)}
+                  onRemove={this.handleOnRemoveWalletConfirm}
+                  onCancel={this.handleOnRemoveWalletCancel}
+                />
+              </div>
+            );
+          })}
           <TableContainer component={Paper}>
             <Table aria-label="Wallets">
               <TableHead>

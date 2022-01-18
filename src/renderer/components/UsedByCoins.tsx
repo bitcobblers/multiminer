@@ -15,12 +15,15 @@ export function UsedByCoins(props: UsedByCoinsProps) {
   return (
     <>
       <Divider />
+      <br />
       <Typography>Used by</Typography>
-      <Grid>
+      <br />
+      <Grid container justifyContent="center" spacing={2}>
         {coins.map((c) => (
           <Chip key={c.symbol} label={c.symbol} />
         ))}
       </Grid>
+      <br />
     </>
   );
 }
