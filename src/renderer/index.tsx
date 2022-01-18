@@ -1,10 +1,10 @@
 import { render } from 'react-dom';
 import { App } from './App';
-import { IElectronApi } from './api';
+import SettingsApi from '../shared/SettingsApi';
 
 declare global {
   interface Window {
-    electron: IElectronApi;
+    settings: SettingsApi;
   }
 }
 

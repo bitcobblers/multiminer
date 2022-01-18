@@ -50,7 +50,7 @@ const linkStyle = {
 };
 
 export function App() {
-  const appSettingsService = new AppSettingsService(window.electron.settings);
+  const appSettingsService = new AppSettingsService(window.settings);
 
   return (
     <Router>

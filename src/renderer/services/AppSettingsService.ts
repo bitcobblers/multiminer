@@ -1,5 +1,5 @@
 import { Coin, Wallet } from '../../models/Configuration';
-import { SettingsApi } from '../api';
+import SettingsApi from '../../shared/SettingsApi';
 
 export class AppSettingsService {
   private readonly api: SettingsApi;
@@ -60,8 +60,12 @@ export class AppSettingsService {
     await this.set<Coin[]>('coins', coins);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async get<T>(key: string, defaultValue: T): Promise<T> {
     const content = await this.api.read(key);
+
+    // eslint-disable-next-line no-console
+    console.log(`Got content: ${content}`);
 
     if (content === '') {
       return defaultValue;
@@ -70,6 +74,7 @@ export class AppSettingsService {
     return JSON.parse(content) as T;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async set<T>(key: string, setting: T): Promise<void> {
     const content = JSON.stringify(setting);
 

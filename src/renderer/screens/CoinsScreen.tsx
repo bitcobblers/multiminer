@@ -65,6 +65,8 @@ export class CoinsScreen extends React.Component<CoinsScreenProps, CoinsScreenSt
     if (index !== -1) {
       updatedCoins.splice(index, 1);
       updatedCoins.splice(index, 0, coin);
+    } else {
+      updatedCoins.push(coin);
     }
 
     await appSettingsService.setCoins(updatedCoins);

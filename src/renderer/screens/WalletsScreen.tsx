@@ -49,13 +49,18 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     });
   }
 
-  handleOnRemoveWalletClose = (result: boolean) => {
+  handleOnRemoveWalletClose = async (result: boolean) => {
+    const { appSettingsService } = this.props;
     const { wallets, deletedWalletId } = this.state;
 
     if (result === true) {
+      const updatedWallets = [...wallets.filter((w) => w.id !== deletedWalletId)];
+
+      await appSettingsService.setWallets(updatedWallets);
+
       this.setState({
         isDeleteConfirmationOpen: false,
-        wallets: [...wallets.filter((w) => w.id !== deletedWalletId)],
+        wallets: updatedWallets,
       });
     } else {
       this.setState({
@@ -64,12 +69,16 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     }
   };
 
-  handleOnAddWalletSave = (wallet: Wallet) => {
+  handleOnAddWalletSave = async (wallet: Wallet) => {
+    const { appSettingsService } = this.props;
     const { wallets } = this.state;
+    const updatedWallets = wallets.concat(wallet);
+
+    await appSettingsService.setWallets(updatedWallets);
 
     this.setState({
       isEditingNew: false,
-      wallets: wallets.concat(wallet),
+      wallets: updatedWallets,
     });
   };
 
@@ -79,13 +88,16 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     });
   };
 
-  handleOnEditWalletSave = (wallet: Wallet) => {
+  handleOnEditWalletSave = async (wallet: Wallet) => {
+    const { appSettingsService } = this.props;
     const { wallets } = this.state;
     const index = wallets.findIndex((w) => w.id === wallet.id);
     const updatedWallets = [...wallets];
 
     updatedWallets.splice(index, 1);
     updatedWallets.splice(index, 0, wallet);
+
+    await appSettingsService.setWallets(updatedWallets);
 
     this.setState({
       wallets: updatedWallets,
