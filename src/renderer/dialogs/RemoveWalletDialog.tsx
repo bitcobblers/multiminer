@@ -11,7 +11,7 @@ interface RemoveWalletDialogProps {
   onCancel: () => void;
 }
 
-const getTitle = (isUsedByCoins: number) => {
+const getPageContent = (isUsedByCoins: number) => {
   if (isUsedByCoins === 0) {
     return 'Are you sure you want to remove this wallet?';
   }
@@ -28,7 +28,7 @@ export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
     <Dialog sx={{ '& .MuiDialog-paper': { width: '450px' } }} open={open} {...other}>
       <DialogTitle>Remove Wallet</DialogTitle>
       <DialogContent dividers>
-        <Typography variant="h6">{getTitle(coins.length)}</Typography>
+        <Typography variant="h6">{getPageContent(coins.length)}</Typography>
         <br />
         <UsedByCoins coins={coins} />
         <Divider />
