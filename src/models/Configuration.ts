@@ -1,6 +1,15 @@
+export type MinerName = 'gminer' | 'phoenixminer' | 'lolminer' | 'nbminer' | 'trexminer' | 'xmrig';
+export type AlgorithmKind = 'CPU' | 'GPU';
+export type AlgorithmName = 'ethash' | 'etchash' | 'kawpaw' | 'randomx';
+
 export type AlgorithmInfo = {
-  name: string;
-  kind: string;
+  name: AlgorithmName;
+  kind: AlgorithmKind;
+};
+
+export type MinerInfo = {
+  name: MinerName;
+  algorithms: AlgorithmName[];
 };
 
 export const AvailableAlgorithms: AlgorithmInfo[] = [
@@ -22,9 +31,39 @@ export const AvailableAlgorithms: AlgorithmInfo[] = [
   },
 ];
 
+export const AvailableMiners: MinerInfo[] = [
+  {
+    name: 'gminer',
+    algorithms: ['ethash'],
+  },
+  {
+    name: 'phoenixminer',
+    algorithms: ['ethash', 'etchash'],
+  },
+  {
+    name: 'lolminer',
+    algorithms: ['ethash', 'etchash'],
+  },
+  {
+    name: 'nbminer',
+    algorithms: ['ethash', 'etchash', 'kawpaw'],
+  },
+  {
+    name: 'trexminer',
+    algorithms: ['ethash', 'etchash', 'kawpaw'],
+  },
+  {
+    name: 'xmrig',
+    algorithms: ['randomx'],
+  },
+];
+
 export type Miner = {
+  id: string;
+  name: MinerName;
   installationPath: string;
-  parameters: Record<string, string>[];
+  algorithm: string;
+  parameters: { [key: string]: string };
 };
 
 export type Coin = {
@@ -36,22 +75,28 @@ export type Coin = {
   referral: string;
 };
 
-export type Algorithm = {
-  url: string;
-  miner?: string;
-};
-
-export type AlgorithmBundle = {
-  ethash: Algorithm;
-  etchash: Algorithm;
-  kawpaw: Algorithm;
-  randomx: Algorithm;
-};
-
 export type Wallet = {
   id: string;
   name: string;
   blockchain: string;
   address: string;
   memo: string;
+};
+
+export type PoolUrls = {
+  ethash: string;
+  etchash: string;
+  kawpaw: string;
+  randomx: string;
+};
+
+export type GeneralSettings = {
+  workerName: string;
+  updateInterval: number;
+  cooldownInterval: number;
+};
+
+export type AppSettings = {
+  settings: GeneralSettings;
+  pools: PoolUrls;
 };
