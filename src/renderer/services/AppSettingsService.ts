@@ -1,4 +1,4 @@
-import { Coin, Wallet, PoolUrls, AppSettings } from '../../models/Configuration';
+import { Coin, Wallet, PoolUrls, Miner, AppSettings } from '../../models/Configuration';
 import SettingsApi from '../../shared/SettingsApi';
 
 export const defaults = {
@@ -10,9 +10,11 @@ export const defaults = {
 
   coins: [
     { symbol: 'ETH', wallet: 'mywallet1', algorithm: 'ethash', enabled: true, duration: 4, referral: 'foo' },
-    { symbol: 'SHIB', wallet: 'mywallet1', algorithm: 'ethash', enabled: true, duration: 4, referral: 'foo' },
+    { symbol: 'SHIB', wallet: 'mywallet1', algorithm: 'ethash', enabled: false, duration: 4, referral: 'foo' },
     { symbol: 'TRX', wallet: 'mywallet3', algorithm: 'ethash', enabled: true, duration: 4, referral: 'bar' },
   ] as Coin[],
+
+  miners: [{ id: '12345', info: 'gminer', name: 'default miner', enabled: true, installationPath: 'C:\\ethereum\\gminer', algorithm: 'ethash', parameters: '' }] as Miner[],
 
   pools: {
     ethash: 'ethash.unmineable.com:3333',
@@ -58,6 +60,14 @@ export class AppSettingsService {
 
   async setCoins(coins: Coin[]): Promise<void> {
     await this.set<Coin[]>('coins', coins);
+  }
+
+  async getMiners(): Promise<Miner[]> {
+    return this.get<Miner[]>('miners', defaults.miners);
+  }
+
+  async setMiners(miners: Miner[]): Promise<void> {
+    await this.set<Miner[]>('miners', miners);
   }
 
   async getAppSettings(): Promise<AppSettings> {

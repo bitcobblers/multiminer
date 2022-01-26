@@ -35,5 +35,7 @@ export default class SettingsModule implements SharedModule {
   reset = () => {
     store.set('wallets', '');
     store.set('coins', '');
+    store.set('settings', '');
+    store.set('miners', '');
   };
 }

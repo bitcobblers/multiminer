@@ -14,6 +14,7 @@ import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
@@ -25,6 +26,7 @@ import { AppSettingsService } from './services/AppSettingsService';
 import { HomeScreen } from './screens/HomeScreen';
 import { WalletsScreen } from './screens/WalletsScreen';
 import { CoinsScreen } from './screens/CoinsScreen';
+import { MinersScreen } from './screens/MinersScreen';
 import { MonitorScreen } from './screens/MonitorScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { AboutScreen } from './screens/AboutScreen';
@@ -36,6 +38,7 @@ const links = [
   { id: 0, to: '/', icon: <HomeIcon />, text: 'Home' },
   { id: 1, to: '/wallets', icon: <AccountBalanceWalletIcon />, text: 'Wallets' },
   { id: 2, to: '/coins', icon: <AddShoppingCartIcon />, text: 'Coins' },
+  { id: 3, to: '/miners', icon: <RocketLaunchIcon />, text: 'Miners' },
   { id: 4, to: '/monitor', icon: <MonitorIcon />, text: 'Monitor' },
   { id: 5, to: '/settings', icon: <SettingsIcon />, text: 'Settings' },
   { id: 6, to: '/about', icon: <InfoIcon />, text: 'About' },
@@ -71,6 +74,7 @@ export function App() {
           <Switch>
             <Route path="/wallets" render={(props) => <WalletsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/coins" render={(props) => <CoinsScreen appSettingsService={appSettingsService} {...props} />} />
+            <Route path="/miners" render={(props) => <MinersScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/monitor" component={MonitorScreen} />
             <Route path="/settings" render={(props) => <SettingsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/about" component={AboutScreen} />

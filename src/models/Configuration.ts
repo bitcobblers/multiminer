@@ -60,10 +60,13 @@ export const AvailableMiners: MinerInfo[] = [
 
 export type Miner = {
   id: string;
-  name: MinerName;
+  info: MinerName;
+  name: string;
+  enabled: boolean;
   installationPath: string;
-  algorithm: string;
-  parameters: { [key: string]: string };
+  algorithm: AlgorithmName;
+  parameters: string;
+  // parameters: { [key: string]: string };
 };
 
 export type Coin = {
