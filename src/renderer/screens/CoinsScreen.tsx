@@ -27,7 +27,6 @@ const blankCoin = (symbol: string, referral: string): Coin => {
     symbol,
     referral,
     wallet: '',
-    algorithm: '',
     enabled: false,
     duration: '',
   };

@@ -66,13 +66,11 @@ export type Miner = {
   installationPath: string;
   algorithm: AlgorithmName;
   parameters: string;
-  // parameters: { [key: string]: string };
 };
 
 export type Coin = {
   symbol: string;
   wallet: string;
-  algorithm: string;
   enabled: boolean;
   duration: number | string;
   referral: string;

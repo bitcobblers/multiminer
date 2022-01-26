@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { Wallet, Coin, AvailableAlgorithms } from '../../models/Configuration';
+import { Wallet, Coin } from '../../models/Configuration';
 import { WalletMenuItem } from '../components/WalletMenuItem';
-import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
 
 type EditCoinDialogProps = {
   open: boolean;
@@ -22,17 +21,12 @@ type EditCoinDialogProps = {
 export function EditCoinDialog(props: EditCoinDialogProps) {
   const { open, icon, symbol, wallets, blockchains, coin, onSave, onCancel, ...other } = props;
   const [wallet, setWallet] = useState(coin.wallet);
-  const [algorithm, setAlgorithm] = useState(coin.algorithm);
   const [enabled, setEnabled] = useState(coin.enabled);
   const [duration, setDuration] = useState(coin.duration);
   const [referral, setReferral] = useState(coin.referral);
 
   const handleOnWalletChange = (e: any) => {
     setWallet(e.target.value.trim());
-  };
-
-  const handleOnAlgorithmChange = (e: any) => {
-    setAlgorithm(e.target.value.trim());
   };
 
   const handleOnDurationChange = (e: any) => {
@@ -48,7 +42,7 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   };
 
   const handleOnSave = () => {
-    onSave({ symbol, wallet, algorithm, enabled, duration, referral });
+    onSave({ symbol, wallet, enabled, duration, referral });
   };
 
   const handleOnCancel = () => {
@@ -58,14 +52,6 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   const validateWallet = (): [boolean, string] => {
     if (wallet.length === 0) {
       return [true, 'A wallet must be specified.'];
-    }
-
-    return [false, ''];
-  };
-
-  const validateAlgorithm = (): [boolean, string] => {
-    if (algorithm.length === 0) {
-      return [true, 'An algorithm must be specified.'];
     }
 
     return [false, ''];
@@ -84,9 +70,8 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   };
 
   const [isWalletInvalid, walletValidationMessage] = validateWallet();
-  const [isAlgorithmInvalid, algorithmValidationMessage] = validateAlgorithm();
   const [isDurationInvalid, durationValidationMessage] = validateDuration();
-  const isInvalid = enabled ? isWalletInvalid || isAlgorithmInvalid || isDurationInvalid : false;
+  const isInvalid = enabled ? isWalletInvalid || isDurationInvalid : false;
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -113,13 +98,6 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
                     <WalletMenuItem wallet={w} />
                   </MenuItem>
                 ))}
-            </TextField>
-            <TextField disabled={!enabled} required label="Miner" select value={algorithm} onChange={handleOnAlgorithmChange} error={isAlgorithmInvalid} helperText={algorithmValidationMessage}>
-              {AvailableAlgorithms.sort((a, b) => a.name.localeCompare(b.name)).map((alg) => (
-                <MenuItem key={alg.name} value={alg.name}>
-                  <AlgorithmMenuItem algorithm={alg} />
-                </MenuItem>
-              ))}
             </TextField>
             <TextField
               disabled={!enabled}
