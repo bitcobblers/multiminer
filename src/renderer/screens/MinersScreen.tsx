@@ -16,7 +16,7 @@ type MinersScreenProps = {
 };
 
 const getEmptyMiner = (): Miner => {
-  return { id: uuid(), info: 'gminer', name: '', enabled: false, installationPath: '', algorithm: 'ethash', parameters: '' };
+  return { id: uuid(), type: 'gminer', name: '', enabled: false, installationPath: '', algorithm: 'ethash', parameters: '' };
 };
 
 export function MinersScreen(props: MinersScreenProps) {
@@ -101,7 +101,7 @@ export function MinersScreen(props: MinersScreenProps) {
                     <EditMinerControls miner={m} onSave={saveMiner} onRemove={removeMiner} />
                   </TableCell>
                   <TableCell>{m.enabled ? <CheckIcon /> : <></>}</TableCell>
-                  <TableCell>{m.info}</TableCell>
+                  <TableCell>{m.type}</TableCell>
                   <TableCell>{m.name}</TableCell>
                   <TableCell>{m.algorithm}</TableCell>
                   <TableCell>{m.installationPath}</TableCell>

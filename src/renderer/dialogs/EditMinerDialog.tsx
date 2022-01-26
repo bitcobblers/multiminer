@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { AvailableAlgorithms, AvailableMiners, Miner, MinerName } from '../../models/Configuration';
+import { AvailableAlgorithms, AvailableMiners, Miner, MinerInfo, AlgorithmName, MinerName } from '../../models/Configuration';
 import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
 import { MinerTypeMenuItem } from '../components/MinerTypeMenuItem';
 
@@ -22,46 +22,66 @@ const getSelectableAlgorithms = (newMinerType: MinerName) => {
   return AvailableAlgorithms.filter((alg) => selectedMinerAlgorithms.indexOf(alg.name) !== -1);
 };
 
+const getDefaultAlgorithm = (name: MinerName, algorithm: AlgorithmName): AlgorithmName => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const miner = AvailableMiners.find((m) => m.name === name)!;
+
+  if (miner.algorithms.findIndex((alg) => alg === algorithm) !== -1) {
+    return algorithm;
+  }
+
+  return miner.algorithms[0];
+};
+
 export function EditMinerDialog(props: EditMinerDialogProps) {
   const { open, miner, onSave, onCancel, ...other } = props;
-  const [minerType, setMinerType] = useState(miner.info);
-  const [name, setName] = useState(miner.name);
-  const [enabled, setEnabled] = useState(miner.enabled);
-  const [installationPath, setInstallationPath] = useState(miner.installationPath);
-  const [algorithm, setAlgorithm] = useState(miner.algorithm);
-  const [parameters, setParameters] = useState(miner.parameters);
+  const [workingMiner, setWorkingMiner] = useState({
+    type: miner.type,
+    name: miner.name,
+    enabled: miner.enabled,
+    installationPath: miner.installationPath,
+    algorithm: miner.algorithm,
+    parameters: miner.parameters,
+  });
 
-  // Internal cache.
-  const [selectableAlgorithms, setSelectableAlgorithms] = useState(getSelectableAlgorithms(minerType));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [originalState, setOriginalState] = useState(workingMiner);
 
   const handleOnNameChange = (e: any) => {
-    setName(e.target.value.trim());
+    const name = e.target.value.trim();
+    setWorkingMiner({ ...workingMiner, ...{ name } });
   };
 
   const handleOnMinerTypeChange = (e: any) => {
-    const newMinerType = e.target.value.trim();
+    const type = e.target.value.trim();
+    const algorithm = getDefaultAlgorithm(type, workingMiner.algorithm);
 
-    setMinerType(newMinerType);
-    setSelectableAlgorithms(getSelectableAlgorithms(newMinerType));
+    setWorkingMiner({ ...workingMiner, ...{ type, algorithm } });
   };
 
   const handleOnEnabledChange = (e: any) => {
-    setEnabled(e.target.checked);
+    const enabled = e.target.checked;
+    setWorkingMiner({ ...workingMiner, ...{ enabled } });
   };
 
   const handleOnAlgorithmChange = (e: any) => {
-    setAlgorithm(e.target.value.trim());
+    const algorithm = e.target.value.trim();
+    setWorkingMiner({ ...workingMiner, ...{ algorithm } });
   };
 
   const handleOnInstallationPathChange = (e: any) => {
-    setInstallationPath(e.target.value.trim());
+    const installationPath = e.target.value.trim();
+    setWorkingMiner({ ...workingMiner, ...{ installationPath } });
   };
 
   const handleOnParametersChange = (e: any) => {
-    setParameters(e.target.value.trim());
+    const parameters = e.target.value.trim();
+    setWorkingMiner({ ...workingMiner, ...{ parameters } });
   };
 
   const validateName = (): [boolean, string] => {
+    const { name } = workingMiner;
+
     if (name.length === 0) {
       return [true, 'A miner must have a name.'];
     }
@@ -70,7 +90,9 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const validateMinerType = (): [boolean, string] => {
-    if (minerType.length === 0) {
+    const { type } = workingMiner;
+
+    if (type.length === 0) {
       return [true, 'A miner type must have a specified.'];
     }
 
@@ -78,6 +100,8 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const validateAlgorithm = (): [boolean, string] => {
+    const { algorithm } = workingMiner;
+
     if (algorithm.length === 0) {
       return [true, 'An algorithm must be specified.'];
     }
@@ -86,13 +110,21 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const handleOnSave = () => {
-    onSave({ id: miner.id, info: minerType, name, enabled, installationPath, algorithm, parameters });
+    const { type, name, enabled, installationPath, algorithm, parameters } = workingMiner;
+    onSave({ id: miner.id, type, name, enabled, installationPath, algorithm, parameters });
   };
 
+  const handleOnCancel = () => {
+    onCancel();
+    setWorkingMiner(originalState);
+  };
+
+  const { enabled, type, algorithm } = workingMiner;
   const [isNameInvalid, nameValidationMessage] = validateName();
   const [isMinerTypeInvalid, minerTypeValidationMessage] = validateMinerType();
   const [isAlgorithmInvalid, algorithmValidationMessage] = validateAlgorithm();
   const isInvalid = enabled ? isNameInvalid || isMinerTypeInvalid || isAlgorithmInvalid : false;
+  const minerTypeAlgorithms = getSelectableAlgorithms(type);
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -103,7 +135,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
           <Stack spacing={2}>
             <FormControlLabel control={<Switch checked={enabled} onChange={handleOnEnabledChange} />} label="Enabled" />
             <TextField disabled={!enabled} required label="Name" defaultValue={miner.name} onChange={handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
-            <TextField disabled={!enabled} required label="Miner" select value={minerType} onChange={handleOnMinerTypeChange} error={isMinerTypeInvalid} helperText={minerTypeValidationMessage}>
+            <TextField disabled={!enabled} required label="Miner" select value={type} onChange={handleOnMinerTypeChange} error={isMinerTypeInvalid} helperText={minerTypeValidationMessage}>
               {AvailableMiners.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
                 <MenuItem key={m.name} value={m.name}>
                   <MinerTypeMenuItem miner={m} />
@@ -111,7 +143,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               ))}
             </TextField>
             <TextField disabled={!enabled} required label="Algorithm" select value={algorithm} onChange={handleOnAlgorithmChange} error={isAlgorithmInvalid} helperText={algorithmValidationMessage}>
-              {selectableAlgorithms.map((alg) => (
+              {minerTypeAlgorithms.map((alg) => (
                 <MenuItem key={alg.name} value={alg.name}>
                   <AlgorithmMenuItem algorithm={alg} />
                 </MenuItem>
@@ -126,7 +158,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
             <Button disabled={isInvalid} onClick={handleOnSave}>
               Save
             </Button>
-            <Button onClick={onCancel}>Cancel</Button>
+            <Button onClick={handleOnCancel}>Cancel</Button>
           </Stack>
         </FormControl>
       </DialogContent>

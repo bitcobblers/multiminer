@@ -60,7 +60,7 @@ export const AvailableMiners: MinerInfo[] = [
 
 export type Miner = {
   id: string;
-  info: MinerName;
+  type: MinerName;
   name: string;
   enabled: boolean;
   installationPath: string;
