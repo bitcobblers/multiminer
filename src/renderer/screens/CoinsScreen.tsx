@@ -75,6 +75,7 @@ export function CoinsScreen(props: CoinsScreenProps) {
     setCoins(updatedCoins);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEnabledOnlyChange = (e: any) => {
     setEnabledOnly(e.target.checked);
   };
@@ -91,10 +92,11 @@ export function CoinsScreen(props: CoinsScreenProps) {
               <TableCell width="40px">Enabled</TableCell>
               <TableCell width="100px">Icon</TableCell>
               <TableCell width="10%">Symbol</TableCell>
-              <TableCell width="25%">Name</TableCell>
+              <TableCell width="20%">Name</TableCell>
               <TableCell width="25%">Networks</TableCell>
-              <TableCell width="15%">Wallet</TableCell>
-              <TableCell width="25%">Referral</TableCell>
+              <TableCell width="10%">Wallet</TableCell>
+              <TableCell width="15%">Duration (hr)</TableCell>
+              <TableCell width="20%">Referral</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -118,6 +120,7 @@ export function CoinsScreen(props: CoinsScreenProps) {
                     ))}
                   </TableCell>
                   <TableCell>{c.coin.wallet}</TableCell>
+                  <TableCell>{c.coin.duration}</TableCell>
                   <TableCell>{c.coin.referral}</TableCell>
                 </TableRow>
               ))}
