@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table } from '@mui/material';
+import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch } from '@mui/material';
 import { AllCoins } from '../../models/Coins';
 import { Coin, Wallet } from '../../models/Configuration';
 import { AppSettingsService } from '../services/AppSettingsService';
@@ -36,6 +36,7 @@ export function CoinsScreen(props: CoinsScreenProps) {
   const { appSettingsService } = props;
   const [wallets, setWallets] = useState([] as Wallet[]);
   const [coins, setCoins] = useState([] as CoinRecord[]);
+  const [enabledOnly, setEnabledOnly] = useState(false);
 
   useEffect(() => {
     const readConfigAsync = async () => {
@@ -74,9 +75,14 @@ export function CoinsScreen(props: CoinsScreenProps) {
     setCoins(updatedCoins);
   };
 
+  const handleEnabledOnlyChange = (e: any) => {
+    setEnabledOnly(e.target.checked);
+  };
+
   return (
     <Container>
       <ScreenHeader title="Coins" />
+      <FormControlLabel control={<Switch checked={enabledOnly} onChange={handleEnabledOnlyChange} />} label="Only Show Enabled" />
       <TableContainer>
         <Table aria-label="Coins">
           <TableHead>
@@ -93,6 +99,7 @@ export function CoinsScreen(props: CoinsScreenProps) {
           </TableHead>
           <TableBody>
             {coins
+              .filter((c) => (enabledOnly ? c.coin.enabled : true))
               .sort((a, b) => a.coin.symbol.localeCompare(b.coin.symbol))
               .map((c) => (
                 <TableRow key={c.id}>
