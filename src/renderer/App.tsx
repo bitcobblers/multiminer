@@ -77,7 +77,7 @@ export function App() {
             <Route path="/wallets" render={(props) => <WalletsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/coins" render={(props) => <CoinsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/miners" render={(props) => <MinersScreen appSettingsService={appSettingsService} {...props} />} />
-            <Route path="/monitor" component={MonitorScreen} />
+            <Route path="/monitor" render={(props) => <MonitorScreen minerService={minerService} {...props} />} />
             <Route path="/settings" render={(props) => <SettingsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/about" component={AboutScreen} />
             <Route path="/" render={(props) => <HomeScreen minerService={minerService} {...props} />} />
