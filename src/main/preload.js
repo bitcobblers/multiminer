@@ -8,3 +8,18 @@ contextBridge.exposeInMainWorld('settings', {
     return ipcRenderer.invoke('ipc-writeSetting', key, value);
   },
 });
+
+contextBridge.exposeInMainWorld('miner', {
+  start(path, args) {
+    return ipcRenderer.invoke('ipc-startMiner', path, args);
+  },
+  stop() {
+    return ipcRenderer.invoke('ipc-stopMiner');
+  },
+  receive(func) {
+    ipcRenderer.on('ipc-minerData', (_event, ...args) => func(...args));
+  },
+  exited(func) {
+    ipcRenderer.on('ipc-minerExit', (_event, ...args) => func(...args));
+  },
+});

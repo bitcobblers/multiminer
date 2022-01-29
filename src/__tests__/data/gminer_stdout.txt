@@ -1,0 +1,296 @@
++----------------------------------------------------------------+
+|                          GMiner v2.74                          |
++----------------------------------------------------------------+
+Algorithm:          Ethash
+DevFee:             0.65 %
+Stratum server:
+  host:             ethash.unmineable.com:3333
+  user:             AAVE:0xe141167eb550b999cb59f9ac202d2dfdd240a4a0.default#FractalMedia
+  password:         x
+Power calculator:   on
+Color output:       on
+Watchdog:           on
+API:                off
+Log to file:        off
+Selected devices:   GPU0
+Intensity:          100
+Temperature limits: 90/120
+------------------------------------------------------------------
+21:54:26 Nvidia Driver: 511.17
+21:54:27 Connected to ethash.unmineable.com:3333 [167.71.96.194]
+21:54:27 Authorized on Stratum Server
+21:54:27 New Job: a4148494 Epoch: #469 Block: #14098088 Diff: 8.726G
+21:54:27 Started Mining on GPU0: NVIDIA GeForce RTX 3080 10GB [0000:02:00.0]
+21:54:29 New Job: ede3f396 Epoch: #469 Block: #14098089 Diff: 8.726G
+21:54:29 New Job: df57544e Epoch: #469 Block: #14098089 Diff: 8.726G
+21:54:31 New Job: cd526fb6 Epoch: #469 Block: #14098090 Diff: 8.726G
+21:54:31 New Job: 4dc9094d Epoch: #469 Block: #14098090 Diff: 8.726G
+21:54:32 GPU0: Generating DAG for epoch #469 [Single Buffer 4776 MB]
+21:54:36 GPU0: DAG generated in 4.69s [1018 MB/s]
+21:54:36 GPU0: DAG verification passed
+21:54:38 New Job: e5ac0ef6 Epoch: #469 Block: #14098090 Diff: 8.726G
+21:54:39 New Job: 82baa9cd Epoch: #469 Block: #14098091 Diff: 8.726G
+21:54:39 New Job: bd3039d8 Epoch: #469 Block: #14098091 Diff: 8.726G
+21:54:46 New Job: 5d046ac4 Epoch: #469 Block: #14098091 Diff: 8.726G
+21:54:46 New Job: 2fc3ddf6 Epoch: #469 Block: #14098091 Diff: 8.726G
+21:54:49 New Job: 9ebed9e2 Epoch: #469 Block: #14098092 Diff: 8.726G
+21:54:50 New Job: 1c8054cd Epoch: #469 Block: #14098092 Diff: 8.726G
+21:54:56 New Job: 7f9b55b3 Epoch: #469 Block: #14098092 Diff: 8.726G
++---+-----+-----------+------+-----+-------------+
+| ID  GPU     Speed    Shares Power  Efficiency  |
++---+-----+-----------+------+-----+-------------+
+|  0  3080  95.85 MH/s  0/0/0 202 W  474.52 KH/W |
++---+-----+-----------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  54/90  70 % 1230 10251    * |
++---+-----+------+-----+----+-----+-----+
+21:54:57 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:54:57 Pool Hashrate: 0 H/s Efficiency: 0.00 %
+21:54:57 Shares/Minute: 0.00
+21:54:57 Uptime: 0d 00:00:30 Electricity: 0.001 kWh $0.00
+21:55:03 New Job: 96b6d197 Epoch: #469 Block: #14098092 Diff: 8.726G
+21:55:05 New Job: 18eac909 Epoch: #469 Block: #14098093 Diff: 8.726G
+21:55:06 New Job: f6b55b9f Epoch: #469 Block: #14098094 Diff: 8.726G
+21:55:07 New Job: da63d071 Epoch: #469 Block: #14098095 Diff: 8.726G
+21:55:07 New Job: a6bbe0e3 Epoch: #469 Block: #14098095 Diff: 8.726G
+21:55:11 New Job: f1d33b7b Epoch: #469 Block: #14098096 Diff: 8.726G
+21:55:13 GPU0 NVIDIA GeForce RTX 3080 10GB: Kernel #6 Selected
+21:55:19 New Job: 96242954 Epoch: #469 Block: #14098096 Diff: 8.726G
+21:55:20 New Job: 0a70089c Epoch: #469 Block: #14098097 Diff: 8.726G
+21:55:20 New Job: f4b0ea02 Epoch: #469 Block: #14098097 Diff: 8.726G
++---+-----+-----------+------+-----+-------------+
+| ID  GPU     Speed    Shares Power  Efficiency  |
++---+-----+-----------+------+-----+-------------+
+|  0  3080  95.90 MH/s  0/0/0 214 W  448.15 KH/W |
++---+-----+-----------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/90  70 % 1275 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:55:27 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:55:27 Pool Hashrate: 0 H/s Efficiency: 0.00 %
+21:55:27 Shares/Minute: 0.00
+21:55:27 Uptime: 0d 00:01:00 Electricity: 0.003 kWh $0.00
+21:55:27 New Job: 31c39b98 Epoch: #469 Block: #14098097 Diff: 8.726G
+21:55:34 New Job: 0d0bc749 Epoch: #469 Block: #14098097 Diff: 8.726G
+21:55:36 New Job: 9ebd730f Epoch: #469 Block: #14098098 Diff: 8.726G
+21:55:36 New Job: 4d5117fb Epoch: #469 Block: #14098098 Diff: 8.726G
+21:55:37 New Job: 163a9058 Epoch: #469 Block: #14098098 Diff: 8.726G
+21:55:43 New Job: 53e4d877 Epoch: #469 Block: #14098098 Diff: 8.726G
+21:55:43 GPU0: Share #1 verified on CPU, difficulty: 9.750G
+21:55:43 GPU0: Share #1 accepted 264 ms
+21:55:50 New Job: cb3aae24 Epoch: #469 Block: #14098098 Diff: 8.726G
+21:55:50 New Job: 697edebf Epoch: #469 Block: #14098098 Diff: 8.726G
+21:55:51 New Job: b50da721 Epoch: #469 Block: #14098099 Diff: 8.726G
+21:55:55 New Job: d3ea152f Epoch: #469 Block: #14098100 Diff: 8.726G
+21:55:55 New Job: 9768c02b Epoch: #469 Block: #14098100 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  95.09 MH/s  1/0/0 9.750G 218 W  436.21 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/90  70 % 1455 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:55:57 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:55:57 Pool Hashrate: 96.96 MH/s Efficiency: 101.96 %
+21:55:57 Shares/Minute: 0.67
+21:55:57 Uptime: 0d 00:01:30 Electricity: 0.005 kWh $0.00
+21:55:57 GPU0: Share #2 verified on CPU, difficulty: 25.39G
+21:55:57 GPU0: Share #2 accepted 40 ms
+21:56:02 New Job: 14cafd57 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:02 GPU0: Share #3 verified on CPU, difficulty: 9.929G
+21:56:02 GPU0: Share #3 accepted 464 ms
+21:56:09 New Job: 818606d0 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:16 New Job: 9aca3800 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:16 New Job: a06e1de2 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:23 New Job: eb5f7b7c Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:23 New Job: 7d454fc6 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:23 New Job: 075af5b9 Epoch: #469 Block: #14098100 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  92.71 MH/s  3/0/0 25.39G 219 W  423.32 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/90  70 % 1365 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:56:27 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:56:27 Pool Hashrate: 218.16 MH/s Efficiency: 235.32 %
+21:56:27 Shares/Minute: 1.50
+21:56:27 Uptime: 0d 00:02:00 Electricity: 0.007 kWh $0.00
+21:56:30 New Job: 9ee04fc2 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:30 New Job: 2234056f Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:30 New Job: f4f190f1 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:37 New Job: fc4fe5de Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:37 New Job: 20d13cdf Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:44 New Job: 5e76d1d8 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:45 New Job: 6d37cdff Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:51 New Job: f0bb3bd0 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:51 New Job: 1f9638b1 Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:52 GPU0: Share #4 verified on CPU, difficulty: 12.89G
+21:56:52 GPU0: Share #4 accepted 38 ms
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  91.39 MH/s  4/0/0 25.39G 220 W  415.42 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  56/90  70 % 1440 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:56:57 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:56:57 Pool Hashrate: 232.70 MH/s Efficiency: 254.62 %
+21:56:57 Shares/Minute: 1.60
+21:56:57 Uptime: 0d 00:02:30 Electricity: 0.009 kWh $0.00
+21:56:58 New Job: 10e7688c Epoch: #469 Block: #14098100 Diff: 8.726G
+21:56:59 New Job: e068896c Epoch: #469 Block: #14098100 Diff: 8.726G
+21:57:03 New Job: c32b5e90 Epoch: #469 Block: #14098101 Diff: 8.726G
+21:57:03 New Job: 246c068c Epoch: #469 Block: #14098101 Diff: 8.726G
+21:57:05 New Job: 0f439e33 Epoch: #469 Block: #14098102 Diff: 8.726G
+21:57:07 New Job: c6cea90d Epoch: #469 Block: #14098102 Diff: 8.726G
+21:57:13 New Job: d837bf10 Epoch: #469 Block: #14098102 Diff: 8.726G
+21:57:19 New Job: 54d22b54 Epoch: #469 Block: #14098102 Diff: 8.726G
+21:57:26 New Job: 9ffac271 Epoch: #469 Block: #14098102 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  91.58 MH/s  4/0/0 25.39G 221 W  414.39 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/90  70 % 1365 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:57:27 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:57:27 Pool Hashrate: 193.92 MH/s Efficiency: 211.75 %
+21:57:27 Shares/Minute: 1.33
+21:57:27 Uptime: 0d 00:03:00 Electricity: 0.011 kWh $0.00
+21:57:33 New Job: d9bf2ed9 Epoch: #469 Block: #14098103 Diff: 8.726G
+21:57:36 New Job: 2da86f55 Epoch: #469 Block: #14098104 Diff: 8.726G
+21:57:37 New Job: 5380a3d6 Epoch: #469 Block: #14098104 Diff: 8.726G
+21:57:38 New Job: 3d1f9036 Epoch: #469 Block: #14098104 Diff: 8.726G
+21:57:44 New Job: 2c7d6549 Epoch: #469 Block: #14098104 Diff: 8.726G
+21:57:49 New Job: f61eab74 Epoch: #469 Block: #14098105 Diff: 8.726G
+21:57:49 New Job: 73bcce23 Epoch: #469 Block: #14098105 Diff: 8.726G
+21:57:56 New Job: 3ed8aa59 Epoch: #469 Block: #14098105 Diff: 8.726G
+21:57:56 New Job: 229cd0ae Epoch: #469 Block: #14098106 Diff: 8.726G
+21:57:56 New Job: 34ba4370 Epoch: #469 Block: #14098106 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  91.60 MH/s  4/0/0 25.39G 221 W  414.46 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/90  70 % 1365 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:57:57 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:57:57 Pool Hashrate: 166.21 MH/s Efficiency: 181.47 %
+21:57:57 Shares/Minute: 1.14
+21:57:57 Uptime: 0d 00:03:30 Electricity: 0.013 kWh $0.00
+21:58:03 New Job: c9b70392 Epoch: #469 Block: #14098106 Diff: 8.726G
+21:58:04 GPU0: Share #5 verified on CPU, difficulty: 15.87G
+21:58:04 GPU0: Share #5 accepted 38 ms
+21:58:10 New Job: ac85cf32 Epoch: #469 Block: #14098106 Diff: 8.726G
+21:58:17 New Job: 1df16804 Epoch: #469 Block: #14098107 Diff: 8.726G
+21:58:24 New Job: 173addda Epoch: #469 Block: #14098107 Diff: 8.726G
+21:58:27 New Job: ae71869a Epoch: #469 Block: #14098108 Diff: 8.726G
+21:58:27 New Job: d0e3ad4c Epoch: #469 Block: #14098108 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  92.09 MH/s  5/0/0 25.39G 222 W  414.83 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/92  70 % 1305 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:58:27 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:58:27 Pool Hashrate: 181.80 MH/s Efficiency: 197.41 %
+21:58:27 Shares/Minute: 1.25
+21:58:27 Uptime: 0d 00:04:00 Electricity: 0.014 kWh $0.00
+21:58:34 New Job: a1386faa Epoch: #469 Block: #14098108 Diff: 8.726G
+21:58:34 New Job: 5b02d012 Epoch: #469 Block: #14098109 Diff: 8.726G
+21:58:34 New Job: f1c850ee Epoch: #469 Block: #14098109 Diff: 8.726G
+21:58:37 New Job: 01f0c588 Epoch: #469 Block: #14098110 Diff: 8.726G
+21:58:37 New Job: 43fe2e7e Epoch: #469 Block: #14098110 Diff: 8.726G
+21:58:44 New Job: d3a5bbd1 Epoch: #469 Block: #14098110 Diff: 8.726G
+21:58:50 New Job: 00c8d560 Epoch: #469 Block: #14098111 Diff: 8.726G
+21:58:55 New Job: 9f51060c Epoch: #469 Block: #14098112 Diff: 8.726G
+21:58:56 New Job: 33cef171 Epoch: #469 Block: #14098112 Diff: 8.726G
+21:58:57 New Job: bfdda85d Epoch: #469 Block: #14098113 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  93.04 MH/s  5/0/0 25.39G 222 W  419.10 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/92  70 % 1275 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:58:57 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:58:57 Pool Hashrate: 161.60 MH/s Efficiency: 173.69 %
+21:58:57 Shares/Minute: 1.11
+21:58:57 Uptime: 0d 00:04:30 Electricity: 0.016 kWh $0.00
+21:59:04 New Job: fabcd369 Epoch: #469 Block: #14098113 Diff: 8.726G
+21:59:11 New Job: acf46b46 Epoch: #469 Block: #14098113 Diff: 8.726G
+21:59:17 New Job: 54c85500 Epoch: #469 Block: #14098113 Diff: 8.726G
+21:59:18 New Job: 6dc2ab4a Epoch: #469 Block: #14098113 Diff: 8.726G
+21:59:19 New Job: 9a299de1 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:19 New Job: c1c0afb5 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:26 New Job: 3443b29e Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:26 New Job: bfcb8246 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:26 New Job: 09f13366 Epoch: #469 Block: #14098114 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  93.66 MH/s  5/0/0 25.39G 222 W  421.87 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  55/92  70 % 1380 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:59:27 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:59:27 Pool Hashrate: 145.44 MH/s Efficiency: 155.29 %
+21:59:27 Shares/Minute: 1.00
+21:59:27 Uptime: 0d 00:05:00 Electricity: 0.018 kWh $0.00
+21:59:33 New Job: 6452d554 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:34 New Job: 844641d3 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:40 New Job: 05263212 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:40 New Job: cda369a2 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:47 New Job: 178d3a33 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:47 New Job: 783c8705 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:47 New Job: de6a1a9d Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:55 New Job: e360a914 Epoch: #469 Block: #14098114 Diff: 8.726G
+21:59:55 New Job: c0fee3c3 Epoch: #469 Block: #14098114 Diff: 8.726G
++---+-----+-----------+------+------+-----+-------------+
+| ID  GPU     Speed    Shares  Best  Power  Efficiency  |
++---+-----+-----------+------+------+-----+-------------+
+|  0  3080  94.03 MH/s  5/0/0 25.39G 222 W  423.55 KH/W |
++---+-----+-----------+------+------+-----+-------------+
++---+-----+------+-----+----+-----+-----+
+| ID  GPU   Temp   Fan  Core  Mem  Kern |
++---+-----+------+-----+----+-----+-----+
+|  0  3080  56/92  70 % 1305 10251    6 |
++---+-----+------+-----+----+-----+-----+
+21:59:57 Pool: ethash.unmineable.com:3333 [167.71.96.194]
+21:59:57 Pool Hashrate: 132.22 MH/s Efficiency: 140.62 %
+21:59:57 Shares/Minute: 0.91
+21:59:57 Uptime: 0d 00:05:30 Electricity: 0.020 kWh $0.00
+22:00:01 New Job: 2d421887 Epoch: #469 Block: #14098114 Diff: 8.726G
+22:00:01 New Job: f82469d2 Epoch: #469 Block: #14098114 Diff: 8.726G
+22:00:08 New Job: 5e2b0d2b Epoch: #469 Block: #14098114 Diff: 8.726G
+22:00:16 New Job: 84cc8923 Epoch: #469 Block: #14098114 Diff: 8.726G

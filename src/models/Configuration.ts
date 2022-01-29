@@ -1,4 +1,4 @@
-export type MinerName = 'gminer' | 'phoenixminer' | 'lolminer' | 'nbminer' | 'trexminer' | 'xmrig';
+export type MinerName = 'phoenixminer' | 'lolminer' | 'nbminer' | 'trexminer' | 'xmrig';
 export type AlgorithmKind = 'CPU' | 'GPU';
 export type AlgorithmName = 'ethash' | 'etchash' | 'kawpaw' | 'randomx';
 
@@ -32,10 +32,6 @@ export const AvailableAlgorithms: AlgorithmInfo[] = [
 ];
 
 export const AvailableMiners: MinerInfo[] = [
-  {
-    name: 'gminer',
-    algorithms: ['ethash'],
-  },
   {
     name: 'phoenixminer',
     algorithms: ['ethash', 'etchash'],

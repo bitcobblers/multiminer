@@ -42,7 +42,7 @@ export default class MainWindow {
     const window = new BrowserWindow({
       ...settings,
       webPreferences: {
-        nodeIntegration: false,
+        nodeIntegration: true,
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js'),
       },

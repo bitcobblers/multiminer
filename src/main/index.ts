@@ -13,6 +13,7 @@ import 'regenerator-runtime/runtime';
 import MainWindow from './main';
 import { addApi } from './ipc';
 import SettingsModule from './modules/SettingsModule';
+import MinerModule from './modules/MinerModule';
 
 const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
@@ -39,6 +40,7 @@ main.onEvent.on('window-created', async () => {
   await installExtensions();
 
   addApi(new SettingsModule());
+  addApi(new MinerModule());
 
   if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');

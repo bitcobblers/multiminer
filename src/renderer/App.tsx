@@ -21,6 +21,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 // Services.
 import { AppSettingsService } from './services/AppSettingsService';
+import { MinerService } from './services/MinerService';
 
 // Screens.
 import { HomeScreen } from './screens/HomeScreen';
@@ -51,6 +52,7 @@ const linkStyle = {
 
 export function App() {
   const appSettingsService = new AppSettingsService(window.settings);
+  const minerService = new MinerService(window.miner);
 
   return (
     <Router>
@@ -78,7 +80,7 @@ export function App() {
             <Route path="/monitor" component={MonitorScreen} />
             <Route path="/settings" render={(props) => <SettingsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/about" component={AboutScreen} />
-            <Route path="/" component={HomeScreen} />
+            <Route path="/" render={(props) => <HomeScreen minerService={minerService} {...props} />} />
           </Switch>
         </Box>
       </ThemeProvider>
