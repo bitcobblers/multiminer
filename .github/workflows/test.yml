@@ -11,23 +11,24 @@ jobs:
         os: [windows-latest]
 
     steps:
-      - name: Check out Git repository
+      - name: Check out Git Repository
         uses: actions/checkout@v1
 
-      - name: Install Node.js and NPM
+      - name: Configure Environment
         uses: actions/setup-node@v1
         with:
           node-version: 16
+          cache: 'yarn'
 
-      - name: npm install
+      - name: Install Dependencies
         run: |
-          npm install
+          yarn install
 
-      - name: npm test
+      - name: Run Tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm run package
-          npm run lint
-          npm exec tsc
-          npm test
+          yarn run package
+          yarn run lint
+          yarn exec tsc
+          yarn test
