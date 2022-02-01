@@ -4,11 +4,7 @@ on: [push, pull_request]
 
 jobs:
   release:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest]
+    runs-on: windows-latest
 
     steps:
       - name: Check out Git Repository
@@ -18,6 +14,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: 'npm'
 
       - name: Install Dependencies
         run: |
