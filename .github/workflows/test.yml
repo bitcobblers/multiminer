@@ -21,13 +21,13 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          yarn install
+          npm install
 
       - name: Run Tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn run package
-          yarn run lint
-          yarn exec tsc
-          yarn test
+          npm run package
+          npm run lint
+          npm exec tsc
+          npm test
