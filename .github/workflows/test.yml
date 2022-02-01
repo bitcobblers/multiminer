@@ -20,11 +20,17 @@ jobs:
         run: |
           npm install
 
+      - name: Build Package
+        run: |
+          npm run package
+
+      - name: Perform Linting
+        run: |
+          npm run lint
+
       - name: Run Tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm run package
-          npm run lint
           npm exec tsc
           npm test
