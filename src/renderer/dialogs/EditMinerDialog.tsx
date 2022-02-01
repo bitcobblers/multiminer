@@ -36,7 +36,7 @@ const getDefaultAlgorithm = (name: MinerName, algorithm: AlgorithmName): Algorit
 export function EditMinerDialog(props: EditMinerDialogProps) {
   const { open, miner, onSave, onCancel, ...other } = props;
   const [workingMiner, setWorkingMiner] = useState({
-    type: miner.type,
+    kind: miner.kind,
     name: miner.name,
     enabled: miner.enabled,
     installationPath: miner.installationPath,
@@ -44,8 +44,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     parameters: miner.parameters,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [originalState, setOriginalState] = useState(workingMiner);
+  const originalState = workingMiner;
 
   const handleOnNameChange = (e: any) => {
     const name = e.target.value.trim();
@@ -53,10 +52,10 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const handleOnMinerTypeChange = (e: any) => {
-    const type = e.target.value.trim();
-    const algorithm = getDefaultAlgorithm(type, workingMiner.algorithm);
+    const kind = e.target.value.trim();
+    const algorithm = getDefaultAlgorithm(kind, workingMiner.algorithm);
 
-    setWorkingMiner({ ...workingMiner, ...{ type, algorithm } });
+    setWorkingMiner({ ...workingMiner, ...{ kind, algorithm } });
   };
 
   const handleOnEnabledChange = (e: any) => {
@@ -90,10 +89,10 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const validateMinerType = (): [boolean, string] => {
-    const { type } = workingMiner;
+    const { kind } = workingMiner;
 
-    if (type.length === 0) {
-      return [true, 'A miner type must have a specified.'];
+    if (kind.length === 0) {
+      return [true, 'A miner kind must have a specified.'];
     }
 
     return [false, ''];
@@ -110,8 +109,8 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const handleOnSave = () => {
-    const { type, name, enabled, installationPath, algorithm, parameters } = workingMiner;
-    onSave({ id: miner.id, type, name, enabled, installationPath, algorithm, parameters });
+    const { kind, name, enabled, installationPath, algorithm, parameters } = workingMiner;
+    onSave({ id: miner.id, kind, name, enabled, installationPath, algorithm, parameters });
   };
 
   const handleOnCancel = () => {
@@ -119,12 +118,12 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     setWorkingMiner(originalState);
   };
 
-  const { enabled, type, algorithm } = workingMiner;
+  const { enabled, kind, algorithm } = workingMiner;
   const [isNameInvalid, nameValidationMessage] = validateName();
   const [isMinerTypeInvalid, minerTypeValidationMessage] = validateMinerType();
   const [isAlgorithmInvalid, algorithmValidationMessage] = validateAlgorithm();
   const isInvalid = enabled ? isNameInvalid || isMinerTypeInvalid || isAlgorithmInvalid : false;
-  const minerTypeAlgorithms = getSelectableAlgorithms(type);
+  const minerTypeAlgorithms = getSelectableAlgorithms(kind);
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -135,7 +134,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
           <Stack spacing={2}>
             <FormControlLabel control={<Switch checked={enabled} onChange={handleOnEnabledChange} />} label="Enabled" />
             <TextField disabled={!enabled} required label="Name" defaultValue={miner.name} onChange={handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
-            <TextField disabled={!enabled} required label="Miner" select value={type} onChange={handleOnMinerTypeChange} error={isMinerTypeInvalid} helperText={minerTypeValidationMessage}>
+            <TextField disabled={!enabled} required label="Miner" select value={kind} onChange={handleOnMinerTypeChange} error={isMinerTypeInvalid} helperText={minerTypeValidationMessage}>
               {AvailableMiners.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
                 <MenuItem key={m.name} value={m.name}>
                   <MinerTypeMenuItem miner={m} />

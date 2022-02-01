@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 type AutoScrollTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
@@ -15,3 +16,7 @@ export function AutoScrollTextArea(props: AutoScrollTextAreaProps) {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <textarea {...props} ref={textRef} />;
 }
+
+AutoScrollTextArea.propTypes = {
+  value: PropTypes.string.isRequired,
+};
