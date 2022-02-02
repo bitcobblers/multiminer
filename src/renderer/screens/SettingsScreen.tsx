@@ -23,10 +23,7 @@ export function SettingsScreen(props: SettingsScreenProps) {
   useEffect(() => {
     appSettingsService
       .getAppSettings()
-      .then((s) => {
-        reset(s);
-        return s;
-      })
+      .then((s) => reset(s))
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(`Unable to load settings: ${error}`);
