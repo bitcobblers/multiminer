@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
 import { Button, Stack, TextField, Container, Typography, Divider, FormControl } from '@mui/material';
+import { useForm } from 'react-hook-form';
 
+import { AppSettings } from 'models/Configuration';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { ConfigurableControl } from '../components/ConfigurableControl';
 import { AppSettingsService, defaults } from '../services/AppSettingsService';
-import { useForm } from 'react-hook-form';
-import { AppSettings } from 'models/Configuration';
 
 interface SettingsScreenProps {
   appSettingsService: AppSettingsService;
 }
 
+// react-hook-form's API requires prop spreading to register controls
+/* eslint-disable react/jsx-props-no-spreading */
 export function SettingsScreen(props: SettingsScreenProps) {
   const { appSettingsService } = props;
   const {
@@ -28,7 +30,7 @@ export function SettingsScreen(props: SettingsScreenProps) {
         // eslint-disable-next-line no-console
         console.log(`Unable to load settings: ${error}`);
       });
-  }, [appSettingsService]);
+  }, [appSettingsService, reset]);
 
   const onSave = handleSubmit(async (value) => {
     await appSettingsService.setAppSettings(value);
