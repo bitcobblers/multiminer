@@ -9,11 +9,11 @@ type MonitorScreenProps = {
 
 export function MonitorScreen(props: MonitorScreenProps): JSX.Element {
   const { minerService } = props;
-  const [data, setData] = useState('');
+  const [data, setData] = useState(minerService.buffer.content);
 
   useEffect(() => {
     const dataReceived = (content: string) => {
-      setData(data + content.replace(/(\r\n)/gm, '\n'));
+      setData(content);
     };
 
     minerService.onReceive(dataReceived);
@@ -24,6 +24,7 @@ export function MonitorScreen(props: MonitorScreenProps): JSX.Element {
   });
 
   const clearLog = () => {
+    minerService.buffer.clear();
     setData('');
   };
 
