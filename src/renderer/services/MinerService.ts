@@ -1,4 +1,4 @@
-import MinerApi from '../../shared/MinerApi';
+import { MinerApi } from '../../shared/MinerApi';
 import { RollingBuffer } from './RollingBuffer';
 
 export type ApiReceiveEvent = (data: string) => void;
@@ -24,7 +24,7 @@ export class MinerService {
       });
     });
 
-    this.api.exited((code: number) => {
+    this.api.exited((code: number | void) => {
       this.exitHandlers.forEach((h) => {
         h(code);
       });

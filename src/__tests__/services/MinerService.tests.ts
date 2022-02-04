@@ -1,19 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ApiReceiveEvent, ApiExitEvent, MinerService } from '../../renderer/services/MinerService';
+import { ExitedCallback, MinerApi } from '../../shared/MinerApi';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getApi = (parameters: any) => {
+const getApi = (parameters: Partial<MinerApi>): MinerApi => {
   return {
     ...{
-      start: async (path: string, args: string) => Promise.resolve(''),
+      start: async () => Promise.resolve(''),
       stop: async () => Promise.resolve(),
-      receive: async (callback: ApiReceiveEvent) => {
-        await Promise.resolve();
-      },
-      exited: async (callback: ApiExitEvent) => {
-        await Promise.resolve();
-      },
-
+      receive: async () => Promise.resolve(),
+      exited: async () => Promise.resolve(),
       ...parameters,
     },
   };
@@ -27,7 +21,8 @@ describe('Miner Service', () => {
     const spyExited = jest.spyOn(api, 'exited');
 
     // Act.
-    const miner = new MinerService(api);
+    // eslint-disable-next-line no-new
+    new MinerService(api);
 
     // Assert.
     expect(spyReceive).toBeCalled();
@@ -99,10 +94,10 @@ describe('Miner Service', () => {
 
   it('Exit handler will fire when data is exited.', async () => {
     // Arrange.
-    let x: ApiExitEvent | undefined;
+    let x: ExitedCallback | undefined;
 
     const api = getApi({
-      exited: async (callback: ApiExitEvent) => {
+      exited: async (callback: ExitedCallback) => {
         x = callback;
       },
     });
@@ -146,7 +141,7 @@ describe('Miner Service', () => {
 
   it('Unsubscribing exit handler will will prevent future events from firing.', async () => {
     // Arrange.
-    let x: ApiExitEvent | undefined;
+    let x: ExitedCallback | undefined;
 
     const api = getApi({
       exited: async (callback: ApiExitEvent) => {
