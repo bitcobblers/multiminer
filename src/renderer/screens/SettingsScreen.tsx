@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button, Stack, TextField, Container, Typography, Divider, FormControl } from '@mui/material';
+import { useForm } from 'react-hook-form';
 
+import { AppSettings } from 'models/Configuration';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { ConfigurableControl } from '../components/ConfigurableControl';
 import { AppSettingsService, defaults } from '../services/AppSettingsService';
@@ -9,117 +11,31 @@ interface SettingsScreenProps {
   appSettingsService: AppSettingsService;
 }
 
+// react-hook-form's API requires prop spreading to register controls
+/* eslint-disable react/jsx-props-no-spreading */
 export function SettingsScreen(props: SettingsScreenProps) {
   const { appSettingsService } = props;
-  const [settings, setSettings] = useState(defaults.settings.settings);
-  const [pools, setPools] = useState(defaults.settings.pools);
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit,
+    reset,
+  } = useForm<AppSettings>({ defaultValues: defaults.settings });
 
   useEffect(() => {
     appSettingsService
       .getAppSettings()
-      .then((s) => {
-        setSettings(s.settings);
-        setPools(s.pools);
-        return s;
-      })
+      .then((s) => reset(s))
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(`Unable to load settings: ${error}`);
       });
-  }, [appSettingsService]);
+  }, [appSettingsService, reset]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleWorkerNameChange = (e: any) => {
-    // updateSettings({ workerName: e.target.value.trim() });
-    setSettings({ ...settings, ...{ workerName: e.target.value.trim() } });
-  };
+  const onSave = handleSubmit(async (value) => {
+    await appSettingsService.setAppSettings(value);
+  });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleUpdateIntervalChange = (e: any) => {
-    setSettings({ ...settings, ...{ updateInterval: e.target.value.trim() } });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleCooldownIntervalChange = (e: any) => {
-    const value = e.target.value.trim();
-    setSettings({ ...settings, ...{ cooldownInterval: value.length === 0 ? 0 : value } });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEthashUrlChanged = (e: any) => {
-    setPools({ ...pools, ...{ ethash: e.target.value.trim() } });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEtchashUrlChanged = (e: any) => {
-    setPools({ ...pools, ...{ etchash: e.target.value.trim() } });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleKawpawUrlChanged = (e: any) => {
-    setPools({ ...pools, ...{ kawpaw: e.target.value.trim() } });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleRandomXUrlChanged = (e: any) => {
-    setPools({ ...pools, ...{ randomx: e.target.value.trim() } });
-  };
-
-  const validateWorkerName = (workerName: string): [boolean, string] => {
-    const workerFormat = /^[a0zA-Z0-9\-_]+/;
-    const maxLength = 30;
-
-    if (workerName.length === 0) {
-      return [true, 'A worker name must be provided.'];
-    }
-
-    if (workerName.length > maxLength) {
-      return [true, 'A worker name cannot be more than 30 characters long.'];
-    }
-
-    if (workerName.match(workerFormat) !== null) {
-      return [true, "The worker name must only contain letters numbers, or a '-' and '_' symbol."];
-    }
-
-    return [false, ''];
-  };
-
-  const validateUpdateInterval = (interval: number): [boolean, string] => {
-    const intervalAsString = interval.toString();
-
-    if (intervalAsString.length === 0) {
-      return [true, 'The interval must be specified.'];
-    }
-
-    if (interval < 5) {
-      return [true, 'The interval cannot be less than 5 minutes.'];
-    }
-
-    return [false, ''];
-  };
-
-  const validatePoolUrl = (url: string): [boolean, string] => {
-    if (url.length === 0) {
-      return [true, 'A pool url must be specified.'];
-    }
-
-    return [false, ''];
-  };
-
-  const onSave = async () => {
-    await appSettingsService.setAppSettings({
-      settings,
-      pools,
-    });
-  };
-
-  const [isWorkerNameInvalid, workerNameValidationMessage] = validateWorkerName(settings.workerName);
-  const [isUpdateIntervalInvalid, updateIntervalValidationMessage] = validateUpdateInterval(settings.updateInterval);
-  const [isEthashUrlInvalid, ethashValidationMessage] = validatePoolUrl(pools.ethash);
-  const [isEtchashUrlInvalid, etchashValidationMessage] = validatePoolUrl(pools.etchash);
-  const [isKawpawUrlInvalid, kawpawValidationMessage] = validatePoolUrl(pools.kawpaw);
-  const [isRandomxUrlInvalid, randomxValidationMessage] = validatePoolUrl(pools.randomx);
-  const isFormInvalid = isWorkerNameInvalid || isUpdateIntervalInvalid || isEthashUrlInvalid || isEtchashUrlInvalid || isKawpawUrlInvalid || isRandomxUrlInvalid;
   const DefaultSpacing = 2;
 
   return (
@@ -130,21 +46,33 @@ export function SettingsScreen(props: SettingsScreenProps) {
       <FormControl fullWidth>
         <Stack direction="column" spacing={DefaultSpacing}>
           <ConfigurableControl description="The name that uniquely identifies this worker.">
-            <TextField required label="Worker Name" value={settings.workerName} onChange={handleWorkerNameChange} error={isWorkerNameInvalid} helperText={workerNameValidationMessage} />
+            <TextField
+              required
+              label="Worker Name"
+              {...register('settings.workerName', {
+                required: 'A worker name must be provided.',
+                maxLength: { value: 30, message: 'A worker name cannot be more than 30 characters long.' },
+                pattern: { value: /^[a-zA-Z0-9\-_]+/, message: "The worker name must only contain letters numbers, or a '-' and '_' symbol." },
+              })}
+              error={!!errors?.settings?.workerName}
+              helperText={errors?.settings?.workerName?.message}
+            />
           </ConfigurableControl>
           <ConfigurableControl description="How often to poll the servers for updated statistics.">
             <TextField
               required
               label="Update Interval (minutes)"
               type="number"
-              value={settings.updateInterval}
-              onChange={handleUpdateIntervalChange}
-              error={isUpdateIntervalInvalid}
-              helperText={updateIntervalValidationMessage}
+              {...register('settings.updateInterval', {
+                required: 'The interval must be specified.',
+                minLength: { value: 5, message: 'The interval cannot be less than 5 minutes.' },
+              })}
+              error={!!errors.settings?.updateInterval}
+              helperText={!!errors.settings?.updateInterval?.message}
             />
           </ConfigurableControl>
           <ConfigurableControl description="How often to wait between invocations of the mining software.">
-            <TextField label="Cooldown Interval (seconds)" type="number" value={settings.cooldownInterval} onChange={handleCooldownIntervalChange} />
+            <TextField label="Cooldown Interval (seconds)" type="number" {...register('settings.cooldownInterval')} />
           </ConfigurableControl>
         </Stack>
         <br />
@@ -153,22 +81,54 @@ export function SettingsScreen(props: SettingsScreenProps) {
         <br />
         <Stack direction="column" spacing={DefaultSpacing}>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the ethash algorithm.">
-            <TextField required label="Ethash" value={pools.ethash} onChange={handleEthashUrlChanged} error={isEthashUrlInvalid} helperText={ethashValidationMessage} />
+            <TextField
+              required
+              label="Ethash"
+              {...register('pools.ethash', {
+                required: 'A pool url must be specified.',
+              })}
+              error={!!errors?.pools?.ethash}
+              helperText={errors?.pools?.ethash?.message}
+            />
           </ConfigurableControl>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the etchash algorithm.">
-            <TextField required label="Etchash" value={pools.etchash} onChange={handleEtchashUrlChanged} error={isEtchashUrlInvalid} helperText={etchashValidationMessage} />
+            <TextField
+              required
+              label="Etchash"
+              {...register('pools.etchash', {
+                required: 'A pool url must be specified.',
+              })}
+              error={!!errors?.pools?.etchash}
+              helperText={errors?.pools?.etchash?.message}
+            />
           </ConfigurableControl>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the kawpaw algorithm.">
-            <TextField required label="Kawpaw" value={pools.kawpaw} onChange={handleKawpawUrlChanged} error={isKawpawUrlInvalid} helperText={kawpawValidationMessage} />
+            <TextField
+              required
+              label="Kawpaw"
+              {...register('pools.kawpaw', {
+                required: 'A pool url must be specified.',
+              })}
+              error={!!errors?.pools?.kawpaw}
+              helperText={errors?.pools?.kawpaw?.message}
+            />
           </ConfigurableControl>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the randomx algorithm.">
-            <TextField required label="RandomX" value={pools.randomx} onChange={handleRandomXUrlChanged} error={isRandomxUrlInvalid} helperText={randomxValidationMessage} />
+            <TextField
+              required
+              label="RandomX"
+              {...register('pools.randomx', {
+                required: 'A pool url must be specified.',
+              })}
+              error={!!errors?.pools?.randomx}
+              helperText={errors?.pools?.randomx?.message}
+            />
           </ConfigurableControl>
         </Stack>
         <br />
         <Divider />
         <Stack direction="row">
-          <Button disabled={isFormInvalid} onClick={onSave}>
+          <Button disabled={!isValid} onClick={onSave}>
             Save Changes
           </Button>
         </Stack>

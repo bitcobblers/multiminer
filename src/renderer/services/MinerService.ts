@@ -1,31 +1,30 @@
-import MinerApi from '../../shared/MinerApi';
+import { MinerApi } from '../../shared/MinerApi';
+import { RollingBuffer } from './RollingBuffer';
 
-type ReceiveEvent = (data: string) => void;
-type ExitEvent = (code: number | void) => void;
+export type ApiReceiveEvent = (data: string) => void;
+export type ApiExitEvent = (code: number | void) => void;
 
 export class MinerService {
-  private readonly receiveHandlers = [] as ReceiveEvent[];
+  private readonly receiveHandlers = [] as ApiReceiveEvent[];
 
-  private readonly exitHandlers = [] as ExitEvent[];
+  private readonly exitHandlers = [] as ApiExitEvent[];
 
   private readonly api: MinerApi;
+
+  public readonly buffer = new RollingBuffer();
 
   constructor(api: MinerApi) {
     this.api = api;
 
     this.api.receive((data: string) => {
-      // eslint-disable-next-line no-console
-      console.log(`data: ${data}`);
+      this.buffer.addContent(data);
 
       this.receiveHandlers.forEach((h) => {
-        h(data);
+        h(this.buffer.content);
       });
     });
 
-    this.api.exited((code: number) => {
-      // eslint-disable-next-line no-console
-      console.log(`exited with code: ${code}`);
-
+    this.api.exited((code: number | void) => {
       this.exitHandlers.forEach((h) => {
         h(code);
       });
@@ -33,22 +32,24 @@ export class MinerService {
   }
 
   async start(path: string, args: string) {
+    this.buffer.clear();
+    await this.api.stop();
     return this.api.start(path, args);
   }
 
   async stop() {
-    return this.api.stop();
+    await this.api.stop();
   }
 
-  onReceive(handler: ReceiveEvent) {
+  onReceive(handler: ApiReceiveEvent) {
     this.receiveHandlers.push(handler);
   }
 
-  onExit(handler: ExitEvent) {
+  onExit(handler: ApiExitEvent) {
     this.exitHandlers.push(handler);
   }
 
-  offReceive(handler: ReceiveEvent) {
+  offReceive(handler: ApiReceiveEvent) {
     const index = this.receiveHandlers.findIndex((h) => h === handler);
 
     if (index !== -1) {
@@ -56,7 +57,7 @@ export class MinerService {
     }
   }
 
-  offExit(handler: ExitEvent) {
+  offExit(handler: ApiExitEvent) {
     const index = this.exitHandlers.findIndex((h) => h === handler);
 
     if (index !== -1) {
