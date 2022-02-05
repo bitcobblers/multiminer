@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   release:
     runs-on: self-hosted
+    timeout-minutes: 10
 
     steps:
       - name: Check out Git Repository
