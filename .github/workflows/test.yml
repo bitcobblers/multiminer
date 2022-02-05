@@ -20,13 +20,13 @@ jobs:
         run: |
           npm install
 
-      - name: Build Package
-        run: |
-          npm run package
+      # - name: Build Package
+      #   run: |
+      #     npm run package
 
-      - name: Perform Linting
-        run: |
-          npm run lint
+      # - name: Perform Linting
+      #   run: |
+      #     npm run lint
 
       - name: Run Tests
         env:
