@@ -89,9 +89,13 @@
     "collectCoverage": false,
     "coverageDirectory": "./coverage",
     "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
+      "!**/node_modules/**",
       "!src/__tests__/**",
-      "!**/node_modules/**"
+      "src/**/*.{ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "./node_modules/",
+      "./release/"
     ],
     "coverageReporters": ["lcov", "text"],
     "moduleDirectories": [
