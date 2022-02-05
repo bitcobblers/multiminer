@@ -89,9 +89,8 @@
     "collectCoverage": false,
     "coverageDirectory": "./coverage",
     "collectCoverageFrom": [
-      "!**/node_modules/**",
-      "!src/__tests__/**",
-      "src/**/*.{ts,tsx}"
+      "!./src/__tests__/**",
+      "./src/**/*.{ts,tsx}"
     ],
     "coveragePathIgnorePatterns": [
       "./node_modules/",
