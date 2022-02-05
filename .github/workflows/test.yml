@@ -19,9 +19,9 @@ jobs:
         run: |
           npm install
 
-      - name: Build Package
+      - name: Run Build
         run: |
-          npm run package
+          npm run build
 
       - name: Perform Linting
         run: |
@@ -32,4 +32,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm exec tsc
-          npm test
+          npm test -- --coverage
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage
+          path: coverage/lcov-report
