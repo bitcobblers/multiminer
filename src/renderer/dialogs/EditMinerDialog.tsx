@@ -43,9 +43,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return AvailableAlgorithms.filter((alg) => selectedMinerAlgorithms.includes(alg.name));
   }, [kind]);
 
-  const handleOnSave = () => {
-    handleSubmit((val) => onSave({ ...val, id: miner.id }));
-  };
+  const handleOnSave = handleSubmit((val) => onSave({ ...val, id: miner.id }));
 
   const handleOnCancel = () => {
     onCancel();
