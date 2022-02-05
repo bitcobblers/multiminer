@@ -20,9 +20,9 @@ jobs:
         run: |
           npm install
 
-      - name: Build Package
+      - name: Run Build
         run: |
-          npm run package
+          npm run build
 
       - name: Perform Linting
         run: |
@@ -34,3 +34,9 @@ jobs:
         run: |
           npm exec tsc
           npm test
+
+      # - name: Upload Coverage Report
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: code-coverage
+      #     path: coverage/lcov-report
