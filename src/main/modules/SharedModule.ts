@@ -1,4 +1,4 @@
-import Handlers from './handlers';
+import Handlers from './Handlers';
 
 export default interface SharedModule {
   name: string;
