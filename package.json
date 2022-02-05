@@ -72,6 +72,7 @@
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
+    "verbose": true,
     "transform": {
       "\\.(ts|tsx|js|jsx)$": "ts-jest"
     },
@@ -86,9 +87,20 @@
       "tsx",
       "json"
     ],
+    "collectCoverage": false,
+    "coverageDirectory": "./coverage",
+    "collectCoverageFrom": [
+      "!./src/__tests__/**",
+      "./src/**/*.{ts,tsx}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "./node_modules/",
+      "./release/"
+    ],
+    "coverageReporters": ["lcov", "text"],
     "moduleDirectories": [
-      "node_modules",
-      "release/app/node_modules"
+      "./node_modules",
+      "./release/app/node_modules"
     ],
     "testPathIgnorePatterns": [
       "./node_modules/",
