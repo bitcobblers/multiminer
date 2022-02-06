@@ -1,5 +1,4 @@
 import { MinerApi } from '../../shared/MinerApi';
-import { RollingBuffer } from './RollingBuffer';
 import { Signal } from './SignalService';
 
 export type ApiReceiveEvent = (data: string) => void;
@@ -12,14 +11,15 @@ export class MinerService {
 
   private readonly api: MinerApi;
 
-  public readonly buffer = new RollingBuffer();
-
   constructor(api: MinerApi) {
     this.api = api;
 
     this.api.receive((data: string) => {
-      this.buffer.addContent(data);
-      this.receiveHandlers.trigger(this.buffer.content);
+      const parsedData = data.replace(/(\r\n)/gm, '\n');
+
+      parsedData.split('\n').forEach((line) => {
+        this.receiveHandlers.trigger(line);
+      });
     });
 
     this.api.exited((code: number | void) => {
@@ -28,7 +28,6 @@ export class MinerService {
   }
 
   async start(path: string, args: string) {
-    this.buffer.clear();
     await this.api.stop();
     return this.api.start(path, args);
   }

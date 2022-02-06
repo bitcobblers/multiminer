@@ -7,9 +7,9 @@ export class RollingBuffer {
 
   private readonly flushAmount: number;
 
-  public numLines = 0;
+  private numLines = 0;
 
-  public content = '';
+  content = '';
 
   constructor(maxLines = 2000, flushAmount = 1) {
     this.maxLines = maxLines;
@@ -17,16 +17,13 @@ export class RollingBuffer {
   }
 
   public addContent(data: string) {
-    const parsedData = data.replace(/(\r\n)/gm, '\n');
-    const newLines = (parsedData.match(/\n/gm) || []).length + 1;
-
-    if (this.content !== '' && this.content.endsWith('\n') === false) {
-      this.content += `\n${parsedData}`;
+    if (this.content === '') {
+      this.content += data;
     } else {
-      this.content += parsedData;
+      this.content += `\n${data}`;
     }
 
-    this.numLines += newLines;
+    this.numLines += 1;
 
     if (this.numLines >= this.maxLines) {
       this.trimContent();
@@ -35,20 +32,20 @@ export class RollingBuffer {
     this.updated.trigger(this.content);
   }
 
-  public clear() {
+  clear() {
     this.content = '';
     this.numLines = 0;
   }
 
-  public subscribe(handler: (content: string) => void) {
+  subscribe(handler: (content: string) => void) {
     this.updated.on(handler);
   }
 
-  public unsubscribe(handler: (content: string) => void) {
+  unsubscribe(handler: (content: string) => void) {
     this.updated.off(handler);
   }
 
-  public trimContent() {
+  trimContent() {
     const numCharacters = this.getNthInstance('\n', this.flushAmount);
 
     if (numCharacters === 0 && this.content[0] !== '\n') {

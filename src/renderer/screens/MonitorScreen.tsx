@@ -1,30 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
-import { MinerService } from '../services/MinerService';
+import { RollingBuffer } from '../services/RollingBuffer';
 import { AutoScrollTextArea } from '../components/AutoScrollTextArea';
 
 type MonitorScreenProps = {
-  minerService: MinerService;
+  stdout: RollingBuffer;
 };
 
 export function MonitorScreen(props: MonitorScreenProps): JSX.Element {
-  const { minerService } = props;
-  const [data, setData] = useState(minerService.buffer.content);
+  const { stdout } = props;
+  const [data, setData] = useState(stdout.content);
 
   useEffect(() => {
     const dataReceived = (content: string) => {
       setData(content);
     };
 
-    minerService.onReceive(dataReceived);
+    stdout.subscribe(dataReceived);
 
     return () => {
-      minerService.offReceive(dataReceived);
+      stdout.unsubscribe(dataReceived);
     };
   });
 
   const clearLog = () => {
-    minerService.buffer.clear();
+    stdout.clear();
     setData('');
   };
 

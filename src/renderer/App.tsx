@@ -20,8 +20,10 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
 // Services.
+import { useEffect } from 'react';
 import { AppSettingsService } from './services/AppSettingsService';
 import { MinerService } from './services/MinerService';
+import { RollingBuffer } from './services/RollingBuffer';
 
 // Screens.
 import { HomeScreen } from './screens/HomeScreen';
@@ -53,6 +55,15 @@ const linkStyle = {
 export function App() {
   const appSettingsService = new AppSettingsService(window.settings);
   const minerService = new MinerService(window.miner);
+  const stdout = new RollingBuffer();
+
+  useEffect(() => {
+    const addContent = (data: string) => stdout.addContent(data);
+
+    minerService.onReceive(addContent);
+
+    return () => minerService.offReceive(addContent);
+  });
 
   return (
     <Router>
@@ -77,7 +88,7 @@ export function App() {
             <Route path="/wallets" render={(props) => <WalletsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/coins" render={(props) => <CoinsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/miners" render={(props) => <MinersScreen appSettingsService={appSettingsService} {...props} />} />
-            <Route path="/monitor" render={(props) => <MonitorScreen minerService={minerService} {...props} />} />
+            <Route path="/monitor" render={(props) => <MonitorScreen stdout={stdout} {...props} />} />
             <Route path="/settings" render={(props) => <SettingsScreen appSettingsService={appSettingsService} {...props} />} />
             <Route path="/about" component={AboutScreen} />
             <Route path="/" render={(props) => <HomeScreen minerService={minerService} {...props} />} />

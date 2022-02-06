@@ -36,29 +36,6 @@ describe('Rolling Buffer', () => {
     expect(buffer.content).toBe('line1\nline2');
   });
 
-  it('Automatically replaces CRLF with LF.', () => {
-    // Arrange.
-    const buffer = new RollingBuffer();
-
-    // Act.
-    buffer.addContent('line1\r\nline2');
-    const hasCrlf = buffer.content.indexOf('\r\n');
-
-    // Expect.
-    expect(hasCrlf).toBe(-1);
-  });
-
-  it('Internal counter is updated by total number of lines added.', () => {
-    // Arrange.
-    const buffer = new RollingBuffer();
-
-    // Act.
-    buffer.addContent('line1\r\n\r\nline2');
-
-    // Expect.
-    expect(buffer.numLines).toBe(3);
-  });
-
   it('Attempting to trim too many lines does not alter content.', () => {
     // Arrange.
     const buffer = new RollingBuffer(10, 1);
@@ -71,7 +48,7 @@ describe('Rolling Buffer', () => {
     expect(buffer.content).toBe('expected');
   });
 
-  it('Clearing buffer resets its content and length.', () => {
+  it('Clearing buffer resets its content.', () => {
     // Arrange.
     const buffer = new RollingBuffer();
     buffer.addContent('content');
@@ -81,7 +58,6 @@ describe('Rolling Buffer', () => {
 
     // Expect.
     expect(buffer.content).toBe('');
-    expect(buffer.numLines).toBe(0);
   });
 
   it('Subscribing causes handler to be triggered when content changes.', () => {

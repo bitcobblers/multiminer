@@ -1,5 +1,5 @@
 import { ApiReceiveEvent, ApiExitEvent, MinerService } from '../../renderer/services/MinerService';
-import { ExitedCallback, MinerApi } from '../../shared/MinerApi';
+import { ExitedCallback, MinerApi, ReceiveCallback } from '../../shared/MinerApi';
 
 const getApi = (parameters: Partial<MinerApi>): MinerApi => {
   return {
@@ -161,5 +161,29 @@ describe('Miner Service', () => {
 
     // Assert.
     expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('Receiving multiple lines triggers receive handler once per line.', async () => {
+    // Arrange.
+    let x: ReceiveCallback | undefined;
+
+    const api = getApi({
+      receive: async (callback: ApiReceiveEvent) => {
+        x = callback;
+      },
+    });
+
+    const miner = new MinerService(api);
+    const handler = jest.fn();
+
+    miner.onReceive(handler);
+
+    // Act.
+    if (x !== undefined) {
+      x('line1\r\nline2');
+    }
+
+    // Assert.
+    expect(handler).toHaveBeenCalledTimes(2);
   });
 });
