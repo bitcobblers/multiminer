@@ -1,13 +1,14 @@
 import { MinerApi } from '../../shared/MinerApi';
 import { RollingBuffer } from './RollingBuffer';
+import { Signal } from './SignalService';
 
 export type ApiReceiveEvent = (data: string) => void;
 export type ApiExitEvent = (code: number | void) => void;
 
 export class MinerService {
-  private readonly receiveHandlers = [] as ApiReceiveEvent[];
+  private readonly receiveHandlers = new Signal<string>();
 
-  private readonly exitHandlers = [] as ApiExitEvent[];
+  private readonly exitHandlers = new Signal<number | void>();
 
   private readonly api: MinerApi;
 
@@ -18,16 +19,11 @@ export class MinerService {
 
     this.api.receive((data: string) => {
       this.buffer.addContent(data);
-
-      this.receiveHandlers.forEach((h) => {
-        h(this.buffer.content);
-      });
+      this.receiveHandlers.trigger(this.buffer.content);
     });
 
     this.api.exited((code: number | void) => {
-      this.exitHandlers.forEach((h) => {
-        h(code);
-      });
+      this.exitHandlers.trigger(code);
     });
   }
 
@@ -42,26 +38,18 @@ export class MinerService {
   }
 
   onReceive(handler: ApiReceiveEvent) {
-    this.receiveHandlers.push(handler);
+    this.receiveHandlers.on(handler);
   }
 
   onExit(handler: ApiExitEvent) {
-    this.exitHandlers.push(handler);
+    this.exitHandlers.on(handler);
   }
 
   offReceive(handler: ApiReceiveEvent) {
-    const index = this.receiveHandlers.findIndex((h) => h === handler);
-
-    if (index !== -1) {
-      this.receiveHandlers.splice(index, 1);
-    }
+    this.receiveHandlers.off(handler);
   }
 
   offExit(handler: ApiExitEvent) {
-    const index = this.exitHandlers.findIndex((h) => h === handler);
-
-    if (index !== -1) {
-      this.exitHandlers.splice(index, 1);
-    }
+    this.exitHandlers.off(handler);
   }
 }

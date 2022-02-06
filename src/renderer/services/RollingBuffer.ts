@@ -1,11 +1,15 @@
+import { Signal } from './SignalService';
+
 export class RollingBuffer {
+  private readonly updated = new Signal<string>();
+
   private readonly maxLines: number;
 
   private readonly flushAmount: number;
 
-  numLines = 0;
+  public numLines = 0;
 
-  content = '';
+  public content = '';
 
   constructor(maxLines = 2000, flushAmount = 1) {
     this.maxLines = maxLines;
@@ -27,11 +31,21 @@ export class RollingBuffer {
     if (this.numLines >= this.maxLines) {
       this.trimContent();
     }
+
+    this.updated.trigger(this.content);
   }
 
   public clear() {
     this.content = '';
     this.numLines = 0;
+  }
+
+  public subscribe(handler: (content: string) => void) {
+    this.updated.on(handler);
+  }
+
+  public unsubscribe(handler: (content: string) => void) {
+    this.updated.off(handler);
   }
 
   public trimContent() {

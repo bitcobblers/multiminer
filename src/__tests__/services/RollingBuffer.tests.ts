@@ -83,4 +83,31 @@ describe('Rolling Buffer', () => {
     expect(buffer.content).toBe('');
     expect(buffer.numLines).toBe(0);
   });
+
+  it('Subscribing causes handler to be triggered when content changes.', () => {
+    // Arrange.
+    const buffer = new RollingBuffer();
+    const handler = jest.fn();
+
+    // Act.
+    buffer.subscribe(handler);
+    buffer.addContent('content');
+
+    // Expect.
+    expect(handler).toHaveBeenCalled();
+  });
+
+  it('Unsubscribing prevents handler from being triggered when content changes.', () => {
+    // Arrange.
+    const buffer = new RollingBuffer();
+    const handler = jest.fn();
+
+    // Act.
+    buffer.subscribe(handler);
+    buffer.unsubscribe(handler);
+    buffer.addContent('content');
+
+    // Expect.
+    expect(handler).not.toHaveBeenCalled();
+  });
 });
