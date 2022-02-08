@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
-import { screenBuffer, clearBuffer } from '../services/RollingBuffer';
+import { screenBuffer, clearBuffer } from '../services/ScreenBuffer';
 import { AutoScrollTextArea } from '../components/AutoScrollTextArea';
 
 export function MonitorScreen(): JSX.Element {
