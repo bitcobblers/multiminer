@@ -3,8 +3,8 @@ import { stdout } from './MinerService';
 
 export const screenBuffer = new BehaviorSubject<string>('');
 
-let maxLines = 2000;
-let flushAmount = 1;
+const maxLines = 25;
+const flushAmount = 1;
 let numLines = 0;
 
 function getNthInstance(content: string, character: string, n: number) {
@@ -29,20 +29,7 @@ function getNthInstance(content: string, character: string, n: number) {
 
 function trimContent(content: string) {
   const numCharacters = getNthInstance(content, '\n', flushAmount);
-
-  if (numCharacters === 0 && content[0] !== '\n') {
-    return '';
-  }
-
-  return content.substring(numCharacters + 1);
-}
-
-export function setBufferSize(lines: number) {
-  maxLines = lines;
-}
-
-export function setFlushAmount(lines: number) {
-  flushAmount = lines;
+  return numCharacters === 0 && content[0] !== '\n' ? '' : content.substring(numCharacters + 1);
 }
 
 export function clearBuffer() {

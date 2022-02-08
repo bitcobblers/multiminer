@@ -1,5 +1,5 @@
-export type ReceiveCallback = (data: string) => void;
-export type ExitedCallback = (code: number | void) => void;
+type ReceiveCallback = (data: string) => void;
+type ExitedCallback = (code: number | void) => void;
 
 export interface MinerApi {
   start: (path: string, args: string) => Promise<string>;

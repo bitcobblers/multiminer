@@ -1,10 +1,12 @@
-import { MinerService } from './MinerService';
-import { Signal } from './SignalService';
+import { Subject } from 'rxjs';
+import { stdout } from './MinerService';
 
 type LineHandler = {
   match: RegExp;
   parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void, globalUpdated: (stat: GlobalStatistic) => void) => void;
 };
+
+let handlers = Array<LineHandler>();
 
 export type GpuStatistic = {
   id: string;
@@ -18,50 +20,22 @@ export type GlobalStatistic = {
   value: string;
 };
 
-export class BaseMinerStreamingService {
-  private readonly gpuStatistics = new Signal<GpuStatistic>();
+export const gpuStatistics = new Subject<GpuStatistic>();
+export const minerStatistics = new Subject<GlobalStatistic>();
 
-  private readonly globalStatistics = new Signal<GlobalStatistic>();
-
-  private readonly lineHandlers: LineHandler[];
-
-  private miner?: MinerService;
-
-  constructor(lineHandlers: LineHandler[]) {
-    this.lineHandlers = lineHandlers;
-  }
-
-  public watch(miner: MinerService) {
-    this.miner = miner;
-    this.miner?.onReceive(this.receivedData);
-    this.miner?.onExit(this.receivedExit);
-  }
-
-  public unwatch() {
-    this.miner?.offReceive(this.receivedData);
-    this.miner?.offExit(this.receivedExit);
-  }
-
-  public subscribe(gpuUpdatedHandler: (value: GpuStatistic) => void, globalUpdateHandler: (value: GlobalStatistic) => void) {
-    this.gpuStatistics.on(gpuUpdatedHandler);
-    this.globalStatistics.on(globalUpdateHandler);
-  }
-
-  public unsubscribe(gpuUpdatedHandler: (value: GpuStatistic) => void, globalUpdateHandler: (value: GlobalStatistic) => void) {
-    this.gpuStatistics.off(gpuUpdatedHandler);
-    this.globalStatistics.off(globalUpdateHandler);
-  }
-
-  private receivedExit() {
-    this.globalStatistics.trigger({ field: 'status', value: 'exited' });
-  }
-
-  private receivedData(line: string) {
-    const handler = this.lineHandlers.find((h) => h.match.test(line) === true);
-
-    handler?.parse(line, this.gpuStatistics.trigger, this.globalStatistics.trigger);
-  }
+export function setHandlers(miningHandlers: LineHandler[]) {
+  handlers = miningHandlers ?? [];
 }
+
+stdout.subscribe((line) => {
+  const handler = handlers.find((h) => h.match.test(line) === true);
+
+  handler?.parse(
+    line,
+    (stat) => gpuStatistics.next(stat),
+    (stat) => minerStatistics.next(stat)
+  );
+});
 
 // Process: lolminer.exe
 // Multiple graphics cards???
