@@ -1,4 +1,4 @@
-import { GpuStatistic, GlobalStatistic } from './MinerStreamingService';
+import { GpuStatistic, GlobalStatistic } from '../MinerStreamingService';
 
 export const GpuStatusLineHandler = {
   match: RegExp(/^GPU \d+\s.+$/),
@@ -131,7 +131,7 @@ export const ShareAcceptedLineHandler = {
   },
 };
 
-export const LolMinerParser = [GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler, FoundShareLineHandler, ShareAcceptedLineHandler];
+export const LolMinerLineParsers = [GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler, FoundShareLineHandler, ShareAcceptedLineHandler];
 
 // Process: lolminer.exe
 // Multiple graphics cards???

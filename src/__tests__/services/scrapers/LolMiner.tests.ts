@@ -6,7 +6,7 @@ import {
   UptimeLineHandler,
   FoundShareLineHandler,
   ShareAcceptedLineHandler,
-} from '../../renderer/services/LolMinerParser';
+} from '../../../renderer/services/scrapers/LolMiner';
 
 describe('LolMiner Parser', () => {
   describe('Gpu Status Tests', () => {
