@@ -1,31 +1,25 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
-import { RollingBuffer } from '../services/RollingBuffer';
+import { screenBuffer, clearBuffer } from '../services/RollingBuffer';
 import { AutoScrollTextArea } from '../components/AutoScrollTextArea';
 
-type MonitorScreenProps = {
-  stdout: RollingBuffer;
-};
-
-export function MonitorScreen(props: MonitorScreenProps): JSX.Element {
-  const { stdout } = props;
-  const [data, setData] = useState(stdout.content);
+export function MonitorScreen(): JSX.Element {
+  const [data, setData] = useState(screenBuffer.value);
 
   useEffect(() => {
     const dataReceived = (content: string) => {
       setData(content);
     };
 
-    stdout.subscribe(dataReceived);
+    const subscription = screenBuffer.subscribe(dataReceived);
 
     return () => {
-      stdout.unsubscribe(dataReceived);
+      subscription.unsubscribe();
     };
   });
 
   const clearLog = () => {
-    stdout.clear();
-    setData('');
+    clearBuffer();
   };
 
   return (

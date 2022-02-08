@@ -7,3 +7,5 @@ export interface MinerApi {
   receive: (callback: ReceiveCallback) => Promise<void>;
   exited: (callback: ExitedCallback) => Promise<void>;
 }
+
+export const minerApi = window.miner;

@@ -1,78 +1,64 @@
-import { Signal } from './SignalService';
+import { BehaviorSubject } from 'rxjs';
+import { stdout } from './MinerService';
 
-export class RollingBuffer {
-  private readonly updated = new Signal<string>();
+export const screenBuffer = new BehaviorSubject<string>('');
 
-  private readonly maxLines: number;
+let maxLines = 2000;
+let flushAmount = 1;
+let numLines = 0;
 
-  private readonly flushAmount: number;
+function getNthInstance(content: string, character: string, n: number) {
+  const { length } = content;
+  let index = 0;
+  let remaining = n;
 
-  private numLines = 0;
+  while (index < length) {
+    if (content[index] === character) {
+      remaining -= 1;
 
-  content = '';
-
-  constructor(maxLines = 2000, flushAmount = 1) {
-    this.maxLines = maxLines;
-    this.flushAmount = flushAmount;
-  }
-
-  public addContent(data: string) {
-    if (this.content === '') {
-      this.content += data;
-    } else {
-      this.content += `\n${data}`;
-    }
-
-    this.numLines += 1;
-
-    if (this.numLines >= this.maxLines) {
-      this.trimContent();
-    }
-
-    this.updated.trigger(this.content);
-  }
-
-  clear() {
-    this.content = '';
-    this.numLines = 0;
-  }
-
-  subscribe(handler: (content: string) => void) {
-    this.updated.on(handler);
-  }
-
-  unsubscribe(handler: (content: string) => void) {
-    this.updated.off(handler);
-  }
-
-  trimContent() {
-    const numCharacters = this.getNthInstance('\n', this.flushAmount);
-
-    if (numCharacters === 0 && this.content[0] !== '\n') {
-      return;
-    }
-
-    this.content = this.content.substring(numCharacters + 1);
-    this.numLines -= this.flushAmount;
-  }
-
-  private getNthInstance(character: string, n: number) {
-    const { length } = this.content;
-    let index = 0;
-    let remaining = n;
-
-    while (index < length) {
-      if (this.content[index] === character) {
-        remaining -= 1;
-
-        if (remaining === 0) {
-          return index;
-        }
+      if (remaining === 0) {
+        return index;
       }
-
-      index += 1;
     }
 
-    return 0;
+    index += 1;
   }
+
+  return 0;
 }
+
+function trimContent(content: string) {
+  const numCharacters = getNthInstance(content, '\n', flushAmount);
+
+  if (numCharacters === 0 && content[0] !== '\n') {
+    return '';
+  }
+
+  return content.substring(numCharacters + 1);
+}
+
+export function setBufferSize(lines: number) {
+  maxLines = lines;
+}
+
+export function setFlushAmount(lines: number) {
+  flushAmount = lines;
+}
+
+export function clearBuffer() {
+  numLines = 0;
+  screenBuffer.next('');
+}
+
+stdout.subscribe((line) => {
+  if (screenBuffer.value === '') {
+    screenBuffer.next(line);
+  } else if (numLines >= maxLines) {
+    numLines -= flushAmount;
+    screenBuffer.next(`${trimContent(screenBuffer.value)}\n${line}`);
+  } else {
+    screenBuffer.next(`${screenBuffer.value}\n${line}`);
+  }
+
+  numLines += 1;
+});
