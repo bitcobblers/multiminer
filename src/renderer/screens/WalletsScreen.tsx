@@ -6,7 +6,7 @@ import { Button, Container, TableContainer, TableCell, TableHead, TableRow, Tabl
 import { Wallet, Coin } from '../../models/Configuration';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { EditWalletDialog } from '../dialogs/EditWalletDialog';
-import { AppSettingsService } from '../services/AppSettingsService';
+import { getCoins, getWallets, setWallets } from '../services/AppSettingsService';
 import { EditWalletControls } from '../components/EditWalletControls';
 
 interface WalletsScreenState {
@@ -16,9 +16,8 @@ interface WalletsScreenState {
   isEditingNew: boolean;
 }
 
-interface WalletsScreenProps {
-  appSettingsService: AppSettingsService;
-}
+// eslint-disable-next-line @typescript-eslint/ban-types
+type WalletsScreenProps = {};
 
 const getEmptyWallet = (): Wallet => {
   return { id: uuid(), name: '', blockchain: 'ETH', address: '', memo: '' };
@@ -37,22 +36,19 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
   }
 
   async componentDidMount() {
-    const { appSettingsService } = this.props;
-
     this.setState({
-      coins: await appSettingsService.getCoins(),
-      wallets: await appSettingsService.getWallets(),
+      coins: await getCoins(),
+      wallets: await getWallets(),
     });
   }
 
   handleOnRemoveWalletConfirm = async (id: string) => {
-    const { appSettingsService } = this.props;
     const { wallets } = this.state;
 
     if (id !== '') {
       const updatedWallets = [...wallets.filter((w) => w.id !== id)];
 
-      await appSettingsService.setWallets(updatedWallets);
+      await setWallets(updatedWallets);
 
       this.setState({
         wallets: updatedWallets,
@@ -61,11 +57,10 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
   };
 
   handleOnAddWalletSave = async (wallet: Wallet) => {
-    const { appSettingsService } = this.props;
     const { wallets } = this.state;
     const updatedWallets = wallets.concat(wallet);
 
-    await appSettingsService.setWallets(updatedWallets);
+    await setWallets(updatedWallets);
 
     this.setState({
       isEditingNew: false,
@@ -80,7 +75,6 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
   };
 
   handleOnEditWalletSave = async (wallet: Wallet) => {
-    const { appSettingsService } = this.props;
     const { wallets } = this.state;
     const index = wallets.findIndex((w) => w.id === wallet.id);
     const updatedWallets = [...wallets];
@@ -88,7 +82,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
     updatedWallets.splice(index, 1);
     updatedWallets.splice(index, 0, wallet);
 
-    await appSettingsService.setWallets(updatedWallets);
+    await setWallets(updatedWallets);
 
     this.setState({
       wallets: updatedWallets,

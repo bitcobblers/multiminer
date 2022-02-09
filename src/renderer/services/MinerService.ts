@@ -1,9 +1,9 @@
 import { Subject } from 'rxjs';
-import { minerApi } from '../../shared/MinerApi';
+import { start, stop, receive } from '../../shared/MinerApi';
 
 export const stdout = new Subject<string>();
 
-minerApi.receive((data: string) => {
+receive((data: string) => {
   data
     .replace(/(\r\n)/gm, '\n')
     .split('\n')
@@ -11,9 +11,9 @@ minerApi.receive((data: string) => {
 });
 
 export async function startMiner(path: string, args: string) {
-  await minerApi.start(path, args);
+  await start(path, args);
 }
 
 export async function stopMiner() {
-  await minerApi.stop();
+  await stop();
 }

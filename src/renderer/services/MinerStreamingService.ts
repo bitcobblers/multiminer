@@ -3,7 +3,7 @@ import { stdout } from './MinerService';
 
 type LineHandler = {
   match: RegExp;
-  parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void, globalUpdated: (stat: GlobalStatistic) => void) => void;
+  parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => void;
 };
 
 let handlers = Array<LineHandler>();
@@ -15,13 +15,13 @@ export type GpuStatistic = {
   value: string;
 };
 
-export type GlobalStatistic = {
+export type MinerStatistic = {
   field: string;
   value: string;
 };
 
 export const gpuStatistics = new Subject<GpuStatistic>();
-export const minerStatistics = new Subject<GlobalStatistic>();
+export const minerStatistics = new Subject<MinerStatistic>();
 
 export function setHandlers(miningHandlers: LineHandler[]) {
   handlers = miningHandlers ?? [];

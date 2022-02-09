@@ -1,5 +1,7 @@
 import { Coin, Wallet, PoolUrls, Miner, AppSettings } from '../../models/Configuration';
-import SettingsApi from '../../shared/SettingsApi';
+import { readSetting, writeSetting } from '../../shared/SettingsApi';
+
+type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
 
 export const defaults = {
   wallets: [
@@ -38,66 +40,30 @@ export const defaults = {
   } as AppSettings,
 };
 
-export class AppSettingsService {
-  private readonly api: SettingsApi;
+async function get<T>(key: SettingsKey, defaultValue: T) {
+  const content = await readSetting(key);
 
-  constructor(api: SettingsApi) {
-    this.api = api;
+  if (content === '') {
+    return defaultValue;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async getWallets(): Promise<Wallet[]> {
-    return this.get<Wallet[]>('wallets', defaults.wallets);
-  }
-
-  async setWallets(wallets: Wallet[]): Promise<void> {
-    await this.set<Wallet[]>('wallets', wallets);
-  }
-
-  async getCoins(): Promise<Coin[]> {
-    return this.get<Coin[]>('coins', defaults.coins);
-  }
-
-  async setCoins(coins: Coin[]): Promise<void> {
-    await this.set<Coin[]>('coins', coins);
-  }
-
-  async getMiners(): Promise<Miner[]> {
-    return this.get<Miner[]>('miners', defaults.miners);
-  }
-
-  async setMiners(miners: Miner[]): Promise<void> {
-    await this.set<Miner[]>('miners', miners);
-  }
-
-  async getAppSettings(): Promise<AppSettings> {
-    return this.get<AppSettings>('settings', defaults.settings);
-  }
-
-  async setAppSettings(appSettings: AppSettings): Promise<void> {
-    await this.set<AppSettings>('settings', appSettings);
-  }
-
-  async get<T>(key: string, defaultValue: T): Promise<T> {
-    const content = await this.api.read(key);
-
-    if (content === '') {
-      // eslint-disable-next-line no-console
-      console.log(`Returning default value: ${JSON.stringify(defaultValue)}`);
-      return defaultValue;
-    }
-
-    // eslint-disable-next-line no-console
-    console.log(`Got content: ${content}`);
-
-    return JSON.parse(content) as T;
-  }
-
-  async set<T>(key: string, setting: T): Promise<void> {
-    const content = JSON.stringify(setting);
-
-    // eslint-disable-next-line no-console
-    console.log(`Calling set with content: ${content}`);
-    await this.api.write(key, content);
-  }
+  return JSON.parse(content) as T;
 }
+
+async function set<T>(key: SettingsKey, setting: T) {
+  const content = JSON.stringify(setting);
+
+  await writeSetting(key, content);
+}
+
+export const getWallets = () => get<Wallet[]>('wallets', defaults.wallets);
+export const setWallets = (wallets: Wallet[]) => set('wallets', wallets);
+
+export const getCoins = () => get<Coin[]>('coins', defaults.coins);
+export const setCoins = (coins: Coin[]) => set('coins', coins);
+
+export const getMiners = () => get<Miner[]>('miners', defaults.miners);
+export const setMiners = (miners: Miner[]) => set('miners', miners);
+
+export const getAppSettings = () => get<AppSettings>('settings', defaults.settings);
+export const setAppSettings = (settings: AppSettings) => set('settings', settings);

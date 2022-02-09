@@ -19,9 +19,6 @@ import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
-// Services.
-import { AppSettingsService } from './services/AppSettingsService';
-
 // Screens.
 import { HomeScreen } from './screens/HomeScreen';
 import { WalletsScreen } from './screens/WalletsScreen';
@@ -50,8 +47,6 @@ const linkStyle = {
 };
 
 export function App() {
-  const appSettingsService = new AppSettingsService(window.settings);
-
   return (
     <Router>
       <ThemeProvider theme={mdTheme}>
@@ -72,11 +67,11 @@ export function App() {
             </List>
           </Drawer>
           <Switch>
-            <Route path="/wallets" render={(props) => <WalletsScreen appSettingsService={appSettingsService} {...props} />} />
-            <Route path="/coins" render={(props) => <CoinsScreen appSettingsService={appSettingsService} {...props} />} />
-            <Route path="/miners" render={(props) => <MinersScreen appSettingsService={appSettingsService} {...props} />} />
+            <Route path="/wallets" component={WalletsScreen} />
+            <Route path="/coins" component={CoinsScreen} />
+            <Route path="/miners" component={MinersScreen} />
             <Route path="/monitor" component={MonitorScreen} />
-            <Route path="/settings" render={(props) => <SettingsScreen appSettingsService={appSettingsService} {...props} />} />
+            <Route path="/settings" component={SettingsScreen} />
             <Route path="/about" component={AboutScreen} />
             <Route path="/" component={HomeScreen} />
           </Switch>
