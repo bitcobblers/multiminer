@@ -3,7 +3,7 @@ import { stdout } from './MinerService';
 
 export const screenBuffer = new BehaviorSubject<string>('');
 
-const maxLines = 25;
+const maxLines = 10000;
 const flushAmount = 1;
 let numLines = 0;
 
