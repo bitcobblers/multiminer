@@ -3,7 +3,7 @@ export interface SettingsApi {
   write: (key: string, content: string) => Promise<void>;
 }
 
-const settingsApi = window.settings;
-
-export const readSetting = settingsApi?.read ?? (async () => Promise.resolve(''));
-export const writeSetting = settingsApi?.write ?? (async () => Promise.resolve());
+export const settingsApi = window.settings ?? {
+  read: async () => Promise.resolve(''),
+  write: async () => Promise.resolve(),
+};

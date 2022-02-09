@@ -8,9 +8,9 @@ export interface MinerApi {
   exited: (callback: ExitedCallback) => Promise<void>;
 }
 
-const minerApi = window.miner;
-
-export const start = minerApi?.start ?? (() => Promise.resolve(''));
-export const stop = minerApi?.stop ?? (() => Promise.resolve());
-export const receive = minerApi?.receive ?? (() => Promise.resolve());
-export const exited = minerApi?.exited ?? (() => Promise.resolve());
+export const minerApi = window.miner ?? {
+  start: () => Promise.resolve(''),
+  stop: () => Promise.resolve(),
+  receive: () => Promise.resolve(),
+  exited: () => Promise.resolve(),
+};

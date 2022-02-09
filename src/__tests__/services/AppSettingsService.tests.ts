@@ -1,12 +1,12 @@
 import * as settings from '../../renderer/services/AppSettingsService';
-import * as settingsApi from '../../shared/SettingsApi';
+import { settingsApi } from '../../shared/SettingsApi';
 import { Wallet, Coin, Miner, AppSettings } from '../../models/Configuration';
 
 describe('App Settings Service', () => {
   describe('Wallets tests', () => {
     it('No content returns default setting', async () => {
       // Arrange.
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(''));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
 
       // Act.
       const result = await settings.getWallets();
@@ -27,7 +27,7 @@ describe('App Settings Service', () => {
         },
       ];
 
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(JSON.stringify(wallets)));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(JSON.stringify(wallets)));
 
       // Act.
       const result = await settings.getWallets();
@@ -40,7 +40,7 @@ describe('App Settings Service', () => {
   describe('Coins tests', () => {
     it('No content returns default setting', async () => {
       // Arrange.
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(''));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
 
       // Act.
       const result = await settings.getCoins();
@@ -61,7 +61,7 @@ describe('App Settings Service', () => {
         },
       ];
 
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(JSON.stringify(coins)));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(JSON.stringify(coins)));
 
       // Act.
       const result = await settings.getCoins();
@@ -74,7 +74,7 @@ describe('App Settings Service', () => {
   describe('Miners tests', () => {
     it('No content returns default setting', async () => {
       // Arrange.
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(''));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
 
       // Act.
       const result = await settings.getMiners();
@@ -97,7 +97,7 @@ describe('App Settings Service', () => {
         },
       ];
 
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(JSON.stringify(miners)));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(JSON.stringify(miners)));
 
       // Act.
       const result = await settings.getMiners();
@@ -110,7 +110,7 @@ describe('App Settings Service', () => {
   describe('Settings tests', () => {
     it('No content returns default setting', async () => {
       // Arrange.
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(''));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
 
       // Act.
       const result = await settings.getAppSettings();
@@ -135,7 +135,7 @@ describe('App Settings Service', () => {
         },
       };
 
-      jest.spyOn(settingsApi, 'readSetting').mockReturnValue(Promise.resolve(JSON.stringify(appSettings)));
+      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(JSON.stringify(appSettings)));
 
       // Act.
       const result = await settings.getAppSettings();

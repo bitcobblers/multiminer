@@ -1,5 +1,5 @@
 import { Coin, Wallet, PoolUrls, Miner, AppSettings } from '../../models/Configuration';
-import { readSetting, writeSetting } from '../../shared/SettingsApi';
+import { settingsApi } from '../../shared/SettingsApi';
 
 type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
 
@@ -41,7 +41,7 @@ export const defaults = {
 };
 
 async function get<T>(key: SettingsKey, defaultValue: T) {
-  const content = await readSetting(key);
+  const content = await settingsApi.read(key);
 
   if (content === '') {
     return defaultValue;
@@ -53,7 +53,7 @@ async function get<T>(key: SettingsKey, defaultValue: T) {
 async function set<T>(key: SettingsKey, setting: T) {
   const content = JSON.stringify(setting);
 
-  await writeSetting(key, content);
+  await settingsApi.write(key, content);
 }
 
 export const getWallets = () => get<Wallet[]>('wallets', defaults.wallets);
