@@ -1,0 +1,274 @@
++---------------------------------------------------------+
+|   _       _ __  __ _                   _  _  _  ____    |
+|  | | ___ | |  \/  (_)_ __   ___ _ __  / || || ||___ \   |
+|  | |/ _ \| | |\/| | | '_ \ / _ \ '__| | || || |_ __) |  |
+|  | | (_) | | |  | | | | | |  __/ |    | ||__   _/ __/   |
+|  |_|\___/|_|_|  |_|_|_| |_|\___|_|    |_(_) |_||_____|  |
+|                                                         |
+|              This software is for mining                |
+|              Autolykos V2                               |
+|              Ethash, Etchash                            |
+|              Equihash 144/5, 192/7, 210/9               |
+|              BeamHash III                               |
+|              ZelHash     (EquihashR 125/4/0)            |
+|              SHA256 (TON)                               |
+|              Cuck(ar)oo 29                              |
+|              Cuckaroo   30 CTX                          |
+|              Cuckatoo   31/32                           |
+|                                                         |
+|                                                         |
+|             Made by Lolliedieb, January 2022            |
++---------------------------------------------------------+
+
+Setup Miner...
+OpenCL driver detected.
+Number of OpenCL supported GPUs: 1
+Cuda driver detected.
+Number of Cuda supported GPUs: 1
+Device 0:
+    Name:    NVIDIA GeForce RTX 3080
+    Address: 2:0
+    Vendor:  NVIDIA Corporation
+    Drivers: Cuda
+    Memory:  10239 MByte
+    Active:  true (Selected Algorithm: ETHash Cuda)
+
+Connecting to pool...
+DNS over HTTPS resolve failed - switching to standard resolve
+Connected to ethash.unmineable.com(165.227.188.185):3333  (TLS disabled)
+Set Ethash stratum mode: Ethereum Proxy
+Authorized worker: SHIB:0xe141167eb550b999cb59f9ac202d2dfdd240a4a0.default#FractalMedia
+New job received: 0x4fefa0 Epoch: 471 Difficulty: 8.73G
+Start Mining...
+New job received: 0x2744d9 Epoch: 471 Difficulty: 8.73G
+New job received: 0xc4c363 Epoch: 471 Difficulty: 8.73G
+-------------------------------------------------------
+          Generated light cache for epoch 471
+       Took 4139 ms, size of new DAG: 4791 MByte
+-------------------------------------------------------
+GPU 0: Starting DAG generation (normal mode)
+GPU 0: DAG build complete 16%
+GPU 0: DAG build complete 32%
+GPU 0: DAG build complete 48%
+GPU 0: DAG build complete 64%
+GPU 0: DAG build complete 80%
+GPU 0: DAG build complete 96%
+GPU 0: DAG generation completed (2831 ms)
+GPU 0: DAG verification passed
+New job received: 0x247696 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 46.82 MH/s
+New job received: 0xc92b88 Epoch: 471 Difficulty: 8.73G
+New job received: 0x6e3d1b Epoch: 471 Difficulty: 8.73G
+New job received: 0x6ccf27 Epoch: 471 Difficulty: 8.73G
+New job received: 0x4919ef Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.61 MH/s
+New job received: 0xfe3aa1 Epoch: 471 Difficulty: 8.73G
+New job received: 0xec2054 Epoch: 471 Difficulty: 8.73G
+New job received: 0x0078b0 Epoch: 471 Difficulty: 8.73G
+New job received: 0x1133e9 Epoch: 471 Difficulty: 8.73G
+New job received: 0x246a1a Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.29 MH/s
+New job received: 0xc2906f Epoch: 471 Difficulty: 8.73G
+New job received: 0x0db74e Epoch: 471 Difficulty: 8.73G
+New job received: 0x926093 Epoch: 471 Difficulty: 8.73G
+New job received: 0x7263d4 Epoch: 471 Difficulty: 8.73G
+New job received: 0x230b41 Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (23:58:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 1m 0s
+      Name     Speed  Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s  MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 84.09  0.00   0/0/0    0.0  223.3   0.376  1297  10241    55   70
+---------------------------
+Total          84.09  0.00   0/0/0    0.0  223.3   0.376
+---------------------------------------------
+Average speed (15s): 93.26 MH/s
+New job received: 0x5b08e9 Epoch: 471 Difficulty: 8.73G
+New job received: 0x9a6583 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 92.04 MH/s
+New job received: 0x7e6a40 Epoch: 471 Difficulty: 8.73G
+New job received: 0x5b593e Epoch: 471 Difficulty: 8.73G
+New job received: 0xcd6f9a Epoch: 471 Difficulty: 8.73G
+New job received: 0xcd41f8 Epoch: 471 Difficulty: 8.73G
+New job received: 0xa4ab77 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 91.44 MH/s
+New job received: 0x1dd788 Epoch: 471 Difficulty: 8.73G
+New job received: 0x29e02f Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 91.84 MH/s
+New job received: 0xa5c4ba Epoch: 471 Difficulty: 8.73G
+New job received: 0xc46998 Epoch: 471 Difficulty: 8.73G
+New job received: 0x13107d Epoch: 471 Difficulty: 8.73G
+New job received: 0xda5168 Epoch: 471 Difficulty: 8.73G
+New job received: 0x59b2dc Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (23:59:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 2m 0s
+      Name     Speed  Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s  MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 91.63  0.00   0/0/0    0.0  223.2   0.410  1309  10241    56   70
+---------------------------
+Total          91.63  0.00   0/0/0    0.0  223.2   0.410
+---------------------------------------------
+Average speed (15s): 91.21 MH/s
+New job received: 0xf55520 Epoch: 471 Difficulty: 8.73G
+New job received: 0xae3047 Epoch: 471 Difficulty: 8.73G
+New job received: 0x74ce93 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 92.10 MH/s
+New job received: 0x04681e Epoch: 471 Difficulty: 8.73G
+New job received: 0xfdb5f8 Epoch: 471 Difficulty: 8.73G
+New job received: 0x8af475 Epoch: 471 Difficulty: 8.73G
+New job received: 0x1fcc71 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.25 MH/s
+New job received: 0x4c6fa7 Epoch: 471 Difficulty: 8.73G
+New job received: 0xd82f81 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.36 MH/s
+New job received: 0xe86fbf Epoch: 471 Difficulty: 8.73G
+New job received: 0x32b38f Epoch: 471 Difficulty: 8.73G
+New job received: 0xd9e3de Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (00:00:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 3m 0s
+      Name     Speed  Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s  MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 93.02  0.00   0/0/0    0.0  223.2   0.416  1275  10241    56   70
+---------------------------
+Total          93.02  0.00   0/0/0    0.0  223.2   0.416
+---------------------------------------------
+Average speed (15s): 93.36 MH/s
+New job received: 0x7900a5 Epoch: 471 Difficulty: 8.73G
+New job received: 0x6310a0 Epoch: 471 Difficulty: 8.73G
+New job received: 0xcb94c9 Epoch: 471 Difficulty: 8.73G
+New job received: 0xd6b7d7 Epoch: 471 Difficulty: 8.73G
+New job received: 0xf3da34 Epoch: 471 Difficulty: 8.73G
+New job received: 0x01bc21 Epoch: 471 Difficulty: 8.73G
+New job received: 0xd46cbb Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.20 MH/s
+New job received: 0x294fcf Epoch: 471 Difficulty: 8.73G
+New job received: 0x2321c9 Epoch: 471 Difficulty: 8.73G
+New job received: 0xc8e0a9 Epoch: 471 Difficulty: 8.73G
+New job received: 0xffe8a5 Epoch: 471 Difficulty: 8.73G
+New job received: 0xc9b143 Epoch: 471 Difficulty: 8.73G
+New job received: 0x08a487 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.41 MH/s
+New job received: 0xc5fbde Epoch: 471 Difficulty: 8.73G
+New job received: 0xaddc65 Epoch: 471 Difficulty: 8.73G
+New job received: 0x825134 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.30 MH/s
+New job received: 0x62481a Epoch: 471 Difficulty: 8.73G
+New job received: 0x84d9ea Epoch: 471 Difficulty: 8.73G
+New job received: 0xf43461 Epoch: 471 Difficulty: 8.73G
+New job received: 0x591337 Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (00:01:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 4m 0s
+      Name     Speed  Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s  MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 93.31  0.00   0/0/0    0.0  223.3   0.417  1274  10241    56   70
+---------------------------
+Total          93.31  0.00   0/0/0    0.0  223.3   0.417
+---------------------------------------------
+Average speed (15s): 93.37 MH/s
+New job received: 0xc40592 Epoch: 471 Difficulty: 8.73G
+New job received: 0x3213ba Epoch: 471 Difficulty: 8.73G
+New job received: 0x56f399 Epoch: 471 Difficulty: 8.73G
+New job received: 0x32cc95 Epoch: 471 Difficulty: 8.73G
+New job received: 0x5f162e Epoch: 471 Difficulty: 8.73G
+New job received: 0xcdddc9 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.34 MH/s
+New job received: 0xeb8158 Epoch: 471 Difficulty: 8.73G
+New job received: 0x053509 Epoch: 471 Difficulty: 8.73G
+New job received: 0x97538d Epoch: 471 Difficulty: 8.73G
+New job received: 0x82a500 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.41 MH/s
+New job received: 0x5d6b4a Epoch: 471 Difficulty: 8.73G
+New job received: 0x68e90d Epoch: 471 Difficulty: 8.73G
+New job received: 0x6a8eb4 Epoch: 471 Difficulty: 8.73G
+New job received: 0x51bc6c Epoch: 471 Difficulty: 8.73G
+New job received: 0x95dd57 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.34 MH/s
+New job received: 0x8db8e7 Epoch: 471 Difficulty: 8.73G
+New job received: 0x1e9689 Epoch: 471 Difficulty: 8.73G
+New job received: 0xe71b3b Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (00:02:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 5m 0s
+      Name     Speed  Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s  MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 93.37  0.00   0/0/0    0.0  223.2   0.417  1271  10241    56   70
+---------------------------
+Total          93.37  0.00   0/0/0    0.0  223.2   0.417
+---------------------------------------------
+Average speed (15s): 93.39 MH/s
+New job received: 0xaaaa13 Epoch: 471 Difficulty: 8.73G
+New job received: 0x37e972 Epoch: 471 Difficulty: 8.73G
+New job received: 0x3be469 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.28 MH/s
+New job received: 0xe85b7c Epoch: 471 Difficulty: 8.73G
+New job received: 0xba0fcf Epoch: 471 Difficulty: 8.73G
+New job received: 0xb6a096 Epoch: 471 Difficulty: 8.73G
+New job received: 0xe8e0c6 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.31 MH/s
+New job received: 0x845109 Epoch: 471 Difficulty: 8.73G
+New job received: 0x24bb10 Epoch: 471 Difficulty: 8.73G
+New job received: 0xf2b62d Epoch: 471 Difficulty: 8.73G
+New job received: 0xa24b37 Epoch: 471 Difficulty: 8.73G
+New job received: 0x13d8ae Epoch: 471 Difficulty: 8.73G
+New job received: 0xad1912 Epoch: 471 Difficulty: 8.73G
+New job received: 0x0e5996 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.31 MH/s
+New job received: 0xf1e5f2 Epoch: 471 Difficulty: 8.73G
+New job received: 0x5e0ec9 Epoch: 471 Difficulty: 8.73G
+GPU 0: Found a share of difficulty 33.73G
+GPU 0: Share accepted (26 ms)
+New job received: 0x608e14 Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (00:03:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 6m 0s
+      Name     Speed   Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s   MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 93.29  24.24   1/0/0  33.7G  223.3   0.417  1265  10241    56   70
+---------------------------
+Total          93.29  24.24   1/0/0  33.7G  223.3   0.417
+---------------------------------------------
+Average speed (15s): 93.26 MH/s
+New job received: 0xc6ec63 Epoch: 471 Difficulty: 8.73G
+GPU 0: Found a share of difficulty 12.19G
+GPU 0: Share accepted (19 ms)
+New job received: 0x81409b Epoch: 471 Difficulty: 8.73G
+New job received: 0xaeb284 Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.27 MH/s
+New job received: 0x80d84b Epoch: 471 Difficulty: 8.73G
+New job received: 0xf5faaf Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.35 MH/s
+New job received: 0x06431c Epoch: 471 Difficulty: 8.73G
+New job received: 0xe9cecc Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.34 MH/s
+New job received: 0x8de799 Epoch: 471 Difficulty: 8.73G
+New job received: 0xecdc4d Epoch: 471 Difficulty: 8.73G
+New job received: 0x9fffd7 Epoch: 471 Difficulty: 8.73G
+---------------------------------------------
+Statistics (00:04:52); Mining: Ethash
+Connected to: ethash.unmineable.com:3333
+Uptime: 0h 7m 0s
+      Name     Speed   Pool  Shares   Best  Power    Eff.  CCLK   MCLK  Core  Fan
+                MH/s   MH/s  A/S/Hw  Share      W  MH/s/W   MHz    MHz  Temp  Pct
+GPU 0 RTX 3080 93.33  41.55   2/0/0  33.7G  223.3   0.417  1269  10241    56   70
+---------------------------
+Total          93.33  41.55   2/0/0  33.7G  223.3   0.417
+---------------------------------------------
+Average speed (15s): 93.35 MH/s
+New job received: 0x15fa55 Epoch: 471 Difficulty: 8.73G
+New job received: 0xeadb32 Epoch: 471 Difficulty: 8.73G
+New job received: 0x9e6b37 Epoch: 471 Difficulty: 8.73G
+New job received: 0x54beea Epoch: 471 Difficulty: 8.73G
+Average speed (15s): 93.24 MH/s
+New job received: 0xa2adcd Epoch: 471 Difficulty: 8.73G
+New job received: 0xed591a Epoch: 471 Difficulty: 8.73G
+New job received: 0x56df8d Epoch: 471 Difficulty: 8.73G
+Detected ctrl+c - closing lolMiner
