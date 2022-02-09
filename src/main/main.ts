@@ -16,7 +16,7 @@ const defaultSettings = {
 
 type Setting = string | number | boolean;
 
-export default class MainWindow {
+class MainWindow {
   settings: { [key: string]: Setting };
 
   window!: BrowserWindow;
@@ -73,3 +73,5 @@ export default class MainWindow {
     }
   }
 }
+
+export const mainWindow = new MainWindow({});
