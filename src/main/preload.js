@@ -23,3 +23,9 @@ contextBridge.exposeInMainWorld('miner', {
     ipcRenderer.on('ipc-minerExit', (_event, ...args) => func(...args));
   },
 });
+
+contextBridge.exposeInMainWorld('dialog', {
+  getPath() {
+    return ipcRenderer.invoke('ipc-selectFolder');
+  },
+});
