@@ -1,4 +1,4 @@
-import { GpuStatistic, GlobalStatistic } from '../MinerStreamingService';
+import { GpuStatistic, MinerStatistic } from '../MinerStreamingService';
 
 export const GpuStatusLineHandler = {
   match: RegExp(/^GPU \d+\s.+$/),
@@ -44,7 +44,7 @@ export const GpuStatusLineHandler = {
 
 export const SummaryLineHandler = {
   match: new RegExp(/^Total\s.+$/),
-  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, globalUpdated: (stat: GlobalStatistic) => void) => {
+  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const CurrentSpeedIndex = 1;
     const SharesIndex = 3;
     const BestShareIndex = 4;
@@ -58,18 +58,18 @@ export const SummaryLineHandler = {
     const power = parts[PowerIndex];
     const efficiency = parts[EfficiencyIndex];
 
-    globalUpdated({ field: 'hashrate', value: currentSpeed });
-    globalUpdated({ field: 'accepted', value: acceptedShares });
-    globalUpdated({ field: 'rejected', value: staleShares });
-    globalUpdated({ field: 'best', value: bestShare });
-    globalUpdated({ field: 'power', value: power });
-    globalUpdated({ field: 'efficiency', value: efficiency });
+    minerUpdated({ field: 'hashrate', value: currentSpeed });
+    minerUpdated({ field: 'accepted', value: acceptedShares });
+    minerUpdated({ field: 'rejected', value: staleShares });
+    minerUpdated({ field: 'best', value: bestShare });
+    minerUpdated({ field: 'power', value: power });
+    minerUpdated({ field: 'efficiency', value: efficiency });
   },
 };
 
 export const NewJobLineHandler = {
   match: new RegExp(/^New job received:\s.+$/),
-  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, globalUpdated: (stat: GlobalStatistic) => void) => {
+  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const IdIndex = 3;
     const EpochIndex = 5;
     const DifficultyIndex = 7;
@@ -79,29 +79,29 @@ export const NewJobLineHandler = {
     const epoch = parts[EpochIndex];
     const difficulty = parts[DifficultyIndex];
 
-    globalUpdated({ field: 'job', value: id });
-    globalUpdated({ field: 'epoch', value: epoch });
-    globalUpdated({ field: 'difficulty', value: difficulty });
+    minerUpdated({ field: 'job', value: id });
+    minerUpdated({ field: 'epoch', value: epoch });
+    minerUpdated({ field: 'difficulty', value: difficulty });
   },
 };
 
 export const AverageSpeedLineHandler = {
   match: new RegExp(/^Average speed\s.+$/),
-  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, globalUpdated: (stat: GlobalStatistic) => void) => {
+  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const SpeedIndex = 3;
     const parts = line.split(/\s+/);
     const hashrate = parts[SpeedIndex];
 
-    globalUpdated({ field: 'hashrate', value: hashrate });
+    minerUpdated({ field: 'hashrate', value: hashrate });
   },
 };
 
 export const UptimeLineHandler = {
   match: new RegExp(/^Uptime:\s.+$/),
-  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, globalUpdated: (stat: GlobalStatistic) => void) => {
+  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const uptime = line.replace(/Uptime:\s+/, '');
 
-    globalUpdated({ field: 'uptime', value: uptime });
+    minerUpdated({ field: 'uptime', value: uptime });
   },
 };
 

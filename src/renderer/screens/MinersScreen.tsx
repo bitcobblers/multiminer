@@ -5,33 +5,28 @@ import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow,
 import CheckIcon from '@mui/icons-material/Check';
 
 import { Miner } from '../../models/Configuration';
-import { AppSettingsService, defaults } from '../services/AppSettingsService';
+import { getMiners, setMiners, defaults } from '../services/AppSettingsService';
 
 import { ScreenHeader } from '../components/ScreenHeader';
 import { EditMinerControls } from '../components/EditMinerControls';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 
-type MinersScreenProps = {
-  appSettingsService: AppSettingsService;
-};
-
 const getEmptyMiner = (): Miner => {
   return { id: uuid(), kind: 'lolminer', name: '', enabled: false, installationPath: '', algorithm: 'ethash', parameters: '' };
 };
 
-export function MinersScreen(props: MinersScreenProps) {
-  const { appSettingsService } = props;
+export function MinersScreen() {
   const [newOpen, setNewOpen] = useState(false);
   const [newMiner, setNewMiner] = useState(getEmptyMiner());
-  const [miners, setMiners] = useState(defaults.miners);
+  const [miners, setLoadedMiners] = useState(defaults.miners);
 
   useEffect(() => {
     const readConfigAsync = async () => {
-      setMiners(await appSettingsService.getMiners());
+      setLoadedMiners(await getMiners());
     };
 
     readConfigAsync();
-  }, [appSettingsService]);
+  }, []);
 
   const handleOnAddMiner = () => {
     setNewOpen(true);
@@ -44,25 +39,25 @@ export function MinersScreen(props: MinersScreenProps) {
     updatedMiners.splice(index, 1);
     updatedMiners.splice(index, 0, miner);
 
-    await appSettingsService.setMiners(updatedMiners);
-    setMiners(updatedMiners);
+    await setMiners(updatedMiners);
+    setLoadedMiners(updatedMiners);
   };
 
   const addMiner = async (miner: Miner) => {
     const updatedMiners = miners.concat(miner);
 
-    await appSettingsService.setMiners(updatedMiners);
+    await setMiners(updatedMiners);
 
     setNewMiner(getEmptyMiner);
-    setMiners(updatedMiners);
+    setLoadedMiners(updatedMiners);
     setNewOpen(false);
   };
 
   const removeMiner = async (id: string) => {
     const updatedMiners = [...miners.filter((m) => m.id !== id)];
 
-    await appSettingsService.setMiners(updatedMiners);
-    setMiners(updatedMiners);
+    await setMiners(updatedMiners);
+    setLoadedMiners(updatedMiners);
   };
 
   return (

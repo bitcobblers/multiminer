@@ -5,16 +5,11 @@ import { useForm } from 'react-hook-form';
 import { AppSettings } from 'models/Configuration';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { ConfigurableControl } from '../components/ConfigurableControl';
-import { AppSettingsService, defaults } from '../services/AppSettingsService';
-
-interface SettingsScreenProps {
-  appSettingsService: AppSettingsService;
-}
+import { getAppSettings, setAppSettings, defaults } from '../services/AppSettingsService';
 
 // react-hook-form's API requires prop spreading to register controls
 /* eslint-disable react/jsx-props-no-spreading */
-export function SettingsScreen(props: SettingsScreenProps) {
-  const { appSettingsService } = props;
+export function SettingsScreen() {
   const {
     register,
     formState: { errors, isValid },
@@ -23,17 +18,16 @@ export function SettingsScreen(props: SettingsScreenProps) {
   } = useForm<AppSettings>({ defaultValues: defaults.settings });
 
   useEffect(() => {
-    appSettingsService
-      .getAppSettings()
+    getAppSettings()
       .then((s) => reset(s))
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(`Unable to load settings: ${error}`);
       });
-  }, [appSettingsService, reset]);
+  }, [reset]);
 
   const onSave = handleSubmit(async (value) => {
-    await appSettingsService.setAppSettings(value);
+    await setAppSettings(value);
   });
 
   const DefaultSpacing = 2;

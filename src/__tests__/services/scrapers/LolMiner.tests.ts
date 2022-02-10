@@ -67,18 +67,18 @@ describe('LolMiner Parser', () => {
       const expectedBest = { field: 'best', value: '33.7G' };
       const expectedPower = { field: 'power', value: '223.3' };
       const expectedEfficiency = { field: 'efficiency', value: '0.417' };
-      const updateGlobal = jest.fn();
+      const updateMiner = jest.fn();
 
       // Act.
-      handler.parse(line, jest.fn(), updateGlobal);
+      handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
-      expect(updateGlobal).toBeCalledWith(expectedHashrate);
-      expect(updateGlobal).toBeCalledWith(expectedAccepted);
-      expect(updateGlobal).toBeCalledWith(expectedRejected);
-      expect(updateGlobal).toBeCalledWith(expectedBest);
-      expect(updateGlobal).toBeCalledWith(expectedPower);
-      expect(updateGlobal).toBeCalledWith(expectedEfficiency);
+      expect(updateMiner).toBeCalledWith(expectedHashrate);
+      expect(updateMiner).toBeCalledWith(expectedAccepted);
+      expect(updateMiner).toBeCalledWith(expectedRejected);
+      expect(updateMiner).toBeCalledWith(expectedBest);
+      expect(updateMiner).toBeCalledWith(expectedPower);
+      expect(updateMiner).toBeCalledWith(expectedEfficiency);
     });
   });
 
@@ -95,15 +95,15 @@ describe('LolMiner Parser', () => {
       const expectedId = { field: 'job', value: '0xc40592' };
       const expectedEpoch = { field: 'epoch', value: '471' };
       const expectedDifficulty = { field: 'difficulty', value: '8.73G' };
-      const updateGlobal = jest.fn();
+      const updateMiner = jest.fn();
 
       // Act.
-      handler.parse(line, jest.fn(), updateGlobal);
+      handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
-      expect(updateGlobal).toBeCalledWith(expectedId);
-      expect(updateGlobal).toBeCalledWith(expectedEpoch);
-      expect(updateGlobal).toBeCalledWith(expectedDifficulty);
+      expect(updateMiner).toBeCalledWith(expectedId);
+      expect(updateMiner).toBeCalledWith(expectedEpoch);
+      expect(updateMiner).toBeCalledWith(expectedDifficulty);
     });
   });
 
@@ -118,13 +118,13 @@ describe('LolMiner Parser', () => {
     it('Should extract the average speed', () => {
       // Arrange.
       const expected = { field: 'hashrate', value: '93.37' };
-      const updateGlobal = jest.fn();
+      const updateMiner = jest.fn();
 
       // Act.
-      handler.parse(line, jest.fn(), updateGlobal);
+      handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
-      expect(updateGlobal).toBeCalledWith(expected);
+      expect(updateMiner).toBeCalledWith(expected);
     });
   });
 
@@ -139,13 +139,13 @@ describe('LolMiner Parser', () => {
     it('Should extract all fields', () => {
       // Arrange.
       const expected = { field: 'uptime', value: '0h 4m 0s' };
-      const updateGlobal = jest.fn();
+      const updateMiner = jest.fn();
 
       // Act.
-      handler.parse(line, jest.fn(), updateGlobal);
+      handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
-      expect(updateGlobal).toBeCalledWith(expected);
+      expect(updateMiner).toBeCalledWith(expected);
     });
   });
 

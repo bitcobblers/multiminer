@@ -4,7 +4,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch } from '@mui/material';
 import { AllCoins } from '../../models/Coins';
 import { Coin, Wallet } from '../../models/Configuration';
-import { AppSettingsService } from '../services/AppSettingsService';
+import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { EditCoinControls } from '../components/EditCoinControls';
 
@@ -18,10 +18,6 @@ type CoinRecord = {
   coin: Coin;
 };
 
-interface CoinsScreenProps {
-  appSettingsService: AppSettingsService;
-}
-
 const blankCoin = (symbol: string, referral: string): Coin => {
   return {
     symbol,
@@ -32,15 +28,14 @@ const blankCoin = (symbol: string, referral: string): Coin => {
   };
 };
 
-export function CoinsScreen(props: CoinsScreenProps) {
-  const { appSettingsService } = props;
+export function CoinsScreen() {
   const [wallets, setWallets] = useState([] as Wallet[]);
-  const [coins, setCoins] = useState([] as CoinRecord[]);
+  const [coins, setLoadedCoins] = useState([] as CoinRecord[]);
   const [enabledOnly, setEnabledOnly] = useState(false);
 
   useEffect(() => {
     const readConfigAsync = async () => {
-      const loadedCoins = await appSettingsService.getCoins();
+      const loadedCoins = await getCoins();
       const parsedCoins = AllCoins.map((cd) => {
         const coin = loadedCoins.find((c) => {
           return c.symbol === cd.symbol;
@@ -56,12 +51,12 @@ export function CoinsScreen(props: CoinsScreenProps) {
         };
       });
 
-      setWallets(await appSettingsService.getWallets());
-      setCoins(parsedCoins);
+      setWallets(await getWallets());
+      setLoadedCoins(parsedCoins);
     };
 
     readConfigAsync();
-  }, [appSettingsService]);
+  }, []);
 
   const handleOnEditCoinSave = async (coin: Coin) => {
     const index = coins.findIndex((c) => c.coin.symbol === coin.symbol);
@@ -71,8 +66,8 @@ export function CoinsScreen(props: CoinsScreenProps) {
     updatedCoins.splice(index, 1);
     updatedCoins.splice(index, 0, updatedCoin);
 
-    await appSettingsService.setCoins(updatedCoins.filter((c) => c.isSet).map((c) => c.coin));
-    setCoins(updatedCoins);
+    await setCoins(updatedCoins.filter((c) => c.isSet).map((c) => c.coin));
+    setLoadedCoins(updatedCoins);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
