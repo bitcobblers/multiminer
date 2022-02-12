@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../MinerStreamingService';
+import { GpuStatistic, MinerStatistic } from '../MinerEventStreamer';
 
 export const GpuStatusLineHandler = {
   match: RegExp(/^GPU \d+\s.+$/),

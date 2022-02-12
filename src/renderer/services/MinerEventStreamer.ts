@@ -1,12 +1,12 @@
 import { Subject } from 'rxjs';
 import { stdout } from './MinerService';
 
-type LineHandler = {
+type LineScraper = {
   match: RegExp;
   parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => void;
 };
 
-let handlers = Array<LineHandler>();
+let handlers = Array<LineScraper>();
 
 export type GpuStatistic = {
   id: string;
@@ -23,7 +23,7 @@ export type MinerStatistic = {
 export const gpuStatistics = new Subject<GpuStatistic>();
 export const minerStatistics = new Subject<MinerStatistic>();
 
-export function setHandlers(miningHandlers: LineHandler[]) {
+export function setHandlers(miningHandlers: LineScraper[]) {
   handlers = miningHandlers ?? [];
 }
 
