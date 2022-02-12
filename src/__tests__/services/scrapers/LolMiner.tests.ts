@@ -159,7 +159,7 @@ describe('LolMiner Parser', () => {
 
     it('Should extract all fields', () => {
       // Arrange.
-      const expected = { id: '0', name: '', field: 'found', value: '12.19G' };
+      const expected = { id: '0', field: 'found', value: '12.19G' };
       const updateGpu = jest.fn();
 
       // Act.
@@ -180,7 +180,7 @@ describe('LolMiner Parser', () => {
 
     it('Should extract all fields', () => {
       // Arrange.
-      const expected = { id: '0', name: '', field: 'accepted', value: '' };
+      const expected = { id: '0', field: 'accepted' };
       const updateGpu = jest.fn();
 
       // Act.

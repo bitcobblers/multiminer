@@ -10,14 +10,14 @@ let handlers = Array<LineHandler>();
 
 export type GpuStatistic = {
   id: string;
-  name: string;
+  name?: string;
   field: string;
-  value: string;
+  value?: string;
 };
 
 export type MinerStatistic = {
   field: string;
-  value: string;
+  value?: string;
 };
 
 export const gpuStatistics = new Subject<GpuStatistic>();
@@ -36,7 +36,3 @@ stdout.subscribe((line) => {
     (stat) => minerStatistics.next(stat)
   );
 });
-
-// Process: lolminer.exe
-// Multiple graphics cards???
-// Commandline:  lolminer.exe --algo ETHASH --user xxx --pool xxx
