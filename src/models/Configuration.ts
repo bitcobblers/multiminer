@@ -44,7 +44,7 @@ export const AvailableMiners: MinerInfo[] = [
     name: 'lolminer',
     algorithms: ['ethash', 'etchash'],
     exe: 'lolminer.exe',
-    getArgs: (alg, cs, url) => `--algo ${alg} --pool ${url} --user ${cs}`,
+    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor`,
   },
   {
     name: 'nbminer',

@@ -1,5 +1,5 @@
 import { Container, Divider, Typography, Button } from '@mui/material';
-import { startMiner, stopMiner } from '../services/MinerService';
+import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 
 export function HomeScreen(): JSX.Element {
   return (
@@ -8,8 +8,9 @@ export function HomeScreen(): JSX.Element {
         Home
       </Typography>
       <Divider />
-      <Button onClick={async () => startMiner('C:\\ethereum\\xmrig-6.16.2\\xmrig.exe', '')}>Start Miner</Button>
+      <Button onClick={async () => startMiner()}>Start Miner</Button>
       <Button onClick={async () => stopMiner()}>Stop Miner</Button>
+      <Button onClick={async () => nextCoin()}>Next Coin</Button>
     </Container>
   );
 }
