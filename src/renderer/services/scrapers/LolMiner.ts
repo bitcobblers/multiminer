@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../MinerStreamingService';
+import { GpuStatistic, MinerStatistic } from '../MinerEventStreamer';
 
 export const GpuStatusLineHandler = {
   match: RegExp(/^GPU \d+\s.+$/),
@@ -115,7 +115,7 @@ export const FoundShareLineHandler = {
     const id = parts[IdIndex].replace(':', '');
     const difficulty = parts[DifficultyIndex];
 
-    gpuUpdated({ id, name: '', field: 'found', value: difficulty });
+    gpuUpdated({ id, field: 'found', value: difficulty });
   },
 };
 
@@ -127,12 +127,8 @@ export const ShareAcceptedLineHandler = {
     const parts = line.split(/\s+/);
     const id = parts[IdIndex].replace(':', '');
 
-    gpuUpdated({ id, name: '', field: 'accepted', value: '' });
+    gpuUpdated({ id, field: 'accepted' });
   },
 };
 
 export const LolMinerLineParsers = [GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler, FoundShareLineHandler, ShareAcceptedLineHandler];
-
-// Process: lolminer.exe
-// Multiple graphics cards???
-// Commandline:  lolminer.exe --algo ETHASH --user xxx --pool xxx

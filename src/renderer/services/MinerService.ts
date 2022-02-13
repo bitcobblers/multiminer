@@ -11,9 +11,13 @@ minerApi.receive((data: string) => {
 });
 
 export async function startMiner(path: string, args: string) {
+  // eslint-disable-next-line no-console
+  console.log(`Starting miner with the following parameters: [ '${path}', '${args}' ]`);
   await minerApi.start(path, args);
 }
 
 export async function stopMiner() {
+  // eslint-disable-next-line no-console
+  console.log('Stopping miner.');
   await minerApi.stop();
 }

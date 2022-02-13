@@ -1,29 +1,29 @@
 import { Subject } from 'rxjs';
 import { stdout } from './MinerService';
 
-type LineHandler = {
+type LineScraper = {
   match: RegExp;
   parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => void;
 };
 
-let handlers = Array<LineHandler>();
+let handlers = Array<LineScraper>();
 
 export type GpuStatistic = {
   id: string;
-  name: string;
+  name?: string;
   field: string;
-  value: string;
+  value?: string;
 };
 
 export type MinerStatistic = {
   field: string;
-  value: string;
+  value?: string;
 };
 
 export const gpuStatistics = new Subject<GpuStatistic>();
 export const minerStatistics = new Subject<MinerStatistic>();
 
-export function setHandlers(miningHandlers: LineHandler[]) {
+export function setHandlers(miningHandlers: LineScraper[]) {
   handlers = miningHandlers ?? [];
 }
 
@@ -36,7 +36,3 @@ stdout.subscribe((line) => {
     (stat) => minerStatistics.next(stat)
   );
 });
-
-// Process: lolminer.exe
-// Multiple graphics cards???
-// Commandline:  lolminer.exe --algo ETHASH --user xxx --pool xxx

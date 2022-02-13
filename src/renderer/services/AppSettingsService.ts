@@ -11,12 +11,12 @@ export const defaults = {
   ] as Wallet[],
 
   coins: [
-    { symbol: 'ETH', wallet: 'mywallet1', enabled: true, duration: 4, referral: 'foo' },
-    { symbol: 'SHIB', wallet: 'mywallet1', enabled: false, duration: 4, referral: 'foo' },
-    { symbol: 'TRX', wallet: 'mywallet3', enabled: true, duration: 4, referral: 'bar' },
+    { symbol: 'ETH', wallet: 'mywallet1', enabled: true, duration: 5, referral: 'FractalMedia' },
+    { symbol: 'SHIB', wallet: 'mywallet1', enabled: false, duration: 5, referral: 'FractalMedia' },
+    { symbol: 'TRX', wallet: 'mywallet3', enabled: true, duration: 5, referral: 'FractalMedia' },
   ] as Coin[],
 
-  miners: [{ id: '12345', kind: 'lolminer', name: 'default miner', enabled: true, installationPath: 'C:\\ethereum\\gminer', algorithm: 'ethash', parameters: '' }] as Miner[],
+  miners: [{ id: '12345', kind: 'lolminer', name: 'default', enabled: true, installationPath: 'C:\\ethereum\\lolminer\\1.42', algorithm: 'ethash', parameters: '' }] as Miner[],
 
   pools: {
     ethash: 'ethash.unmineable.com:3333',
