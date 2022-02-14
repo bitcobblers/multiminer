@@ -1,12 +1,16 @@
 import path from 'path-browserify';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { AllCoins, CoinDefinition } from '../../models/Coins';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models/Configuration';
 
+export type ManagerState = 'inactive' | 'active';
+
 export const errors = new Subject<string>();
+export const serviceState = new BehaviorSubject<ManagerState>('inactive');
+export const currentCoin = new Subject<string>();
 
 let timeout: NodeJS.Timeout;
 
@@ -95,6 +99,7 @@ async function changeCoin() {
       // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
+      currentCoin.next(coin.symbol);
       await miningService.startMiner(filePath, args);
       timeout = setTimeout(changeCoin, Number(selection.coin.duration) * 1000 * 60);
     }
@@ -107,11 +112,13 @@ export async function nextCoin() {
 }
 
 export async function stopMiner() {
+  serviceState.next('inactive');
   clearTimeout(timeout);
   await miningService.stopMiner();
 }
 
 export async function startMiner() {
+  serviceState.next('active');
   clearTimeout(timeout);
   await changeCoin();
 }
