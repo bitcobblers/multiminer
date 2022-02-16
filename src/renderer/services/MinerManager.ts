@@ -6,16 +6,28 @@ import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models/Configuration';
 
-export type ManagerState = 'inactive' | 'active';
+export type ManagerState = {
+  state: 'active' | 'inactive';
+  currentCoin: string;
+};
 
-export const errors = new Subject<string>();
-export const serviceState = new BehaviorSubject<ManagerState>('inactive');
-export const currentCoin = new Subject<string>();
+export const errors$ = new Subject<string>();
+export const serviceState$ = new BehaviorSubject<ManagerState>({ state: 'inactive', currentCoin: '' });
+
+const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
 
 let timeout: NodeJS.Timeout;
 
+function activate(coin: string) {
+  serviceState$.next({ state: 'active', currentCoin: coin });
+}
+
+function deactivate() {
+  serviceState$.next({ state: 'inactive', currentCoin: '' });
+}
+
 function setError(message: string) {
-  errors.next(message);
+  errors$.next(message);
 }
 
 function getRandom<T>(array: Array<T>) {
@@ -99,9 +111,9 @@ async function changeCoin() {
       // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
-      currentCoin.next(coin.symbol);
+      activate(coin.symbol);
       await miningService.startMiner(filePath, args);
-      timeout = setTimeout(changeCoin, Number(selection.coin.duration) * 1000 * 60);
+      timeout = setTimeout(changeCoin, Number(selection.coin.duration) * MILLISECONDS_PER_HOUR);
     }
   );
 }
@@ -112,13 +124,12 @@ export async function nextCoin() {
 }
 
 export async function stopMiner() {
-  serviceState.next('inactive');
+  deactivate();
   clearTimeout(timeout);
   await miningService.stopMiner();
 }
 
 export async function startMiner() {
-  serviceState.next('active');
   clearTimeout(timeout);
   await changeCoin();
 }

@@ -1,9 +1,8 @@
-import { BehaviorSubject } from 'rxjs';
-import axios from 'axios';
+import { BehaviorSubject, timer } from 'rxjs';
 
 import { AllCoins } from '../../models/Coins';
-import { Coin } from '../../models/Configuration';
 import * as config from './AppSettingsService';
+import { tickerApi } from '../../shared/TickerApi';
 
 export type CoinTicker = {
   symbol: string;
@@ -12,43 +11,36 @@ export type CoinTicker = {
 
 export const ticker = new BehaviorSubject<CoinTicker[]>([]);
 
-const UPDATE_INTERVAL = 1; // Minutes
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
-const TICKER_URL = 'https://api.coingecko.com/api/v3/simple/price';
+const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
 
-function formatUrl(coins: Coin[]) {
-  const ids = coins.map((c) => AllCoins.find((cd) => cd.symbol === c.symbol)?.id).join(',');
-
-  return `${TICKER_URL}?ids=${ids}&vs_currencies=USD`;
-}
+const updater = timer(0, UPDATE_INTERVAL);
 
 export async function updateTicker() {
   const coins = (await config.getCoins()).filter((c) => c.enabled);
-  const url = formatUrl(coins);
+  const ids = coins.map((c) => AllCoins.find((cd) => cd.symbol === c.symbol)?.id ?? '').filter((c) => c !== '');
+  const result = Array<CoinTicker>();
 
-  if (coins.length === 0) {
+  if (ids.length === 0) {
     return;
   }
 
-  const updatedCoins = await axios
-    .get(url)
-    .then((r) => r.data)
-    .then((d) => {
-      const result: CoinTicker[] = [];
+  const response = JSON.parse(await tickerApi.getTicker(ids));
 
-      Object.keys(d).forEach((k) => {
-        // This call should never fail.
-        const symbol = AllCoins.find((c) => c.id === k)?.symbol;
+  Object.keys(response).forEach((k) => {
+    // This call should never fail.
+    const symbol = AllCoins.find((c) => c.id === k)?.symbol;
 
-        if (symbol !== undefined) {
-          result.push({ symbol, price: d[k].usd });
-        }
-      });
+    if (symbol !== undefined) {
+      result.push({ symbol, price: response[k].usd });
+    }
+  });
 
-      return result;
-    });
-
-  ticker.next(updatedCoins);
+  if (result.length > 0) {
+    ticker.next(result);
+  }
 }
 
-setInterval(updateTicker, UPDATE_INTERVAL * MILLISECONDS_PER_MINUTE);
+updater.subscribe(() => {
+  updateTicker();
+});
