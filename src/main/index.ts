@@ -15,6 +15,8 @@ import { addApi } from './ipc';
 import SettingsModule from './modules/SettingsModule';
 import MinerModule from './modules/MinerModule';
 import DialogModule from './modules/DialogModule';
+import UnmineableModule from './modules/UnmineableModule';
+import TickerModule from './modules/TickerModule';
 
 const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
@@ -43,6 +45,8 @@ mainWindow.onEvent.on('window-created', async () => {
   addApi(new SettingsModule());
   addApi(new MinerModule());
   addApi(new DialogModule());
+  addApi(new UnmineableModule());
+  addApi(new TickerModule());
 
   if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');

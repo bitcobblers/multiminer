@@ -29,3 +29,15 @@ contextBridge.exposeInMainWorld('dialog', {
     return ipcRenderer.invoke('ipc-selectFolder');
   },
 });
+
+contextBridge.exposeInMainWorld('unmineable', {
+  getCoin(coin, address) {
+    return ipcRenderer.invoke('ipc-getUnmineableCoin', coin, address);
+  },
+});
+
+contextBridge.exposeInMainWorld('ticker', {
+  getTicker(coins) {
+    return ipcRenderer.invoke('ipc-getTicker', coins);
+  },
+});
