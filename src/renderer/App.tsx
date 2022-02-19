@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useEffect, useState } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -18,6 +19,10 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
+
+// Context.
+import { MinerContext } from './MinerContext';
+import { MinerState, serviceState$ } from './services/MinerManager';
 
 // Screens.
 import { HomeScreen } from './screens/HomeScreen';
@@ -47,36 +52,48 @@ const linkStyle = {
 };
 
 export function App() {
+  const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
+
+  useEffect(() => {
+    const subscription = serviceState$.subscribe((s) => {
+      setManagerState(s);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
-    <Router>
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <Drawer style={{ width: drawerWidth }} variant="persistent" open>
-            <List style={{ width: drawerWidth }}>
-              {links.map((value) => {
-                return (
-                  <Link key={value.id} to={value.to} style={linkStyle}>
-                    <ListItem button>
-                      <ListItemIcon>{value.icon}</ListItemIcon>
-                      <ListItemText primary={value.text} />
-                    </ListItem>
-                  </Link>
-                );
-              })}
-            </List>
-          </Drawer>
-          <Switch>
-            <Route path="/wallets" component={WalletsScreen} />
-            <Route path="/coins" component={CoinsScreen} />
-            <Route path="/miners" component={MinersScreen} />
-            <Route path="/monitor" component={MonitorScreen} />
-            <Route path="/settings" component={SettingsScreen} />
-            <Route path="/about" component={AboutScreen} />
-            <Route path="/" component={HomeScreen} />
-          </Switch>
-        </Box>
-      </ThemeProvider>
-    </Router>
+    <MinerContext.Provider value={managerState}>
+      <Router>
+        <ThemeProvider theme={mdTheme}>
+          <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <Drawer style={{ width: drawerWidth }} variant="persistent" open>
+              <List style={{ width: drawerWidth }}>
+                {links.map((value) => {
+                  return (
+                    <Link key={value.id} to={value.to} style={linkStyle}>
+                      <ListItem button>
+                        <ListItemIcon>{value.icon}</ListItemIcon>
+                        <ListItemText primary={value.text} />
+                      </ListItem>
+                    </Link>
+                  );
+                })}
+              </List>
+            </Drawer>
+            <Switch>
+              <Route path="/wallets" component={WalletsScreen} />
+              <Route path="/coins" component={CoinsScreen} />
+              <Route path="/miners" component={MinersScreen} />
+              <Route path="/monitor" component={MonitorScreen} />
+              <Route path="/settings" component={SettingsScreen} />
+              <Route path="/about" component={AboutScreen} />
+              <Route path="/" component={HomeScreen} />
+            </Switch>
+          </Box>
+        </ThemeProvider>
+      </Router>
+    </MinerContext.Provider>
   );
 }
