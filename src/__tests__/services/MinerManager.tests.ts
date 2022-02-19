@@ -9,7 +9,7 @@ describe('Miner Manager Service', () => {
     const onError = jest.fn();
     const onSuccess = jest.fn();
 
-    manager.setMiner('');
+    manager.setMiner(null);
 
     // Act.
     await manager.selectCoin(onError, onSuccess);

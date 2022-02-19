@@ -126,7 +126,7 @@ async function changeCoin() {
   );
 }
 
-export function setMiner(minerName: string) {
+export function setMiner(minerName: string | null) {
   updateState({ miner: minerName });
 }
 
