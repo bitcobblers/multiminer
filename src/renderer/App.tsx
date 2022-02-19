@@ -21,7 +21,7 @@ import { MinerContext } from './MinerContext';
 import { MinerState, serviceState$ } from './services/MinerManager';
 
 // Screens.
-import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens/AllScreens';
+import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 
 const drawerWidth = 200;
 const mdTheme = createTheme();
