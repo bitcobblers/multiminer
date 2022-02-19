@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useEffect, useState } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -14,6 +15,10 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
+
+// Context.
+import { MinerContext } from './MinerContext';
+import { MinerState, serviceState$ } from './services/MinerManager';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens/AllScreens';
@@ -60,17 +65,29 @@ function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
 }
 
 export function App() {
+  const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
+
+  useEffect(() => {
+    const subscription = serviceState$.subscribe((s) => {
+      setManagerState(s);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
-    <Router>
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <Drawer style={{ width: drawerWidth }} variant="persistent" open>
-            <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-          </Drawer>
-          <Switch>{links.map(NavScreen)}</Switch>
-        </Box>
-      </ThemeProvider>
-    </Router>
+    <MinerContext.Provider value={managerState}>
+      <Router>
+        <ThemeProvider theme={mdTheme}>
+          <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <Drawer style={{ width: drawerWidth }} variant="persistent" open>
+              <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+            </Drawer>
+            <Switch>{links.map(NavScreen)}</Switch>
+          </Box>
+        </ThemeProvider>
+      </Router>
+    </MinerContext.Provider>
   );
 }

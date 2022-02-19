@@ -5,25 +5,40 @@ import { AllCoins, CoinDefinition } from '../../models/Coins';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models/Configuration';
+import { getMiners } from './AppSettingsService';
 
-export type ManagerState = {
-  state: 'active' | 'inactive';
-  currentCoin: string;
+type CoinSelection = {
+  miner: Miner;
+  minerInfo: MinerInfo;
+  coin: Coin;
+  coinInfo: CoinDefinition;
+  wallet: Wallet;
 };
-
-export const errors$ = new Subject<string>();
-export const serviceState$ = new BehaviorSubject<ManagerState>({ state: 'inactive', currentCoin: '' });
 
 const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
 
 let timeout: NodeJS.Timeout;
 
+export type MinerState = {
+  state: 'active' | 'inactive';
+  currentCoin: string | null;
+  miner: string | null;
+};
+
+export const errors$ = new Subject<string>();
+export const serviceState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: null, miner: null });
+
+function updateState(newState: Partial<MinerState>) {
+  const currentState = serviceState$.getValue();
+  serviceState$.next({ ...currentState, ...newState });
+}
+
 function activate(coin: string) {
-  serviceState$.next({ state: 'active', currentCoin: coin });
+  updateState({ state: 'active', currentCoin: coin });
 }
 
 function deactivate() {
-  serviceState$.next({ state: 'inactive', currentCoin: '' });
+  updateState({ state: 'inactive', currentCoin: null });
 }
 
 function setError(message: string) {
@@ -46,16 +61,9 @@ function getConnectionString(symbol: string, address: string, memo: string, name
   return `${symbol}:${sanitize(address)}:${sanitize(memo)}.${sanitize(name)}#${referral}`;
 }
 
-type CoinSelection = {
-  miner: Miner;
-  minerInfo: MinerInfo;
-  coin: Coin;
-  coinInfo: CoinDefinition;
-  wallet: Wallet;
-};
-
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
-  const miner = (await config.getMiners()).find((m) => m.enabled);
+  const minerName = serviceState$.getValue().miner;
+  const miner = (await config.getMiners()).find((m) => m.name === minerName);
   const minerInfo = AvailableMiners.find((m) => m.name === miner?.kind);
 
   if (miner === undefined) {
@@ -118,6 +126,10 @@ async function changeCoin() {
   );
 }
 
+export function setMiner(minerName: string | null) {
+  updateState({ miner: minerName });
+}
+
 export async function nextCoin() {
   clearTimeout(timeout);
   await changeCoin();
@@ -133,3 +145,13 @@ export async function startMiner() {
   clearTimeout(timeout);
   await changeCoin();
 }
+
+// eslint-disable-next-line promise/catch-or-return
+getMiners().then((miners) => {
+  const miner = miners.find((m) => m.enabled);
+
+  // eslint-disable-next-line promise/always-return
+  if (miner !== undefined) {
+    updateState({ miner: miner?.name });
+  }
+});
