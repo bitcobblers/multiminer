@@ -11,7 +11,7 @@ export function HomeScreen(): JSX.Element {
   const minerContext = useContext(MinerContext);
 
   const refreshData = async () => {
-    await Promise.all([updateCoins(), updateTicker()]);
+    await Promise.allSettled([updateCoins(), updateTicker()]);
   };
 
   useEffect(() => {
@@ -46,13 +46,13 @@ export function HomeScreen(): JSX.Element {
         Home
       </Typography>
       <Divider />
-      <Button disabled={minerActive || minerContext.miner === ''} onClick={async () => startMiner()}>
+      <Button disabled={minerActive || minerContext.miner === null} onClick={async () => startMiner()}>
         Start Miner
       </Button>
       <Button disabled={!minerActive} onClick={async () => stopMiner()}>
         Stop Miner
       </Button>
-      <Button disabled={!minerActive || minerContext.miner === ''} onClick={async () => nextCoin()}>
+      <Button disabled={!minerActive || minerContext.miner === null} onClick={async () => nextCoin()}>
         Next Coin
       </Button>
       <RefreshIcon onClick={async () => refreshData()} />

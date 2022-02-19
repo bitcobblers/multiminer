@@ -21,12 +21,12 @@ let timeout: NodeJS.Timeout;
 
 export type MinerState = {
   state: 'active' | 'inactive';
-  currentCoin: string;
-  miner: string;
+  currentCoin: string | null;
+  miner: string | null;
 };
 
 export const errors$ = new Subject<string>();
-export const serviceState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: '', miner: '' });
+export const serviceState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: null, miner: null });
 
 function updateState(newState: Partial<MinerState>) {
   const currentState = serviceState$.getValue();
@@ -38,7 +38,7 @@ function activate(coin: string) {
 }
 
 function deactivate() {
-  updateState({ state: 'inactive', currentCoin: '' });
+  updateState({ state: 'inactive', currentCoin: null });
 }
 
 function setError(message: string) {
@@ -150,9 +150,8 @@ export async function startMiner() {
 getMiners().then((miners) => {
   const miner = miners.find((m) => m.enabled);
 
+  // eslint-disable-next-line promise/always-return
   if (miner !== undefined) {
-    updateState({ miner: miner?.name ?? '' });
+    updateState({ miner: miner?.name });
   }
-
-  return '';
 });
