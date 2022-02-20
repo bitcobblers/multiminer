@@ -34,6 +34,9 @@ contextBridge.exposeInMainWorld('unmineable', {
   getCoin(coin, address) {
     return ipcRenderer.invoke('ipc-getUnmineableCoin', coin, address);
   },
+  getWorkers(uuid) {
+    return ipcRenderer.invoke('ipc-getUnmineableWorkers', uuid);
+  },
 });
 
 contextBridge.exposeInMainWorld('ticker', {
