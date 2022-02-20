@@ -1,15 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { useEffect, useState } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
 // Material.
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Box from '@mui/material/Box';
-import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box } from '@mui/material';
 
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
@@ -25,31 +20,48 @@ import { MinerContext } from './MinerContext';
 import { MinerState, serviceState$ } from './services/MinerManager';
 
 // Screens.
-import { HomeScreen } from './screens/HomeScreen';
-import { WalletsScreen } from './screens/WalletsScreen';
-import { CoinsScreen } from './screens/CoinsScreen';
-import { MinersScreen } from './screens/MinersScreen';
-import { MonitorScreen } from './screens/MonitorScreen';
-import { SettingsScreen } from './screens/SettingsScreen';
-import { AboutScreen } from './screens/AboutScreen';
+import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 
 const drawerWidth = 200;
 const mdTheme = createTheme();
 
 const links = [
-  { id: 0, to: '/', icon: <HomeIcon />, text: 'Home' },
-  { id: 1, to: '/wallets', icon: <AccountBalanceWalletIcon />, text: 'Wallets' },
-  { id: 2, to: '/coins', icon: <AddShoppingCartIcon />, text: 'Coins' },
-  { id: 3, to: '/miners', icon: <RocketLaunchIcon />, text: 'Miners' },
-  { id: 4, to: '/monitor', icon: <MonitorIcon />, text: 'Monitor' },
-  { id: 5, to: '/settings', icon: <SettingsIcon />, text: 'Settings' },
-  { id: 6, to: '/about', icon: <InfoIcon />, text: 'About' },
+  { id: 0, to: '/$', icon: <HomeIcon />, text: 'Home', screen: <HomeScreen /> },
+  { id: 1, to: '/wallets', icon: <AccountBalanceWalletIcon />, text: 'Wallets', screen: <WalletsScreen /> },
+  { id: 2, to: '/coins', icon: <AddShoppingCartIcon />, text: 'Coins', screen: <CoinsScreen /> },
+  { id: 3, to: '/miners', icon: <RocketLaunchIcon />, text: 'Miners', screen: <MinersScreen /> },
+  { id: 4, to: '/monitor', icon: <MonitorIcon />, text: 'Monitor', screen: <MonitorScreen /> },
+  { id: 5, to: '/settings', icon: <SettingsIcon />, text: 'Settings', screen: <SettingsScreen /> },
+  { id: 6, to: '/about', icon: <InfoIcon />, text: 'About', screen: <AboutScreen /> },
 ];
 
 const linkStyle = {
   textDecoration: 'none',
   color: 'black',
 };
+
+function NavLink(props: { id: number; to: string; icon: JSX.Element; text: string }) {
+  const { id, to, icon, text } = props;
+
+  return (
+    <Link key={id} to={to} style={linkStyle}>
+      <ListItem button>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItem>
+    </Link>
+  );
+}
+
+function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
+  const { id, to, screen } = props;
+
+  return (
+    <Route key={id} path={to}>
+      {screen}
+    </Route>
+  );
+}
 
 export function App() {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
@@ -69,28 +81,9 @@ export function App() {
           <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <Drawer style={{ width: drawerWidth }} variant="persistent" open>
-              <List style={{ width: drawerWidth }}>
-                {links.map((value) => {
-                  return (
-                    <Link key={value.id} to={value.to} style={linkStyle}>
-                      <ListItem button>
-                        <ListItemIcon>{value.icon}</ListItemIcon>
-                        <ListItemText primary={value.text} />
-                      </ListItem>
-                    </Link>
-                  );
-                })}
-              </List>
+              <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
             </Drawer>
-            <Switch>
-              <Route path="/wallets" component={WalletsScreen} />
-              <Route path="/coins" component={CoinsScreen} />
-              <Route path="/miners" component={MinersScreen} />
-              <Route path="/monitor" component={MonitorScreen} />
-              <Route path="/settings" component={SettingsScreen} />
-              <Route path="/about" component={AboutScreen} />
-              <Route path="/" component={HomeScreen} />
-            </Switch>
+            <Switch>{links.map(NavScreen)}</Switch>
           </Box>
         </ThemeProvider>
       </Router>
