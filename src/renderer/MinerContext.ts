@@ -3,6 +3,6 @@ import { MinerState } from './services/MinerManager';
 
 export const MinerContext = React.createContext<MinerState>({
   state: 'inactive',
-  currentCoin: '',
-  miner: '',
+  currentCoin: null,
+  miner: null,
 });

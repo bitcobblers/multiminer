@@ -3,7 +3,7 @@ import { Container, Divider, Typography, Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { startMiner, stopMiner, nextCoin, serviceState$ } from '../services/MinerManager';
 import { ticker, updateTicker } from '../services/CoinFeed';
-import { unmineable$, updateCoins } from '../services/UnmineableFeed';
+import { unmineableCoins$, unmineableWorkers$, updateCoins, updateWorkers } from '../services/UnmineableFeed';
 import { MinerContext } from '../MinerContext';
 
 export function HomeScreen(): JSX.Element {
@@ -26,17 +26,27 @@ export function HomeScreen(): JSX.Element {
       });
     });
 
-    const unmineableSubscription = unmineable$.subscribe((coins) => {
+    const unmineableCoinsSubscription = unmineableCoins$.subscribe((coins) => {
       coins.forEach((c) => {
+        if (c.symbol === minerContext.currentCoin) {
+          updateWorkers(c.uuid);
+        }
+
         // eslint-disable-next-line no-console
         console.log(`Symbol: ${c.symbol}, Balance: ${c.balance}, Threshold: ${c.threshold}`);
       });
     });
 
+    const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => {
+      // eslint-disable-next-line no-console
+      console.log(`Stats: ${JSON.stringify(stats)}`);
+    });
+
     return () => {
       minerSubscription.unsubscribe();
       tickerSubscription.unsubscribe();
-      unmineableSubscription.unsubscribe();
+      unmineableCoinsSubscription.unsubscribe();
+      unmineableWorkersSubscription.unsubscribe();
     };
   });
 

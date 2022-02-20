@@ -3,6 +3,44 @@ import * as config from './AppSettingsService';
 import { serviceState$ } from './MinerManager';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
+type TimeSeries = {
+  data: number[];
+  timestamp: Date[];
+};
+
+type Chart = {
+  reported: TimeSeries;
+  calculated: TimeSeries;
+};
+
+type Worker = {
+  online: boolean;
+  name: string;
+  last: Date;
+  rhr: number;
+  chr: number;
+  referral: string;
+};
+
+export type UnmineableStats = {
+  ethash: {
+    workers: Worker[];
+    chart: Chart;
+  };
+  etchash: {
+    workers: Worker[];
+    chart: Chart;
+  };
+  kawpow: {
+    workers: Worker[];
+    chart: Chart;
+  };
+  randomx: {
+    workers: Worker[];
+    chart: Chart;
+  };
+};
+
 export type UnmineableCoin = {
   symbol: string;
   balance: number;
@@ -11,7 +49,8 @@ export type UnmineableCoin = {
   uuid: string;
 };
 
-export const unmineable$ = new ReplaySubject<UnmineableCoin[]>();
+export const unmineableCoins$ = new ReplaySubject<UnmineableCoin[]>();
+export const unmineableWorkers$ = new ReplaySubject<UnmineableStats>();
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
@@ -43,11 +82,26 @@ async function updateCoin(coin: string, address: string) {
   });
 }
 
+export async function updateWorkers(uuid: string) {
+  const stats = await unmineableApi.getWorkers(uuid).then((w) => {
+    const raw = JSON.parse(w);
+
+    return {
+      ethash: raw.data.ethash,
+      etchash: raw.data.etchash,
+      kawpow: raw.data.kawpow,
+      randomx: raw.data.randomx,
+    };
+  });
+
+  unmineableWorkers$.next(stats);
+}
+
 export async function updateCoins() {
   const coins = (await getCoins()).filter((c) => c.address !== '');
   const updatedCoins = await Promise.all(coins.map((cm) => updateCoin(cm.symbol, cm.address)));
 
-  unmineable$.next(updatedCoins);
+  unmineableCoins$.next(updatedCoins);
 }
 
 updater$.subscribe(() => {
