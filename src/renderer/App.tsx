@@ -17,7 +17,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 // Context.
 import { MinerContext } from './MinerContext';
-import { MinerState, serviceState$ } from './services/MinerManager';
+import { MinerState, minerState$ } from './services/MinerManager';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
@@ -67,7 +67,7 @@ export function App() {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
 
   useEffect(() => {
-    const subscription = serviceState$.subscribe((s) => {
+    const subscription = minerState$.subscribe((s) => {
       setManagerState(s);
     });
 

@@ -26,11 +26,11 @@ export type MinerState = {
 };
 
 export const errors$ = new Subject<string>();
-export const serviceState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: null, miner: null });
+export const minerState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: null, miner: null });
 
 function updateState(newState: Partial<MinerState>) {
-  const currentState = serviceState$.getValue();
-  serviceState$.next({ ...currentState, ...newState });
+  const currentState = minerState$.getValue();
+  minerState$.next({ ...currentState, ...newState });
 }
 
 function activate(coin: string) {
@@ -41,19 +41,9 @@ function deactivate() {
   updateState({ state: 'inactive', currentCoin: null });
 }
 
-function setError(message: string) {
-  errors$.next(message);
-}
-
-function getRandom<T>(array: Array<T>) {
-  return array[Math.floor(Math.random() * array.length)];
-}
-
-function sanitize(value: string) {
-  return value.trim().replace(/\s+/g, '');
-}
-
 function getConnectionString(symbol: string, address: string, memo: string, name: string, referral: string) {
+  const sanitize = (value: string) => value.trim().replace(/\s+/g, '');
+
   if (memo === '') {
     return `${symbol}:${sanitize(address)}.${sanitize(name)}#${referral}`;
   }
@@ -62,7 +52,9 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 }
 
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
-  const minerName = serviceState$.getValue().miner;
+  const getRandom = <T>(array: Array<T>) => array[Math.floor(Math.random() * array.length)];
+
+  const minerName = minerState$.getValue().miner;
   const miner = (await config.getMiners()).find((m) => m.name === minerName);
   const minerInfo = AvailableMiners.find((m) => m.name === miner?.kind);
 
@@ -106,7 +98,7 @@ async function changeCoin() {
 
   selectCoin(
     (error) => {
-      setError(error);
+      errors$.next(error);
     },
     async (selection) => {
       const appSettings = await config.getAppSettings();
