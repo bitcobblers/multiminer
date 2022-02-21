@@ -1,12 +1,5 @@
-import {
-  GpuStatusLineHandler,
-  SummaryLineHandler,
-  NewJobLineHandler,
-  AverageSpeedLineHandler,
-  UptimeLineHandler,
-  FoundShareLineHandler,
-  ShareAcceptedLineHandler,
-} from '../../../renderer/services/scrapers/LolMiner';
+import { GpuStatistic, MinerStatistic } from '../../../renderer/services/Aggregates';
+import { GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler } from '../../../renderer/services/scrapers/LolMiner';
 
 describe('LolMiner Parser', () => {
   describe('Gpu Status Tests', () => {
@@ -19,35 +12,27 @@ describe('LolMiner Parser', () => {
 
     it('Should extract all fields', () => {
       // Arrange.
-      const id = '0';
-      const name = 'RTX 3080';
-
-      const expectedHashrate = { id, name, field: 'hashrate', value: '93.33' };
-      const expectedAccepted = { id, name, field: 'accepted', value: '2' };
-      const expectedRejected = { id, name, field: 'rejected', value: '0' };
-      const expectedBest = { id, name, field: 'best', value: '33.7G' };
-      const expectedPower = { id, name, field: 'power', value: '223.3' };
-      const expectedEfficiency = { id, name, field: 'efficiency', value: '0.417' };
-      const expectedCoreClock = { id, name, field: 'cclk', value: '1269' };
-      const expectedMemoryClock = { id, name, field: 'mclk', value: '10241' };
-      const expectedCoreTemperature = { id, name, field: 'core_temp', value: '56' };
-      const expectedFanSpeed = { id, name, field: 'fan_speed', value: '70' };
       const updateGpu = jest.fn();
+      const expected: GpuStatistic = {
+        id: '0',
+        name: 'RTX 3080',
+        hashrate: 93.33,
+        accepted: 2,
+        rejected: 0,
+        best: '33.7G',
+        power: 223.3,
+        efficiency: 0.417,
+        coreClock: 1269,
+        memClock: 10241,
+        coreTemperature: 56,
+        fanSpeed: 70,
+      };
 
       // Act.
       handler.parse(line, updateGpu);
 
       // Assert.
-      expect(updateGpu).toBeCalledWith(expectedHashrate);
-      expect(updateGpu).toBeCalledWith(expectedAccepted);
-      expect(updateGpu).toBeCalledWith(expectedRejected);
-      expect(updateGpu).toBeCalledWith(expectedBest);
-      expect(updateGpu).toBeCalledWith(expectedPower);
-      expect(updateGpu).toBeCalledWith(expectedEfficiency);
-      expect(updateGpu).toBeCalledWith(expectedCoreClock);
-      expect(updateGpu).toBeCalledWith(expectedMemoryClock);
-      expect(updateGpu).toBeCalledWith(expectedCoreTemperature);
-      expect(updateGpu).toBeCalledWith(expectedFanSpeed);
+      expect(updateGpu).toBeCalledWith(expected);
     });
   });
 
@@ -61,24 +46,21 @@ describe('LolMiner Parser', () => {
 
     it('Should extract all fields', () => {
       // Arrange.
-      const expectedHashrate = { field: 'hashrate', value: '93.29' };
-      const expectedAccepted = { field: 'accepted', value: '1' };
-      const expectedRejected = { field: 'rejected', value: '0' };
-      const expectedBest = { field: 'best', value: '33.7G' };
-      const expectedPower = { field: 'power', value: '223.3' };
-      const expectedEfficiency = { field: 'efficiency', value: '0.417' };
       const updateMiner = jest.fn();
+      const expected: MinerStatistic = {
+        hashrate: 93.29,
+        accepted: 1,
+        rejected: 0,
+        best: '33.7G',
+        power: 223.3,
+        efficiency: 0.417,
+      };
 
       // Act.
       handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
-      expect(updateMiner).toBeCalledWith(expectedHashrate);
-      expect(updateMiner).toBeCalledWith(expectedAccepted);
-      expect(updateMiner).toBeCalledWith(expectedRejected);
-      expect(updateMiner).toBeCalledWith(expectedBest);
-      expect(updateMiner).toBeCalledWith(expectedPower);
-      expect(updateMiner).toBeCalledWith(expectedEfficiency);
+      expect(updateMiner).toBeCalledWith(expected);
     });
   });
 
@@ -92,18 +74,18 @@ describe('LolMiner Parser', () => {
 
     it('Should extract all fields', () => {
       // Arrange.
-      const expectedId = { field: 'job', value: '0xc40592' };
-      const expectedEpoch = { field: 'epoch', value: '471' };
-      const expectedDifficulty = { field: 'difficulty', value: '8.73G' };
       const updateMiner = jest.fn();
+      const expected: MinerStatistic = {
+        job: '0xc40592',
+        epoch: 471,
+        difficulty: '8.73G',
+      };
 
       // Act.
       handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
-      expect(updateMiner).toBeCalledWith(expectedId);
-      expect(updateMiner).toBeCalledWith(expectedEpoch);
-      expect(updateMiner).toBeCalledWith(expectedDifficulty);
+      expect(updateMiner).toBeCalledWith(expected);
     });
   });
 
@@ -117,8 +99,10 @@ describe('LolMiner Parser', () => {
 
     it('Should extract the average speed', () => {
       // Arrange.
-      const expected = { field: 'hashrate', value: '93.37' };
       const updateMiner = jest.fn();
+      const expected: MinerStatistic = {
+        hashrate: 93.37,
+      };
 
       // Act.
       handler.parse(line, jest.fn(), updateMiner);
@@ -138,56 +122,16 @@ describe('LolMiner Parser', () => {
 
     it('Should extract all fields', () => {
       // Arrange.
-      const expected = { field: 'uptime', value: '0h 4m 0s' };
       const updateMiner = jest.fn();
+      const expected: MinerStatistic = {
+        uptime: '0h 4m 0s',
+      };
 
       // Act.
       handler.parse(line, jest.fn(), updateMiner);
 
       // Assert.
       expect(updateMiner).toBeCalledWith(expected);
-    });
-  });
-
-  describe('Found Share Tests', () => {
-    const line = 'GPU 0: Found a share of difficulty 12.19G';
-    const handler = FoundShareLineHandler;
-
-    it('Should match against filter', () => {
-      expect(handler.match.test(line)).toBe(true);
-    });
-
-    it('Should extract all fields', () => {
-      // Arrange.
-      const expected = { id: '0', field: 'found', value: '12.19G' };
-      const updateGpu = jest.fn();
-
-      // Act.
-      handler.parse(line, updateGpu);
-
-      // Assert.
-      expect(updateGpu).toBeCalledWith(expected);
-    });
-  });
-
-  describe('Share Accepted Tests', () => {
-    const line = 'GPU 0: Share accepted (19 ms)';
-    const handler = ShareAcceptedLineHandler;
-
-    it('Should match against filter', () => {
-      expect(handler.match.test(line)).toBe(true);
-    });
-
-    it('Should extract all fields', () => {
-      // Arrange.
-      const expected = { id: '0', field: 'accepted' };
-      const updateGpu = jest.fn();
-
-      // Act.
-      handler.parse(line, updateGpu);
-
-      // Assert.
-      expect(updateGpu).toBeCalledWith(expected);
     });
   });
 });
