@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
 import { screenBuffer, clearBuffer } from '../services/ScreenBuffer';
 import { AutoScrollTextArea } from '../components/AutoScrollTextArea';
+import { ScreenHeader } from '../components/ScreenHeader';
 
 export function MonitorScreen(): JSX.Element {
   const [data, setData] = useState(screenBuffer.value);
@@ -24,9 +25,7 @@ export function MonitorScreen(): JSX.Element {
 
   return (
     <Container>
-      <Typography variant="h3" gutterBottom>
-        Monitor
-      </Typography>
+      <ScreenHeader title="Monitor" />
       <Typography variant="body1" gutterBottom>
         Here you can monitor the raw output for the mining application that is currently running.
       </Typography>
