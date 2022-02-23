@@ -8,7 +8,7 @@ import * as formatter from '../services/Formatters';
 import { getCoins } from '../services/AppSettingsService';
 import { startMiner, stopMiner, nextCoin, minerState$ } from '../services/MinerManager';
 import { ticker, updateTicker } from '../services/CoinFeed';
-import { unmineableCoins$, unmineableWorkers$, updateCoins, updateWorkers } from '../services/UnmineableFeed';
+import { unmineableCoins$, unmineableWorkers$, updateCoins } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
 
 // Context.
@@ -224,6 +224,7 @@ export function HomeScreen(): JSX.Element {
       setConfiguredCoins(updatedConfiguredCoins);
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => {});
 
     return () => {
