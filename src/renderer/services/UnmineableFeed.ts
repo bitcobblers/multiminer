@@ -1,6 +1,6 @@
 import { ReplaySubject, timer } from 'rxjs';
 import * as config from './AppSettingsService';
-import { serviceState$ } from './MinerManager';
+import { minerState$ } from './MinerManager';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
 type TimeSeries = {
@@ -105,7 +105,7 @@ export async function updateCoins() {
 }
 
 updater$.subscribe(() => {
-  const service = serviceState$.getValue();
+  const service = minerState$.getValue();
 
   if (service.state === 'active') {
     //  updateCoins();

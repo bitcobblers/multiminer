@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { Container, Divider, Typography, Button } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { startMiner, stopMiner, nextCoin, serviceState$ } from '../services/MinerManager';
+import { startMiner, stopMiner, nextCoin, minerState$ } from '../services/MinerManager';
 import { ticker, updateTicker } from '../services/CoinFeed';
 import { unmineableCoins$, unmineableWorkers$, updateCoins, updateWorkers } from '../services/UnmineableFeed';
 import { MinerContext } from '../MinerContext';
@@ -15,7 +15,7 @@ export function HomeScreen(): JSX.Element {
   };
 
   useEffect(() => {
-    const minerSubscription = serviceState$.subscribe((s) => {
+    const minerSubscription = minerState$.subscribe((s) => {
       setMinerActive(s.state === 'active');
     });
 

@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../MinerEventStreamer';
+import { GpuStatistic, MinerStatistic } from '../Aggregates';
 
 export const GpuStatusLineHandler = {
   match: RegExp(/^GPU \d+\s.+$/),
@@ -29,16 +29,20 @@ export const GpuStatusLineHandler = {
     const [acceptedShares, staleShares] = parts[offset - SharesIndex].split('/');
     const currentSpeed = parts[offset - CurrentSpeedIndex];
 
-    gpuUpdated({ id, name, field: 'hashrate', value: currentSpeed });
-    gpuUpdated({ id, name, field: 'accepted', value: acceptedShares });
-    gpuUpdated({ id, name, field: 'rejected', value: staleShares });
-    gpuUpdated({ id, name, field: 'best', value: bestShare });
-    gpuUpdated({ id, name, field: 'power', value: power });
-    gpuUpdated({ id, name, field: 'efficiency', value: efficiency });
-    gpuUpdated({ id, name, field: 'cclk', value: coreClock });
-    gpuUpdated({ id, name, field: 'mclk', value: memoryClock });
-    gpuUpdated({ id, name, field: 'core_temp', value: coreTemperature });
-    gpuUpdated({ id, name, field: 'fan_speed', value: fanPercent });
+    gpuUpdated({
+      id,
+      name,
+      hashrate: Number(currentSpeed),
+      accepted: Number(acceptedShares),
+      rejected: Number(staleShares),
+      best: bestShare,
+      power: Number(power),
+      efficiency: Number(efficiency),
+      coreClock: Number(coreClock),
+      memClock: Number(memoryClock),
+      coreTemperature: Number(coreTemperature),
+      fanSpeed: Number(fanPercent),
+    });
   },
 };
 
@@ -58,12 +62,14 @@ export const SummaryLineHandler = {
     const power = parts[PowerIndex];
     const efficiency = parts[EfficiencyIndex];
 
-    minerUpdated({ field: 'hashrate', value: currentSpeed });
-    minerUpdated({ field: 'accepted', value: acceptedShares });
-    minerUpdated({ field: 'rejected', value: staleShares });
-    minerUpdated({ field: 'best', value: bestShare });
-    minerUpdated({ field: 'power', value: power });
-    minerUpdated({ field: 'efficiency', value: efficiency });
+    minerUpdated({
+      hashrate: Number(currentSpeed),
+      accepted: Number(acceptedShares),
+      rejected: Number(staleShares),
+      best: bestShare,
+      power: Number(power),
+      efficiency: Number(efficiency),
+    });
   },
 };
 
@@ -79,9 +85,11 @@ export const NewJobLineHandler = {
     const epoch = parts[EpochIndex];
     const difficulty = parts[DifficultyIndex];
 
-    minerUpdated({ field: 'job', value: id });
-    minerUpdated({ field: 'epoch', value: epoch });
-    minerUpdated({ field: 'difficulty', value: difficulty });
+    minerUpdated({
+      job: id,
+      epoch: Number(epoch),
+      difficulty,
+    });
   },
 };
 
@@ -92,7 +100,9 @@ export const AverageSpeedLineHandler = {
     const parts = line.split(/\s+/);
     const hashrate = parts[SpeedIndex];
 
-    minerUpdated({ field: 'hashrate', value: hashrate });
+    minerUpdated({
+      hashrate: Number(hashrate),
+    });
   },
 };
 
@@ -101,34 +111,10 @@ export const UptimeLineHandler = {
   parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const uptime = line.replace(/Uptime:\s+/, '');
 
-    minerUpdated({ field: 'uptime', value: uptime });
+    minerUpdated({
+      uptime,
+    });
   },
 };
 
-export const FoundShareLineHandler = {
-  match: new RegExp(/^GPU \d+: Found.+/),
-  parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void) => {
-    const IdIndex = 1;
-    const DifficultyIndex = 7;
-
-    const parts = line.split(/\s+/);
-    const id = parts[IdIndex].replace(':', '');
-    const difficulty = parts[DifficultyIndex];
-
-    gpuUpdated({ id, field: 'found', value: difficulty });
-  },
-};
-
-export const ShareAcceptedLineHandler = {
-  match: new RegExp(/GPU \d+: Share.+/),
-  parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void) => {
-    const IdIndex = 1;
-
-    const parts = line.split(/\s+/);
-    const id = parts[IdIndex].replace(':', '');
-
-    gpuUpdated({ id, field: 'accepted' });
-  },
-};
-
-export const LolMinerLineParsers = [GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler, FoundShareLineHandler, ShareAcceptedLineHandler];
+export const LolMinerLineParsers = [GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler];
