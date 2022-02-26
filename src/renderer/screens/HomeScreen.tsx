@@ -174,22 +174,20 @@ export function HomeScreen(): JSX.Element {
 
   useEffect(() => {
     const tickerSubscription = ticker.subscribe((coins) => {
-      const updatedConfiguredCoins = Array<ConfiguredCoin>();
-
-      configuredCoins.forEach((currentCoin) => {
+      const updatedConfiguredCoins = configuredCoins.map((currentCoin) => {
         const updatedCoin = coins.find((c) => c.symbol === currentCoin.symbol);
 
-        if (updatedCoin !== null) {
-          updatedConfiguredCoins.push({
-            ...currentCoin,
-            ...{
-              current: minerContext.currentCoin === currentCoin.symbol,
-              price: updatedCoin?.price,
-            },
-          });
-        } else {
-          updatedConfiguredCoins.push(currentCoin);
+        if (updatedCoin === null) {
+          return currentCoin;
         }
+
+        return {
+          ...currentCoin,
+          ...{
+            current: minerContext.currentCoin === currentCoin.symbol,
+            price: updatedCoin?.price,
+          },
+        };
       });
 
       setConfiguredCoins(updatedConfiguredCoins);
@@ -202,39 +200,37 @@ export function HomeScreen(): JSX.Element {
         }
       });
 
-      const updatedConfiguredCoins = Array<ConfiguredCoin>();
-
-      configuredCoins.forEach((currentCoin) => {
+      const updatedConfiguredCoins = configuredCoins.map((currentCoin) => {
         const updatedCoin = coins.find((c) => c.symbol === currentCoin.symbol);
 
-        if (updatedCoin !== null) {
-          updatedConfiguredCoins.push({
-            ...currentCoin,
-            ...{
-              current: minerContext.currentCoin === currentCoin.symbol,
-              mined: updatedCoin?.balance,
-              threshold: updatedCoin?.threshold,
-            },
-          });
-        } else {
-          updatedConfiguredCoins.push(currentCoin);
+        if (updatedCoin === null) {
+          return currentCoin;
         }
+
+        return {
+          ...currentCoin,
+          ...{
+            current: minerContext.currentCoin === currentCoin.symbol,
+            mined: updatedCoin?.balance,
+            threshold: updatedCoin?.threshold,
+          },
+        };
       });
 
       setConfiguredCoins(updatedConfiguredCoins);
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => {});
+    const unmineableWorkersSubscription = unmineableWorkers$.subscribe(() => {
+      // eslint-disable-next-line no-console
+      console.log('Updating workers.');
+    });
 
     return () => {
       tickerSubscription.unsubscribe();
       unmineableCoinsSubscription.unsubscribe();
       unmineableWorkersSubscription.unsubscribe();
     };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [configuredCoins, minerContext.currentCoin]);
 
   useEffect(() => {
     const loadConfiguredCoins = async () => {
@@ -261,9 +257,7 @@ export function HomeScreen(): JSX.Element {
     };
 
     loadConfiguredCoins();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [minerContext.currentCoin]);
 
   useEffect(() => {
     const gpuStatsSubscription = gpuStatistics$.subscribe((stats) => {
