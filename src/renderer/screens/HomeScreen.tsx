@@ -161,8 +161,7 @@ export function HomeScreen(): JSX.Element {
   const minerContext = useContext(MinerContext);
 
   const refreshData = async () => {
-    updateCoins();
-    updateTicker();
+    await Promise.allSettled([updateCoins(), updateTicker()]);
   };
 
   useEffect(() => {
