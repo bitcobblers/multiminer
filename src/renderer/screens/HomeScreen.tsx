@@ -1,7 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { Container, Divider, Grid, Button, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
+
+// UI.
+import { Container, Divider, Grid, Button, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tabs, Tab } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+
+// Graphs.
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 // Services.
 import { GpuStatistic, MinerStatistic } from '../services/Aggregates';
@@ -9,7 +15,7 @@ import * as formatter from '../services/Formatters';
 import { getCoins } from '../services/AppSettingsService';
 import { startMiner, stopMiner, nextCoin, minerState$ } from '../services/MinerManager';
 import { ticker, updateTicker } from '../services/CoinFeed';
-import { unmineableCoins$, unmineableWorkers$, updateCoins } from '../services/UnmineableFeed';
+import { AlgorithmStat, unmineableCoins$, UnmineableStats, unmineableWorkers$, updateCoins, updateWorkers } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
 
 // Context.
@@ -18,6 +24,7 @@ import { AllCoins } from '../../models/Coins';
 
 // Screens.
 import { ScreenHeader } from '../components/ScreenHeader';
+import { TabPanel } from '../components/TabPanel';
 
 type ConfiguredCoin = {
   current: boolean;
@@ -153,16 +160,106 @@ function CoinsTable(props: { coins: ConfiguredCoin[] }) {
   );
 }
 
+function WorkerGraph(props: { algorithm: string; stat: AlgorithmStat | undefined }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { algorithm, stat } = props;
+
+  if (stat === undefined) {
+    return <p>No data to display!</p>;
+  }
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: algorithm,
+      },
+    },
+  };
+
+  const chr = stat.workers.map((w) => w.chr).reduce((previous, current) => previous + current, 0);
+  const rhr = stat.workers.map((w) => w.rhr).reduce((previous, current) => previous + current, 0);
+
+  const labels = stat?.chart.calculated.timestamps;
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: `Calculated (${chr})`,
+        data: stat?.chart.calculated.data,
+        borderColor: 'rgb(255,99,132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: `Reported(${rhr})`,
+        data: stat?.chart.reported.data,
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  };
+
+  return <Line options={options} data={data} />;
+}
+
+function WorkersGraphs(props: { workers: UnmineableStats | undefined }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { workers } = props;
+  const [tabIndex, setTabIndex] = useState(0);
+
+  if (workers === undefined) {
+    return <p>No data to display!</p>;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tabClicked = (_event: any, value: number) => {
+    setTabIndex(value);
+  };
+
+  return (
+    <div>
+      <Tabs value={tabIndex} onChange={tabClicked}>
+        <Tab label="Ethash" />
+        <Tab label="Etchash" />
+        <Tab label="Kawpow" />
+        <Tab label="RandomX" />
+      </Tabs>
+
+      <TabPanel value={tabIndex} index={0}>
+        <WorkerGraph algorithm="Ethash" stat={workers?.ethash} />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={1}>
+        <WorkerGraph algorithm="Etchash" stat={workers?.etchash} />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={2}>
+        <WorkerGraph algorithm="Kawpow" stat={workers?.kawpow} />
+      </TabPanel>
+      <TabPanel value={tabIndex} index={3}>
+        <WorkerGraph algorithm="RandomX" stat={workers?.randomx} />
+      </TabPanel>
+    </div>
+  );
+}
+
 export function HomeScreen(): JSX.Element {
   const [minerActive, setMinerActive] = useState(false);
   const [configuredCoins, setConfiguredCoins] = useState(Array<ConfiguredCoin>());
   const [currentGpuStats, setCurrentGpuStats] = useState(Array<GpuStatistic>());
   const [currentMinerStats, setCurrentMinerStats] = useState({} as MinerStatistic);
+  const [workerStats, setWorkerStats] = useState<UnmineableStats>();
   const minerContext = useContext(MinerContext);
 
   const refreshData = async () => {
     await Promise.allSettled([updateCoins(), updateTicker()]);
   };
+
+  useEffect(() => {
+    ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+  }, []);
 
   useEffect(() => {
     const minerSubscription = minerState$.subscribe((s) => {
@@ -198,7 +295,10 @@ export function HomeScreen(): JSX.Element {
     const unmineableCoinsSubscription = unmineableCoins$.subscribe((coins) => {
       coins.forEach((c) => {
         if (c.symbol === minerContext.currentCoin) {
-          // updateWorkers(c.uuid);
+          console.log('Calling updateWorkers');
+          updateWorkers(c.uuid);
+        } else {
+          console.log('Not calling updateWorkers');
         }
       });
 
@@ -222,9 +322,10 @@ export function HomeScreen(): JSX.Element {
       coinsFeed$.next(updatedConfiguredCoins);
     });
 
-    const unmineableWorkersSubscription = unmineableWorkers$.subscribe(() => {
+    const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => {
       // eslint-disable-next-line no-console
       console.log('Updating workers.');
+      setWorkerStats(stats);
     });
 
     return () => {
@@ -312,6 +413,10 @@ export function HomeScreen(): JSX.Element {
         <Grid item xs={12}>
           <Typography variant="h3">Coins</Typography>
           <CoinsTable coins={configuredCoins} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h3">Graphs</Typography>
+          <WorkersGraphs workers={workerStats} />
         </Grid>
       </Grid>
     </Container>

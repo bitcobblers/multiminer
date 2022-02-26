@@ -3,7 +3,7 @@ import axios from 'axios';
 import SharedModule from './SharedModule';
 
 const TICKER_URL = 'https://api.unmineable.com/v4/address';
-const WORKERS_URL = 'https://api.unminable.com/v4/account';
+const WORKERS_URL = 'https://api.unmineable.com/v4/account';
 
 async function getCoin(_event: IpcMainInvokeEvent, coin: string, address: string) {
   const url = `${TICKER_URL}/${address}?coin=${coin}`;
