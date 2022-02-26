@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
+import { BehaviorSubject } from 'rxjs';
 import { Container, Divider, Grid, Button, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -27,6 +28,8 @@ type ConfiguredCoin = {
   threshold?: number;
   duration: number;
 };
+
+const coinsFeed$ = new BehaviorSubject<ConfiguredCoin[]>([]);
 
 function DevicesTable(props: { gpus: GpuStatistic[] }) {
   const { gpus } = props;
@@ -174,7 +177,7 @@ export function HomeScreen(): JSX.Element {
 
   useEffect(() => {
     const tickerSubscription = ticker.subscribe((coins) => {
-      const updatedConfiguredCoins = configuredCoins.map((currentCoin) => {
+      const updatedConfiguredCoins = coinsFeed$.getValue().map((currentCoin) => {
         const updatedCoin = coins.find((c) => c.symbol === currentCoin.symbol);
 
         if (updatedCoin === null) {
@@ -190,7 +193,7 @@ export function HomeScreen(): JSX.Element {
         };
       });
 
-      setConfiguredCoins(updatedConfiguredCoins);
+      coinsFeed$.next(updatedConfiguredCoins);
     });
 
     const unmineableCoinsSubscription = unmineableCoins$.subscribe((coins) => {
@@ -200,7 +203,7 @@ export function HomeScreen(): JSX.Element {
         }
       });
 
-      const updatedConfiguredCoins = configuredCoins.map((currentCoin) => {
+      const updatedConfiguredCoins = coinsFeed$.getValue().map((currentCoin) => {
         const updatedCoin = coins.find((c) => c.symbol === currentCoin.symbol);
 
         if (updatedCoin === null) {
@@ -217,7 +220,7 @@ export function HomeScreen(): JSX.Element {
         };
       });
 
-      setConfiguredCoins(updatedConfiguredCoins);
+      coinsFeed$.next(updatedConfiguredCoins);
     });
 
     const unmineableWorkersSubscription = unmineableWorkers$.subscribe(() => {
@@ -230,7 +233,7 @@ export function HomeScreen(): JSX.Element {
       unmineableCoinsSubscription.unsubscribe();
       unmineableWorkersSubscription.unsubscribe();
     };
-  }, [configuredCoins, minerContext.currentCoin]);
+  }, [minerContext.currentCoin]);
 
   useEffect(() => {
     const loadConfiguredCoins = async () => {
@@ -253,7 +256,7 @@ export function HomeScreen(): JSX.Element {
         } as ConfiguredCoin;
       });
 
-      setConfiguredCoins(parsedCoins);
+      coinsFeed$.next(parsedCoins);
     };
 
     loadConfiguredCoins();
@@ -271,6 +274,16 @@ export function HomeScreen(): JSX.Element {
     return () => {
       gpuStatsSubscription.unsubscribe();
       minerStatsSubscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const feedSubscription = coinsFeed$.subscribe((updatedCoins) => {
+      setConfiguredCoins(updatedCoins);
+    });
+
+    return () => {
+      feedSubscription.unsubscribe();
     };
   }, []);
 

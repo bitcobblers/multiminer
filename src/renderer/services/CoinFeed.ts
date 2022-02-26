@@ -1,4 +1,4 @@
-import { BehaviorSubject, timer } from 'rxjs';
+import { ReplaySubject, timer } from 'rxjs';
 
 import { AllCoins } from '../../models/Coins';
 import * as config from './AppSettingsService';
@@ -9,7 +9,7 @@ export type CoinTicker = {
   price: number;
 };
 
-export const ticker = new BehaviorSubject<CoinTicker[]>([]);
+export const ticker = new ReplaySubject<CoinTicker[]>();
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
