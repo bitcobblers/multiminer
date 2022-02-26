@@ -22,7 +22,7 @@ export function setHandlers(miningHandlers: LineScraper[]) {
 }
 
 export function setHandlerPack(name: string) {
-  if (Object.keys(handlerPacks).find((k) => k === name)) {
+  if (name in handlerPacks) {
     handlers = handlerPacks[name];
   }
 }
