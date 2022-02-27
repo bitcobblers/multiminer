@@ -5,7 +5,7 @@ import { unmineableApi } from '../../shared/UnmineableApi';
 
 type TimeSeries = {
   data: number[];
-  timestamp: Date[];
+  timestamps: Date[];
 };
 
 type Chart = {
@@ -22,23 +22,16 @@ type Worker = {
   referral: string;
 };
 
+export type AlgorithmStat = {
+  workers: Worker[];
+  chart: Chart;
+};
+
 export type UnmineableStats = {
-  ethash: {
-    workers: Worker[];
-    chart: Chart;
-  };
-  etchash: {
-    workers: Worker[];
-    chart: Chart;
-  };
-  kawpow: {
-    workers: Worker[];
-    chart: Chart;
-  };
-  randomx: {
-    workers: Worker[];
-    chart: Chart;
-  };
+  ethash: AlgorithmStat;
+  etchash: AlgorithmStat;
+  kawpow: AlgorithmStat;
+  randomx: AlgorithmStat;
 };
 
 export type UnmineableCoin = {
@@ -108,6 +101,6 @@ updater$.subscribe(() => {
   const service = minerState$.getValue();
 
   if (service.state === 'active') {
-    //  updateCoins();
+    updateCoins();
   }
 });

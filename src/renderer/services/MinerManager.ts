@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { AllCoins, CoinDefinition } from '../../models/Coins';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
+import * as miningStream from './MinerEventStreamer';
 import { AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models/Configuration';
 import { getMiners } from './AppSettingsService';
 
@@ -111,8 +112,11 @@ async function changeCoin() {
       // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
-      activate(coin.symbol);
       await miningService.startMiner(filePath, args);
+      miningStream.clearStatistics();
+      miningStream.setHandlerPack(minerInfo.name);
+      activate(coin.symbol);
+
       timeout = setTimeout(changeCoin, Number(selection.coin.duration) * MILLISECONDS_PER_HOUR);
     }
   );
