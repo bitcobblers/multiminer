@@ -295,10 +295,7 @@ export function HomeScreen(): JSX.Element {
     const unmineableCoinsSubscription = unmineableCoins$.subscribe((coins) => {
       coins.forEach((c) => {
         if (c.symbol === minerContext.currentCoin) {
-          console.log('Calling updateWorkers');
           updateWorkers(c.uuid);
-        } else {
-          console.log('Not calling updateWorkers');
         }
       });
 
@@ -323,8 +320,6 @@ export function HomeScreen(): JSX.Element {
     });
 
     const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => {
-      // eslint-disable-next-line no-console
-      console.log('Updating workers.');
       setWorkerStats(stats);
     });
 

@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
-import { getAssetPath, resolveHtmlPath } from './util';
+import { getAssetPath, getResolveHtmlPath } from './util';
 
 const AppName = 'Unmineable Multi-Miner';
 const defaultSettings = {
@@ -48,7 +48,7 @@ class MainWindow {
       },
     });
 
-    window.loadURL(resolveHtmlPath('index.html'));
+    window.loadURL(getResolveHtmlPath()('index.html'));
     window.once('ready-to-show', () => {
       if (process.env.START_MINIMIZED) {
         window.minimize();

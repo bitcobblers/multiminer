@@ -103,6 +103,7 @@ export type GeneralSettings = {
   workerName: string;
   updateInterval: number;
   cooldownInterval: number;
+  proxy: string;
 };
 
 export type AppSettings = {

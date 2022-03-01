@@ -30,6 +30,7 @@ export const defaults = {
       workerName: 'default',
       updateInterval: 30,
       cooldownInterval: 15,
+      proxy: '',
     },
     pools: {
       ethash: 'ethash.unmineable.com:3333',

@@ -126,6 +126,7 @@ describe('App Settings Service', () => {
           workerName: 'worker',
           updateInterval: 1,
           cooldownInterval: 30,
+          proxy: '',
         },
         pools: {
           ethash: '',
