@@ -1,5 +1,5 @@
 import { dialog, IpcMainInvokeEvent, OpenDialogOptions } from 'electron';
-import SharedModule from './SharedModule';
+import { SharedModule } from './SharedModule';
 import { mainWindow } from '../main';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,12 +14,9 @@ const getPath = async (_event: IpcMainInvokeEvent): Promise<string> => {
   return result.canceled ? '' : result.filePaths[0];
 };
 
-export default class DialogModule implements SharedModule {
-  name = 'dialog';
-
-  handlers = {
+export const DialogModule: SharedModule = {
+  name: 'dialog',
+  handlers: {
     'ipc-selectFolder': getPath,
-  };
-
-  reset = () => {};
-}
+  },
+};

@@ -1,5 +1,5 @@
 import { IpcMainInvokeEvent } from 'electron';
-import SharedModule from './SharedModule';
+import { SharedModule } from './SharedModule';
 import { globalStore } from '../globals';
 import { logger } from '../logger';
 
@@ -20,18 +20,16 @@ const writeSettings = async (_event: IpcMainInvokeEvent, key: string, value: str
   globalStore.set(key, value);
 };
 
-export default class SettingsModule implements SharedModule {
-  name = 'settings';
-
-  handlers = {
+export const SettingsModule: SharedModule = {
+  name: 'settings',
+  handlers: {
     'ipc-readSetting': readSettings,
     'ipc-writeSetting': writeSettings,
-  };
-
-  reset = () => {
+  },
+  reset: () => {
     globalStore.set('wallets', '');
     globalStore.set('coins', '');
     globalStore.set('settings', '');
     globalStore.set('miners', '');
-  };
-}
+  },
+};
