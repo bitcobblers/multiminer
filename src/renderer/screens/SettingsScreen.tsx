@@ -69,7 +69,7 @@ export function SettingsScreen() {
             <TextField label="Cooldown Interval (seconds)" type="number" {...register('settings.cooldownInterval')} />
           </ConfigurableControl>
           <ConfigurableControl description="The optional proxy server to use for network calls.">
-            <TextField label="Proxy Server" {...register('settings.proxy', {})} />
+            <TextField label="Proxy Server" {...register('settings.proxy')} />
           </ConfigurableControl>
         </Stack>
         <br />

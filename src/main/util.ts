@@ -5,6 +5,7 @@ import { HttpProxyAgent } from 'http-proxy-agent';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import { globalStore } from './globals';
 import { AppSettings } from '../models/Configuration';
+import { logger } from './logger';
 
 function getResourcesPath() {
   return app.isPackaged ? path.join(process.resourcesPath, 'assets') : path.join(__dirname, '../../assets');
@@ -45,28 +46,28 @@ globalStore.onDidChange('settings', (settings) => {
 });
 
 export function getUrl(url: string) {
-  const socksCall = () => fetch(url, { agent: new SocksProxyAgent(proxy) });
-  const httpCall = () => fetch(url, { agent: new HttpProxyAgent(proxy) });
-  const normalCall = () => fetch(url);
-
   const pickCall = () => {
     if (proxy.match(/^socks:/i)) {
-      return socksCall;
-    }
-    if (proxy.match(/^http:/i)) {
-      return httpCall;
+      return fetch(url, { agent: new SocksProxyAgent(proxy) });
     }
 
-    return normalCall;
+    if (proxy.match(/^http:/i)) {
+      return fetch(url, { agent: new HttpProxyAgent(proxy) });
+    }
+
+    return fetch(url);
   };
 
-  const initialCall = pickCall();
+  logger.debug(`Invoking rest call to ${url}`);
 
-  return initialCall()
+  return pickCall()
     .then((r) => r.text())
+    .then((r) => {
+      logger.debug(`Log the following response: ${r}`);
+      return r;
+    })
     .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.log(`An error occurred while calling ${url} - ${error}`);
+      logger.error(`An error occurred while calling ${url} - ${error}`);
       return '';
     });
 }
