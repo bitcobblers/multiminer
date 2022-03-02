@@ -1,26 +1,16 @@
 import { IpcMainInvokeEvent } from 'electron';
-import axios from 'axios';
 import SharedModule from './SharedModule';
+import { getUrl } from '../util';
 
 const TICKER_URL = 'https://api.unmineable.com/v4/address';
 const WORKERS_URL = 'https://api.unmineable.com/v4/account';
 
 async function getCoin(_event: IpcMainInvokeEvent, coin: string, address: string) {
-  const url = `${TICKER_URL}/${address}?coin=${coin}`;
-
-  // eslint-disable-next-line no-console
-  console.log(`Getting ticker: ${url}`);
-
-  return axios.get(url).then((r) => JSON.stringify(r.data));
+  return getUrl(`${TICKER_URL}/${address}?coin=${coin}`);
 }
 
 async function getWorkers(_event: IpcMainInvokeEvent, uuid: string) {
-  const url = `${WORKERS_URL}/${uuid}/workers`;
-
-  // eslint-disable-next-line no-console
-  console.log(`Getting ticker: ${url}`);
-
-  return axios.get(url).then((r) => JSON.stringify(r.data));
+  return getUrl(`${WORKERS_URL}/${uuid}/workers`);
 }
 
 export default class UnmineableModule implements SharedModule {

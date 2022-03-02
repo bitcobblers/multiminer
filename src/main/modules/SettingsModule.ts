@@ -1,14 +1,12 @@
 import { IpcMainInvokeEvent } from 'electron';
-import Store from 'electron-store';
 import SharedModule from './SharedModule';
-
-const store = new Store();
+import { globalStore } from '../globals';
 
 const readSettings = async (_event: IpcMainInvokeEvent, key: string): Promise<string> => {
   let result = '';
 
-  if (store.has(key)) {
-    result = store.get(key) as string;
+  if (globalStore.has(key)) {
+    result = globalStore.get(key) as string;
   }
 
   // eslint-disable-next-line no-console
@@ -20,7 +18,7 @@ const readSettings = async (_event: IpcMainInvokeEvent, key: string): Promise<st
 const writeSettings = async (_event: IpcMainInvokeEvent, key: string, value: string): Promise<string> => {
   // eslint-disable-next-line no-console
   console.log(`Called write-settings with key: ${key}, value: ${value}`);
-  store.set(key, value);
+  globalStore.set(key, value);
   return '';
 };
 
@@ -33,9 +31,9 @@ export default class SettingsModule implements SharedModule {
   };
 
   reset = () => {
-    store.set('wallets', '');
-    store.set('coins', '');
-    store.set('settings', '');
-    store.set('miners', '');
+    globalStore.set('wallets', '');
+    globalStore.set('coins', '');
+    globalStore.set('settings', '');
+    globalStore.set('miners', '');
   };
 }
