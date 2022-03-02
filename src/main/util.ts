@@ -63,11 +63,11 @@ export function getUrl(url: string) {
   return pickCall()
     .then((r) => r.text())
     .then((r) => {
-      logger.debug(`Log the following response: ${r}`);
+      logger.debug('Log the following response: %s', r);
       return r;
     })
     .catch((error) => {
-      logger.error(`An error occurred while calling ${url} - ${error}`);
+      logger.error('An error occurred while calling %s - %o$', url, error);
       return '';
     });
 }

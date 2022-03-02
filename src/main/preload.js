@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld('settings', {
     return ipcRenderer.invoke('ipc-readSetting', key);
   },
   write(key, value) {
-    return ipcRenderer.invoke('ipc-writeSetting', key, value);
+    ipcRenderer.invoke('ipc-writeSetting', key, value);
   },
 });
 

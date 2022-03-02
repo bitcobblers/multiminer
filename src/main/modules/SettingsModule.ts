@@ -1,25 +1,23 @@
 import { IpcMainInvokeEvent } from 'electron';
 import SharedModule from './SharedModule';
 import { globalStore } from '../globals';
+import { logger } from '../logger';
 
-const readSettings = async (_event: IpcMainInvokeEvent, key: string): Promise<string> => {
-  let result = '';
+const readSettings = async (_event: IpcMainInvokeEvent, key: string) => {
+  let result = null;
 
   if (globalStore.has(key)) {
-    result = globalStore.get(key) as string;
+    result = globalStore.get(key);
   }
 
-  // eslint-disable-next-line no-console
-  console.log(`ipc-readSetting invoked with: ${key}.  Result: ${result}`);
+  logger.debug('ipc-readSetting invoked with: %s.  Result: %o', key, result);
 
-  return result;
+  return result ?? '';
 };
 
-const writeSettings = async (_event: IpcMainInvokeEvent, key: string, value: string): Promise<string> => {
-  // eslint-disable-next-line no-console
-  console.log(`Called write-settings with key: ${key}, value: ${value}`);
+const writeSettings = async (_event: IpcMainInvokeEvent, key: string, value: string) => {
+  logger.debug('Called write-settings with key: %s, value: %o', key, value);
   globalStore.set(key, value);
-  return '';
 };
 
 export default class SettingsModule implements SharedModule {
