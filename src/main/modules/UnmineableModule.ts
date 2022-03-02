@@ -1,5 +1,5 @@
 import { IpcMainInvokeEvent } from 'electron';
-import SharedModule from './SharedModule';
+import { SharedModule } from './SharedModule';
 import { getUrl } from '../util';
 
 const TICKER_URL = 'https://api.unmineable.com/v4/address';
@@ -13,13 +13,10 @@ async function getWorkers(_event: IpcMainInvokeEvent, uuid: string) {
   return getUrl(`${WORKERS_URL}/${uuid}/workers`);
 }
 
-export default class UnmineableModule implements SharedModule {
-  name = 'unmineable';
-
-  handlers = {
+export const UnmineableModule: SharedModule = {
+  name: 'unmineable',
+  handlers: {
     'ipc-getUnmineableCoin': getCoin,
     'ipc-getUnmineableWorkers': getWorkers,
-  };
-
-  reset = () => {};
-}
+  },
+};

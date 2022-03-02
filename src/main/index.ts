@@ -12,11 +12,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { mainWindow } from './main';
 import { addApi } from './ipc';
-import SettingsModule from './modules/SettingsModule';
-import MinerModule from './modules/MinerModule';
-import DialogModule from './modules/DialogModule';
-import UnmineableModule from './modules/UnmineableModule';
-import TickerModule from './modules/TickerModule';
+import { DialogModule, MinerModule, SettingsModule, TickerModule, UnmineableModule } from './modules';
 
 const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
@@ -37,16 +33,14 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
-// export const main = new MainWindow({});
-
 mainWindow.onEvent.on('window-created', async () => {
   await installExtensions();
 
-  addApi(new SettingsModule());
-  addApi(new MinerModule());
-  addApi(new DialogModule());
-  addApi(new UnmineableModule());
-  addApi(new TickerModule());
+  addApi(SettingsModule);
+  addApi(MinerModule);
+  addApi(DialogModule);
+  addApi(UnmineableModule);
+  addApi(TickerModule);
 
   if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');
