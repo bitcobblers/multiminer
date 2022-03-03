@@ -8,3 +8,4 @@ export { GeneralSettings, AppSettings } from './AppSettings';
 export { Miner } from './Miner';
 export { MinerInfo, AvailableMiners } from './MinerInfo';
 export { GpuStatistic, MinerStatistic } from './Aggregates';
+export { ConfiguredCoin } from './ConfiguredCoin';
