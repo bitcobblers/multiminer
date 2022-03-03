@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { Chain } from '../../models/Chains';
+import { Chain } from '../../models';
 
 export interface ChainMenuItemProps {
   chain: Chain;
