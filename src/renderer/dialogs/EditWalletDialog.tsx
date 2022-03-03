@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
-import { Wallet, Coin } from '../../models/AppSettings';
-import { Chain, AllChains } from '../../models/Chains';
+import { Wallet, Coin, Chain, AllChains } from '../../models';
 import { ChainMenuItem } from '../components/ChainMenuItem';
 import { UsedByCoins } from '../components/UsedByCoins';
 
@@ -12,7 +11,7 @@ interface EditWalletDialogState {
   blockchain: string;
   address: string;
   memo: string;
-  chain?: Chain;
+  network?: Chain;
 }
 
 interface EditWalletDialogProps {
@@ -31,10 +30,10 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
     this.state = {
       name: props.wallet.name,
-      blockchain: props.wallet.blockchain,
+      blockchain: props.wallet.network,
       address: props.wallet.address,
       memo: props.wallet.memo,
-      chain: AllChains.find((c) => c.name === props.wallet.blockchain),
+      network: AllChains.find((c) => c.name === props.wallet.network),
     };
   }
 
@@ -51,7 +50,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
     this.setState({
       blockchain,
-      chain: AllChains.find((c) => c.name === blockchain),
+      network: AllChains.find((c) => c.name === blockchain),
     });
   };
 
@@ -71,9 +70,9 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
   handleOnSave = () => {
     const { wallet, onSave } = this.props;
-    const { name, blockchain, address, memo } = this.state;
+    const { name, network, address, memo } = this.state;
 
-    onSave({ id: wallet.id, name, blockchain, address, memo });
+    onSave({ id: wallet.id, name, network, address, memo });
   };
 
   handleOnCancel = () => {
@@ -96,7 +95,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   validateAddress = (): [boolean, string] => {
-    const { address, chain } = this.state;
+    const { address, network: chain } = this.state;
     const addressFormat = chain?.token_format;
 
     if (address.length === 0) {
@@ -111,7 +110,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   validateMemo = (): [boolean, string] => {
-    const { memo, chain } = this.state;
+    const { memo, network: chain } = this.state;
     const memoFormat = chain?.memo_format;
 
     if (memo.length === 0 || memoFormat === undefined || memo.match(memoFormat)) {
