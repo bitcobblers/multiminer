@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { Coin, Wallet, PoolUrls, Miner, AppSettings } from '../../models/Configuration';
 import { settingsApi } from '../../shared/SettingsApi';
 
@@ -41,6 +42,19 @@ export const defaults = {
   } as AppSettings,
 };
 
+export const walletsChanged$ = new Subject<Wallet[]>();
+export const coinsChanged$ = new Subject<Coin[]>();
+export const minersChanged$ = new Subject<Miner[]>();
+export const appSettingsChanged$ = new Subject<AppSettings>();
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const watchers$: { [key: string]: any } = {
+  wallets: new Subject<Wallet[]>(),
+  coins: new Subject<Coin[]>(),
+  miners: new Subject<Miner[]>(),
+  appSettings: new Subject<AppSettings>(),
+};
+
 async function get<T>(key: SettingsKey, defaultValue: T) {
   const content = await settingsApi.read(key);
 
@@ -68,3 +82,17 @@ export const setMiners = (miners: Miner[]) => set('miners', miners);
 
 export const getAppSettings = () => get<AppSettings>('settings', defaults.settings);
 export const setAppSettings = (settings: AppSettings) => set('settings', settings);
+
+settingsApi.watch('wallets');
+settingsApi.watch('coins');
+settingsApi.watch('miners');
+settingsApi.watch('settings');
+
+settingsApi.changed((key, content) => {
+  // eslint-disable-next-line no-console
+  console.log(`Config change detected: ${key}: ${content}`);
+
+  if (key in watchers$) {
+    watchers$[key].next(JSON.parse(content));
+  }
+});

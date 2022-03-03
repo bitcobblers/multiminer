@@ -1,10 +1,13 @@
 import { ipcMain } from 'electron';
 import { SharedModule } from './modules/SharedModule';
 import { logger } from './logger';
+import { isDevelopment } from './globals';
 
 export function addApi(module: SharedModule) {
-  if (module.reset !== undefined) {
-    module.reset();
+  if (isDevelopment) {
+    if (module.reset !== undefined) {
+      module.reset();
+    }
   }
 
   Object.keys(module.handlers).forEach((key) => {
