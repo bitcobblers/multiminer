@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { AvailableAlgorithms, AvailableMiners, Miner, AlgorithmName, MinerName } from '../../models/Configuration';
+import { AvailableAlgorithms, AvailableMiners, Miner, AlgorithmName, MinerName } from '../../models/AppSettings';
 import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
 import { MinerTypeMenuItem } from '../components/MinerTypeMenuItem';
 

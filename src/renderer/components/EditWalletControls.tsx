@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
-import { Wallet, Coin } from '../../models/Configuration';
+import { Wallet, Coin } from '../../models/AppSettings';
 import { EditWalletDialog } from '../dialogs/EditWalletDialog';
 import { RemoveWalletDialog } from '../dialogs/RemoveWalletDialog';
 

@@ -20,7 +20,7 @@ import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer
 
 // Context.
 import { MinerContext } from '../MinerContext';
-import { AllCoins } from '../../models/Coins';
+import { AllCoins } from '../../models/CoinDefinition';
 
 // Screens.
 import { ScreenHeader } from '../components/ScreenHeader';

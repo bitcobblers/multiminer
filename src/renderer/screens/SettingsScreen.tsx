@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Button, Stack, TextField, Container, Typography, Divider, FormControl } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
-import { AppSettings } from 'models/Configuration';
+import { AppSettings } from 'models/AppSettings';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { ConfigurableControl } from '../components/ConfigurableControl';
 import { getAppSettings, setAppSettings, defaults } from '../services/AppSettingsService';

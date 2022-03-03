@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
-import { Wallet, Coin } from '../../models/Configuration';
+import { Wallet, Coin } from '../../models/AppSettings';
 import { Chain, AllChains } from '../../models/Chains';
 import { ChainMenuItem } from '../components/ChainMenuItem';
 import { UsedByCoins } from '../components/UsedByCoins';

@@ -1,5 +1,5 @@
 import { Divider, Grid, Chip, Typography } from '@mui/material';
-import { Coin } from '../../models/Configuration';
+import { Coin } from '../../models/AppSettings';
 
 export interface UsedByCoinsProps {
   coins: Coin[];

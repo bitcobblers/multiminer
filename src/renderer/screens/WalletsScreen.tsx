@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
 
-import { Wallet, Coin } from '../../models/Configuration';
+import { Wallet, Coin } from '../../models';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { EditWalletDialog } from '../dialogs/EditWalletDialog';
 import { getCoins, getWallets, setWallets } from '../services/AppSettingsService';
@@ -20,7 +20,7 @@ interface WalletsScreenState {
 type WalletsScreenProps = {};
 
 const getEmptyWallet = (): Wallet => {
-  return { id: uuid(), name: '', blockchain: 'ETH', address: '', memo: '' };
+  return { id: uuid(), name: '', network: 'ETH', address: '', memo: '' };
 };
 
 export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsScreenState> {
@@ -131,7 +131,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
                 <TableRow>
                   <TableCell width="80px" />
                   <TableCell width="15%">Name</TableCell>
-                  <TableCell width="10%">Blockchain</TableCell>
+                  <TableCell width="10%">Network</TableCell>
                   <TableCell width="60%">Address</TableCell>
                   <TableCell width="15%">Memo</TableCell>
                 </TableRow>
@@ -143,7 +143,7 @@ export class WalletsScreen extends React.Component<WalletsScreenProps, WalletsSc
                       <EditWalletControls wallet={w} existingWallets={wallets} coins={coins} onEditSave={this.handleOnEditWalletSave} onRemoveConfirm={this.handleOnRemoveWalletConfirm} />
                     </TableCell>
                     <TableCell>{w.name}</TableCell>
-                    <TableCell>{w.blockchain}</TableCell>
+                    <TableCell>{w.network}</TableCell>
                     <TableCell>{w.address}</TableCell>
                     <TableCell>{w.memo}</TableCell>
                   </TableRow>

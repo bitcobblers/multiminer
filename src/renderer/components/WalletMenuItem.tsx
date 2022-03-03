@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { Wallet } from '../../models/Configuration';
+import { Wallet } from '../../models/AppSettings';
 
 export interface WalletMenuItemProps {
   wallet: Wallet;

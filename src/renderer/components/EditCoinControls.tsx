@@ -3,7 +3,7 @@ import { useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
-import { Wallet, Coin } from '../../models/Configuration';
+import { Wallet, Coin } from '../../models/AppSettings';
 import { EditCoinDialog } from '../dialogs/EditCoinDialog';
 
 interface EditCoinControlsProps {

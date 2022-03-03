@@ -1,11 +1,10 @@
 import path from 'path-browserify';
 
 import { BehaviorSubject, Subject } from 'rxjs';
-import { AllCoins, CoinDefinition } from '../../models/Coins';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import * as miningStream from './MinerEventStreamer';
-import { AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models/Configuration';
+import { AllCoins, CoinDefinition, AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models';
 import { getMiners } from './AppSettingsService';
 
 type CoinSelection = {

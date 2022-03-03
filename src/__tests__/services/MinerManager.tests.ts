@@ -1,4 +1,4 @@
-import { Miner, Coin, Wallet } from '../../models/Configuration';
+import { Miner, Coin, Wallet } from '../../models';
 import * as settings from '../../renderer/services/AppSettingsService';
 import * as manager from '../../renderer/services/MinerManager';
 
@@ -64,7 +64,7 @@ describe('Miner Manager Service', () => {
     // Arrange.
     const miner: Miner = { id: '0', kind: 'lolminer', name: 'miner', enabled: true, installationPath: '', algorithm: 'ethash', parameters: '' };
     const coin: Coin = { symbol: 'ETH', wallet: 'mywallet', enabled: true, duration: 1, referral: '' };
-    const wallet: Wallet = { id: '0', name: 'mywallet', blockchain: 'ETH', address: '0x12345', memo: '' };
+    const wallet: Wallet = { id: '0', name: 'mywallet', network: 'ETH', address: '0x12345', memo: '' };
 
     jest.spyOn(settings, 'getMiners').mockReturnValue(Promise.resolve([miner]));
     jest.spyOn(settings, 'getCoins').mockReturnValue(Promise.resolve([coin]));

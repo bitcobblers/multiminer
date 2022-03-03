@@ -1,6 +1,6 @@
 import { ReplaySubject, timer } from 'rxjs';
 
-import { AllCoins } from '../../models/Coins';
+import { AllCoins } from '../../models';
 import * as config from './AppSettingsService';
 import { tickerApi } from '../../shared/TickerApi';
 
