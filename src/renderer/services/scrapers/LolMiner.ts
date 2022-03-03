@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../Aggregates';
+import { GpuStatistic, MinerStatistic } from '../../../models';
 
 export const GpuStatusLineHandler = {
   match: RegExp(/^GPU \d+\s.+$/),

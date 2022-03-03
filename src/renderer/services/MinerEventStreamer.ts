@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { stdout } from './MinerService';
-import { GpuStatistic, MinerStatistic } from './Aggregates';
+import { GpuStatistic, MinerStatistic } from '../../models';
 import { LolMinerLineParsers } from './scrapers/LolMiner';
 
 type LineScraper = {

@@ -6,6 +6,8 @@ import { DialogApi } from '../shared/DialogApi';
 import { UnmineableApi } from '../shared/UnmineableApi';
 import { TickerApi } from '../shared/TickerApi';
 
+import { cleanup as cleanupDataService } from './services/DataService';
+
 declare global {
   interface Window {
     settings: SettingsApi;
@@ -15,5 +17,9 @@ declare global {
     ticker: TickerApi;
   }
 }
+
+window.addEventListener('beforeunload', () => {
+  cleanupDataService();
+});
 
 render(<App />, document.getElementById('root'));

@@ -9,7 +9,7 @@ export type CoinTicker = {
   price: number;
 };
 
-export const ticker = new ReplaySubject<CoinTicker[]>();
+export const ticker$ = new ReplaySubject<CoinTicker[]>();
 
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
@@ -37,7 +37,7 @@ export async function updateTicker() {
   });
 
   if (result.length > 0) {
-    ticker.next(result);
+    ticker$.next(result);
   }
 }
 

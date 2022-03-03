@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../../renderer/services/Aggregates';
+import { GpuStatistic, MinerStatistic } from '../../models';
 import { gpuStatistics$, minerStatistics$, setHandlers, clearStatistics } from '../../renderer/services/MinerEventStreamer';
 import { stdout } from '../../renderer/services/MinerService';
 

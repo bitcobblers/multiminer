@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react';
-import { BehaviorSubject } from 'rxjs';
 
 // UI.
 import { Container, Divider, Grid, Button, Typography, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tabs, Tab } from '@mui/material';
@@ -10,17 +9,17 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 
 // Services.
-import { GpuStatistic, MinerStatistic } from '../services/Aggregates';
+import { GpuStatistic, MinerStatistic } from '../../models';
 import * as formatter from '../services/Formatters';
-import { getCoins } from '../services/AppSettingsService';
 import { startMiner, stopMiner, nextCoin, minerState$ } from '../services/MinerManager';
-import { ticker, updateTicker } from '../services/CoinFeed';
-import { AlgorithmStat, unmineableCoins$, UnmineableStats, unmineableWorkers$, updateCoins, updateWorkers } from '../services/UnmineableFeed';
+import { updateTicker } from '../services/CoinFeed';
+import { AlgorithmStat, UnmineableStats, unmineableWorkers$, updateCoins } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
+
+import { enabledCoins$ } from '../services/DataService';
 
 // Context.
 import { MinerContext } from '../MinerContext';
-import { AllCoins } from '../../models/CoinDefinition';
 
 // Screens.
 import { ScreenHeader } from '../components/ScreenHeader';
@@ -35,8 +34,6 @@ type ConfiguredCoin = {
   threshold?: number;
   duration: number;
 };
-
-const coinsFeed$ = new BehaviorSubject<ConfiguredCoin[]>([]);
 
 function DevicesTable(props: { gpus: GpuStatistic[] }) {
   const { gpus } = props;
@@ -266,98 +263,14 @@ export function HomeScreen(): JSX.Element {
       setMinerActive(s.state === 'active');
     });
 
-    return () => {
-      minerSubscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    const tickerSubscription = ticker.subscribe((coins) => {
-      const updatedConfiguredCoins = coinsFeed$.getValue().map((currentCoin) => {
-        const updatedCoin = coins.find((c) => c.symbol === currentCoin.symbol);
-
-        if (updatedCoin === null) {
-          return currentCoin;
-        }
-
-        return {
-          ...currentCoin,
-          ...{
-            current: minerContext.currentCoin === currentCoin.symbol,
-            price: updatedCoin?.price,
-          },
-        };
-      });
-
-      coinsFeed$.next(updatedConfiguredCoins);
-    });
-
-    const unmineableCoinsSubscription = unmineableCoins$.subscribe((coins) => {
-      coins.forEach((c) => {
-        if (c.symbol === minerContext.currentCoin) {
-          updateWorkers(c.uuid);
-        }
-      });
-
-      const updatedConfiguredCoins = coinsFeed$.getValue().map((currentCoin) => {
-        const updatedCoin = coins.find((c) => c.symbol === currentCoin.symbol);
-
-        if (updatedCoin === null) {
-          return currentCoin;
-        }
-
-        return {
-          ...currentCoin,
-          ...{
-            current: minerContext.currentCoin === currentCoin.symbol,
-            mined: updatedCoin?.balance,
-            threshold: updatedCoin?.threshold,
-          },
-        };
-      });
-
-      coinsFeed$.next(updatedConfiguredCoins);
-    });
-
     const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => {
       setWorkerStats(stats);
     });
 
-    return () => {
-      tickerSubscription.unsubscribe();
-      unmineableCoinsSubscription.unsubscribe();
-      unmineableWorkersSubscription.unsubscribe();
-    };
-  }, [minerContext.currentCoin]);
+    const coinsSubscription = enabledCoins$.subscribe((coins) => {
+      setConfiguredCoins(coins);
+    });
 
-  useEffect(() => {
-    const loadConfiguredCoins = async () => {
-      const enabledCoins = (await getCoins()).filter((c) => c.enabled);
-      const parsedCoins = AllCoins.filter((cd) => enabledCoins.find((c) => c.symbol === cd.symbol)).map((cd) => {
-        const coin = enabledCoins.find((c) => {
-          return c.symbol === cd.symbol;
-        });
-
-        return {
-          current: cd.symbol === minerContext.currentCoin ?? '',
-          icon: cd.icon,
-          symbol: cd.symbol,
-          mined: 0,
-          price: 0,
-          value: 0,
-          threshold: 0,
-          progress: 0,
-          duration: coin?.duration ?? 0,
-        } as ConfiguredCoin;
-      });
-
-      coinsFeed$.next(parsedCoins);
-    };
-
-    loadConfiguredCoins();
-  }, [minerContext.currentCoin]);
-
-  useEffect(() => {
     const gpuStatsSubscription = gpuStatistics$.subscribe((stats) => {
       setCurrentGpuStats(stats);
     });
@@ -367,20 +280,13 @@ export function HomeScreen(): JSX.Element {
     });
 
     return () => {
+      minerSubscription.unsubscribe();
+      unmineableWorkersSubscription.unsubscribe();
+      coinsSubscription.unsubscribe();
       gpuStatsSubscription.unsubscribe();
       minerStatsSubscription.unsubscribe();
     };
-  }, []);
-
-  useEffect(() => {
-    const feedSubscription = coinsFeed$.subscribe((updatedCoins) => {
-      setConfiguredCoins(updatedCoins);
-    });
-
-    return () => {
-      feedSubscription.unsubscribe();
-    };
-  }, []);
+  }, [minerContext.currentCoin]);
 
   return (
     <Container>

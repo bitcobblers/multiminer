@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../../../renderer/services/Aggregates';
+import { GpuStatistic, MinerStatistic } from '../../../models';
 import { GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler } from '../../../renderer/services/scrapers/LolMiner';
 
 describe('LolMiner Parser', () => {
