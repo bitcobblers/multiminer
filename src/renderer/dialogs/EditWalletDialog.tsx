@@ -11,7 +11,7 @@ interface EditWalletDialogState {
   blockchain: string;
   address: string;
   memo: string;
-  network?: Chain;
+  network: Chain;
 }
 
 interface EditWalletDialogProps {
@@ -28,13 +28,17 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   constructor(props: EditWalletDialogProps) {
     super(props);
 
-    this.state = {
-      name: props.wallet.name,
-      blockchain: props.wallet.network,
-      address: props.wallet.address,
-      memo: props.wallet.memo,
-      network: AllChains.find((c) => c.name === props.wallet.network),
-    };
+    const network = AllChains.find((c) => c.name === props.wallet.network);
+
+    if (network !== undefined) {
+      this.state = {
+        name: props.wallet.name,
+        blockchain: props.wallet.network,
+        address: props.wallet.address,
+        memo: props.wallet.memo,
+        network,
+      };
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,11 +51,14 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnBlockchainChange = (e: any) => {
     const blockchain = e.target.value.trim();
+    const network = AllChains.find((c) => c.name === blockchain);
 
-    this.setState({
-      blockchain,
-      network: AllChains.find((c) => c.name === blockchain),
-    });
+    if (network !== undefined) {
+      this.setState({
+        blockchain,
+        network,
+      });
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,7 +79,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
     const { wallet, onSave } = this.props;
     const { name, network, address, memo } = this.state;
 
-    onSave({ id: wallet.id, name, network, address, memo });
+    onSave({ id: wallet.id, name, network: network.name, address, memo });
   };
 
   handleOnCancel = () => {

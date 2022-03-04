@@ -20,7 +20,7 @@ async function writeSetting(_event: IpcMainInvokeEvent, key: string, value: stri
   globalStore.set(key, value);
 }
 
-function watchSettings(event: IpcMainInvokeEvent, key: string) {
+function watchSetting(event: IpcMainInvokeEvent, key: string) {
   logger.debug('Watching for settings changes on: %s', key);
   globalStore.onDidChange(key, (change) => {
     event.sender.send('ipc-settingChanged', key, change);
@@ -32,7 +32,7 @@ export const SettingsModule: SharedModule = {
   handlers: {
     'ipc-readSetting': readSetting,
     'ipc-writeSetting': writeSetting,
-    'ipc-watchSetting': watchSettings,
+    'ipc-watchSetting': watchSetting,
   },
   reset: () => {
     globalStore.set('wallets', '');
