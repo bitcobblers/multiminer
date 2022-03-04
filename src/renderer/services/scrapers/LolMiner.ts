@@ -37,7 +37,7 @@ export const GpuStatusLineHandler = {
       rejected: Number(staleShares),
       best: bestShare,
       power: Number(power),
-      efficiency: Number(efficiency),
+      efficiency: Number(efficiency) * 1000,
       coreClock: Number(coreClock),
       memClock: Number(memoryClock),
       coreTemperature: Number(coreTemperature),
@@ -68,7 +68,7 @@ export const SummaryLineHandler = {
       rejected: Number(staleShares),
       best: bestShare,
       power: Number(power),
-      efficiency: Number(efficiency),
+      efficiency: Number(efficiency) * 1000,
     });
   },
 };

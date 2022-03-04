@@ -21,7 +21,7 @@ describe('LolMiner Parser', () => {
         rejected: 0,
         best: '33.7G',
         power: 223.3,
-        efficiency: 0.417,
+        efficiency: 417,
         coreClock: 1269,
         memClock: 10241,
         coreTemperature: 56,
@@ -53,7 +53,7 @@ describe('LolMiner Parser', () => {
         rejected: 0,
         best: '33.7G',
         power: 223.3,
-        efficiency: 0.417,
+        efficiency: 417,
       };
 
       // Act.
