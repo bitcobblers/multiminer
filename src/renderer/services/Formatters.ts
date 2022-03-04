@@ -2,8 +2,8 @@ export function number(value: number | undefined, maxDigits = 8) {
   return value === undefined ? 'N/A' : value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: maxDigits });
 }
 
-export function currency(value: number | undefined) {
-  return value === undefined ? 'N/A' : value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 8 });
+export function currency(value: number | undefined, maxDigits = 2) {
+  return value === undefined ? 'N/A' : value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: maxDigits });
 }
 
 export function hashrate(value: number | undefined) {

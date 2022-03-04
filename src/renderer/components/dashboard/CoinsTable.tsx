@@ -35,8 +35,8 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
                 <img src={c.icon} alt="icon" />
               </TableCell>
               <TableCell>{c.symbol}</TableCell>
-              <TableCell>{formatter.number(c.mined)}</TableCell>
-              <TableCell>{formatter.currency(c.price)}</TableCell>
+              <TableCell>{formatter.number(c.mined, 6)}</TableCell>
+              <TableCell>{formatter.currency(c.price, 8)}</TableCell>
               <TableCell>{formatter.minedValue(c.price, c.mined)}</TableCell>
               <TableCell>{formatter.number(c.threshold)}</TableCell>
               <TableCell>
