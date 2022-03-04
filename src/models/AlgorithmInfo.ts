@@ -15,7 +15,7 @@ export const AvailableAlgorithms: AlgorithmInfo[] = [
     kind: 'GPU',
   },
   {
-    name: 'kawpaw',
+    name: 'kawpow',
     kind: 'GPU',
   },
   {

@@ -22,13 +22,13 @@ export const AvailableMiners: MinerInfo[] = [
   },
   {
     name: 'nbminer',
-    algorithms: ['ethash', 'etchash', 'kawpaw'],
+    algorithms: ['ethash', 'etchash', 'kawpow'],
     exe: 'nbminer.exe',
     getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} -log`,
   },
   {
     name: 'trexminer',
-    algorithms: ['ethash', 'etchash', 'kawpaw'],
+    algorithms: ['ethash', 'etchash', 'kawpow'],
     exe: 't-reg.exe',
     getArgs: (alg, cs, url) => `-a ${alg} -o ${url} -u ${cs} -p x`,
   },
