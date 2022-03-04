@@ -61,19 +61,19 @@ export function HomeScreen(): JSX.Element {
       <Button onClick={async () => refreshData()}>Refresh</Button>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h3">Devices</Typography>
+          <Typography variant="h4">Devices</Typography>
           <ComputeTable gpus={currentGpuStats} />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h3">Miner</Typography>
+          <Typography variant="h4">Miner</Typography>
           <MinerTable miner={currentMinerStats} />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h3">Coins</Typography>
+          <Typography variant="h4">Coins</Typography>
           <CoinsTable coins={configuredCoins} />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h3">Graphs</Typography>
+          <Typography variant="h4">Graphs</Typography>
           <WorkersGraphs workers={workerStats} />
         </Grid>
       </Grid>
