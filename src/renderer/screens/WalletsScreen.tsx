@@ -4,10 +4,9 @@ import { v4 as uuid } from 'uuid';
 import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
 
 import { Wallet, Coin } from '../../models';
-import { ScreenHeader } from '../components/ScreenHeader';
+import { ScreenHeader, EditWalletControls } from '../components';
 import { EditWalletDialog } from '../dialogs/EditWalletDialog';
 import { getCoins, getWallets, setWallets } from '../services/AppSettingsService';
-import { EditWalletControls } from '../components/EditWalletControls';
 
 interface WalletsScreenState {
   coins: Coin[];

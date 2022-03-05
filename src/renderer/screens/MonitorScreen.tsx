@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
 import { screenBuffer, clearBuffer } from '../services/ScreenBuffer';
-import { AutoScrollTextArea } from '../components/AutoScrollTextArea';
-import { ScreenHeader } from '../components/ScreenHeader';
+import { AutoScrollTextArea, ScreenHeader } from '../components';
 
 export function MonitorScreen(): JSX.Element {
   const [data, setData] = useState(screenBuffer.value);
