@@ -3,8 +3,7 @@ import { Button, Stack, TextField, Container, Typography, Divider, FormControl }
 import { useForm } from 'react-hook-form';
 
 import { AppSettings } from 'models/AppSettings';
-import { ScreenHeader } from '../components/ScreenHeader';
-import { ConfigurableControl } from '../components/ConfigurableControl';
+import { ScreenHeader, ConfigurableControl } from '../components';
 import { getAppSettings, setAppSettings, defaults } from '../services/AppSettingsService';
 
 // react-hook-form's API requires prop spreading to register controls

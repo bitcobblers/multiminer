@@ -7,8 +7,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Miner } from '../../models';
 import { getMiners, setMiners, defaults } from '../services/AppSettingsService';
 
-import { ScreenHeader } from '../components/ScreenHeader';
-import { EditMinerControls } from '../components/EditMinerControls';
+import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 
 const getEmptyMiner = (): Miner => {

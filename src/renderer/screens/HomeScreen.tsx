@@ -14,7 +14,7 @@ import { enabledCoins$ } from '../services/DataService';
 import { MinerContext } from '../MinerContext';
 
 // Screens.
-import { ScreenHeader } from '../components/ScreenHeader';
+import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {

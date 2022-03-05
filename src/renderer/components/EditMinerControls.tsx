@@ -5,8 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
 import { Miner } from '../../models';
-import { RemoveMinerDialog } from '../dialogs/RemoveMinerDialog';
-import { EditMinerDialog } from '../dialogs/EditMinerDialog';
+import { RemoveMinerDialog, EditMinerDialog } from '../dialogs';
 
 interface EditMinerControlsProps {
   miner: Miner;

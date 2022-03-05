@@ -5,8 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
 import { Wallet, Coin } from '../../models';
-import { EditWalletDialog } from '../dialogs/EditWalletDialog';
-import { RemoveWalletDialog } from '../dialogs/RemoveWalletDialog';
+import { EditWalletDialog, RemoveWalletDialog } from '../dialogs';
 
 interface EditWalletControlsState {
   editOpen: boolean;
