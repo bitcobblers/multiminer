@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 import CheckIcon from '@mui/icons-material/Check';
 import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch } from '@mui/material';
@@ -27,6 +28,8 @@ const blankCoin = (symbol: string, referral: string): Coin => {
 };
 
 export function CoinsScreen() {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [wallets, setWallets] = useState([] as Wallet[]);
   const [coins, setLoadedCoins] = useState([] as CoinRecord[]);
   const [enabledOnly, setEnabledOnly] = useState(false);
@@ -66,6 +69,10 @@ export function CoinsScreen() {
 
     await setCoins(updatedCoins.filter((c) => c.isSet).map((c) => c.coin));
     setLoadedCoins(updatedCoins);
+
+    enqueueSnackbar(`Coin ${coin.symbol} updated.`, {
+      variant: 'success',
+    });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

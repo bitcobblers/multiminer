@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import { useSnackbar } from 'notistack';
 
 import { Miner } from '../../models';
 import { getMiners, setMiners, defaults } from '../services/AppSettingsService';
@@ -15,6 +16,7 @@ const getEmptyMiner = (): Miner => {
 };
 
 export function MinersScreen() {
+  const { enqueueSnackbar } = useSnackbar();
   const [newOpen, setNewOpen] = useState(false);
   const [newMiner, setNewMiner] = useState(getEmptyMiner());
   const [miners, setLoadedMiners] = useState(defaults.miners);
@@ -40,6 +42,10 @@ export function MinersScreen() {
 
     await setMiners(updatedMiners);
     setLoadedMiners(updatedMiners);
+
+    enqueueSnackbar(`Miner ${miner.name} updated.`, {
+      variant: 'success',
+    });
   };
 
   const addMiner = async (miner: Miner) => {
@@ -50,13 +56,21 @@ export function MinersScreen() {
     setNewMiner(getEmptyMiner);
     setLoadedMiners(updatedMiners);
     setNewOpen(false);
+
+    enqueueSnackbar(`Miner ${miner.name} added.`, {
+      variant: 'success',
+    });
   };
 
-  const removeMiner = async (id: string) => {
+  const removeMiner = async (name: string, id: string) => {
     const updatedMiners = [...miners.filter((m) => m.id !== id)];
 
     await setMiners(updatedMiners);
     setLoadedMiners(updatedMiners);
+
+    enqueueSnackbar(`Miner ${name} removed.`, {
+      variant: 'success',
+    });
   };
 
   return (

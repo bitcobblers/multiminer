@@ -2,6 +2,7 @@ import React from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 import { Wallet, Coin } from '../../models';
 import { ScreenHeader, EditWalletControls } from '../components';

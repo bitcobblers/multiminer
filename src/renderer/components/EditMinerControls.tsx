@@ -10,7 +10,7 @@ import { RemoveMinerDialog, EditMinerDialog } from '../dialogs';
 interface EditMinerControlsProps {
   miner: Miner;
   onSave: (miner: Miner) => void;
-  onRemove: (id: string) => void;
+  onRemove: (name: string, id: string) => void;
 }
 
 export function EditMinerControls(props: EditMinerControlsProps) {
@@ -37,7 +37,7 @@ export function EditMinerControls(props: EditMinerControlsProps) {
 
   const handleRemoveClose = (result: boolean) => {
     if (result === true) {
-      onRemove(miner.id);
+      onRemove(miner.name, miner.id);
     }
 
     setRemoveOpen(false);

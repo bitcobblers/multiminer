@@ -5,7 +5,7 @@ import './App.css';
 // Material.
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box } from '@mui/material';
-import { SnackbarProvider, SnackbarKey } from 'notistack';
+import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
 
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
@@ -18,7 +18,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 // Context.
 import { MinerContext } from './MinerContext';
-import { MinerState, minerState$ } from './services/MinerManager';
+import { MinerState, minerState$, minerErrors$ } from './services/MinerManager';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
@@ -64,37 +64,53 @@ function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
   );
 }
 
-export function App() {
+function AppContent() {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
-  const snackRef = useRef<SnackbarProvider>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const subscription = minerState$.subscribe((s) => {
+    const stateSubscription = minerState$.subscribe((s) => {
       setManagerState(s);
+      enqueueSnackbar(`Miner is now ${s.state}.`);
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    const alertSubscription = minerErrors$.subscribe((s) => {
+      enqueueSnackbar(s, { variant: 'error' });
+    });
+
+    return () => {
+      stateSubscription.unsubscribe();
+      alertSubscription.unsubscribe();
+    };
+  }, [enqueueSnackbar]);
+
+  return (
+    <MinerContext.Provider value={managerState}>
+      <Router>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <Drawer style={{ width: drawerWidth }} variant="persistent" open>
+            <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+          </Drawer>
+          <Switch>{links.map(NavScreen)}</Switch>
+        </Box>
+      </Router>
+    </MinerContext.Provider>
+  );
+}
+
+export function App() {
+  const snackRef = useRef<SnackbarProvider>(null);
 
   const closeSnack = (key: SnackbarKey) => () => {
     snackRef.current?.closeSnackbar(key);
   };
 
   return (
-    <MinerContext.Provider value={managerState}>
-      <Router>
-        <ThemeProvider theme={mdTheme}>
-          <SnackbarProvider maxSnack={5} ref={snackRef} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
-            <Box sx={{ display: 'flex' }}>
-              <CssBaseline />
-              <Drawer style={{ width: drawerWidth }} variant="persistent" open>
-                <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-              </Drawer>
-              <Switch>{links.map(NavScreen)}</Switch>
-            </Box>
-          </SnackbarProvider>
-        </ThemeProvider>
-      </Router>
-    </MinerContext.Provider>
+    <ThemeProvider theme={mdTheme}>
+      <SnackbarProvider maxSnack={5} ref={snackRef} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
+        <AppContent />
+      </SnackbarProvider>
+    </ThemeProvider>
   );
 }
