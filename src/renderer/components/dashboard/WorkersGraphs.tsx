@@ -52,7 +52,7 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
   return <Line options={options} data={data} />;
 }
 
-export function WorkersGraphs(props: { workers: UnmineableStats | undefined }) {
+export function WorkersGraphs(props: { workers?: UnmineableStats }) {
   const { workers } = props;
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -64,8 +64,7 @@ export function WorkersGraphs(props: { workers: UnmineableStats | undefined }) {
     return <p>No data to display!</p>;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tabClicked = (_event: any, value: number) => {
+  const tabClicked = (_event: unknown, value: number) => {
     setTabIndex(value);
   };
 
@@ -93,3 +92,7 @@ export function WorkersGraphs(props: { workers: UnmineableStats | undefined }) {
     </div>
   );
 }
+
+WorkersGraphs.defaultProps = {
+  workers: undefined,
+};

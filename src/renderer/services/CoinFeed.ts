@@ -1,6 +1,6 @@
 import { ReplaySubject, timer } from 'rxjs';
 
-import { AllCoins } from '../../models';
+import { ALL_COINS } from '../../models';
 import * as config from './AppSettingsService';
 import { tickerApi } from '../../shared/TickerApi';
 
@@ -18,7 +18,7 @@ const updater = timer(0, UPDATE_INTERVAL);
 
 export async function updateTicker() {
   const coins = (await config.getCoins()).filter((c) => c.enabled);
-  const ids = coins.map((c) => AllCoins.find((cd) => cd.symbol === c.symbol)?.id ?? '').filter((c) => c !== '');
+  const ids = coins.map((c) => ALL_COINS.find((cd) => cd.symbol === c.symbol)?.id ?? '').filter((c) => c !== '');
   const result = Array<CoinTicker>();
 
   if (ids.length === 0) {
@@ -29,7 +29,7 @@ export async function updateTicker() {
 
   Object.keys(response).forEach((k) => {
     // This call should never fail.
-    const symbol = AllCoins.find((c) => c.id === k)?.symbol;
+    const symbol = ALL_COINS.find((c) => c.id === k)?.symbol;
 
     if (symbol !== undefined) {
       result.push({ symbol, price: response[k].usd });

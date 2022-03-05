@@ -7,7 +7,7 @@ export type MinerInfo = {
   getArgs: (algorithm: AlgorithmName, cs: string, url: string) => string;
 };
 
-export const AvailableMiners: MinerInfo[] = [
+export const AVAILABLE_MINERS: MinerInfo[] = [
   {
     name: 'phoenixminer',
     algorithms: ['ethash', 'etchash'],
