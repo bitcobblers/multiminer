@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { AlgorithmInfo } from '../../models/Configuration';
+import { AlgorithmInfo } from '../../models';
 
 export interface AlgorithmMenuItemProps {
   algorithm: AlgorithmInfo;

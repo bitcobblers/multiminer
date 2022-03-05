@@ -1,5 +1,5 @@
 import { Grid, Typography, Chip } from '@mui/material';
-import { MinerInfo } from '../../models/Configuration';
+import { MinerInfo } from '../../models';
 
 export interface AlgorithmMenuItemProps {
   miner: MinerInfo;

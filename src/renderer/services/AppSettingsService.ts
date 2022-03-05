@@ -1,13 +1,14 @@
-import { Coin, Wallet, PoolUrls, Miner, AppSettings } from '../../models/Configuration';
+import { Subject } from 'rxjs';
+import { Coin, Wallet, Miner, AppSettings } from '../../models';
 import { settingsApi } from '../../shared/SettingsApi';
 
 type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
 
 export const defaults = {
   wallets: [
-    { id: 'e4bfb138-4365-404f-89d3-6549b22d4b3b', name: 'mywallet1', blockchain: 'ETH', address: '0xe141167eb550b999cb59f9ac202d2dfdd240a4a0', memo: '' },
-    { id: '14306209-a673-44ec-a732-9e14f14b029c', name: 'mywallet2', blockchain: 'XLM', address: 'GD2BLIQF6SF3RJE4QOG64NOPRSEH6ASPEWLH7WJNSVQCP3ATOGQDGUOX', memo: '3128811' },
-    { id: '8980b1a7-129c-4b42-ac33-b5eabfbd7f92', name: 'mywallet3', blockchain: 'TRX', address: 'TEP6m4AAWBPqLndTJAM1PH3RzkDPKV9D71', memo: '' },
+    { id: 'e4bfb138-4365-404f-89d3-6549b22d4b3b', name: 'mywallet1', network: 'ETH', address: '0xe141167eb550b999cb59f9ac202d2dfdd240a4a0', memo: '' },
+    { id: '14306209-a673-44ec-a732-9e14f14b029c', name: 'mywallet2', network: 'XLM', address: 'GD2BLIQF6SF3RJE4QOG64NOPRSEH6ASPEWLH7WJNSVQCP3ATOGQDGUOX', memo: '3128811' },
+    { id: '8980b1a7-129c-4b42-ac33-b5eabfbd7f92', name: 'mywallet3', network: 'TRX', address: 'TEP6m4AAWBPqLndTJAM1PH3RzkDPKV9D71', memo: '' },
   ] as Wallet[],
 
   coins: [
@@ -17,13 +18,6 @@ export const defaults = {
   ] as Coin[],
 
   miners: [{ id: '12345', kind: 'lolminer', name: 'default', enabled: true, installationPath: 'C:\\ethereum\\lolminer\\1.42', algorithm: 'ethash', parameters: '' }] as Miner[],
-
-  pools: {
-    ethash: 'ethash.unmineable.com:3333',
-    etchash: 'etchash.unmineable.com:3333',
-    kawpaw: 'kp.unmineable.com:3333',
-    randomx: 'rx.unmineable.com:3333',
-  } as PoolUrls,
 
   settings: {
     settings: {
@@ -39,6 +33,18 @@ export const defaults = {
       randomx: 'rx.unmineable.com:3333',
     },
   } as AppSettings,
+};
+
+export const walletsChanged$ = new Subject<Wallet[]>();
+export const coinsChanged$ = new Subject<Coin[]>();
+export const minersChanged$ = new Subject<Miner[]>();
+export const appSettingsChanged$ = new Subject<AppSettings>();
+
+export const watchers$ = {
+  wallets: new Subject<Wallet[]>(),
+  coins: new Subject<Coin[]>(),
+  miners: new Subject<Miner[]>(),
+  appSettings: new Subject<AppSettings>(),
 };
 
 async function get<T>(key: SettingsKey, defaultValue: T) {
@@ -68,3 +74,23 @@ export const setMiners = (miners: Miner[]) => set('miners', miners);
 
 export const getAppSettings = () => get<AppSettings>('settings', defaults.settings);
 export const setAppSettings = (settings: AppSettings) => set('settings', settings);
+
+settingsApi.watch('wallets');
+settingsApi.watch('coins');
+settingsApi.watch('miners');
+settingsApi.watch('settings');
+
+settingsApi.changed((key, content) => {
+  // eslint-disable-next-line no-console
+  console.log(`Config change detected: ${key}: ${content}`);
+
+  if (key === 'wallets') {
+    watchers$.wallets.next(JSON.parse(content));
+  } else if (key === 'coins') {
+    watchers$.coins.next(JSON.parse(content));
+  } else if (key === 'miners') {
+    watchers$.miners.next(JSON.parse(content));
+  } else if (key === 'settings') {
+    watchers$.appSettings.next(JSON.parse(content));
+  }
+});

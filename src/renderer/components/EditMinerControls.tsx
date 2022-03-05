@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Stack } from '@mui/material';
 
-import { Miner } from '../../models/Configuration';
+import { Miner } from '../../models';
 import { RemoveMinerDialog } from '../dialogs/RemoveMinerDialog';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 

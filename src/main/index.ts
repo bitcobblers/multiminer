@@ -12,9 +12,8 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { mainWindow } from './main';
 import { addApi } from './ipc';
+import { isDevelopment } from './globals';
 import { DialogModule, MinerModule, SettingsModule, TickerModule, UnmineableModule } from './modules';
-
-const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDevelopment) {
   require('electron-debug')();

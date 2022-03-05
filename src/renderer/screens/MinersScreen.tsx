@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
-import { Miner } from '../../models/Configuration';
+import { Miner } from '../../models';
 import { getMiners, setMiners, defaults } from '../services/AppSettingsService';
 
 import { ScreenHeader } from '../components/ScreenHeader';

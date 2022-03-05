@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { Wallet, Coin } from '../../models/Configuration';
+import { Wallet, Coin } from '../../models';
 import { WalletMenuItem } from '../components/WalletMenuItem';
 
 type EditCoinDialogProps = {

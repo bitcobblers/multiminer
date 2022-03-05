@@ -1,7 +1,7 @@
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, Typography, Divider } from '@mui/material';
 import { UsedByCoins } from '../components/UsedByCoins';
-import { Coin } from '../../models/Configuration';
+import { Coin } from '../../models';
 
 interface RemoveWalletDialogProps {
   open: boolean;

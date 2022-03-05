@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
-import { Wallet, Coin } from '../../models/Configuration';
-import { Chain, AllChains } from '../../models/Chains';
+import { Wallet, Coin, Chain, ALL_CHAINS } from '../../models';
 import { ChainMenuItem } from '../components/ChainMenuItem';
 import { UsedByCoins } from '../components/UsedByCoins';
 
@@ -12,7 +11,7 @@ interface EditWalletDialogState {
   blockchain: string;
   address: string;
   memo: string;
-  chain?: Chain;
+  network: Chain;
 }
 
 interface EditWalletDialogProps {
@@ -29,13 +28,17 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   constructor(props: EditWalletDialogProps) {
     super(props);
 
-    this.state = {
-      name: props.wallet.name,
-      blockchain: props.wallet.blockchain,
-      address: props.wallet.address,
-      memo: props.wallet.memo,
-      chain: AllChains.find((c) => c.name === props.wallet.blockchain),
-    };
+    const network = ALL_CHAINS.find((c) => c.name === props.wallet.network);
+
+    if (network !== undefined) {
+      this.state = {
+        name: props.wallet.name,
+        blockchain: props.wallet.network,
+        address: props.wallet.address,
+        memo: props.wallet.memo,
+        network,
+      };
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,11 +51,14 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnBlockchainChange = (e: any) => {
     const blockchain = e.target.value.trim();
+    const network = ALL_CHAINS.find((c) => c.name === blockchain);
 
-    this.setState({
-      blockchain,
-      chain: AllChains.find((c) => c.name === blockchain),
-    });
+    if (network !== undefined) {
+      this.setState({
+        blockchain,
+        network,
+      });
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,9 +77,9 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
   handleOnSave = () => {
     const { wallet, onSave } = this.props;
-    const { name, blockchain, address, memo } = this.state;
+    const { name, network, address, memo } = this.state;
 
-    onSave({ id: wallet.id, name, blockchain, address, memo });
+    onSave({ id: wallet.id, name, network: network.name, address, memo });
   };
 
   handleOnCancel = () => {
@@ -96,7 +102,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   validateAddress = (): [boolean, string] => {
-    const { address, chain } = this.state;
+    const { address, network: chain } = this.state;
     const addressFormat = chain?.token_format;
 
     if (address.length === 0) {
@@ -111,7 +117,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   };
 
   validateMemo = (): [boolean, string] => {
-    const { memo, chain } = this.state;
+    const { memo, network: chain } = this.state;
     const memoFormat = chain?.memo_format;
 
     if (memo.length === 0 || memoFormat === undefined || memo.match(memoFormat)) {
@@ -142,7 +148,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
             <Stack spacing={2}>
               <TextField required label="Name" defaultValue={wallet.name} onChange={this.handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
               <TextField required label="Blockchain" select value={this.state.blockchain} onChange={this.handleOnBlockchainChange}>
-                {AllChains.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
+                {ALL_CHAINS.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
                   <MenuItem key={n.name} value={n.name}>
                     <ChainMenuItem chain={n} />
                   </MenuItem>

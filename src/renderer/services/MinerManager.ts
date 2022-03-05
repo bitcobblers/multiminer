@@ -1,11 +1,10 @@
 import path from 'path-browserify';
 
 import { BehaviorSubject, Subject } from 'rxjs';
-import { AllCoins, CoinDefinition } from '../../models/Coins';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import * as miningStream from './MinerEventStreamer';
-import { AvailableMiners, Miner, Coin, MinerInfo, Wallet } from '../../models/Configuration';
+import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet } from '../../models';
 import { getMiners } from './AppSettingsService';
 
 type CoinSelection = {
@@ -57,7 +56,7 @@ export async function selectCoin(onError: (message: string) => void, onSuccess: 
 
   const minerName = minerState$.getValue().miner;
   const miner = (await config.getMiners()).find((m) => m.name === minerName);
-  const minerInfo = AvailableMiners.find((m) => m.name === miner?.kind);
+  const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
 
   if (miner === undefined) {
     onError('No miners have been enabled.');
@@ -77,7 +76,7 @@ export async function selectCoin(onError: (message: string) => void, onSuccess: 
   }
 
   const coin = getRandom(enabledCoins);
-  const coinInfo = AllCoins.find((c) => c.symbol === coin.symbol);
+  const coinInfo = ALL_COINS.find((c) => c.symbol === coin.symbol);
 
   if (coinInfo === undefined) {
     onError('Could not find any information about this coin.');

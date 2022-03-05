@@ -3,7 +3,7 @@ import { SharedModule } from './SharedModule';
 import { globalStore } from '../globals';
 import { logger } from '../logger';
 
-const readSettings = async (_event: IpcMainInvokeEvent, key: string) => {
+async function readSetting(_event: IpcMainInvokeEvent, key: string) {
   let result = null;
 
   if (globalStore.has(key)) {
@@ -13,18 +13,26 @@ const readSettings = async (_event: IpcMainInvokeEvent, key: string) => {
   logger.debug('ipc-readSetting invoked with: %s.  Result: %o', key, result);
 
   return result ?? '';
-};
+}
 
-const writeSettings = async (_event: IpcMainInvokeEvent, key: string, value: string) => {
+async function writeSetting(_event: IpcMainInvokeEvent, key: string, value: string) {
   logger.debug('Called write-settings with key: %s, value: %o', key, value);
   globalStore.set(key, value);
-};
+}
+
+function watchSetting(event: IpcMainInvokeEvent, key: string) {
+  logger.debug('Watching for settings changes on: %s', key);
+  globalStore.onDidChange(key, (change) => {
+    event.sender.send('ipc-settingChanged', key, change);
+  });
+}
 
 export const SettingsModule: SharedModule = {
   name: 'settings',
   handlers: {
-    'ipc-readSetting': readSettings,
-    'ipc-writeSetting': writeSettings,
+    'ipc-readSetting': readSetting,
+    'ipc-writeSetting': writeSetting,
+    'ipc-watchSetting': watchSetting,
   },
   reset: () => {
     globalStore.set('wallets', '');

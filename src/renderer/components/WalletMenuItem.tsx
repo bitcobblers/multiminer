@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { Wallet } from '../../models/Configuration';
+import { Wallet } from '../../models';
 
 export interface WalletMenuItemProps {
   wallet: Wallet;
@@ -14,7 +14,7 @@ export function WalletMenuItem(props: WalletMenuItemProps) {
         <Typography>{wallet.name}</Typography>
       </Grid>
       <Grid item xs={4}>
-        <Typography>{wallet.blockchain}</Typography>
+        <Typography>{wallet.network}</Typography>
       </Grid>
       <Grid item xs={4}>
         <Typography>{wallet.memo}</Typography>

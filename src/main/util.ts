@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import { HttpProxyAgent } from 'http-proxy-agent';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import { globalStore } from './globals';
-import { AppSettings } from '../models/Configuration';
+import { AppSettings } from '../models';
 import { logger } from './logger';
 
 function getResourcesPath() {

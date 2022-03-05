@@ -7,6 +7,12 @@ contextBridge.exposeInMainWorld('settings', {
   write(key, value) {
     ipcRenderer.invoke('ipc-writeSetting', key, value);
   },
+  watch(key) {
+    ipcRenderer.invoke('ipc-watchSetting', key);
+  },
+  changed(func) {
+    ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
+  },
 });
 
 contextBridge.exposeInMainWorld('miner', {

@@ -1,6 +1,6 @@
 import * as settings from '../../renderer/services/AppSettingsService';
 import { settingsApi } from '../../shared/SettingsApi';
-import { Wallet, Coin, Miner, AppSettings } from '../../models/Configuration';
+import { Wallet, Coin, Miner, AppSettings } from '../../models';
 
 describe('App Settings Service', () => {
   describe('Wallets tests', () => {
@@ -21,7 +21,7 @@ describe('App Settings Service', () => {
         {
           id: '12345',
           name: 'test',
-          blockchain: 'ETH',
+          network: 'ETH',
           address: '0x12345',
           memo: '',
         },
