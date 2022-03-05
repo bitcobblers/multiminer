@@ -5,7 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { Line } from 'react-chartjs-2';
 
 import { Tabs, Tab } from '@mui/material';
-import { TabPanel } from '../TabPanel';
+import { TabPanel } from '..';
 import { AlgorithmStat, UnmineableStats } from '../../services/UnmineableFeed';
 
 function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefined }) {

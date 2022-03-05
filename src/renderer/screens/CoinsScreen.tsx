@@ -4,8 +4,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch } from '@mui/material';
 import { ALL_COINS, Coin, Wallet } from '../../models';
 import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
-import { ScreenHeader } from '../components/ScreenHeader';
-import { EditCoinControls } from '../components/EditCoinControls';
+import { ScreenHeader, EditCoinControls } from '../components';
 
 type CoinRecord = {
   id: string;

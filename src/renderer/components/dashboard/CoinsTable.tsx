@@ -1,6 +1,6 @@
 import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import { LinearProgressWithLabel } from '../LinearProgressWithLabel';
+import { LinearProgressWithLabel } from '..';
 import * as formatter from '../../services/Formatters';
 import { ConfiguredCoin } from '../../../models';
 
