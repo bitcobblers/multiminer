@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { stdout } from './MinerService';
+import { stdout$ } from './MinerService';
 import { GpuStatistic, MinerStatistic } from '../../models';
 import { LolMinerLineParsers } from './scrapers/LolMiner';
 
@@ -36,7 +36,7 @@ function combine<T>(item: T, other: Partial<T>) {
   return { ...item, ...other };
 }
 
-stdout.subscribe((line) => {
+stdout$.subscribe((line) => {
   const handler = handlers.find((h) => h.match.test(line) === true);
 
   handler?.parse(

@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { stdout } from './MinerService';
+import { stdout$ } from './MinerService';
 
 export const screenBuffer = new BehaviorSubject<string>('');
 
@@ -37,7 +37,7 @@ export function clearBuffer() {
   screenBuffer.next('');
 }
 
-stdout.subscribe((line) => {
+stdout$.subscribe((line) => {
   if (screenBuffer.value === '') {
     screenBuffer.next(line);
   } else if (numLines >= MAX_LINES) {
