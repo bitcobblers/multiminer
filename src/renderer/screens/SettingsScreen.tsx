@@ -99,15 +99,15 @@ export function SettingsScreen() {
               helperText={errors?.pools?.etchash?.message}
             />
           </ConfigurableControl>
-          <ConfigurableControl description="The URL to use when connecting to a mining pool using the kawpaw algorithm.">
+          <ConfigurableControl description="The URL to use when connecting to a mining pool using the kawpow algorithm.">
             <TextField
               required
-              label="Kawpaw"
-              {...register('pools.kawpaw', {
+              label="Kawpow"
+              {...register('pools.kawpow', {
                 required: 'A pool url must be specified.',
               })}
-              error={!!errors?.pools?.kawpaw}
-              helperText={errors?.pools?.kawpaw?.message}
+              error={!!errors?.pools?.kawpow}
+              helperText={errors?.pools?.kawpow?.message}
             />
           </ConfigurableControl>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the randomx algorithm.">

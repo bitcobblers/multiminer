@@ -1,9 +1,17 @@
+export function number(value: number | undefined, maxDigits = 8) {
+  return value === undefined ? 'N/A' : value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: maxDigits });
+}
+
+export function currency(value: number | undefined, maxDigits = 2) {
+  return value === undefined ? 'N/A' : value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: maxDigits });
+}
+
 export function hashrate(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${value}`;
+  return value === undefined ? 'N/A' : `${value}MH/s`;
 }
 
 export function shares(accepted: number | undefined, rejected: number | undefined) {
-  return `${accepted ?? 0} / ${rejected ?? 0}`;
+  return `${number(accepted ?? 0)} / ${number(rejected ?? 0)}`;
 }
 
 export function best(value: string | undefined) {
@@ -11,11 +19,11 @@ export function best(value: string | undefined) {
 }
 
 export function found(accepted: number | undefined, rejected: number | undefined) {
-  return `${(accepted ?? 0) + (rejected ?? 0)}`;
+  return number((accepted ?? 0) + (rejected ?? 0));
 }
 
 export function power(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${value.toLocaleString()}W`;
+  return value === undefined ? 'N/A' : `${number(value)}W`;
 }
 
 export function efficiency(value: number | undefined) {
@@ -24,7 +32,7 @@ export function efficiency(value: number | undefined) {
   }
 
   // TODO: This needs special logic to handle miners that report this in KH/W vs MH/W.
-  return `${value}`;
+  return `${number(value)}KH/W`;
 }
 
 export function clockSpeed(speed: number | undefined) {
@@ -36,23 +44,15 @@ export function temperature(value: number | undefined) {
 }
 
 export function percentage(percent: number | undefined) {
-  return percent === undefined ? 'N/A' : `${percent}%`;
+  return percent === undefined ? 'N/A' : `${number(percent, 2)}%`;
 }
 
 export function difficulty(value: string | undefined) {
   return value === undefined ? 'N/A' : `${value}`;
 }
 
-export function number(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${value.toLocaleString()}`;
-}
-
-export function currency(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${value.toLocaleString('en-US')}`;
-}
-
 export function progress(mined: number | undefined, threshold: number | undefined) {
-  return mined === undefined || threshold === undefined || mined === 0 || threshold === 0 ? 'N/A' : `${(mined / threshold).toLocaleString()}%`;
+  return mined === undefined || threshold === undefined || mined === 0 || threshold === 0 ? 'N/A' : `${number((100 * mined) / threshold, 2)}%`;
 }
 
 export function minedValue(mined: number | undefined, price: number | undefined) {

@@ -10,7 +10,7 @@ export type AppSettings = {
   pools: {
     ethash: string;
     etchash: string;
-    kawpaw: string;
+    kawpow: string;
     randomx: string;
   };
 };

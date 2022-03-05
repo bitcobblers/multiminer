@@ -29,7 +29,7 @@ export const defaults = {
     pools: {
       ethash: 'ethash.unmineable.com:3333',
       etchash: 'etchash.unmineable.com:3333',
-      kawpaw: 'kp.unmineable.com:3333',
+      kawpow: 'kp.unmineable.com:3333',
       randomx: 'rx.unmineable.com:3333',
     },
   } as AppSettings,

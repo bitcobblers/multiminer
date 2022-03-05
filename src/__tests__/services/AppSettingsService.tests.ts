@@ -131,7 +131,7 @@ describe('App Settings Service', () => {
         pools: {
           ethash: '',
           etchash: '',
-          kawpaw: '',
+          kawpow: '',
           randomx: '',
         },
       };

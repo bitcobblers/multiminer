@@ -16,9 +16,9 @@ type Chart = {
 type Worker = {
   online: boolean;
   name: string;
-  last: Date;
-  rhr: number;
-  chr: number;
+  last: number;
+  rhr: string;
+  chr: string;
   referral: string;
 };
 
@@ -67,9 +67,9 @@ async function updateCoin(coin: string, address: string) {
 
     return {
       symbol: coin,
-      balance: raw.data.balance,
-      threshold: raw.data.payment_threshold,
-      miningFee: raw.data.mining_fee,
+      balance: Number(raw.data.balance),
+      threshold: Number(raw.data.payment_threshold),
+      miningFee: Number(raw.data.mining_fee),
       uuid: raw.data.uuid,
     };
   });
@@ -84,7 +84,7 @@ export async function updateWorkers(uuid: string) {
       etchash: raw.data.etchash,
       kawpow: raw.data.kawpow,
       randomx: raw.data.randomx,
-    };
+    } as UnmineableStats;
   });
 
   unmineableWorkers$.next(stats);

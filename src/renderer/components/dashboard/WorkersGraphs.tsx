@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+import dateFormat from 'dateformat';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -10,7 +11,7 @@ import { AlgorithmStat, UnmineableStats } from '../../services/UnmineableFeed';
 function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefined }) {
   const { algorithm, stat } = props;
 
-  if (stat === undefined) {
+  if (stat === undefined || stat.workers === undefined || stat.chart === undefined) {
     return <p>No data to display!</p>;
   }
 
@@ -25,12 +26,26 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
         text: algorithm,
       },
     },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Date',
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Hashrate (MH/s)',
+        },
+      },
+    },
   };
 
-  const chr = stat.workers.map((w) => w.chr).reduce((previous, current) => previous + current, 0);
-  const rhr = stat.workers.map((w) => w.rhr).reduce((previous, current) => previous + current, 0);
+  const chr = stat.workers.map((w) => w.chr).reduce((previous, current) => Number(previous) + Number(current), 0);
+  const rhr = stat.workers.map((w) => w.rhr).reduce((previous, current) => Number(previous) + Number(current), 0);
 
-  const labels = stat?.chart.calculated.timestamps;
+  const labels = stat?.chart.calculated.timestamps.map((ts) => dateFormat(new Date(ts), 'yyyy/mm/dd HH:MM:ss'));
   const data = {
     labels,
     datasets: [
