@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { Coin, AllCoins, ConfiguredCoin } from '../../models';
+import { Coin, ALL_COINS, ConfiguredCoin } from '../../models';
 import * as config from './AppSettingsService';
 import { MinerState, minerState$ } from './MinerManager';
 import { CoinTicker, ticker$ } from './CoinFeed';
@@ -12,7 +12,7 @@ async function loadCoins() {
 
   enabledCoins$.next(
     loadedCoins.map((c) => {
-      const cd = AllCoins.find((x) => x.symbol === c.symbol);
+      const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
 
       return {
         current: false,
@@ -31,9 +31,7 @@ function minerStateChanged(state: MinerState) {
   const updatedCoins = enabledCoins$.getValue().map((c) => {
     return {
       ...c,
-      ...{
-        current: state.state === 'active' ? state.currentCoin === c.symbol : false,
-      },
+      current: state.state === 'active' ? state.currentCoin === c.symbol : false,
     };
   });
 
@@ -53,9 +51,7 @@ function tickerUpdated(coins: CoinTicker[]) {
 
     return {
       ...c,
-      ...{
-        price: ticker?.price,
-      },
+      price: ticker?.price,
     };
   });
 
@@ -99,7 +95,7 @@ function reloadCoins(coins: Coin[]) {
   const updatedCoins = coins
     .filter((c) => c.enabled)
     .map((c) => {
-      const cd = AllCoins.find((x) => x.symbol === c.symbol);
+      const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
 
       const previousCoin = previouslyLoadedCoins.find((x) => x.symbol === c.symbol);
       return {

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { AvailableAlgorithms, AvailableMiners, Miner, AlgorithmName, MinerName } from '../../models';
+import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, AlgorithmName, MinerName } from '../../models';
 import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
 import { MinerTypeMenuItem } from '../components/MinerTypeMenuItem';
 
@@ -16,15 +16,15 @@ type EditMinerDialogProps = {
 };
 
 const getSelectableAlgorithms = (newMinerType: MinerName) => {
-  const selectedMiner = AvailableMiners.find((m) => m.name === newMinerType);
+  const selectedMiner = AVAILABLE_MINERS.find((m) => m.name === newMinerType);
   const selectedMinerAlgorithms = selectedMiner?.algorithms ?? [];
 
-  return AvailableAlgorithms.filter((alg) => selectedMinerAlgorithms.indexOf(alg.name) !== -1);
+  return AVAILABLE_ALGORITHMS.filter((alg) => selectedMinerAlgorithms.indexOf(alg.name) !== -1);
 };
 
 const getDefaultAlgorithm = (name: MinerName, algorithm: AlgorithmName): AlgorithmName => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const miner = AvailableMiners.find((m) => m.name === name)!;
+  const miner = AVAILABLE_MINERS.find((m) => m.name === name)!;
 
   if (miner.algorithms.findIndex((alg) => alg === algorithm) !== -1) {
     return algorithm;
@@ -135,7 +135,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
             <FormControlLabel control={<Switch checked={enabled} onChange={handleOnEnabledChange} />} label="Enabled" />
             <TextField disabled={!enabled} required label="Name" defaultValue={miner.name} onChange={handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
             <TextField disabled={!enabled} required label="Miner" select value={kind} onChange={handleOnMinerTypeChange} error={isMinerTypeInvalid} helperText={minerTypeValidationMessage}>
-              {AvailableMiners.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
+              {AVAILABLE_MINERS.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
                 <MenuItem key={m.name} value={m.name}>
                   <MinerTypeMenuItem miner={m} />
                 </MenuItem>

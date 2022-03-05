@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
-import { Wallet, Coin, Chain, AllChains } from '../../models';
+import { Wallet, Coin, Chain, ALL_CHAINS } from '../../models';
 import { ChainMenuItem } from '../components/ChainMenuItem';
 import { UsedByCoins } from '../components/UsedByCoins';
 
@@ -28,7 +28,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   constructor(props: EditWalletDialogProps) {
     super(props);
 
-    const network = AllChains.find((c) => c.name === props.wallet.network);
+    const network = ALL_CHAINS.find((c) => c.name === props.wallet.network);
 
     if (network !== undefined) {
       this.state = {
@@ -51,7 +51,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleOnBlockchainChange = (e: any) => {
     const blockchain = e.target.value.trim();
-    const network = AllChains.find((c) => c.name === blockchain);
+    const network = ALL_CHAINS.find((c) => c.name === blockchain);
 
     if (network !== undefined) {
       this.setState({
@@ -148,7 +148,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
             <Stack spacing={2}>
               <TextField required label="Name" defaultValue={wallet.name} onChange={this.handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
               <TextField required label="Blockchain" select value={this.state.blockchain} onChange={this.handleOnBlockchainChange}>
-                {AllChains.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
+                {ALL_CHAINS.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
                   <MenuItem key={n.name} value={n.name}>
                     <ChainMenuItem chain={n} />
                   </MenuItem>

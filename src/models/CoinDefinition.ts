@@ -9,7 +9,7 @@ export type CoinDefinition = {
   referral: string;
 };
 
-export const AllCoins: CoinDefinition[] = [
+export const ALL_COINS: CoinDefinition[] = [
   {
     id: '0x',
     icon: CoinIcons.Zrx,

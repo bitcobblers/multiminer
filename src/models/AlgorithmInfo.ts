@@ -5,7 +5,7 @@ export type AlgorithmInfo = {
   kind: AlgorithmKind;
 };
 
-export const AvailableAlgorithms: AlgorithmInfo[] = [
+export const AVAILABLE_ALGORITHMS: AlgorithmInfo[] = [
   {
     name: 'ethash',
     kind: 'GPU',

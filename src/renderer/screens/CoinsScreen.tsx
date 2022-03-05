@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import CheckIcon from '@mui/icons-material/Check';
 import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch } from '@mui/material';
-import { AllCoins, Coin, Wallet } from '../../models';
+import { ALL_COINS, Coin, Wallet } from '../../models';
 import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { EditCoinControls } from '../components/EditCoinControls';
@@ -35,7 +35,7 @@ export function CoinsScreen() {
   useEffect(() => {
     const readConfigAsync = async () => {
       const loadedCoins = await getCoins();
-      const parsedCoins = AllCoins.map((cd) => {
+      const parsedCoins = ALL_COINS.map((cd) => {
         const coin = loadedCoins.find((c) => {
           return c.symbol === cd.symbol;
         });

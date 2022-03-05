@@ -5,9 +5,7 @@ import { isDevelopment } from './globals';
 
 export function addApi(module: SharedModule) {
   if (isDevelopment) {
-    if (module.reset !== undefined) {
-      module.reset();
-    }
+    module.reset?.();
   }
 
   Object.keys(module.handlers).forEach((key) => {
