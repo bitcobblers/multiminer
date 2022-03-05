@@ -207,6 +207,7 @@
     "history": "4.x.x",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.7",
+    "notistack": "^2.0.3",
     "path-browserify": "^1.0.1",
     "pino": "^7.8.0",
     "pino-pretty": "^7.5.1",

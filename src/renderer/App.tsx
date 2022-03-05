@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
 // Material.
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box } from '@mui/material';
+import { Button, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box } from '@mui/material';
+import { SnackbarProvider, SnackbarKey } from 'notistack';
 
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
@@ -65,6 +66,7 @@ function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
 
 export function App() {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
+  const snackRef = useRef<SnackbarProvider>(null);
 
   useEffect(() => {
     const subscription = minerState$.subscribe((s) => {
@@ -74,17 +76,23 @@ export function App() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const closeSnack = (key: SnackbarKey) => () => {
+    snackRef.current?.closeSnackbar(key);
+  };
+
   return (
     <MinerContext.Provider value={managerState}>
       <Router>
         <ThemeProvider theme={mdTheme}>
-          <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <Drawer style={{ width: drawerWidth }} variant="persistent" open>
-              <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-            </Drawer>
-            <Switch>{links.map(NavScreen)}</Switch>
-          </Box>
+          <SnackbarProvider maxSnack={5} ref={snackRef} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
+            <Box sx={{ display: 'flex' }}>
+              <CssBaseline />
+              <Drawer style={{ width: drawerWidth }} variant="persistent" open>
+                <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+              </Drawer>
+              <Switch>{links.map(NavScreen)}</Switch>
+            </Box>
+          </SnackbarProvider>
         </ThemeProvider>
       </Router>
     </MinerContext.Provider>
