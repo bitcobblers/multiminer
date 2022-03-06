@@ -1,6 +1,6 @@
 import { GpuStatistic, MinerStatistic } from '../../models';
 import { gpuStatistics$, minerStatistics$, setHandlers, clearStatistics } from '../../renderer/services/MinerEventStreamer';
-import { stdout } from '../../renderer/services/MinerService';
+import { stdout$ } from '../../renderer/services/MinerService';
 
 describe('Miner Streaming Service Tests', () => {
   it('Clearing handlers should not fire statistics', () => {
@@ -12,7 +12,7 @@ describe('Miner Streaming Service Tests', () => {
     const minerSpy = jest.spyOn(minerStatistics$, 'next');
 
     // Act.
-    stdout.next('');
+    stdout$.next('');
 
     // Assert.
     expect(gpuSpy).not.toHaveBeenCalled();
@@ -44,8 +44,8 @@ describe('Miner Streaming Service Tests', () => {
       const spyGpu = jest.spyOn(gpuStatistics$, 'next');
 
       // Act.
-      stdout.next('1');
-      stdout.next('2');
+      stdout$.next('1');
+      stdout$.next('2');
 
       // Assert.
       expect(spyGpu).toBeCalledWith(expected);
@@ -81,9 +81,9 @@ describe('Miner Streaming Service Tests', () => {
       const spyGpu = jest.spyOn(gpuStatistics$, 'next');
 
       // Act.
-      stdout.next('1');
-      stdout.next('2');
-      stdout.next('3');
+      stdout$.next('1');
+      stdout$.next('2');
+      stdout$.next('3');
 
       // Assert.
       expect(spyGpu).toBeCalledWith(expected);
@@ -113,8 +113,8 @@ describe('Miner Streaming Service Tests', () => {
       const spyGpu = jest.spyOn(gpuStatistics$, 'next');
 
       // Act.
-      stdout.next('1');
-      stdout.next('2');
+      stdout$.next('1');
+      stdout$.next('2');
 
       // Assert.
       expect(spyGpu).toBeCalledWith(expected);
@@ -138,7 +138,7 @@ describe('Miner Streaming Service Tests', () => {
       const minerSpy = jest.spyOn(minerStatistics$, 'next');
 
       // Act.
-      stdout.next('');
+      stdout$.next('');
 
       // Assert.
       expect(minerSpy).toBeCalled();
@@ -168,8 +168,8 @@ describe('Miner Streaming Service Tests', () => {
       const minerSpy = jest.spyOn(minerStatistics$, 'next');
 
       // Act.
-      stdout.next('1');
-      stdout.next('2');
+      stdout$.next('1');
+      stdout$.next('2');
 
       // Assert.
       expect(minerSpy).toBeCalledWith(expected);

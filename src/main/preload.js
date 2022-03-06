@@ -16,17 +16,23 @@ contextBridge.exposeInMainWorld('settings', {
 });
 
 contextBridge.exposeInMainWorld('miner', {
-  start(path, args) {
-    return ipcRenderer.invoke('ipc-startMiner', path, args);
+  start(name, coin, path, args) {
+    return ipcRenderer.invoke('ipc-startMiner', name, coin, path, args);
   },
   stop() {
     return ipcRenderer.invoke('ipc-stopMiner');
+  },
+  status() {
+    return ipcRenderer.invoke('ipc-statusMiner');
   },
   receive(func) {
     ipcRenderer.on('ipc-minerData', (_event, ...args) => func(...args));
   },
   exited(func) {
-    ipcRenderer.on('ipc-minerExit', (_event, ...args) => func(...args));
+    ipcRenderer.on('ipc-minerExited', (_event, ...args) => func(...args));
+  },
+  started(func) {
+    ipcRenderer.on('ipc-minerStarted', (_event, ...args) => func(...args));
   },
 });
 

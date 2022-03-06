@@ -1,5 +1,5 @@
 import { screenBuffer, clearBuffer } from '../../renderer/services/ScreenBuffer';
-import { stdout } from '../../renderer/services/MinerService';
+import { stdout$ } from '../../renderer/services/MinerService';
 
 describe('Screen Buffer Tests', () => {
   it('Clearing buffer should reset it to empty string', () => {
@@ -23,7 +23,7 @@ describe('Screen Buffer Tests', () => {
 
     // Act.
     clearBuffer();
-    stdout.next('expected');
+    stdout$.next('expected');
     subscription.unsubscribe();
 
     // Assert.
@@ -38,8 +38,8 @@ describe('Screen Buffer Tests', () => {
 
     // Act.
     clearBuffer();
-    stdout.next('line1');
-    stdout.next('line2');
+    stdout$.next('line1');
+    stdout$.next('line2');
     subscription.unsubscribe();
 
     // Assert.

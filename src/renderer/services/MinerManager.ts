@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import * as miningStream from './MinerEventStreamer';
+import { minerApi } from '../../shared/MinerApi';
 import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet } from '../../models';
 import { getMiners } from './AppSettingsService';
 
@@ -31,14 +32,6 @@ export const minerState$ = new BehaviorSubject<MinerState>({ state: 'inactive', 
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
   minerState$.next({ ...currentState, ...newState });
-}
-
-function activate(coin: string) {
-  updateState({ state: 'active', currentCoin: coin });
-}
-
-function deactivate() {
-  updateState({ state: 'inactive', currentCoin: null });
 }
 
 function getConnectionString(symbol: string, address: string, memo: string, name: string, referral: string) {
@@ -111,10 +104,9 @@ async function changeCoin() {
       // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
-      await miningService.startMiner(filePath, args);
+      await miningService.startMiner(miner.name, coin.symbol, filePath, args);
       miningStream.clearStatistics();
       miningStream.setHandlerPack(minerInfo.name);
-      activate(coin.symbol);
 
       timeout = setTimeout(changeCoin, Number(selection.coin.duration) * MILLISECONDS_PER_HOUR);
     }
@@ -131,7 +123,6 @@ export async function nextCoin() {
 }
 
 export async function stopMiner() {
-  deactivate();
   clearTimeout(timeout);
   await miningService.stopMiner();
 }
@@ -141,12 +132,46 @@ export async function startMiner() {
   await changeCoin();
 }
 
-// eslint-disable-next-line promise/catch-or-return
-getMiners().then((miners) => {
+async function getMinerState() {
+  return minerApi.status();
+}
+
+async function getDefaultMiner() {
+  const miners = await getMiners();
   const miner = miners.find((m) => m.enabled);
 
-  // eslint-disable-next-line promise/always-return
-  if (miner !== undefined) {
-    updateState({ miner: miner?.name });
+  return miner !== undefined ? miner : undefined;
+}
+
+async function setInitialState() {
+  const minerState = await getMinerState();
+  const defaultMiner = await getDefaultMiner();
+
+  if (minerState.state === 'active') {
+    // eslint-disable-next-line no-console
+    console.log(`Miner already active.  Updating state to reflect.  Coin is ${minerState.currentCoin}.`);
+
+    updateState(minerState);
+  } else {
+    // eslint-disable-next-line no-console
+    console.log('Miner not active.  Setting default miner to use.');
+
+    updateState({ miner: defaultMiner?.name });
   }
+}
+
+miningService.minerExited$.subscribe(() => {
+  updateState({
+    state: 'inactive',
+    currentCoin: null,
+  });
 });
+
+miningService.minerStarted$.subscribe((coin) => {
+  updateState({
+    state: 'active',
+    currentCoin: coin,
+  });
+});
+
+setInitialState();
