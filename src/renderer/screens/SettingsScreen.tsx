@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Button, Stack, TextField, Container, Typography, Divider, FormControl } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 
 import { AppSettings } from 'models/AppSettings';
 import { ScreenHeader, ConfigurableControl } from '../components';
@@ -9,6 +10,8 @@ import { getAppSettings, setAppSettings, defaults } from '../services/AppSetting
 // react-hook-form's API requires prop spreading to register controls
 /* eslint-disable react/jsx-props-no-spreading */
 export function SettingsScreen() {
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     register,
     formState: { errors, isValid },
@@ -27,6 +30,9 @@ export function SettingsScreen() {
 
   const onSave = handleSubmit(async (value) => {
     await setAppSettings(value);
+    enqueueSnackbar('Settings updated.', {
+      variant: 'success',
+    });
   });
 
   const DefaultSpacing = 2;

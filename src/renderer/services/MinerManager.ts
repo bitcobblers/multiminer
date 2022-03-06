@@ -26,7 +26,7 @@ export type MinerState = {
   miner: string | null;
 };
 
-export const errors$ = new Subject<string>();
+export const minerErrors$ = new Subject<string>();
 export const minerState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: null, miner: null });
 
 function updateState(newState: Partial<MinerState>) {
@@ -91,7 +91,7 @@ async function changeCoin() {
 
   selectCoin(
     (error) => {
-      errors$.next(error);
+      minerErrors$.next(error);
     },
     async (selection) => {
       const appSettings = await config.getAppSettings();

@@ -4,10 +4,11 @@ import { UsedByCoins } from '../components/UsedByCoins';
 import { Coin } from '../../models';
 
 interface RemoveWalletDialogProps {
+  name: string;
   open: boolean;
   id: string;
   coins: Coin[];
-  onRemove: (id: string) => void;
+  onRemove: (name: string, id: string) => void;
   onCancel: () => void;
 }
 
@@ -20,7 +21,7 @@ const getPageContent = (isUsedByCoins: number) => {
 };
 
 export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
-  const { open, id, coins, onRemove, onCancel, ...other } = props;
+  const { open, name, id, coins, onRemove, onCancel, ...other } = props;
   const isUsedByCoins = coins.length;
 
   return (
@@ -32,7 +33,7 @@ export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
         <br />
         <UsedByCoins coins={coins} />
         <Divider />
-        <Button disabled={isUsedByCoins > 0} onClick={() => onRemove(id)}>
+        <Button disabled={isUsedByCoins > 0} onClick={() => onRemove(name, id)}>
           Yes
         </Button>
         <Button onClick={onCancel}>No</Button>
