@@ -43,9 +43,7 @@ export function MinersScreen() {
     await setMiners(updatedMiners);
     setLoadedMiners(updatedMiners);
 
-    enqueueSnackbar(`Miner ${miner.name} updated.`, {
-      variant: 'success',
-    });
+    enqueueSnackbar(`Miner ${miner.name} updated.`, { variant: 'success' });
   };
 
   const addMiner = async (miner: Miner) => {
@@ -57,9 +55,7 @@ export function MinersScreen() {
     setLoadedMiners(updatedMiners);
     setNewOpen(false);
 
-    enqueueSnackbar(`Miner ${miner.name} added.`, {
-      variant: 'success',
-    });
+    enqueueSnackbar(`Miner ${miner.name} added.`, { variant: 'success' });
   };
 
   const removeMiner = async (name: string, id: string) => {
@@ -68,9 +64,7 @@ export function MinersScreen() {
     await setMiners(updatedMiners);
     setLoadedMiners(updatedMiners);
 
-    enqueueSnackbar(`Miner ${name} removed.`, {
-      variant: 'success',
-    });
+    enqueueSnackbar(`Miner ${name} removed.`, { variant: 'success' });
   };
 
   return (

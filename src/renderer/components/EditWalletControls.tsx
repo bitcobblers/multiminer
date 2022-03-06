@@ -17,7 +17,7 @@ interface EditWalletControlsProps {
   existingWallets: Wallet[];
   coins: Coin[];
   onEditSave: (wallet: Wallet) => void;
-  onRemoveConfirm: (id: string) => void;
+  onRemoveConfirm: (name: string, id: string) => void;
 }
 
 export class EditWalletControls extends React.Component<EditWalletControlsProps, EditWalletControlsState> {
@@ -50,9 +50,9 @@ export class EditWalletControls extends React.Component<EditWalletControlsProps,
     });
   };
 
-  handleRemoveWallet = (id: string) => {
+  handleRemoveWallet = (name: string, id: string) => {
     // eslint-disable-next-line react/destructuring-assignment
-    this.props.onRemoveConfirm(id);
+    this.props.onRemoveConfirm(name, id);
     this.setState({
       removeOpen: false,
     });
@@ -80,7 +80,7 @@ export class EditWalletControls extends React.Component<EditWalletControlsProps,
     return (
       <Stack direction="row" spacing={1}>
         <EditWalletDialog open={editOpen} wallet={wallet} existingWallets={existingWallets} coins={usedCoins} isNew={false} onCancel={this.handleCancelEditWallet} onSave={this.handleSaveWallet} />
-        <RemoveWalletDialog open={removeOpen} id={wallet.id} coins={usedCoins} onCancel={this.handleCancelRemoveWallet} onRemove={this.handleRemoveWallet} />
+        <RemoveWalletDialog open={removeOpen} name={wallet.name} id={wallet.id} coins={usedCoins} onCancel={this.handleCancelRemoveWallet} onRemove={this.handleRemoveWallet} />
         <DeleteIcon onClick={this.handleOpenRemoveDialog} />
         <EditIcon onClick={this.handleOpenEditDialog} />
       </Stack>
