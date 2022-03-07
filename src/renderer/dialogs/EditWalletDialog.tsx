@@ -139,6 +139,20 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
 
     const isInvalid = isNameInvalid;
 
+    const shouldDisableBlockchainSelection = () => {
+      return coins.length !== 0;
+    };
+
+    const blockchainLabel = () => {
+      if (coins.length === 0) {
+        return 'Blockchain';
+      }
+      if (coins.length === 1) {
+        return 'Cannot change blockchain.  Already bound to 1 coin.';
+      }
+      return `Cannot change blockchain.  Already bound to ${coins.length} coins.`;
+    };
+
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
@@ -147,7 +161,7 @@ export class EditWalletDialog extends React.Component<EditWalletDialogProps, Edi
           <FormControl fullWidth>
             <Stack spacing={2}>
               <TextField required label="Name" defaultValue={wallet.name} onChange={this.handleOnNameChange} error={isNameInvalid} helperText={nameValidationMessage} />
-              <TextField required label="Blockchain" select value={this.state.blockchain} onChange={this.handleOnBlockchainChange}>
+              <TextField disabled={shouldDisableBlockchainSelection()} required label={blockchainLabel()} select value={this.state.blockchain} onChange={this.handleOnBlockchainChange}>
                 {ALL_CHAINS.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
                   <MenuItem key={n.name} value={n.name}>
                     <ChainMenuItem chain={n} />

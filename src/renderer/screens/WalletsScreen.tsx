@@ -56,6 +56,7 @@ export function WalletsScreen() {
     updatedWallets.splice(index, 1);
     updatedWallets.splice(index, 0, wallet);
 
+    await config.setWallets(updatedWallets);
     setWallets(updatedWallets);
     enqueueSnackbar(`Updated wallet ${wallet.name}.`, { variant: 'success' });
   };

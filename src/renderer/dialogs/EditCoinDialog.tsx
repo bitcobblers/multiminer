@@ -25,6 +25,8 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   const [duration, setDuration] = useState(coin.duration);
   const [referral, setReferral] = useState(coin.referral);
 
+  const compatibleWallets = wallets.filter((w) => blockchains.includes(w.network));
+
   const handleOnWalletChange = (e: any) => {
     setWallet(e.target.value.trim());
   };
@@ -73,6 +75,14 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   const [isDurationInvalid, durationValidationMessage] = validateDuration();
   const isInvalid = enabled ? isWalletInvalid || isDurationInvalid : false;
 
+  const shouldDisableWalletSelection = () => {
+    return !enabled || compatibleWallets.length === 0;
+  };
+
+  const walletLabel = () => {
+    return compatibleWallets.length === 0 ? 'No compatible wallets' : 'Wallet';
+  };
+
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
@@ -90,8 +100,17 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
             </div>
             <Divider />
             <FormControlLabel control={<Switch checked={enabled} onChange={handleOnEnabledChange} />} label="Enabled" />
-            <TextField disabled={!enabled} required label="Wallet" select value={wallet} onChange={handleOnWalletChange} error={isWalletInvalid} helperText={walletValidationMessage}>
-              {wallets
+            <TextField
+              disabled={shouldDisableWalletSelection()}
+              required
+              label={walletLabel()}
+              select
+              value={wallet}
+              onChange={handleOnWalletChange}
+              error={isWalletInvalid}
+              helperText={walletValidationMessage}
+            >
+              {compatibleWallets
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((w) => (
                   <MenuItem key={w.name} value={w.name}>
