@@ -27,7 +27,7 @@ const drawerWidth = 200;
 const mdTheme = createTheme();
 
 const links = [
-  { id: 0, to: '/$', icon: <HomeIcon />, text: 'Home', screen: <HomeScreen /> },
+  { id: 0, to: '/', icon: <HomeIcon />, text: 'Home', screen: <HomeScreen /> },
   { id: 1, to: '/wallets', icon: <AccountBalanceWalletIcon />, text: 'Wallets', screen: <WalletsScreen /> },
   { id: 2, to: '/coins', icon: <AddShoppingCartIcon />, text: 'Coins', screen: <CoinsScreen /> },
   { id: 3, to: '/miners', icon: <RocketLaunchIcon />, text: 'Miners', screen: <MinersScreen /> },
@@ -92,7 +92,7 @@ function AppContent() {
           <Drawer style={{ width: drawerWidth }} variant="persistent" open>
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
           </Drawer>
-          <Switch>{links.map(NavScreen)}</Switch>
+          <Switch>{links.reverse().map(NavScreen)}</Switch>
         </Box>
       </Router>
     </MinerContext.Provider>

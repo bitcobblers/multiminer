@@ -9,16 +9,19 @@ export const enabledCoins$ = new BehaviorSubject<ConfiguredCoin[]>([]);
 
 async function loadCoins() {
   const loadedCoins = (await config.getCoins()).filter((c) => c.enabled);
+  const wallets = await config.getWallets();
 
   enabledCoins$.next(
     loadedCoins.map((c) => {
       const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
+      const wallet = wallets.find((w) => c.wallet === w.name);
 
       return {
         current: false,
         icon: cd?.icon ?? '',
         symbol: c.symbol,
         duration: Number(c.duration),
+        address: wallet?.address ?? '',
       };
     })
   );
@@ -89,27 +92,33 @@ function reloadCoins(coins: Coin[]) {
   // eslint-disable-next-line no-console
   console.log('Reloading coins from configuration.');
 
-  const { currentCoin } = minerState$.getValue();
-  const previouslyLoadedCoins = enabledCoins$.getValue();
+  const updateCoins = async () => {
+    const { currentCoin } = minerState$.getValue();
+    const previouslyLoadedCoins = enabledCoins$.getValue();
+    const wallets = await config.getWallets();
 
-  const updatedCoins = coins
-    .filter((c) => c.enabled)
-    .map((c) => {
-      const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
+    return coins
+      .filter((c) => c.enabled)
+      .map((c) => {
+        const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
+        const wallet = wallets.find((w) => c.wallet === w.name);
 
-      const previousCoin = previouslyLoadedCoins.find((x) => x.symbol === c.symbol);
-      return {
-        current: currentCoin === c.symbol,
-        icon: cd?.icon ?? '',
-        symbol: c.symbol,
-        price: previousCoin?.price,
-        mined: previousCoin?.mined,
-        threshold: previousCoin?.threshold,
-        duration: Number(c.duration),
-      };
-    });
+        const previousCoin = previouslyLoadedCoins.find((x) => x.symbol === c.symbol);
+        return {
+          current: currentCoin === c.symbol,
+          icon: cd?.icon ?? '',
+          symbol: c.symbol,
+          price: previousCoin?.price,
+          mined: previousCoin?.mined,
+          threshold: previousCoin?.threshold,
+          duration: Number(c.duration),
+          address: wallet?.address ?? '',
+        };
+      });
+  };
 
-  enabledCoins$.next(updatedCoins);
+  // eslint-disable-next-line promise/catch-or-return
+  updateCoins().then((updatedCoins) => enabledCoins$.next(updatedCoins));
 }
 
 const minerStateSubscription = minerState$.subscribe(minerStateChanged);

@@ -3,6 +3,7 @@ import AaveIcon from '../../assets/coins/aave.svg';
 import AdaIcon from '../../assets/coins/ada.svg';
 import AlgoIcon from '../../assets/coins/algo.svg';
 import AtomIcon from '../../assets/coins/atom.svg';
+import BabyDogeIcon from '../../assets/coins/babydoge.svg';
 import BandIcon from '../../assets/coins/band.svg';
 import BatIcon from '../../assets/coins/bat.svg';
 import BchIcon from '../../assets/coins/bch.svg';
@@ -21,6 +22,7 @@ import EnjIcon from '../../assets/coins/enj.svg';
 import EosIcon from '../../assets/coins/eos.svg';
 import EtcIcon from '../../assets/coins/etc.svg';
 import EthIcon from '../../assets/coins/eth.svg';
+import FtmIcon from '../../assets/coins/ftm.svg';
 import FunIcon from '../../assets/coins/fun.svg';
 import GasIcon from '../../assets/coins/gas.svg';
 import HotIcon from '../../assets/coins/hot.svg';
@@ -69,6 +71,7 @@ export const CoinIcons = {
   Ada: AdaIcon,
   Algo: AlgoIcon,
   Atom: AtomIcon,
+  BabyDoge: BabyDogeIcon,
   Band: BandIcon,
   Bat: BatIcon,
   Bch: BchIcon,
@@ -87,6 +90,7 @@ export const CoinIcons = {
   Eos: EosIcon,
   Etc: EtcIcon,
   Eth: EthIcon,
+  Ftm: FtmIcon,
   Fun: FunIcon,
   Gas: GasIcon,
   Hot: HotIcon,

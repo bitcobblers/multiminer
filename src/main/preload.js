@@ -49,6 +49,9 @@ contextBridge.exposeInMainWorld('unmineable', {
   getWorkers(uuid) {
     return ipcRenderer.invoke('ipc-getUnmineableWorkers', uuid);
   },
+  openBrowser(coin, address) {
+    return ipcRenderer.invoke('ipc-openUnmineableWeb', coin, address);
+  },
 });
 
 contextBridge.exposeInMainWorld('ticker', {

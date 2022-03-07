@@ -8,6 +8,16 @@ import { Tabs, Tab } from '@mui/material';
 import { TabPanel } from '..';
 import { AlgorithmStat, UnmineableStats } from '../../services/UnmineableFeed';
 
+function shrink<T>(items: T[]) {
+  let result = items;
+
+  while (result.length > 150) {
+    result = result.filter((_x, i) => i % 5 !== 0);
+  }
+
+  return result;
+}
+
 function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefined }) {
   const { algorithm, stat } = props;
 
@@ -45,21 +55,27 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
   const chr = stat.workers.map((w) => w.chr).reduce((previous, current) => Number(previous) + Number(current), 0);
   const rhr = stat.workers.map((w) => w.rhr).reduce((previous, current) => Number(previous) + Number(current), 0);
 
-  const labels = stat?.chart.calculated.timestamps.map((ts) => dateFormat(new Date(ts), 'yyyy/mm/dd HH:MM:ss'));
+  const timestamps = shrink(stat?.chart.calculated.timestamps).map((ts) => dateFormat(new Date(ts), 'yyyy/mm/dd HH:MM:ss'));
+  const calculatedData = shrink(stat?.chart.calculated.data);
+  const reportedData = shrink(stat?.chart.reported.data);
+
+  const labels = timestamps;
   const data = {
     labels,
     datasets: [
       {
         label: `Calculated (${chr})`,
-        data: stat?.chart.calculated.data,
+        data: calculatedData,
         borderColor: 'rgb(255,99,132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        lineTension: 0.5,
       },
       {
         label: `Reported(${rhr})`,
-        data: stat?.chart.reported.data,
+        data: reportedData,
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        lineTension: 0.5,
       },
     ],
   };

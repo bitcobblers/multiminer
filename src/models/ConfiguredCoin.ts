@@ -6,4 +6,5 @@ export type ConfiguredCoin = {
   price?: number;
   threshold?: number;
   duration: number;
+  address: string;
 };
