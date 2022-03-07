@@ -16,7 +16,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: '0x',
     symbol: 'ZRX',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'i9p3-ao71',
   },
   {
     id: '1inch',
@@ -24,7 +24,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: '1Inch',
     symbol: '1INCH',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'jpww-daqu',
   },
   {
     id: 'aave',
@@ -32,7 +32,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Aave',
     symbol: 'AAVE',
     blockchains: ['BSC', 'ETH'],
-    referral: 'FractalMedia',
+    referral: '2xc8-cp4e',
   },
   {
     id: 'algorand',
@@ -40,7 +40,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Algorand',
     symbol: 'ALGO',
     blockchains: ['ALGO'],
-    referral: 'FractalMedia',
+    referral: '4rcp-6phh',
   },
   {
     id: 'augur',
@@ -48,7 +48,15 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Augur',
     symbol: 'REP',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'futc-3x8d',
+  },
+  {
+    id: 'baby-doge-coin',
+    icon: CoinIcons.BabyDoge,
+    name: 'Baby Doge',
+    symbol: 'BABYDOGE',
+    blockchains: ['BNB'],
+    referral: 'iwtu-dkg4',
   },
   {
     id: 'band-protocol',
@@ -56,7 +64,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Band Protocol',
     symbol: 'BAND',
     blockchains: ['BAND'],
-    referral: 'FractalMedia',
+    referral: '6yis-m6qd',
   },
   {
     id: 'basic-attention-token',
@@ -64,7 +72,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Basic Attention Token',
     symbol: 'BAT',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '9qny-5sqm',
   },
   {
     id: 'binancecoin',
@@ -72,7 +80,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Binance Coin',
     symbol: 'BNB',
     blockchains: ['BNB', 'BSC'],
-    referral: 'FractalMedia',
+    referral: 'ba8w-ywck',
   },
   {
     id: 'bitcoin',
@@ -80,7 +88,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Bitcoin',
     symbol: 'BTC',
     blockchains: ['BTC'],
-    referral: 'FractalMedia',
+    referral: 'jsbv-p7ge',
   },
   {
     id: 'bitcoin-cash',
@@ -88,7 +96,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Bitcoin Cash',
     symbol: 'BCH',
     blockchains: ['BCH'],
-    referral: 'FractalMedia',
+    referral: '3x9l-lsss',
   },
   {
     id: 'bitcoin-gold',
@@ -96,7 +104,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Bitcoin God',
     symbol: 'BTG',
     blockchains: ['BTG'],
-    referral: 'FractalMedia',
+    referral: 'r067-lzbs',
   },
   {
     id: 'bittorrent-2',
@@ -104,7 +112,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'BitTorrent',
     symbol: 'BTT',
     blockchains: ['TRX'],
-    referral: 'FractalMedia',
+    referral: 'coi9-zt28',
   },
   {
     id: 'cardano',
@@ -112,7 +120,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Cardano',
     symbol: 'ADA',
     blockchains: ['ADA'],
-    referral: 'FractalMedia',
+    referral: 'ddw4-8l44',
   },
   {
     id: 'chainlink',
@@ -120,7 +128,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'ChainLink',
     symbol: 'LINK',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'xpnm-ycra',
   },
   {
     id: 'chiliz',
@@ -128,7 +136,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Chiliz',
     symbol: 'CHZ',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '59bp-rqkz',
   },
   {
     id: 'cosmos',
@@ -136,7 +144,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Cosmos',
     symbol: 'ATOM',
     blockchains: ['ATOM'],
-    referral: 'FractalMedia',
+    referral: '3lep-weav',
   },
   {
     id: 'crypto-com-chain',
@@ -144,7 +152,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Crypto.com Coin',
     symbol: 'CRO',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '53v9-dbfx',
   },
   {
     id: 'dash',
@@ -152,7 +160,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Dash',
     symbol: 'DASH',
     blockchains: ['DASH'],
-    referral: 'FractalMedia',
+    referral: 'yuaf-05e0',
   },
   {
     id: 'decentraland',
@@ -160,7 +168,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Decentraland',
     symbol: 'MANA',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'qk2z-eps4',
   },
   {
     id: 'digibyte',
@@ -168,7 +176,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'DigiByte',
     symbol: 'DGB',
     blockchains: ['DGB'],
-    referral: 'FractalMedia',
+    referral: '28b6-4rse',
   },
   {
     id: 'dogecoin',
@@ -176,7 +184,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Dogecoin',
     symbol: 'DOGE',
     blockchains: ['DOGE'],
-    referral: 'FractalMedia',
+    referral: 'pdwb-af48',
   },
   {
     id: 'dogelon-mars',
@@ -184,7 +192,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Dogelon Mars',
     symbol: 'ELON',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'pdwb-af48',
   },
   {
     id: 'enjincoin',
@@ -192,7 +200,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Enjin Coin',
     symbol: 'ENJ',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'h3c2-h36r',
   },
   {
     id: 'eos',
@@ -200,7 +208,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'EOS',
     symbol: 'EOS',
     blockchains: ['EOS'],
-    referral: 'FractalMedia',
+    referral: 'amgj-xq2z',
   },
   {
     id: 'ethereum',
@@ -208,7 +216,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Ethereum',
     symbol: 'ETH',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'a83j-r7ty',
   },
   {
     id: 'ethereum-classic',
@@ -216,7 +224,15 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Ethereum Classic',
     symbol: 'ETC',
     blockchains: ['ETC'],
-    referral: 'FractalMedia',
+    referral: '2cia-hqii',
+  },
+  {
+    id: 'fantom',
+    icon: CoinIcons.Ftm,
+    name: 'Fantom',
+    symbol: 'FTM',
+    blockchains: ['BNB', 'ETH'],
+    referral: 'y09n-4yju',
   },
   {
     id: 'funfair',
@@ -224,7 +240,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'FUNToken',
     symbol: 'FUN',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '7g14-zme4',
   },
   {
     id: 'gas',
@@ -240,7 +256,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Holo',
     symbol: 'HOT',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'guyy-42yu',
   },
   {
     id: 'icon',
@@ -248,7 +264,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Icon',
     symbol: 'ICX',
     blockchains: ['ICX'],
-    referral: 'FractalMedia',
+    referral: 'ovvz-b640',
   },
   {
     id: 'klever',
@@ -256,7 +272,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Klever',
     symbol: 'KLV',
     blockchains: ['TRX'],
-    referral: 'FractalMedia',
+    referral: 'xz1q-tx7c',
   },
   {
     id: 'kyber-network-crystal',
@@ -264,7 +280,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'KyberNetwork',
     symbol: 'KNC',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'u59r-vzx4',
   },
   {
     id: 'lisk',
@@ -272,7 +288,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Lisk',
     symbol: 'LSK',
     blockchains: ['LSK'],
-    referral: 'FractalMedia',
+    referral: 'i48c-prkz',
   },
   {
     id: 'litecoin',
@@ -280,7 +296,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Litecoin',
     symbol: 'LTC',
     blockchains: ['LTC'],
-    referral: 'FractalMedia',
+    referral: 'hrxw-a5vm',
   },
   {
     id: 'matic-network',
@@ -288,7 +304,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Matic (Polygon)',
     symbol: 'MATIC',
     blockchains: ['BSC', 'ETH', 'MATIC'],
-    referral: 'FractalMedia',
+    referral: 'oewc-yhxr',
   },
   {
     id: 'metal',
@@ -296,7 +312,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Metal',
     symbol: 'MTL',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'o25k-cbwg',
   },
   {
     id: 'monero',
@@ -304,7 +320,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Monero',
     symbol: 'XMR',
     blockchains: ['XMR'],
-    referral: 'FractalMedia',
+    referral: 'eudt-l3su',
   },
   {
     id: 'nano',
@@ -312,7 +328,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Nano',
     symbol: 'NANO',
     blockchains: ['NANO'],
-    referral: 'FractalMedia',
+    referral: '3ojr-om8a',
   },
   {
     id: 'neo',
@@ -320,7 +336,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Neo',
     symbol: 'NEO',
     blockchains: ['NEO'],
-    referral: 'FractalMedia',
+    referral: '6gjc-vaq3',
   },
   {
     id: 'pancakeswap-token',
@@ -336,7 +352,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Qtum',
     symbol: 'QTUM',
     blockchains: ['QTUM'],
-    referral: 'FractalMedia',
+    referral: '4l4i-97mi',
   },
   {
     id: 'ravencoin',
@@ -344,7 +360,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Ravencoin',
     symbol: 'RVN',
     blockchains: ['RVN'],
-    referral: 'FractalMedia',
+    referral: '91zn-yiah',
   },
   {
     id: 'reserve-rights-token',
@@ -352,7 +368,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Reserve Rights',
     symbol: 'RSR',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'ifch-yect',
   },
   {
     id: 'ripple',
@@ -360,15 +376,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Ripple',
     symbol: 'XRP',
     blockchains: ['XRP'],
-    referral: 'FractalMedia',
-  },
-  {
-    id: 'safemoon',
-    icon: CoinIcons.Safemoon,
-    name: 'SafeMoon (V1)',
-    symbol: 'SAFEMOON',
-    blockchains: ['BSC', 'BSC-V2'],
-    referral: 'FractalMedia',
+    referral: 'k37h-3a8l',
   },
   {
     id: 'safemoon-2',
@@ -376,7 +384,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'SafeMoon (V2)',
     symbol: 'SFM',
     blockchains: ['BSC'],
-    referral: 'FractalMedia',
+    referral: '0usu-k1nc',
   },
   {
     id: 'saitama-inu',
@@ -384,7 +392,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Saitama Inu',
     symbol: 'SAITAMA',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '5qd8-bxlz',
   },
   {
     id: 'siacoin',
@@ -392,7 +400,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Saicoin',
     symbol: 'SC',
     blockchains: ['SC'],
-    referral: 'FractalMedia',
+    referral: 'nyho-5wax',
   },
   {
     id: 'shiba-inu',
@@ -400,7 +408,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Shiba Inu',
     symbol: 'SHIB',
     blockchains: ['BSC', 'ETH', 'KCC'],
-    referral: 'FractalMedia',
+    referral: 'e9ah-aa88',
   },
   {
     id: 'solana',
@@ -408,7 +416,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Solana',
     symbol: 'SOL',
     blockchains: ['BSC', 'SOL'],
-    referral: 'FractalMedia',
+    referral: '4f06-7nrw',
   },
   {
     id: 'stellar',
@@ -416,7 +424,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Stellar Lumens',
     symbol: 'XLM',
     blockchains: ['XLM'],
-    referral: 'FractalMedia',
+    referral: '7gyd-0w5f',
   },
   {
     id: 'sushi',
@@ -424,7 +432,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Sushi',
     symbol: 'SUSHI',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '19n2-v9sg',
   },
   {
     id: 'tezos',
@@ -432,7 +440,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Tezos',
     symbol: 'XTZ',
     blockchains: ['XTZ'],
-    referral: 'FractalMedia',
+    referral: '6xdn-181x',
   },
   {
     id: 'tron',
@@ -440,7 +448,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Tron',
     symbol: 'TRX',
     blockchains: ['TRX'],
-    referral: 'FractalMedia',
+    referral: 'o9d3-o66o',
   },
   {
     id: 'uniswap',
@@ -448,7 +456,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Uniswap',
     symbol: 'UNI',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: 'c8dz-rwtz',
   },
   {
     id: 'tether',
@@ -456,7 +464,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'TetherUS',
     symbol: 'USDT',
     blockchains: ['BSC', 'ETH', 'TRX'],
-    referral: 'FractalMedia',
+    referral: 'arrh-soac',
   },
   {
     id: 'vechain',
@@ -464,7 +472,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'VeChain',
     symbol: 'VET',
     blockchains: ['VET'],
-    referral: 'FractalMedia',
+    referral: 'a0b3-5fbe',
   },
   {
     id: 'waves',
@@ -472,7 +480,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Waves',
     symbol: 'WAVES',
     blockchains: ['WAVES'],
-    referral: 'FractalMedia',
+    referral: 'li8e-jc78',
   },
   {
     id: 'wink',
@@ -480,7 +488,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'WINk',
     symbol: 'WIN',
     blockchains: ['TRX'],
-    referral: 'FractalMedia',
+    referral: 'cnw5-t8p2',
   },
   {
     id: 'wrapped-bitcoin',
@@ -488,7 +496,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Wrapped Bitcoin',
     symbol: 'WBTC',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '0vd5-80dq',
   },
   {
     id: 'verge',
@@ -496,7 +504,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Verge',
     symbol: 'XVG',
     blockchains: ['XVG'],
-    referral: 'FractalMedia',
+    referral: 'dbw3-04gl',
   },
   {
     id: 'yearn-finance',
@@ -504,7 +512,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Yearn.finance',
     symbol: 'YFI',
     blockchains: ['ETH'],
-    referral: 'FractalMedia',
+    referral: '38ae-8rsz',
   },
   {
     id: 'zcash',
@@ -512,7 +520,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Zcash',
     symbol: 'ZEC',
     blockchains: ['ZEC'],
-    referral: 'FractalMedia',
+    referral: 'x00k-b9ff',
   },
   {
     id: 'zilliqa',
@@ -520,6 +528,6 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Zilliqa',
     symbol: 'ZIL',
     blockchains: ['ZIL'],
-    referral: 'FractalMedia',
+    referral: 'hcwx-r950',
   },
 ];
