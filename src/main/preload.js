@@ -25,6 +25,9 @@ contextBridge.exposeInMainWorld('miner', {
   status() {
     return ipcRenderer.invoke('ipc-statusMiner');
   },
+  error(func) {
+    ipcRenderer.on('ipc-minerError', (_event, ...args) => func(...args));
+  },
   receive(func) {
     ipcRenderer.on('ipc-minerData', (_event, ...args) => func(...args));
   },
