@@ -1,6 +1,6 @@
 import { Button, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, MenuItem, Stack, Switch, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { AlgorithmName, AvailableAlgorithms, AvailableMiners, Miner, MinerName } from '../../models/Configuration';
 import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
@@ -27,10 +27,12 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
 
   const {
     register,
+    unregister,
     watch,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isValid },
+    getValues,
   } = useForm<Omit<Miner, 'id'>>({ defaultValues: miner });
 
   const kind = watch('kind');
@@ -42,6 +44,15 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     const selectedMinerAlgorithms = selectedMiner?.algorithms ?? [];
     return AvailableAlgorithms.filter((alg) => selectedMinerAlgorithms.includes(alg.name));
   }, [kind]);
+
+  // // ignore validation errors if disabled
+  // useEffect(() => {
+  //   if (!isValid && !isEnabled) {
+  //     Object.keys(miner).forEach((x) => {
+  //       unregister(x as keyof Omit<Miner, 'id'>);
+  //     });
+  //   }
+  // }, [isEnabled]);
 
   const handleOnSave = handleSubmit((val) => onSave({ ...val, id: miner.id }));
 
@@ -62,7 +73,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               disabled={!isEnabled}
               label="Name"
               {...register('name', {
-                required: 'A miner must have a name.',
+                validate: (val) => (getValues('enabled') ? (val ? undefined : 'A miner must have a name.') : undefined),
               })}
               error={!!errors?.name}
               helperText={errors?.name?.message}

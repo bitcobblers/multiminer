@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
 import { Wallet, Coin } from '../../models/Configuration';
 import { WalletMenuItem } from '../components/WalletMenuItem';
+import { useForm } from 'react-hook-form';
 
 type EditCoinDialogProps = {
   open: boolean;
@@ -20,58 +19,21 @@ type EditCoinDialogProps = {
 
 export function EditCoinDialog(props: EditCoinDialogProps) {
   const { open, icon, symbol, wallets, blockchains, coin, onSave, onCancel, ...other } = props;
-  const [wallet, setWallet] = useState(coin.wallet);
-  const [enabled, setEnabled] = useState(coin.enabled);
-  const [duration, setDuration] = useState(coin.duration);
-  const [referral, setReferral] = useState(coin.referral);
 
-  const handleOnWalletChange = (e: any) => {
-    setWallet(e.target.value.trim());
-  };
+  const {
+    register,
+    watch,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<Coin>({ defaultValues: coin });
 
-  const handleOnDurationChange = (e: any) => {
-    setDuration(e.target.value.trim());
-  };
+  const enabled = watch('enabled');
 
-  const handleOnReferralChange = (e: any) => {
-    setReferral(e.target.value.trim());
-  };
-
-  const handleOnEnabledChange = (e: any) => {
-    setEnabled(e.target.checked);
-  };
-
-  const handleOnSave = () => {
-    onSave({ symbol, wallet, enabled, duration, referral });
-  };
+  const handleOnSave = handleSubmit((val) => onSave(val));
 
   const handleOnCancel = () => {
     onCancel();
   };
-
-  const validateWallet = (): [boolean, string] => {
-    if (wallet.length === 0) {
-      return [true, 'A wallet must be specified.'];
-    }
-
-    return [false, ''];
-  };
-
-  const validateDuration = (): [boolean, string] => {
-    if ((duration as string) === '') {
-      return [true, 'An duration in hours must be specified.'];
-    }
-
-    if ((duration as number) < 1) {
-      return [true, 'The duration must be at least 1 hour or more.'];
-    }
-
-    return [false, ''];
-  };
-
-  const [isWalletInvalid, walletValidationMessage] = validateWallet();
-  const [isDurationInvalid, durationValidationMessage] = validateDuration();
-  const isInvalid = enabled ? isWalletInvalid || isDurationInvalid : false;
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -89,8 +51,8 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
                 ))}
             </div>
             <Divider />
-            <FormControlLabel control={<Switch checked={enabled} onChange={handleOnEnabledChange} />} label="Enabled" />
-            <TextField disabled={!enabled} required label="Wallet" select value={wallet} onChange={handleOnWalletChange} error={isWalletInvalid} helperText={walletValidationMessage}>
+            <FormControlLabel control={<Switch checked={enabled} {...register('enabled')} />} label="Enabled" />
+            <TextField disabled={!enabled} required label="Wallet" {...register('wallet', { required: 'A wallet must be specified.' })} error={!!errors.wallet} helperText={errors.wallet?.message}>
               {wallets
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((w) => (
@@ -104,17 +66,18 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
               required
               type="number"
               label="Duration (hours)"
-              defaultValue={duration}
-              onChange={handleOnDurationChange}
-              error={isDurationInvalid}
-              helperText={durationValidationMessage}
+              value={watch('duration') ?? null}
+              {...register('duration', {
+                required: 'A duration in hours must be specified.',
+                min: {value: 1, message: 'The duration must be at least 1 hour or more.'},
+              })}
+              error={!!errors?.duration}
+              helperText={errors?.duration?.message}
             />
-            <TextField disabled={!enabled} label="Referral" defaultValue={referral} onChange={handleOnReferralChange} />
+            <TextField disabled={!enabled} label="Referral" {...register('referral')} />
             <Divider />
           </Stack>
-          <Button onClick={handleOnSave} disabled={isInvalid}>
-            Save
-          </Button>
+          <Button onClick={handleOnSave}>Save</Button>
           <Button onClick={handleOnCancel}>Cancel</Button>
         </FormControl>
       </DialogContent>
