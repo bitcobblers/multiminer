@@ -1,6 +1,6 @@
 type ReceiveCallback = (data: string) => void;
 type ExitedCallback = (code: number | void) => void;
-type StartedCallback = (coin: string) => void;
+type StartedCallback = (coin: string, miner: string) => void;
 type ErrorCallback = (message: string) => void;
 
 export interface MinerApi {

@@ -4,7 +4,7 @@ import { minerErrors$ } from '../../models';
 
 export const stdout$ = new Subject<string>();
 export const minerExited$ = new Subject<number | void>();
-export const minerStarted$ = new Subject<string>();
+export const minerStarted$ = new Subject<{ coin: string; miner: string }>();
 
 minerApi.receive((data: string) => {
   data
@@ -21,8 +21,8 @@ minerApi.exited((code: number | void) => {
   minerExited$.next(code);
 });
 
-minerApi.started((coin: string) => {
-  minerStarted$.next(coin);
+minerApi.started((coin: string, miner: string) => {
+  minerStarted$.next({ coin, miner });
 });
 
 minerApi.error((message: string) => {

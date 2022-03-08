@@ -6,7 +6,11 @@ import { logger } from '../logger';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SendCallback = (channel: string, ...args: any[]) => void;
-type LaunchResponse = string | null;
+
+type LaunchHandlers = {
+  onError: (error: string) => string;
+  onSuccess: (proc: ChildProcessWithoutNullStreams) => null;
+};
 
 let miner: ChildProcessWithoutNullStreams | null = null;
 let minerName: string | null = null;
@@ -48,42 +52,40 @@ export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendC
     });
 }
 
-export function launch(path: string, args: string, onError: (error: string) => LaunchResponse, onSuccess: (proc: ChildProcessWithoutNullStreams) => LaunchResponse) {
+export function launch(path: string, args: string, handlers: LaunchHandlers) {
   if (fs.existsSync(path) === false) {
-    return onError(`The path to the miner could not be found: ${path}.`);
+    return handlers.onError(`The path to the miner could not be found: ${path}.`);
   }
 
   try {
     fs.accessSync(path, fs.constants.X_OK);
   } catch (error) {
-    return onError(`The miner is not executable: ${error}`);
+    return handlers.onError(`The miner is not executable: ${error}`);
   }
 
-  return onSuccess(spawn(path, args.split(' ')));
+  return handlers.onSuccess(spawn(path, args.split(' ')));
 }
 
 function start(event: IpcMainInvokeEvent, name: string, coin: string, path: string, args: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-shadow
   const send = (channel: string, ...args: any[]) => event.sender.send(channel, ...args);
 
-  return launch(
-    path,
-    args,
-    (error) => {
+  return launch(path, args, {
+    onError: (error: string) => {
       logger.error('Miner failed to start: %s', error);
       return error;
     },
-    (proc) => {
+    onSuccess: (proc: ChildProcessWithoutNullStreams) => {
       miner = proc;
       minerName = name;
       currentCoin = coin;
 
       attachHandlers(proc, send);
-      send('ipc-minerStarted', coin);
+      send('ipc-minerStarted', coin, minerName);
       logger.info('Started miner with at %s with args = %s', path, args);
       return null;
-    }
-  );
+    },
+  });
 }
 
 function stop(event: IpcMainInvokeEvent) {

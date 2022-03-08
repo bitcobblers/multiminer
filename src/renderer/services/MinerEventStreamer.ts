@@ -1,6 +1,5 @@
-import { BehaviorSubject } from 'rxjs';
-import { stdout$ } from './MinerService';
-import { GpuStatistic, MinerStatistic } from '../../models';
+import { minerStarted$, stdout$ } from './MinerService';
+import { GpuStatistic, MinerStatistic, gpuStatistics$, minerStatistics$ } from '../../models';
 import { LolMinerLineParsers } from './scrapers/LolMiner';
 
 type LineScraper = {
@@ -13,9 +12,6 @@ const handlerPacks: { [key: string]: LineScraper[] } = {
 };
 
 let handlers = Array<LineScraper>();
-
-export const gpuStatistics$ = new BehaviorSubject<GpuStatistic[]>([]);
-export const minerStatistics$ = new BehaviorSubject<MinerStatistic>({});
 
 export function setHandlers(miningHandlers: LineScraper[]) {
   handlers = miningHandlers ?? [];
@@ -54,4 +50,9 @@ stdout$.subscribe((line) => {
       minerStatistics$.next(combine(previous, stat));
     }
   );
+});
+
+minerStarted$.subscribe(({ miner }) => {
+  clearStatistics();
+  setHandlerPack(miner);
 });

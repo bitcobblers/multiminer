@@ -12,15 +12,17 @@ describe('Miner Module', () => {
     // Arrange.
     jest.spyOn(fs, 'existsSync').mockReturnValue(false);
 
-    const onError = jest.fn();
-    const onSuccess = jest.fn();
+    const handlers = {
+      onError: jest.fn(),
+      onSuccess: jest.fn(),
+    };
 
     // Act.
-    minerModule.launch('path/to/unknown', 'ignored', onError, jest.fn());
+    minerModule.launch('path/to/unknown', 'ignored', handlers);
 
     // Assert.
-    expect(onError).toBeCalled();
-    expect(onSuccess).not.toBeCalled();
+    expect(handlers.onError).toBeCalled();
+    expect(handlers.onSuccess).not.toBeCalled();
   });
 
   it('Should call onError if the miner path is not an executable.', () => {
@@ -30,15 +32,17 @@ describe('Miner Module', () => {
       throw new Error('expected');
     });
 
-    const onError = jest.fn();
-    const onSuccess = jest.fn();
+    const handlers = {
+      onError: jest.fn(),
+      onSuccess: jest.fn(),
+    };
 
     // Act.
-    minerModule.launch('path/to/exe', 'ignored', onError, jest.fn());
+    minerModule.launch('path/to/exe', 'ignored', handlers);
 
     // Assert.
-    expect(onError).toBeCalled();
-    expect(onSuccess).not.toBeCalled();
+    expect(handlers.onError).toBeCalled();
+    expect(handlers.onSuccess).not.toBeCalled();
   });
 
   it('Should call onSuccess if the miner started successfully.', () => {
@@ -46,15 +50,17 @@ describe('Miner Module', () => {
     jest.spyOn(fs, 'existsSync').mockImplementation(() => true);
     jest.spyOn(fs, 'accessSync').mockImplementation();
 
-    const onError = jest.fn();
-    const onSuccess = jest.fn();
+    const handlers = {
+      onError: jest.fn(),
+      onSuccess: jest.fn(),
+    };
 
     // Act.
-    minerModule.launch('path/to/exe', 'ignored', onError, onSuccess);
+    minerModule.launch('path/to/exe', 'ignored', handlers);
 
     // Assert.
-    expect(onError).not.toBeCalled();
-    expect(onSuccess).toBeCalled();
+    expect(handlers.onError).not.toBeCalled();
+    expect(handlers.onSuccess).toBeCalled();
   });
 
   it('Should not send an event when process is interrupted.', () => {
