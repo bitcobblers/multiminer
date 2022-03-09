@@ -46,7 +46,7 @@ globalStore.onDidChange('settings', (settings) => {
 });
 
 export function getUrl(url: string) {
-  const pickCall = () => {
+  const callFetch = () => {
     if (proxy.match(/^socks:/i)) {
       return fetch(url, { agent: new SocksProxyAgent(proxy) });
     }
@@ -60,11 +60,14 @@ export function getUrl(url: string) {
 
   logger.debug(`Invoking rest call to ${url}`);
 
-  return pickCall()
-    .then((r) => r.text())
+  return callFetch()
     .then((r) => {
-      logger.debug('Log the following response: %s', r);
-      return r;
+      if (r.ok === false) {
+        logger.error('An error occurred while calling %s - %d: %s', url, r.status, r.statusText);
+        return '';
+      }
+
+      return r.text();
     })
     .catch((error) => {
       logger.error('An error occurred while calling %s - %o$', url, error);
