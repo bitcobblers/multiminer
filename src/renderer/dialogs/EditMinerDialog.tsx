@@ -11,13 +11,14 @@ import { MinerTypeMenuItem } from '../components/MinerTypeMenuItem';
 type EditMinerDialogProps = {
   open: boolean;
   miner: Miner;
+  existingMiners: Miner[];
 
   onSave: (miner: Miner) => void;
   onCancel: () => void;
 };
 
 export function EditMinerDialog(props: EditMinerDialogProps) {
-  const { open, miner, onSave, onCancel, ...other } = props;
+  const { open, miner, existingMiners, onSave, onCancel, ...other } = props;
 
   const {
     register,
@@ -25,7 +26,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Omit<Miner, 'id'>>({ defaultValues: miner });
+  } = useForm<Omit<Miner, 'id'>>({ defaultValues: miner, mode: 'all' });
 
   const kind = watch('kind');
 
@@ -54,41 +55,55 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
       <DialogTitle>Edit Miner</DialogTitle>
       <DialogContent dividers>
-        <FormControl fullWidth>
-          <Stack spacing={2}>
-            <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
-            <TextField
-              label="Name"
-              {...register('name', {
-                validate: (val) => (val === undefined ? 'A miner must have a name.' : undefined),
-              })}
-              error={!!errors?.name}
-              helperText={errors?.name?.message}
-            />
-            <TextField required label="Miner" select value={watch('kind')} {...register('kind')}>
-              {AVAILABLE_MINERS.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
-                <MenuItem key={m.name} value={m.name}>
-                  <MinerTypeMenuItem miner={m} />
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField required label="Algorithm" select value={pickAlgorithm(watch('algorithm'))} {...register('algorithm')}>
-              {minerTypeAlgorithms.map((alg) => (
-                <MenuItem key={alg.name} value={alg.name}>
-                  <AlgorithmMenuItem algorithm={alg} />
-                </MenuItem>
-              ))}
-            </TextField>
-            <Stack direction="row">
-              <TextField label="Installation Path" {...register('installationPath')} value={watch('installationPath') ?? ''} />
-              <Button>Browse</Button>
+        <form onSubmit={handleOnSave}>
+          <FormControl fullWidth>
+            <Stack spacing={2}>
+              <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
+              <TextField
+                required
+                label="Name"
+                value={watch('name') ?? null}
+                {...register('name', {
+                  required: 'A miner must have a name',
+                  validate: (val) => (existingMiners.find((m) => m.name === val) ? 'A miner already exists with this name.' : undefined),
+                })}
+                error={!!errors?.name}
+                helperText={errors?.name?.message}
+              />
+              <TextField required label="Miner" select value={watch('kind')} {...register('kind')}>
+                {AVAILABLE_MINERS.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
+                  <MenuItem key={m.name} value={m.name}>
+                    <MinerTypeMenuItem miner={m} />
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField required label="Algorithm" select value={pickAlgorithm(watch('algorithm'))} {...register('algorithm')}>
+                {minerTypeAlgorithms.map((alg) => (
+                  <MenuItem key={alg.name} value={alg.name}>
+                    <AlgorithmMenuItem algorithm={alg} />
+                  </MenuItem>
+                ))}
+              </TextField>
+              <Stack direction="row">
+                <TextField
+                  required
+                  label="Installation Path"
+                  value={watch('installationPath') ?? ''}
+                  {...register('installationPath', {
+                    required: 'The path to the miner installation must be provided.',
+                  })}
+                  error={!!errors?.installationPath}
+                  helperText={errors?.installationPath?.message}
+                />
+                <Button>Browse</Button>
+              </Stack>
+              <TextField label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
+              <Divider />
+              <Button type="submit">Save</Button>
+              <Button onClick={handleOnCancel}>Cancel</Button>
             </Stack>
-            <TextField label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
-            <Divider />
-            <Button onClick={handleOnSave}>Save</Button>
-            <Button onClick={handleOnCancel}>Cancel</Button>
-          </Stack>
-        </FormControl>
+          </FormControl>
+        </form>
       </DialogContent>
     </Dialog>
   );
