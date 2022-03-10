@@ -1,7 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
-import { Coin, ALL_COINS, ConfiguredCoin } from '../../models';
+import { Coin, ALL_COINS, ConfiguredCoin, MinerState, minerState$ } from '../../models';
 import * as config from './AppSettingsService';
-import { MinerState, minerState$ } from './MinerManager';
 import { CoinTicker, ticker$ } from './CoinFeed';
 import { UnmineableCoin, unmineableCoins$, updateWorkers } from './UnmineableFeed';
 

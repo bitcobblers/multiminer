@@ -4,11 +4,10 @@ import { useEffect, useState, useContext } from 'react';
 import { Container, Divider, Grid, Button, Typography } from '@mui/material';
 
 // Services.
-import { GpuStatistic, MinerStatistic, ConfiguredCoin } from '../../models';
-import { startMiner, stopMiner, nextCoin, minerState$ } from '../services/MinerManager';
+import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, gpuStatistics$, minerStatistics$ } from '../../models';
+import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 import { updateTicker } from '../services/CoinFeed';
 import { UnmineableStats, unmineableWorkers$, updateCoins } from '../services/UnmineableFeed';
-import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
 
 import { enabledCoins$ } from '../services/DataService';
 import { MinerContext } from '../MinerContext';

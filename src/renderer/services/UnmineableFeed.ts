@@ -1,6 +1,6 @@
 import { ReplaySubject, timer } from 'rxjs';
 import * as config from './AppSettingsService';
-import { minerState$ } from './MinerManager';
+import { minerState$ } from '../../models';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
 type TimeSeries = {

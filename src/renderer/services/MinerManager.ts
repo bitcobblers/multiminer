@@ -1,11 +1,9 @@
 import path from 'path-browserify';
 
-import { BehaviorSubject, Subject } from 'rxjs';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
-import * as miningStream from './MinerEventStreamer';
 import { minerApi } from '../../shared/MinerApi';
-import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet } from '../../models';
+import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
 import { getMiners } from './AppSettingsService';
 
 type CoinSelection = {
@@ -19,15 +17,6 @@ type CoinSelection = {
 const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
 
 let timeout: NodeJS.Timeout;
-
-export type MinerState = {
-  state: 'active' | 'inactive';
-  currentCoin: string | null;
-  miner: string | null;
-};
-
-export const minerErrors$ = new Subject<string>();
-export const minerState$ = new BehaviorSubject<MinerState>({ state: 'inactive', currentCoin: null, miner: null });
 
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
@@ -105,10 +94,6 @@ async function changeCoin() {
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
       await miningService.startMiner(miner.name, coin.symbol, filePath, args);
-      miningStream.clearStatistics();
-      miningStream.setHandlerPack(minerInfo.name);
-
-      timeout = setTimeout(changeCoin, Number(selection.coin.duration) * MILLISECONDS_PER_HOUR);
     }
   );
 }
@@ -167,10 +152,24 @@ miningService.minerExited$.subscribe(() => {
   });
 });
 
-miningService.minerStarted$.subscribe((coin) => {
+miningService.minerStarted$.subscribe(({ coin, miner }) => {
   updateState({
     state: 'active',
     currentCoin: coin,
+    miner,
+  });
+
+  // eslint-disable-next-line promise/catch-or-return
+  config.getCoins().then((coins) => {
+    const c = coins.find((x) => x.symbol === coin);
+
+    // eslint-disable-next-line promise/always-return
+    if (c !== undefined) {
+      // eslint-disable-next-line no-console
+      console.log(`Setting runtime for current coin to ${c.duration} hours.`);
+
+      timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
+    }
   });
 });
 
