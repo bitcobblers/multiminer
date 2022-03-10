@@ -12,63 +12,62 @@ type CoinRecord = {
   icon: string;
   name: string;
   blockchains: string[];
-
   isSet: boolean;
   coin: Coin;
 };
 
-const blankCoin = (symbol: string, referral: string): Coin => {
+const blankCoin = (symbol: string) => {
   return {
     symbol,
-    referral,
     wallet: '',
     enabled: false,
-    duration: '',
+    duration: 6,
   };
 };
+
+async function loadCoins() {
+  const loadedCoins = await getCoins();
+
+  return ALL_COINS.sort((a, b) => a.symbol.localeCompare(b.symbol)).map((cd) => {
+    const coin = loadedCoins.find((c) => c.symbol === cd.symbol);
+
+    return {
+      id: cd.id,
+      icon: cd.icon,
+      name: cd.name,
+      blockchains: cd.blockchains,
+      isSet: coin !== undefined,
+      coin: coin ?? blankCoin(cd.symbol),
+    };
+  });
+}
 
 export function CoinsScreen() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [wallets, setWallets] = useState([] as Wallet[]);
-  const [coins, setLoadedCoins] = useState([] as CoinRecord[]);
+  const [wallets, setWallets] = useState<Array<Wallet>>([]);
+  const [coins, setLoadedCoins] = useState<Array<CoinRecord>>([]);
   const [enabledOnly, setEnabledOnly] = useState(false);
 
   useEffect(() => {
     const readConfigAsync = async () => {
-      const loadedCoins = await getCoins();
-      const parsedCoins = ALL_COINS.map((cd) => {
-        const coin = loadedCoins.find((c) => {
-          return c.symbol === cd.symbol;
-        });
-
-        return {
-          id: cd.id,
-          icon: cd.icon,
-          name: cd.name,
-          blockchains: cd.blockchains,
-          isSet: coin !== undefined,
-          coin: coin ?? blankCoin(cd.symbol, cd.referral),
-        };
-      });
-
       setWallets(await getWallets());
-      setLoadedCoins(parsedCoins);
+      setLoadedCoins(await loadCoins());
     };
 
     readConfigAsync();
   }, []);
 
   const handleOnEditCoinSave = async (coin: Coin) => {
-    const index = coins.findIndex((c) => c.coin.symbol === coin.symbol);
-    const updatedCoin = { ...coins[index], ...{ isSet: true, coin } };
-    const updatedCoins = [...coins];
+    await setCoins(
+      coins
+        .filter((c) => c.isSet)
+        .filter((c) => c.coin.symbol !== coin.symbol)
+        .map((c) => c.coin)
+        .concat(coin)
+    );
 
-    updatedCoins.splice(index, 1);
-    updatedCoins.splice(index, 0, updatedCoin);
-
-    await setCoins(updatedCoins.filter((c) => c.isSet).map((c) => c.coin));
-    setLoadedCoins(updatedCoins);
+    setLoadedCoins(await loadCoins());
 
     enqueueSnackbar(`Coin ${coin.symbol} updated.`, {
       variant: 'success',
@@ -90,13 +89,12 @@ export function CoinsScreen() {
             <TableRow>
               <TableCell width="80px" />
               <TableCell width="40px">Enabled</TableCell>
-              <TableCell width="100px">Icon</TableCell>
-              <TableCell width="10%">Symbol</TableCell>
-              <TableCell width="20%">Name</TableCell>
-              <TableCell width="25%">Networks</TableCell>
-              <TableCell width="10%">Wallet</TableCell>
-              <TableCell width="15%">Duration (hr)</TableCell>
-              <TableCell width="20%">Referral</TableCell>
+              <TableCell>Icon</TableCell>
+              <TableCell>Symbol</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Networks</TableCell>
+              <TableCell>Wallet</TableCell>
+              <TableCell>Duration</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -119,9 +117,8 @@ export function CoinsScreen() {
                       <Chip key={`${c.name}-${chain}`} label={chain} />
                     ))}
                   </TableCell>
-                  <TableCell>{c.coin.wallet}</TableCell>
+                  <TableCell>{c.coin.wallet === '' ? 'None' : c.coin.wallet}</TableCell>
                   <TableCell>{c.coin.duration}</TableCell>
-                  <TableCell>{c.coin.referral}</TableCell>
                 </TableRow>
               ))}
           </TableBody>

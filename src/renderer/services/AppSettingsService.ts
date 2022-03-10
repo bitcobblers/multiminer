@@ -12,12 +12,14 @@ export const defaults = {
   ] as Wallet[],
 
   coins: [
-    { symbol: 'ETH', wallet: 'mywallet1', enabled: true, duration: 5, referral: 'FractalMedia' },
-    { symbol: 'SHIB', wallet: 'mywallet1', enabled: false, duration: 5, referral: 'FractalMedia' },
-    { symbol: 'TRX', wallet: 'mywallet3', enabled: true, duration: 5, referral: 'FractalMedia' },
+    { symbol: 'ETH', wallet: 'mywallet1', enabled: true, duration: 5 },
+    { symbol: 'SHIB', wallet: 'mywallet1', enabled: false, duration: 5 },
+    { symbol: 'TRX', wallet: 'mywallet3', enabled: true, duration: 5 },
   ] as Coin[],
 
-  miners: [{ id: '12345', kind: 'lolminer', name: 'default', enabled: true, installationPath: 'C:\\ethereum\\lolminer\\1.42', algorithm: 'ethash', parameters: '' }] as Miner[],
+  miners: [
+    { id: '4dbc2b17-348f-4529-859a-7bcdfca20e1e', kind: 'lolminer', name: 'default', enabled: true, installationPath: 'C:\\ethereum\\lolminer\\1.42', algorithm: 'ethash', parameters: '' },
+  ] as Miner[],
 
   settings: {
     settings: {
