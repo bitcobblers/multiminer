@@ -61,58 +61,60 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>
-        <FormControl fullWidth>
-          <Stack spacing={2}>
-            <TextField
-              required
-              label="Name"
-              value={watch('name') ?? null}
-              {...register('name', {
-                required: 'A name is required for the wallet.',
-                validate: (val) => (existingWallets.find((w) => w.name === val) ? 'A wallet already exists with this name.' : undefined),
-              })}
-              error={!!errors?.name}
-              helperText={errors?.name?.message}
-            />
-            <TextField required label={blockchainLabel()} select disabled={shouldDisableBlockchainSelection()} value={watch('network') ?? null} {...register('network')}>
-              {ALL_CHAINS.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
-                <MenuItem key={n.name} value={n.name}>
-                  <ChainMenuItem chain={n} />
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              required
-              label="Address"
-              value={watch('address') ?? null}
-              {...register('address', {
-                required: 'An address is required for the wallet.',
-                pattern: {
-                  value: RegExp(chainInfo?.token_format ?? '/.*/'),
-                  message: 'The address provided does not match the format expected for this blockchain.',
-                },
-              })}
-              error={!!errors?.address}
-              helperText={errors?.address?.message}
-            />
-            <TextField
-              label="Memo"
-              value={watch('memo') ?? null}
-              {...register('memo', {
-                pattern: {
-                  value: RegExp(chainInfo?.memo_format ?? '/*/'),
-                  message: 'The memo provided does not match the format expected for this blockchain.',
-                },
-              })}
-              error={!!errors?.memo}
-              helperText={errors?.memo?.message}
-            />
-            <UsedByCoins coins={coins} />
-            <Divider />
-          </Stack>
-          <Button onClick={handleOnSave}>{saveButtonTitle}</Button>
-          <Button onClick={handleOnCancel}>Cancel</Button>
-        </FormControl>
+        <form onSubmit={handleOnSave}>
+          <FormControl fullWidth>
+            <Stack spacing={2}>
+              <TextField
+                required
+                label="Name"
+                value={watch('name') ?? null}
+                {...register('name', {
+                  required: 'A name is required for the wallet.',
+                  validate: (val) => (existingWallets.filter((w) => w.id !== wallet.id).find((w) => w.name === val) ? 'A wallet already exists with this name.' : undefined),
+                })}
+                error={!!errors?.name}
+                helperText={errors?.name?.message}
+              />
+              <TextField required label={blockchainLabel()} select disabled={shouldDisableBlockchainSelection()} value={watch('network') ?? null} {...register('network')}>
+                {ALL_CHAINS.sort((a, b) => a.name.localeCompare(b.name)).map((n) => (
+                  <MenuItem key={n.name} value={n.name}>
+                    <ChainMenuItem chain={n} />
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                required
+                label="Address"
+                value={watch('address') ?? null}
+                {...register('address', {
+                  required: 'An address is required for the wallet.',
+                  pattern: {
+                    value: RegExp(chainInfo?.token_format ?? '/.*/'),
+                    message: 'The address provided does not match the format expected for this blockchain.',
+                  },
+                })}
+                error={!!errors?.address}
+                helperText={errors?.address?.message}
+              />
+              <TextField
+                label="Memo"
+                value={watch('memo') ?? null}
+                {...register('memo', {
+                  pattern: {
+                    value: RegExp(chainInfo?.memo_format ?? '/*/'),
+                    message: 'The memo provided does not match the format expected for this blockchain.',
+                  },
+                })}
+                error={!!errors?.memo}
+                helperText={errors?.memo?.message}
+              />
+              <UsedByCoins coins={coins} />
+              <Divider />
+            </Stack>
+            <Button type="submit">{saveButtonTitle}</Button>
+            <Button onClick={handleOnCancel}>Cancel</Button>
+          </FormControl>
+        </form>
       </DialogContent>
     </Dialog>
   );

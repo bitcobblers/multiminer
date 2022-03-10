@@ -53,44 +53,46 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
       <DialogTitle>Edit Coin</DialogTitle>
       <DialogContent dividers>
-        <FormControl fullWidth>
-          <Stack spacing={2}>
-            <img src={icon} alt={symbol} height={60} />
-            <div>
-              {blockchains
-                .sort((a, b) => a.localeCompare(b))
-                .map((n) => (
-                  <Chip key={n} label={n} />
-                ))}
-            </div>
-            <Divider />
-            <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
-            <TextField label={walletLabel()} select disabled={shouldDisableWalletSelection()} {...register('wallet')} value={watch('wallet') ?? null}>
-              {compatibleWallets
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((w) => (
-                  <MenuItem key={w.name} value={w.name}>
-                    <WalletMenuItem wallet={w} />
-                  </MenuItem>
-                ))}
-            </TextField>
-            <TextField
-              required
-              type="number"
-              label="Duration (hours)"
-              value={watch('duration') ?? null}
-              {...register('duration', {
-                required: 'A duration in hours must be specified.',
-                min: { value: 1, message: 'The duration must be at least 1 hour or more.' },
-              })}
-              error={!!errors?.duration}
-              helperText={errors?.duration?.message}
-            />
-            <Divider />
-          </Stack>
-          <Button onClick={handleOnSave}>Save</Button>
-          <Button onClick={handleOnCancel}>Cancel</Button>
-        </FormControl>
+        <form onSubmit={handleOnSave}>
+          <FormControl fullWidth>
+            <Stack spacing={2}>
+              <img src={icon} alt={symbol} height={60} />
+              <div>
+                {blockchains
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((n) => (
+                    <Chip key={n} label={n} />
+                  ))}
+              </div>
+              <Divider />
+              <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
+              <TextField label={walletLabel()} select disabled={shouldDisableWalletSelection()} {...register('wallet')} value={watch('wallet') ?? null}>
+                {compatibleWallets
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((w) => (
+                    <MenuItem key={w.name} value={w.name}>
+                      <WalletMenuItem wallet={w} />
+                    </MenuItem>
+                  ))}
+              </TextField>
+              <TextField
+                required
+                type="number"
+                label="Duration (hours)"
+                value={watch('duration') ?? null}
+                {...register('duration', {
+                  required: 'A duration in hours must be specified.',
+                  min: { value: 1, message: 'The duration must be at least 1 hour or more.' },
+                })}
+                error={!!errors?.duration}
+                helperText={errors?.duration?.message}
+              />
+              <Divider />
+            </Stack>
+            <Button type="submit">Save</Button>
+            <Button onClick={handleOnCancel}>Cancel</Button>
+          </FormControl>
+        </form>
       </DialogContent>
     </Dialog>
   );
