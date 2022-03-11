@@ -57,7 +57,6 @@ describe('App Settings Service', () => {
           wallet: 'wallet',
           enabled: true,
           duration: 1,
-          referral: '',
         },
       ];
 

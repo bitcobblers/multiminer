@@ -42,6 +42,7 @@ export function WalletsScreen() {
 
     setIsEditingNew(false);
     setWallets(updatedWallets);
+    await config.setWallets(updatedWallets);
     enqueueSnackbar(`Added wallet ${wallet.name}.`, { variant: 'success' });
   };
 
@@ -58,6 +59,7 @@ export function WalletsScreen() {
 
     await config.setWallets(updatedWallets);
     setWallets(updatedWallets);
+    await config.setWallets(updatedWallets);
     enqueueSnackbar(`Updated wallet ${wallet.name}.`, { variant: 'success' });
   };
 

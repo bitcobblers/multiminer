@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/jsx-props-no-spreading */
 
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
 import { Wallet, Coin } from '../../models';
@@ -20,63 +20,28 @@ type EditCoinDialogProps = {
 
 export function EditCoinDialog(props: EditCoinDialogProps) {
   const { open, icon, symbol, wallets, blockchains, coin, onSave, onCancel, ...other } = props;
-  const [wallet, setWallet] = useState(coin.wallet);
-  const [enabled, setEnabled] = useState(coin.enabled);
-  const [duration, setDuration] = useState(coin.duration);
-  const [referral, setReferral] = useState(coin.referral);
 
-  const compatibleWallets = wallets.filter((w) => blockchains.includes(w.network));
+  const {
+    register,
+    watch,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm<Coin>({ defaultValues: coin, mode: 'all' });
 
-  const handleOnWalletChange = (e: any) => {
-    setWallet(e.target.value.trim());
-  };
-
-  const handleOnDurationChange = (e: any) => {
-    setDuration(e.target.value.trim());
-  };
-
-  const handleOnReferralChange = (e: any) => {
-    setReferral(e.target.value.trim());
-  };
-
-  const handleOnEnabledChange = (e: any) => {
-    setEnabled(e.target.checked);
-  };
-
-  const handleOnSave = () => {
-    onSave({ symbol, wallet, enabled, duration, referral });
-  };
+  const handleOnSave = handleSubmit((value) => {
+    onSave(value);
+  });
 
   const handleOnCancel = () => {
+    reset(coin);
     onCancel();
   };
 
-  const validateWallet = (): [boolean, string] => {
-    if (wallet.length === 0) {
-      return [true, 'A wallet must be specified.'];
-    }
-
-    return [false, ''];
-  };
-
-  const validateDuration = (): [boolean, string] => {
-    if ((duration as string) === '') {
-      return [true, 'An duration in hours must be specified.'];
-    }
-
-    if ((duration as number) < 1) {
-      return [true, 'The duration must be at least 1 hour or more.'];
-    }
-
-    return [false, ''];
-  };
-
-  const [isWalletInvalid, walletValidationMessage] = validateWallet();
-  const [isDurationInvalid, durationValidationMessage] = validateDuration();
-  const isInvalid = enabled ? isWalletInvalid || isDurationInvalid : false;
+  const compatibleWallets = wallets.filter((w) => blockchains.includes(w.network));
 
   const shouldDisableWalletSelection = () => {
-    return !enabled || compatibleWallets.length === 0;
+    return compatibleWallets.length === 0;
   };
 
   const walletLabel = () => {
@@ -88,54 +53,46 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
       <DialogTitle>Edit Coin</DialogTitle>
       <DialogContent dividers>
-        <FormControl fullWidth>
-          <Stack spacing={2}>
-            <img src={icon} alt={symbol} height={60} />
-            <div>
-              {blockchains
-                .sort((a, b) => a.localeCompare(b))
-                .map((n) => (
-                  <Chip key={n} label={n} />
-                ))}
-            </div>
-            <Divider />
-            <FormControlLabel control={<Switch checked={enabled} onChange={handleOnEnabledChange} />} label="Enabled" />
-            <TextField
-              disabled={shouldDisableWalletSelection()}
-              required
-              label={walletLabel()}
-              select
-              value={wallet}
-              onChange={handleOnWalletChange}
-              error={isWalletInvalid}
-              helperText={walletValidationMessage}
-            >
-              {compatibleWallets
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((w) => (
-                  <MenuItem key={w.name} value={w.name}>
-                    <WalletMenuItem wallet={w} />
-                  </MenuItem>
-                ))}
-            </TextField>
-            <TextField
-              disabled={!enabled}
-              required
-              type="number"
-              label="Duration (hours)"
-              defaultValue={duration}
-              onChange={handleOnDurationChange}
-              error={isDurationInvalid}
-              helperText={durationValidationMessage}
-            />
-            <TextField disabled={!enabled} label="Referral" defaultValue={referral} onChange={handleOnReferralChange} />
-            <Divider />
-          </Stack>
-          <Button onClick={handleOnSave} disabled={isInvalid}>
-            Save
-          </Button>
-          <Button onClick={handleOnCancel}>Cancel</Button>
-        </FormControl>
+        <form onSubmit={handleOnSave}>
+          <FormControl fullWidth>
+            <Stack spacing={2}>
+              <img src={icon} alt={symbol} height={60} />
+              <div>
+                {blockchains
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((n) => (
+                    <Chip key={n} label={n} />
+                  ))}
+              </div>
+              <Divider />
+              <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
+              <TextField label={walletLabel()} select disabled={shouldDisableWalletSelection()} {...register('wallet')} value={watch('wallet') ?? null}>
+                {compatibleWallets
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((w) => (
+                    <MenuItem key={w.name} value={w.name}>
+                      <WalletMenuItem wallet={w} />
+                    </MenuItem>
+                  ))}
+              </TextField>
+              <TextField
+                required
+                type="number"
+                label="Duration (hours)"
+                value={watch('duration') ?? null}
+                {...register('duration', {
+                  required: 'A duration in hours must be specified.',
+                  min: { value: 1, message: 'The duration must be at least 1 hour.' },
+                })}
+                error={!!errors?.duration}
+                helperText={errors?.duration?.message}
+              />
+              <Divider />
+            </Stack>
+            <Button type="submit">Save</Button>
+            <Button onClick={handleOnCancel}>Cancel</Button>
+          </FormControl>
+        </form>
       </DialogContent>
     </Dialog>
   );

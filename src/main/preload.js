@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('settings', {
     ipcRenderer.invoke('ipc-watchSetting', key);
   },
   changed(func) {
+    ipcRenderer.removeAllListeners('ipc-settingChanged');
     ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
   },
 });
@@ -26,15 +27,19 @@ contextBridge.exposeInMainWorld('miner', {
     return ipcRenderer.invoke('ipc-statusMiner');
   },
   error(func) {
+    ipcRenderer.removeAllListeners('ipc-minerError');
     ipcRenderer.on('ipc-minerError', (_event, ...args) => func(...args));
   },
   receive(func) {
+    ipcRenderer.removeAllListeners('ipc-minerData');
     ipcRenderer.on('ipc-minerData', (_event, ...args) => func(...args));
   },
   exited(func) {
+    ipcRenderer.removeAllListeners('ipc-minerExited');
     ipcRenderer.on('ipc-minerExited', (_event, ...args) => func(...args));
   },
   started(func) {
+    ipcRenderer.removeAllListeners('ipc-minerStarted');
     ipcRenderer.on('ipc-minerStarted', (_event, ...args) => func(...args));
   },
 });
