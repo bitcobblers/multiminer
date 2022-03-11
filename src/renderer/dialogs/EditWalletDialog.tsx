@@ -70,7 +70,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
                 value={watch('name') ?? null}
                 {...register('name', {
                   required: 'A name is required for the wallet.',
-                  validate: (val) => (existingWallets.filter((w) => w.id !== wallet.id).find((w) => w.name === val) ? 'A wallet already exists with this name.' : undefined),
+                  validate: (val) => (existingWallets.filter((w) => w.id !== wallet.id).find((w) => w.name === val) ? 'A wallet already exists with the same name.' : undefined),
                 })}
                 error={!!errors?.name}
                 helperText={errors?.name?.message}

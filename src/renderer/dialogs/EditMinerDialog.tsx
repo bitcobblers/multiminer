@@ -65,7 +65,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                 value={watch('name') ?? null}
                 {...register('name', {
                   required: 'A miner must have a name',
-                  validate: (val) => (existingMiners.filter((m) => m.id !== miner.id).find((m) => m.name === val) ? 'A miner already exists with this name.' : undefined),
+                  validate: (val) => (existingMiners.filter((m) => m.id !== miner.id).find((m) => m.name === val) ? 'A miner already exists with the same name.' : undefined),
                 })}
                 error={!!errors?.name}
                 helperText={errors?.name?.message}

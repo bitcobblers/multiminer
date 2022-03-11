@@ -19,7 +19,7 @@ type CoinRecord = {
 const blankCoin = (symbol: string) => {
   return {
     symbol,
-    wallet: '',
+    wallet: null,
     enabled: false,
     duration: 6,
   };
@@ -61,8 +61,7 @@ export function CoinsScreen() {
   const handleOnEditCoinSave = async (coin: Coin) => {
     await setCoins(
       coins
-        .filter((c) => c.isSet)
-        .filter((c) => c.coin.symbol !== coin.symbol)
+        .filter((c) => c.isSet && c.coin.symbol !== coin.symbol)
         .map((c) => c.coin)
         .concat(coin)
     );
@@ -117,7 +116,7 @@ export function CoinsScreen() {
                       <Chip key={`${c.name}-${chain}`} label={chain} />
                     ))}
                   </TableCell>
-                  <TableCell>{c.coin.wallet === '' ? 'None' : c.coin.wallet}</TableCell>
+                  <TableCell>{c.coin.wallet ?? 'None'}</TableCell>
                   <TableCell>{c.coin.duration}</TableCell>
                 </TableRow>
               ))}
