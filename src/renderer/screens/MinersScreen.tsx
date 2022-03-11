@@ -83,7 +83,7 @@ export function MinersScreen() {
           },
         }}
       >
-        <EditMinerDialog key="edit-new-miner" open={newOpen} miner={newMiner} onSave={addMiner} onCancel={() => setNewOpen(false)} />
+        <EditMinerDialog key="edit-new-miner" open={newOpen} miner={newMiner} existingMiners={miners} onSave={addMiner} onCancel={() => setNewOpen(false)} />
         <TableContainer>
           <Table aria-label="Miners">
             <TableHead>
@@ -100,7 +100,7 @@ export function MinersScreen() {
               {miners.map((m) => (
                 <TableRow key={m.id}>
                   <TableCell>
-                    <EditMinerControls miner={m} onSave={saveMiner} onRemove={removeMiner} />
+                    <EditMinerControls miner={m} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
                   </TableCell>
                   <TableCell>{m.enabled ? <CheckIcon /> : <></>}</TableCell>
                   <TableCell>{m.kind}</TableCell>
