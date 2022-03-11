@@ -35,9 +35,17 @@ function combine<T>(item: T, other: Partial<T>) {
 stdout$.subscribe((line) => {
   const handler = handlers.find((h) => h.match.test(line) === true);
 
+  // eslint-disable-next-line no-console
+  console.log(`Parsing line: xxx${line}xxx`);
+  // eslint-disable-next-line no-console
+  console.log(`Parsing handler: ${handler?.match}`);
+
   handler?.parse(
-    line,
+    line.trim(),
     (stat) => {
+      // eslint-disable-next-line no-console
+      console.log(`Matched gpu pattern for: ${handler?.match}`);
+
       const previous = gpuStatistics$.getValue();
       const oldStat = previous.find((s) => s.id === stat.id);
       const newStats = oldStat ? [...previous.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...previous, stat];
@@ -46,13 +54,18 @@ stdout$.subscribe((line) => {
       gpuStatistics$.next(newStats);
     },
     (stat) => {
+      // eslint-disable-next-line no-console
+      console.log(`Matched miner pattern for: ${handler?.match}`);
+
       const previous = minerStatistics$.getValue();
       minerStatistics$.next(combine(previous, stat));
     }
   );
 });
 
-minerStarted$.subscribe(({ miner }) => {
-  clearStatistics();
-  setHandlerPack(miner);
-});
+export function init() {
+  minerStarted$.subscribe(({ miner }) => {
+    clearStatistics();
+    setHandlerPack(miner);
+  });
+}

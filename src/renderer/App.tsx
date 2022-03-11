@@ -19,6 +19,7 @@ import InfoIcon from '@mui/icons-material/Info';
 // Context.
 import { MinerContext } from './MinerContext';
 import { MinerState, minerState$, minerErrors$ } from '../models';
+import { init as initStreaming } from './services/MinerEventStreamer';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
@@ -109,6 +110,8 @@ export function App() {
   const closeSnack = (key: SnackbarKey) => () => {
     snackRef.current?.closeSnackbar(key);
   };
+
+  initStreaming();
 
   return (
     <ThemeProvider theme={mdTheme}>
