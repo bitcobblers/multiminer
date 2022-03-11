@@ -66,7 +66,13 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
               </div>
               <Divider />
               <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
-              <TextField label={walletLabel()} select disabled={shouldDisableWalletSelection()} {...register('wallet')} value={watch('wallet') ?? null}>
+              <TextField
+                label={walletLabel()}
+                select
+                disabled={shouldDisableWalletSelection()}
+                {...register('wallet')}
+                value={watch('wallet') ?? compatibleWallets.length ? compatibleWallets[0].name : ''}
+              >
                 {compatibleWallets
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((w) => (
