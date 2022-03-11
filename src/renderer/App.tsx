@@ -18,7 +18,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 // Context.
 import { MinerContext } from './MinerContext';
-import { MinerState, minerState$, minerErrors$ } from './services/MinerManager';
+import { MinerState, minerState$, minerErrors$ } from '../models';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
@@ -64,6 +64,10 @@ function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
   );
 }
 
+function safeReverse<T>(items: Array<T>) {
+  return [...items].reverse();
+}
+
 function AppContent() {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
   const { enqueueSnackbar } = useSnackbar();
@@ -92,7 +96,7 @@ function AppContent() {
           <Drawer style={{ width: drawerWidth }} variant="persistent" open>
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
           </Drawer>
-          <Switch>{links.reverse().map(NavScreen)}</Switch>
+          <Switch>{safeReverse(links).map(NavScreen)}</Switch>
         </Box>
       </Router>
     </MinerContext.Provider>
