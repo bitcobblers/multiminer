@@ -10,4 +10,4 @@ export { MinerInfo, AVAILABLE_MINERS } from './MinerInfo';
 export { GpuStatistic, MinerStatistic } from './Aggregates';
 export { ConfiguredCoin } from './ConfiguredCoin';
 export { MinerState } from './MinerState';
-export { minerErrors$, minerState$, gpuStatistics$, minerStatistics$ } from './Observables';
+export { minerErrors$, minerState$ } from './Observables';

@@ -1,5 +1,5 @@
-import { GpuStatistic, MinerStatistic, gpuStatistics$, minerStatistics$ } from '../../models';
-import { setHandlers, clearStatistics } from '../../renderer/services/MinerEventStreamer';
+import { GpuStatistic, MinerStatistic } from '../../models';
+import { setHandlers, clearStatistics, gpuStatistics$, minerStatistics$ } from '../../renderer/services/MinerEventStreamer';
 import { stdout$ } from '../../renderer/services/MinerService';
 
 describe('Miner Streaming Service Tests', () => {
