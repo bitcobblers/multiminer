@@ -3,10 +3,9 @@ import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
 // Material.
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch, ListItemButton } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
-import { useTheme } from '@mui/material/styles';
 
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
@@ -36,14 +35,13 @@ const links = [
   { id: 6, to: '/about', icon: <InfoIcon />, text: 'About', screen: <AboutScreen /> },
 ];
 
-
 const NavLink = (props: { id: number; to: string; icon: JSX.Element; text: string }) => {
   const { id, to, icon, text } = props;
   const theme = useTheme();
 
   return (
-    <Link key={id} to={to} style={{textDecoration: 'none'}}>
-      <ListItemButton sx={{color: theme.palette.text.primary}}>
+    <Link key={id} to={to} style={{ textDecoration: 'none' }}>
+      <ListItemButton sx={{ color: theme.palette.text.primary }}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={text} />
       </ListItemButton>
