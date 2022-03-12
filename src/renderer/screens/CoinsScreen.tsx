@@ -88,7 +88,6 @@ export function CoinsScreen() {
             <TableRow>
               <TableCell width="80px" />
               <TableCell width="40px">Enabled</TableCell>
-              <TableCell>Icon</TableCell>
               <TableCell>Symbol</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Networks</TableCell>
@@ -107,9 +106,11 @@ export function CoinsScreen() {
                   </TableCell>
                   <TableCell>{c.coin.enabled ? <CheckIcon /> : <></>}</TableCell>
                   <TableCell>
-                    <img src={c.icon} alt="icon" />
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
+                      {c.coin.symbol}
+                    </div>
                   </TableCell>
-                  <TableCell>{c.coin.symbol}</TableCell>
                   <TableCell>{c.name}</TableCell>
                   <TableCell>
                     {c.blockchains.map((chain) => (
