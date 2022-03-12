@@ -1,6 +1,12 @@
+import { BehaviorSubject } from 'rxjs';
+
 import { minerStarted$, stdout$ } from './MinerService';
-import { GpuStatistic, MinerStatistic, gpuStatistics$, minerStatistics$ } from '../../models';
+import { GpuStatistic, MinerStatistic } from '../../models';
 import { LolMinerLineParsers } from './scrapers/LolMiner';
+import { getMiners } from './AppSettingsService';
+
+export const gpuStatistics$ = new BehaviorSubject<GpuStatistic[]>([]);
+export const minerStatistics$ = new BehaviorSubject<MinerStatistic>({});
 
 type LineScraper = {
   match: RegExp;
@@ -36,8 +42,11 @@ stdout$.subscribe((line) => {
   const handler = handlers.find((h) => h.match.test(line) === true);
 
   handler?.parse(
-    line,
+    line.trim(),
     (stat) => {
+      // eslint-disable-next-line no-console
+      console.log(`Matched gpu pattern for: ${handler?.match}`);
+
       const previous = gpuStatistics$.getValue();
       const oldStat = previous.find((s) => s.id === stat.id);
       const newStats = oldStat ? [...previous.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...previous, stat];
@@ -46,6 +55,9 @@ stdout$.subscribe((line) => {
       gpuStatistics$.next(newStats);
     },
     (stat) => {
+      // eslint-disable-next-line no-console
+      console.log(`Matched miner pattern for: ${handler?.match}`);
+
       const previous = minerStatistics$.getValue();
       minerStatistics$.next(combine(previous, stat));
     }
@@ -54,5 +66,14 @@ stdout$.subscribe((line) => {
 
 minerStarted$.subscribe(({ miner }) => {
   clearStatistics();
-  setHandlerPack(miner);
+
+  // eslint-disable-next-line promise/catch-or-return
+  getMiners().then((miners) => {
+    const minerType = miners.find((m) => m.name === miner);
+
+    // eslint-disable-next-line promise/always-return
+    if (minerType?.kind !== undefined) {
+      setHandlerPack(minerType?.kind);
+    }
+  });
 });

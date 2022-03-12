@@ -8,10 +8,11 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/NavigateNext';
 
 // Services.
-import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, gpuStatistics$, minerStatistics$ } from '../../models';
+import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 import { updateTicker } from '../services/CoinFeed';
 import { UnmineableStats, unmineableWorkers$, updateCoins } from '../services/UnmineableFeed';
+import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
 
 import { enabledCoins$ } from '../services/DataService';
 import { MinerContext } from '../MinerContext';

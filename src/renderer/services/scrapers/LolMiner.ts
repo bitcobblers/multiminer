@@ -1,7 +1,7 @@
 import { GpuStatistic, MinerStatistic } from '../../../models';
 
 export const GpuStatusLineHandler = {
-  match: RegExp(/^GPU \d+\s.+$/),
+  match: RegExp(/^(?!.*auto)GPU \d+\s.+$/),
   parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void) => {
     const IdIndex = 1;
 
@@ -46,8 +46,69 @@ export const GpuStatusLineHandler = {
   },
 };
 
+export const GpuStatusLHRLineHandler = {
+  match: RegExp(/^GPU \d+\s.+auto.+$/),
+  parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void) => {
+    const IdIndex = 1;
+
+    const BestShareIndex = 1;
+    const SharesIndex = 2;
+    const CurrentSpeedIndex = 5;
+
+    const parts = line.split(/\s+/);
+    const id = parts[IdIndex];
+    const name = parts.splice(2, parts.length - 8).join(' ');
+    const offset = parts.length - 1;
+
+    const power = parts[offset];
+    const bestShare = parts[offset - BestShareIndex];
+    const [acceptedShares, staleShares] = parts[offset - SharesIndex].split('/');
+    const currentSpeed = parts[offset - CurrentSpeedIndex];
+
+    gpuUpdated({
+      id,
+      name,
+      hashrate: Number(currentSpeed),
+      accepted: Number(acceptedShares),
+      rejected: Number(staleShares),
+      best: bestShare,
+      power: Number(power),
+    });
+  },
+};
+
+export const GpuStatusLHRLineHandler2 = {
+  match: RegExp(/^GPU \d+\s.+auto$/),
+  parse: (line: string, gpuUpdated: (stat: GpuStatistic) => void) => {
+    const IdIndex = 1;
+    const EfficiencyIndex = 2;
+    const CoreClockIndex = 3;
+    const MemoryClockIndex = 4;
+    const CoreTempIndex = 5;
+    const FanSpeedIndex = 6;
+
+    const parts = line.split(/\s+/);
+    const id = parts[IdIndex];
+    const efficiency = parts[EfficiencyIndex];
+    const coreClock = parts[CoreClockIndex];
+    const memoryClock = parts[MemoryClockIndex];
+    const coreTemperature = parts[CoreTempIndex];
+    const fanSpeed = parts[FanSpeedIndex];
+
+    gpuUpdated({
+      id,
+      efficiency: Number(efficiency),
+      coreClock: Number(coreClock),
+      memClock: Number(memoryClock),
+      coreTemperature: Number(coreTemperature),
+      fanSpeed: Number(fanSpeed),
+    });
+  },
+};
+
 export const SummaryLineHandler = {
-  match: new RegExp(/^Total\s.+$/),
+  //                           HR           Pool HR      SHARES            DIFFICULTY       POWER        EFFICIENCY
+  match: new RegExp(/^Total\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\/\d+\/\d+)\s+(\d+\.\d+[TG])\s+(\d+\.\d+)\s+(\d+\.\d+)$/),
   parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const CurrentSpeedIndex = 1;
     const SharesIndex = 3;
@@ -69,6 +130,31 @@ export const SummaryLineHandler = {
       best: bestShare,
       power: Number(power),
       efficiency: Number(efficiency) * 1000,
+    });
+  },
+};
+
+export const SummaryLHRLineHandler = {
+  //                           HR           Pool HR      SHARES            DIFFICULTY       POWER
+  match: new RegExp(/^Total\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\/\d+\/\d+)\s+(\d+\.\d+[TG])\s+(\d+\.\d+)$/),
+  parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
+    const CurrentSpeedIndex = 1;
+    const SharesIndex = 3;
+    const BestShareIndex = 4;
+    const PowerIndex = 5;
+
+    const parts = line.split(/\s+/);
+    const currentSpeed = parts[CurrentSpeedIndex];
+    const [acceptedShares, staleShares] = parts[SharesIndex].split('/');
+    const bestShare = parts[BestShareIndex];
+    const power = parts[PowerIndex];
+
+    minerUpdated({
+      hashrate: Number(currentSpeed),
+      accepted: Number(acceptedShares),
+      rejected: Number(staleShares),
+      best: bestShare,
+      power: Number(power),
     });
   },
 };
@@ -117,4 +203,13 @@ export const UptimeLineHandler = {
   },
 };
 
-export const LolMinerLineParsers = [GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler, AverageSpeedLineHandler, UptimeLineHandler];
+export const LolMinerLineParsers = [
+  GpuStatusLineHandler,
+  GpuStatusLHRLineHandler,
+  GpuStatusLHRLineHandler2,
+  SummaryLineHandler,
+  SummaryLHRLineHandler,
+  NewJobLineHandler,
+  AverageSpeedLineHandler,
+  UptimeLineHandler,
+];
