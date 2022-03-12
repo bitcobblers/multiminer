@@ -95,6 +95,7 @@ async function updateCoins(coins: ConfiguredCoin[]) {
 updater$
   .pipe(
     withLatestFrom(minerState$, enabledCoins$),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     map(([_, miner, coins]) => ({ state: miner.state, coins }))
   )
   .subscribe(({ state, coins }) => {
@@ -106,6 +107,7 @@ updater$
 refreshData$
   .pipe(
     withLatestFrom(minerState$, enabledCoins$),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     map(([_, miner, coins]) => ({ state: miner.state, coins }))
   )
   .subscribe(({ state, coins }) => {
