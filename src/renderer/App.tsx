@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
 // Material.
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Button, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box } from '@mui/material';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch, ListItemButton } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
 
 // Navigation Icons.
@@ -24,7 +24,6 @@ import { MinerState, minerState$, minerErrors$ } from '../models';
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 
 const drawerWidth = 200;
-const mdTheme = createTheme();
 
 const links = [
   { id: 0, to: '/', icon: <HomeIcon />, text: 'Home', screen: <HomeScreen /> },
@@ -36,23 +35,19 @@ const links = [
   { id: 6, to: '/about', icon: <InfoIcon />, text: 'About', screen: <AboutScreen /> },
 ];
 
-const linkStyle = {
-  textDecoration: 'none',
-  color: 'black',
-};
-
-function NavLink(props: { id: number; to: string; icon: JSX.Element; text: string }) {
+const NavLink = (props: { id: number; to: string; icon: JSX.Element; text: string }) => {
   const { id, to, icon, text } = props;
+  const theme = useTheme();
 
   return (
-    <Link key={id} to={to} style={linkStyle}>
-      <ListItem button>
+    <Link key={id} to={to} style={{ textDecoration: 'none' }}>
+      <ListItemButton sx={{ color: theme.palette.text.primary }}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={text} />
-      </ListItem>
+      </ListItemButton>
     </Link>
   );
-}
+};
 
 function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
   const { id, to, screen } = props;
@@ -68,7 +63,7 @@ function safeReverse<T>(items: Array<T>) {
   return [...items].reverse();
 }
 
-function AppContent() {
+function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -93,8 +88,21 @@ function AppContent() {
       <Router>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <Drawer style={{ width: drawerWidth }} variant="persistent" open>
+          <Drawer
+            style={{ width: drawerWidth, display: 'flex' }}
+            sx={{
+              '& .MuiPaper-root': {
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              },
+            }}
+            variant="persistent"
+            open
+          >
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+            {themeToggle}
           </Drawer>
           <Switch>{safeReverse(links).map(NavScreen)}</Switch>
         </Box>
@@ -110,10 +118,28 @@ export function App() {
     snackRef.current?.closeSnackbar(key);
   };
 
+  const THEME_KEY = 'theme-mode';
+  const [themeMode, setThemeMode] = useState<PaletteMode>((localStorage.getItem(THEME_KEY) as PaletteMode) ?? 'light');
+  const mdTheme = useMemo(() => createTheme({ palette: { mode: themeMode } }), [themeMode]);
+
   return (
     <ThemeProvider theme={mdTheme}>
       <SnackbarProvider maxSnack={5} ref={snackRef} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
-        <AppContent />
+        <AppContent
+          themeToggle={
+            <div className="theme-toggle">
+              <span style={{ textTransform: 'capitalize' }}>{themeMode} mode</span>
+              <ToggleSwitch
+                checked={themeMode === 'dark'}
+                onChange={(event) => {
+                  const mode = event.target.checked ? 'dark' : 'light';
+                  localStorage.setItem(THEME_KEY, mode);
+                  setThemeMode(mode);
+                }}
+              />
+            </div>
+          }
+        />
       </SnackbarProvider>
     </ThemeProvider>
   );
