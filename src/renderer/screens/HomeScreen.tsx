@@ -49,7 +49,7 @@ export function HomeScreen(): JSX.Element {
   }, [minerContext.currentCoin]);
 
   return (
-    <Container sx={{ pt: '0.8rem' }}>
+    <Container>
       <ScreenHeader title="Home" />
       <Divider />
       <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%' }}>
