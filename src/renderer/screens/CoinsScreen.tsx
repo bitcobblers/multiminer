@@ -117,7 +117,9 @@ export function CoinsScreen() {
                 <TableCell>
                   <EditCoinControls icon={c.icon} blockchains={c.blockchains} coin={c.coin} wallets={wallets} onSave={handleOnEditCoinSave} />
                 </TableCell>
-                <TableCell align='center' sx={{p: '0.1rem'}}>{c.coin.enabled && <CheckIcon sx={{fontSize:"1.8rem"}} color="success" />}</TableCell>
+                <TableCell align="center" sx={{ p: '0.1rem' }}>
+                  {c.coin.enabled && <CheckIcon sx={{ fontSize: '1.8rem' }} color="success" />}
+                </TableCell>
                 <TableCell>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
