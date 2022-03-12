@@ -22,7 +22,7 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
         <TableHead>
           <TableRow>
             <TableCell>Current</TableCell>
-            <TableCell>Symbol</TableCell>
+            <TableCell>Coin</TableCell>
             <TableCell>Mined</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Value</TableCell>

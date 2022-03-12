@@ -6,6 +6,7 @@ import './App.css';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch, ListItemButton } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
+import { lightGreen, teal } from '@mui/material/colors';
 
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
@@ -120,7 +121,16 @@ export function App() {
 
   const THEME_KEY = 'theme-mode';
   const [themeMode, setThemeMode] = useState<PaletteMode>((localStorage.getItem(THEME_KEY) as PaletteMode) ?? 'light');
-  const mdTheme = useMemo(() => createTheme({ palette: { mode: themeMode } }), [themeMode]);
+  const mdTheme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: themeMode === 'dark' ? lightGreen : teal,
+          mode: themeMode,
+        },
+      }),
+    [themeMode]
+  );
 
   return (
     <ThemeProvider theme={mdTheme}>

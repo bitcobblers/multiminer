@@ -2,9 +2,10 @@
 
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { Dialog, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
 import { Wallet, Coin, ALL_CHAINS } from '../../models';
 import { ChainMenuItem, UsedByCoins } from '../components';
+import { CustomDialogActions } from './CustomDialogActions';
 
 type EditWalletDialogProps = {
   open: boolean;
@@ -59,7 +60,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
 
   return (
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
       <DialogContent dividers>
         <form onSubmit={handleOnSave}>
           <FormControl fullWidth>
@@ -111,8 +112,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
               <UsedByCoins coins={coins} />
               <Divider />
             </Stack>
-            <Button type="submit">{saveButtonTitle}</Button>
-            <Button onClick={handleOnCancel}>Cancel</Button>
+            <CustomDialogActions buttonType="submit" buttonText={saveButtonTitle} onCancel={handleOnCancel} />
           </FormControl>
         </form>
       </DialogContent>
