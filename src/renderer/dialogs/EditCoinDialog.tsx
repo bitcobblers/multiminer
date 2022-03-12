@@ -2,9 +2,10 @@
 
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
-import { Chip, DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
+import { Chip, DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
 import { Wallet, Coin } from '../../models';
 import { WalletMenuItem } from '../components/WalletMenuItem';
+import { CustomDialogActions } from './CustomDialogActions';
 
 type EditCoinDialogProps = {
   open: boolean;
@@ -51,14 +52,14 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
-      <DialogTitle>Edit Coin</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Edit Coin</DialogTitle>
       <DialogContent dividers>
         <form onSubmit={handleOnSave}>
           <FormControl fullWidth>
             <img src={icon} alt={symbol} height={60} />
             <Stack spacing={2}>
-              <div style={{display: 'flex', alignItems: 'center'}}>
-                <span style={{marginRight: '0.2rem'}}>Networks: </span>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ marginRight: '0.2rem' }}>Networks: </span>
                 {blockchains
                   .sort((a, b) => a.localeCompare(b))
                   .map((n) => (
@@ -94,10 +95,8 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
                 error={!!errors?.duration}
                 helperText={errors?.duration?.message}
               />
-              <Divider />
             </Stack>
-            <Button type="submit">Save</Button>
-            <Button onClick={handleOnCancel}>Cancel</Button>
+            <CustomDialogActions buttonType="submit" onCancel={handleOnCancel} />
           </FormControl>
         </form>
       </DialogContent>

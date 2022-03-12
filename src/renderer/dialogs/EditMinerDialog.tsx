@@ -7,6 +7,7 @@ import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormCon
 import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner } from '../../models';
 import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
 import { MinerTypeMenuItem } from '../components/MinerTypeMenuItem';
+import { CustomDialogActions } from './CustomDialogActions';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -53,7 +54,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
 
   return (
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
-      <DialogTitle>Edit Miner</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Edit Miner</DialogTitle>
       <DialogContent dividers>
         <form onSubmit={handleOnSave}>
           <FormControl fullWidth>
@@ -99,8 +100,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               </Stack>
               <TextField label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
               <Divider />
-              <Button type="submit">Save</Button>
-              <Button onClick={handleOnCancel}>Cancel</Button>
+              <CustomDialogActions buttonType="submit" onCancel={handleOnCancel} />
             </Stack>
           </FormControl>
         </form>
