@@ -104,7 +104,7 @@ export function CoinsScreen() {
             <TableRow>
               <TableCell width="80px" />
               <TableCell width="40px">Enabled</TableCell>
-              <TableCell>Symbol</TableCell>
+              <TableCell>Coin</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Networks</TableCell>
               <TableCell>Wallet</TableCell>
