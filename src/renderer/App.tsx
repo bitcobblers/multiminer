@@ -4,8 +4,9 @@ import './App.css';
 
 // Material.
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Button, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch } from '@mui/material';
+import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch, ListItemButton } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
+import { useTheme } from '@mui/material/styles';
 
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
@@ -35,23 +36,20 @@ const links = [
   { id: 6, to: '/about', icon: <InfoIcon />, text: 'About', screen: <AboutScreen /> },
 ];
 
-const linkStyle = {
-  textDecoration: 'none',
-  color: 'black',
-};
 
-function NavLink(props: { id: number; to: string; icon: JSX.Element; text: string }) {
+const NavLink = (props: { id: number; to: string; icon: JSX.Element; text: string }) => {
   const { id, to, icon, text } = props;
+  const theme = useTheme();
 
   return (
-    <Link key={id} to={to} style={linkStyle}>
-      <ListItem button>
+    <Link key={id} to={to} style={{textDecoration: 'none'}}>
+      <ListItemButton sx={{color: theme.palette.text.primary}}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={text} />
-      </ListItem>
+      </ListItemButton>
     </Link>
   );
-}
+};
 
 function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
   const { id, to, screen } = props;
