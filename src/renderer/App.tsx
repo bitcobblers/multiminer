@@ -4,7 +4,7 @@ import './App.css';
 
 // Material.
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Button, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box } from '@mui/material';
+import { Button, ListItem, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
 
 // Navigation Icons.
@@ -24,7 +24,6 @@ import { MinerState, minerState$, minerErrors$ } from '../models';
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 
 const drawerWidth = 200;
-const mdTheme = createTheme();
 
 const links = [
   { id: 0, to: '/', icon: <HomeIcon />, text: 'Home', screen: <HomeScreen /> },
@@ -68,7 +67,7 @@ function safeReverse<T>(items: Array<T>) {
   return [...items].reverse();
 }
 
-function AppContent() {
+function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
   const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -93,8 +92,21 @@ function AppContent() {
       <Router>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <Drawer style={{ width: drawerWidth }} variant="persistent" open>
+          <Drawer
+            style={{ width: drawerWidth, display: 'flex' }}
+            sx={{
+              '& .MuiPaper-root': {
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              },
+            }}
+            variant="persistent"
+            open
+          >
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+            {themeToggle}
           </Drawer>
           <Switch>{safeReverse(links).map(NavScreen)}</Switch>
         </Box>
@@ -110,10 +122,25 @@ export function App() {
     snackRef.current?.closeSnackbar(key);
   };
 
+  const [themeMode, setThemeMode] = useState<PaletteMode>('light');
+
+  const mdTheme = createTheme({ palette: { mode: themeMode } });
+
   return (
     <ThemeProvider theme={mdTheme}>
       <SnackbarProvider maxSnack={5} ref={snackRef} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
-        <AppContent />
+        <AppContent
+          themeToggle={
+            <div className="theme-toggle">
+              <span style={{ textTransform: 'capitalize' }}>{themeMode} mode</span>
+              <ToggleSwitch
+                onChange={(event) => {
+                  setThemeMode(event.target.checked ? 'dark' : 'light');
+                }}
+              />
+            </div>
+          }
+        />
       </SnackbarProvider>
     </ThemeProvider>
   );
