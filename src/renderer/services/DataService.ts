@@ -1,10 +1,7 @@
-import { BehaviorSubject } from 'rxjs';
-import { Coin, ALL_COINS, ConfiguredCoin, MinerState, minerState$ } from '../../models';
+import { Coin, ALL_COINS, MinerState, minerState$, enabledCoins$ } from '../../models';
 import * as config from './AppSettingsService';
 import { CoinTicker, ticker$ } from './CoinFeed';
-import { UnmineableCoin, unmineableCoins$, updateWorkers } from './UnmineableFeed';
-
-export const enabledCoins$ = new BehaviorSubject<ConfiguredCoin[]>([]);
+import { UnmineableCoin, unmineableCoins$ } from './UnmineableFeed';
 
 async function loadCoins() {
   const loadedCoins = (await config.getCoins()).filter((c) => c.enabled);
@@ -71,9 +68,9 @@ function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
       return c;
     }
 
-    if (c.current) {
-      updateWorkers(ticker.uuid);
-    }
+    // if (c.current) {
+    //   updateWorkers(ticker.uuid);
+    // }
 
     return {
       ...c,

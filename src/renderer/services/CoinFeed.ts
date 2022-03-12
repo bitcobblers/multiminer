@@ -1,6 +1,6 @@
 import { ReplaySubject, timer } from 'rxjs';
 
-import { ALL_COINS } from '../../models';
+import { ALL_COINS, refreshData$ } from '../../models';
 import * as config from './AppSettingsService';
 import { tickerApi } from '../../shared/TickerApi';
 
@@ -42,5 +42,9 @@ export async function updateTicker() {
 }
 
 updater.subscribe(() => {
+  updateTicker();
+});
+
+refreshData$.subscribe(() => {
   updateTicker();
 });
