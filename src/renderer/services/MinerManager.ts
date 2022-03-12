@@ -18,6 +18,10 @@ const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
 
 let timeout: NodeJS.Timeout;
 
+function getRandom<T>(array: Array<T>) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
   minerState$.next({ ...currentState, ...newState });
@@ -34,8 +38,6 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 }
 
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
-  const getRandom = <T>(array: Array<T>) => array[Math.floor(Math.random() * array.length)];
-
   const minerName = minerState$.getValue().miner;
   const miner = (await config.getMiners()).find((m) => m.name === minerName);
   const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
@@ -86,7 +88,7 @@ async function changeCoin() {
       const appSettings = await config.getAppSettings();
       const { miner, minerInfo, coin, coinInfo, wallet } = selection;
 
-      const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, miner.name, coinInfo.referral);
+      const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, miner.name, getRandom(coinInfo.referrals));
       const filePath = path.join(miner.installationPath, minerInfo.exe);
       const args = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
 
@@ -135,42 +137,40 @@ async function setInitialState() {
   if (minerState.state === 'active') {
     // eslint-disable-next-line no-console
     console.log(`Miner already active.  Updating state to reflect.  Coin is ${minerState.currentCoin}.`);
-
     updateState(minerState);
   } else {
     // eslint-disable-next-line no-console
     console.log('Miner not active.  Setting default miner to use.');
-
     updateState({ miner: defaultMiner?.name });
   }
+
+  miningService.minerExited$.subscribe(() => {
+    updateState({
+      state: 'inactive',
+      currentCoin: null,
+    });
+  });
+
+  miningService.minerStarted$.subscribe(({ coin, miner }) => {
+    updateState({
+      state: 'active',
+      currentCoin: coin,
+      miner,
+    });
+
+    // eslint-disable-next-line promise/catch-or-return
+    config.getCoins().then((coins) => {
+      const c = coins.find((x) => x.symbol === coin);
+
+      // eslint-disable-next-line promise/always-return
+      if (c !== undefined) {
+        // eslint-disable-next-line no-console
+        console.log(`Setting runtime for current coin to ${c.duration} hours.`);
+
+        timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
+      }
+    });
+  });
 }
-
-miningService.minerExited$.subscribe(() => {
-  updateState({
-    state: 'inactive',
-    currentCoin: null,
-  });
-});
-
-miningService.minerStarted$.subscribe(({ coin, miner }) => {
-  updateState({
-    state: 'active',
-    currentCoin: coin,
-    miner,
-  });
-
-  // eslint-disable-next-line promise/catch-or-return
-  config.getCoins().then((coins) => {
-    const c = coins.find((x) => x.symbol === coin);
-
-    // eslint-disable-next-line promise/always-return
-    if (c !== undefined) {
-      // eslint-disable-next-line no-console
-      console.log(`Setting runtime for current coin to ${c.duration} hours.`);
-
-      timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
-    }
-  });
-});
 
 setInitialState();
