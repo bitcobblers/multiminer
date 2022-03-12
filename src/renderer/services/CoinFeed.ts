@@ -25,6 +25,12 @@ export async function updateTicker() {
     return;
   }
 
+  const content = await tickerApi.getTicker(ids);
+
+  if (content === '') {
+    return;
+  }
+
   const response = JSON.parse(await tickerApi.getTicker(ids));
 
   Object.keys(response).forEach((k) => {

@@ -44,9 +44,6 @@ stdout$.subscribe((line) => {
   handler?.parse(
     line.trim(),
     (stat) => {
-      // eslint-disable-next-line no-console
-      console.log(`Matched gpu pattern for: ${handler?.match}`);
-
       const previous = gpuStatistics$.getValue();
       const oldStat = previous.find((s) => s.id === stat.id);
       const newStats = oldStat ? [...previous.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...previous, stat];
@@ -55,9 +52,6 @@ stdout$.subscribe((line) => {
       gpuStatistics$.next(newStats);
     },
     (stat) => {
-      // eslint-disable-next-line no-console
-      console.log(`Matched miner pattern for: ${handler?.match}`);
-
       const previous = minerStatistics$.getValue();
       minerStatistics$.next(combine(previous, stat));
     }
