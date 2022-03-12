@@ -55,9 +55,10 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
       <DialogContent dividers>
         <form onSubmit={handleOnSave}>
           <FormControl fullWidth>
+            <img src={icon} alt={symbol} height={60} />
             <Stack spacing={2}>
-              <img src={icon} alt={symbol} height={60} />
-              <div>
+              <div style={{display: 'flex', alignItems: 'center'}}>
+                <span style={{marginRight: '0.2rem'}}>Networks: </span>
                 {blockchains
                   .sort((a, b) => a.localeCompare(b))
                   .map((n) => (
