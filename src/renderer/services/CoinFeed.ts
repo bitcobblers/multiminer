@@ -31,7 +31,7 @@ export async function updateTicker() {
     return;
   }
 
-  const response = JSON.parse(await tickerApi.getTicker(ids));
+  const response = JSON.parse(content);
 
   Object.keys(response).forEach((k) => {
     // This call should never fail.
@@ -49,14 +49,8 @@ export async function updateTicker() {
 
 updater.subscribe(() => {
   updateTicker();
-
-  // eslint-disable-next-line no-console
-  console.log('Updating ticker (update)');
 });
 
 refreshData$.subscribe(() => {
   updateTicker();
-
-  // eslint-disable-next-line no-console
-  console.log('Updating ticker (update)');
 });

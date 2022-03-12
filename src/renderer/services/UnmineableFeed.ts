@@ -1,4 +1,4 @@
-import { combineLatestWith, map, ReplaySubject, timer } from 'rxjs';
+import { withLatestFrom, map, ReplaySubject, timer } from 'rxjs';
 import { ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
@@ -94,28 +94,22 @@ async function updateCoins(coins: ConfiguredCoin[]) {
 
 updater$
   .pipe(
-    combineLatestWith(minerState$, enabledCoins$),
+    withLatestFrom(minerState$, enabledCoins$),
     map(([_, miner, coins]) => ({ state: miner.state, coins }))
   )
   .subscribe(({ state, coins }) => {
     if (state === 'active') {
-      // updateCoins(coins);
-
-      // eslint-disable-next-line no-console
-      console.log('updating unmineable coins (update).');
+      updateCoins(coins);
     }
   });
 
 refreshData$
   .pipe(
-    combineLatestWith(minerState$, enabledCoins$),
+    withLatestFrom(minerState$, enabledCoins$),
     map(([_, miner, coins]) => ({ state: miner.state, coins }))
   )
   .subscribe(({ state, coins }) => {
     if (state === 'active') {
-      // updateCoins(coins);
-
-      // eslint-disable-next-line no-console
-      console.log('updating unmineable coins (refresh).');
+      updateCoins(coins);
     }
   });
