@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -124,8 +124,7 @@ export function App() {
 
   const THEME_KEY = 'theme-mode';
   const [themeMode, setThemeMode] = useState<PaletteMode>((localStorage.getItem(THEME_KEY) as PaletteMode) ?? 'light');
-
-  const mdTheme = createTheme({ palette: { mode: themeMode } });
+  const mdTheme = useMemo(() => createTheme({ palette: { mode: themeMode } }), [themeMode]);
 
   return (
     <ThemeProvider theme={mdTheme}>
