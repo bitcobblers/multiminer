@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch } from '@mui/material';
+import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch, TextField, Box } from '@mui/material';
 import { ALL_COINS, Coin, Wallet } from '../../models';
 import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
 import { ScreenHeader, EditCoinControls } from '../components';
@@ -48,6 +48,19 @@ export function CoinsScreen() {
   const [wallets, setWallets] = useState<Array<Wallet>>([]);
   const [coins, setLoadedCoins] = useState<Array<CoinRecord>>([]);
   const [enabledOnly, setEnabledOnly] = useState(false);
+  const [filter, setFilter] = useState<string>('');
+  const filteredCoins = useMemo(
+    () =>
+      coins
+        .filter((c) => {
+          const isOptionallyEnabled = enabledOnly ? c.coin.enabled : true;
+          const isOptionallyFiltered = filter ? `${c.name} ${c.coin.symbol}`.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) : true;
+          return isOptionallyEnabled && isOptionallyFiltered;
+        })
+        .sort((a, b) => a.coin.symbol.localeCompare(b.coin.symbol))
+        .map((x) => x),
+    [coins, enabledOnly, filter]
+  );
 
   useEffect(() => {
     const readConfigAsync = async () => {
@@ -81,7 +94,10 @@ export function CoinsScreen() {
   return (
     <Container>
       <ScreenHeader title="Coins" />
-      <FormControlLabel control={<Switch checked={enabledOnly} onChange={handleEnabledOnlyChange} />} label="Only Show Enabled" />
+      <Box sx={{ display: 'flex', mt: '1rem' }}>
+        <TextField size="small" sx={{ mr: '1rem' }} placeholder="Filter..." onChange={(event) => setFilter(event.target.value)} />
+        <FormControlLabel control={<Switch checked={enabledOnly} onChange={handleEnabledOnlyChange} />} label="Only Show Enabled" />
+      </Box>
       <TableContainer>
         <Table aria-label="Coins">
           <TableHead>
@@ -96,31 +112,28 @@ export function CoinsScreen() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {coins
-              .filter((c) => (enabledOnly ? c.coin.enabled : true))
-              .sort((a, b) => a.coin.symbol.localeCompare(b.coin.symbol))
-              .map((c) => (
-                <TableRow key={c.id}>
-                  <TableCell>
-                    <EditCoinControls icon={c.icon} blockchains={c.blockchains} coin={c.coin} wallets={wallets} onSave={handleOnEditCoinSave} />
-                  </TableCell>
-                  <TableCell>{c.coin.enabled ? <CheckIcon /> : <></>}</TableCell>
-                  <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
-                      {c.coin.symbol}
-                    </div>
-                  </TableCell>
-                  <TableCell>{c.name}</TableCell>
-                  <TableCell>
-                    {c.blockchains.map((chain) => (
-                      <Chip key={`${c.name}-${chain}`} label={chain} />
-                    ))}
-                  </TableCell>
-                  <TableCell>{c.coin.wallet ?? 'None'}</TableCell>
-                  <TableCell>{c.coin.duration}</TableCell>
-                </TableRow>
-              ))}
+            {filteredCoins.map((c) => (
+              <TableRow key={c.id}>
+                <TableCell>
+                  <EditCoinControls icon={c.icon} blockchains={c.blockchains} coin={c.coin} wallets={wallets} onSave={handleOnEditCoinSave} />
+                </TableCell>
+                <TableCell>{c.coin.enabled ? <CheckIcon /> : null}</TableCell>
+                <TableCell>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
+                    {c.coin.symbol}
+                  </div>
+                </TableCell>
+                <TableCell>{c.name}</TableCell>
+                <TableCell>
+                  {c.blockchains.map((chain) => (
+                    <Chip key={`${c.name}-${chain}`} label={chain} />
+                  ))}
+                </TableCell>
+                <TableCell>{c.coin.wallet ?? 'None'}</TableCell>
+                <TableCell>{c.coin.duration}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
