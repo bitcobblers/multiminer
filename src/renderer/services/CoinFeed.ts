@@ -49,8 +49,14 @@ export async function updateTicker() {
 
 updater.subscribe(() => {
   updateTicker();
+
+  // eslint-disable-next-line no-console
+  console.log('Updating ticker (update)');
 });
 
 refreshData$.subscribe(() => {
   updateTicker();
+
+  // eslint-disable-next-line no-console
+  console.log('Updating ticker (update)');
 });

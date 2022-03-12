@@ -99,7 +99,10 @@ updater$
   )
   .subscribe(({ state, coins }) => {
     if (state === 'active') {
-      updateCoins(coins);
+      // updateCoins(coins);
+
+      // eslint-disable-next-line no-console
+      console.log('updating unmineable coins (update).');
     }
   });
 
@@ -110,6 +113,9 @@ refreshData$
   )
   .subscribe(({ state, coins }) => {
     if (state === 'active') {
-      updateCoins(coins);
+      // updateCoins(coins);
+
+      // eslint-disable-next-line no-console
+      console.log('updating unmineable coins (refresh).');
     }
   });
