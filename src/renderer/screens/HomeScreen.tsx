@@ -1,7 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
 
 // UI.
-import { Container, Divider, Grid, Button, Typography } from '@mui/material';
+import { Container, Divider, Grid, Button, Typography, Box } from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import RefreshIcon from '@mui/icons-material/Cached';
+import NextIcon from '@mui/icons-material/NavigateNext';
 
 // Services.
 import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, gpuStatistics$, minerStatistics$ } from '../../models';
@@ -48,17 +52,24 @@ export function HomeScreen(): JSX.Element {
     <Container>
       <ScreenHeader title="Home" />
       <Divider />
-      <Button disabled={minerActive || minerContext.miner === null} onClick={async () => startMiner()}>
-        Start Miner
-      </Button>
-      <Button disabled={!minerActive} onClick={async () => stopMiner()}>
-        Stop Miner
-      </Button>
-      <Button disabled={!minerActive || minerContext.miner === null} onClick={async () => nextCoin()}>
-        Next Coin
-      </Button>
-      <Button onClick={async () => refreshData()}>Refresh</Button>
-      <Grid container spacing={2}>
+      <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%' }}>
+        <Button disabled={minerActive || minerContext.miner === null} onClick={async () => startMiner()}>
+          <PlayArrowIcon /> Start Miner
+        </Button>
+        <Button disabled={!minerActive} onClick={async () => stopMiner()}>
+          <StopIcon />
+          Stop Miner
+        </Button>
+        <Button disabled={!minerActive || minerContext.miner === null} onClick={async () => nextCoin()}>
+          <NextIcon />
+          Next Coin
+        </Button>
+        <Button onClick={async () => refreshData()}>
+          <RefreshIcon sx={{ pr: '0.2rem' }} />
+          Refresh
+        </Button>
+      </Box>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="h4">Devices</Typography>
           <ComputeTable gpus={currentGpuStats} />

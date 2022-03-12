@@ -22,7 +22,6 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
         <TableHead>
           <TableRow>
             <TableCell>Current</TableCell>
-            <TableCell>Icon</TableCell>
             <TableCell>Symbol</TableCell>
             <TableCell>Mined</TableCell>
             <TableCell>Price</TableCell>
@@ -37,10 +36,12 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
             <TableRow key={c.symbol}>
               <TableCell>{c.current ? <CheckIcon /> : <></>} </TableCell>
               <TableCell>
-                <img src={c.icon} alt="icon" />
-              </TableCell>
-              <TableCell>
-                <Button onClick={async () => openBrowser(c.symbol, c.address)}>{c.symbol}</Button>
+                <Button onClick={async () => openBrowser(c.symbol, c.address)} sx={{ minWidth: '5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
+                    {c.symbol}
+                  </div>
+                </Button>
               </TableCell>
               <TableCell>{formatter.number(c.mined, 6)}</TableCell>
               <TableCell>{formatter.currency(c.price, 8)}</TableCell>

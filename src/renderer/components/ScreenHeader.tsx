@@ -5,11 +5,11 @@ export function ScreenHeader(props: any) {
   const { title } = props;
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
+    <>
+      <Typography variant="h4" gutterBottom sx={{ pt: '0.8rem' }}>
         {title}
       </Typography>
       <Divider />
-    </div>
+    </>
   );
 }
