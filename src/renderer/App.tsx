@@ -122,7 +122,8 @@ export function App() {
     snackRef.current?.closeSnackbar(key);
   };
 
-  const [themeMode, setThemeMode] = useState<PaletteMode>('light');
+  const THEME_KEY = 'theme-mode';
+  const [themeMode, setThemeMode] = useState<PaletteMode>((localStorage.getItem(THEME_KEY) as PaletteMode) ?? 'light');
 
   const mdTheme = createTheme({ palette: { mode: themeMode } });
 
@@ -134,8 +135,11 @@ export function App() {
             <div className="theme-toggle">
               <span style={{ textTransform: 'capitalize' }}>{themeMode} mode</span>
               <ToggleSwitch
+                checked={themeMode === 'dark'}
                 onChange={(event) => {
-                  setThemeMode(event.target.checked ? 'dark' : 'light');
+                  const mode = event.target.checked ? 'dark' : 'light';
+                  localStorage.setItem(THEME_KEY, mode);
+                  setThemeMode(mode);
                 }}
               />
             </div>
