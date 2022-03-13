@@ -107,8 +107,8 @@ export const GpuStatusLHRLineHandler2 = {
 };
 
 export const SummaryLineHandler = {
-  //                           HR           Pool HR      SHARES            DIFFICULTY       POWER        EFFICIENCY
-  match: new RegExp(/^Total\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\/\d+\/\d+)\s+(\d+\.\d+[TG])\s+(\d+\.\d+)\s+(\d+\.\d+)$/),
+  //                           HR           Pool HR      SHARES            DIFFICULTY        POWER        EFFICIENCY
+  match: new RegExp(/^Total\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\/\d+\/\d+)\s+(\d+\.\d+[T|G]?)\s+(\d+\.\d+)\s+(\d+\.\d+)$/),
   parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const CurrentSpeedIndex = 1;
     const SharesIndex = 3;
@@ -135,8 +135,8 @@ export const SummaryLineHandler = {
 };
 
 export const SummaryLHRLineHandler = {
-  //                           HR           Pool HR      SHARES            DIFFICULTY       POWER
-  match: new RegExp(/^Total\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\/\d+\/\d+)\s+(\d+\.\d+[TG])\s+(\d+\.\d+)$/),
+  //                           HR           Pool HR      SHARES            DIFFICULTY        POWER
+  match: new RegExp(/^Total\s+(\d+\.\d+)\s+(\d+\.\d+)\s+(\d+\/\d+\/\d+)\s+(\d+\.\d+[T|G]?)\s+(\d+\.\d+)$/),
   parse: (line: string, _gpuUpdated: (stat: GpuStatistic) => void, minerUpdated: (stat: MinerStatistic) => void) => {
     const CurrentSpeedIndex = 1;
     const SharesIndex = 3;
