@@ -37,12 +37,9 @@ export const defaults = {
   } as AppSettings,
 };
 
-export const walletsChanged$ = new Subject<Wallet[]>();
-export const coinsChanged$ = new Subject<Coin[]>();
-export const minersChanged$ = new Subject<Miner[]>();
-export const appSettingsChanged$ = new Subject<AppSettings>();
+type Watcher = Subject<Wallet[]> | Subject<Coin[]> | Subject<Miner[]> | Subject<AppSettings>;
 
-export const watchers$ = {
+export const watchers$: { [key: string]: Watcher } = {
   wallets: new Subject<Wallet[]>(),
   coins: new Subject<Coin[]>(),
   miners: new Subject<Miner[]>(),
@@ -86,13 +83,7 @@ settingsApi.changed((key, content) => {
   // eslint-disable-next-line no-console
   console.log(`Config change detected: ${key}: ${content}`);
 
-  if (key === 'wallets') {
-    watchers$.wallets.next(JSON.parse(content));
-  } else if (key === 'coins') {
-    watchers$.coins.next(JSON.parse(content));
-  } else if (key === 'miners') {
-    watchers$.miners.next(JSON.parse(content));
-  } else if (key === 'settings') {
-    watchers$.appSettings.next(JSON.parse(content));
+  if (key in watchers$) {
+    watchers$[key].next(JSON.parse(content));
   }
 });
