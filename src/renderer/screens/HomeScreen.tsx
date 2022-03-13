@@ -47,7 +47,7 @@ export function HomeScreen(): JSX.Element {
     <Container>
       <ScreenHeader title="Home" />
       <Divider />
-      <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%' }}>
+      <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%', '& .MuiButton-root': { minWidth: '8.8rem' } }}>
         <Button disabled={minerActive || minerContext.miner === null} onClick={async () => startMiner()}>
           <PlayArrowIcon /> Start Miner
         </Button>
