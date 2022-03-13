@@ -1,6 +1,10 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - 'releases/**'
 
 jobs:
   release:
@@ -34,3 +38,7 @@ jobs:
         run: |
           npm exec tsc
           npm test
+
+      - name: Package
+        run: |
+          npm run package
