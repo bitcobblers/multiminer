@@ -39,7 +39,7 @@ export const ALL_COINS: CoinDefinition[] = [
     icon: CoinIcons.Algo,
     name: 'Algorand',
     symbol: 'ALGO',
-    blockchains: ['ALGO'],
+    blockchains: ['ETH', 'BSC'],
     referrals: ['4rcp-6phh'],
   },
   {
@@ -55,7 +55,7 @@ export const ALL_COINS: CoinDefinition[] = [
     icon: CoinIcons.BabyDoge,
     name: 'Baby Doge',
     symbol: 'BABYDOGE',
-    blockchains: ['BNB'],
+    blockchains: ['BSC'],
     referrals: ['iwtu-dkg4'],
   },
   {
@@ -231,7 +231,7 @@ export const ALL_COINS: CoinDefinition[] = [
     icon: CoinIcons.Ftm,
     name: 'Fantom',
     symbol: 'FTM',
-    blockchains: ['BNB', 'ETH'],
+    blockchains: ['FTM', 'BNB', 'ETH'],
     referrals: ['y09n-4yju'],
   },
   {
