@@ -1,8 +1,16 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import { Subject } from 'rxjs';
 import { Coin, Wallet, Miner, AppSettings } from '../../models';
 import { settingsApi } from '../../shared/SettingsApi';
 
 type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
+
+class WatchersObservable {
+  wallets = new Subject<Wallet[]>();
+  coins = new Subject<Coin[]>();
+  miners = new Subject<Miner[]>();
+  appSettings = new Subject<AppSettings>();
+}
 
 export const defaults = {
   wallets: [
@@ -37,17 +45,7 @@ export const defaults = {
   } as AppSettings,
 };
 
-export const walletsChanged$ = new Subject<Wallet[]>();
-export const coinsChanged$ = new Subject<Coin[]>();
-export const minersChanged$ = new Subject<Miner[]>();
-export const appSettingsChanged$ = new Subject<AppSettings>();
-
-export const watchers$ = {
-  wallets: new Subject<Wallet[]>(),
-  coins: new Subject<Coin[]>(),
-  miners: new Subject<Miner[]>(),
-  appSettings: new Subject<AppSettings>(),
-};
+export const watchers$ = new WatchersObservable();
 
 async function get<T>(key: SettingsKey, defaultValue: T) {
   const content = await settingsApi.read(key);
@@ -86,13 +84,9 @@ settingsApi.changed((key, content) => {
   // eslint-disable-next-line no-console
   console.log(`Config change detected: ${key}: ${content}`);
 
-  if (key === 'wallets') {
-    watchers$.wallets.next(JSON.parse(content));
-  } else if (key === 'coins') {
-    watchers$.coins.next(JSON.parse(content));
-  } else if (key === 'miners') {
-    watchers$.miners.next(JSON.parse(content));
-  } else if (key === 'settings') {
-    watchers$.appSettings.next(JSON.parse(content));
+  const typedKey = key as keyof WatchersObservable;
+
+  if (typedKey in watchers$) {
+    watchers$[typedKey].next(JSON.parse(content));
   }
 });
