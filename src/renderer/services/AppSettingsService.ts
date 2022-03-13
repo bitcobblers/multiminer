@@ -1,8 +1,16 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import { Subject } from 'rxjs';
 import { Coin, Wallet, Miner, AppSettings } from '../../models';
 import { settingsApi } from '../../shared/SettingsApi';
 
 type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
+
+class WatchersObservable {
+  wallets = new Subject<Wallet[]>();
+  coins = new Subject<Coin[]>();
+  miners = new Subject<Miner[]>();
+  appSettings = new Subject<AppSettings>();
+}
 
 export const defaults = {
   wallets: [
@@ -37,14 +45,7 @@ export const defaults = {
   } as AppSettings,
 };
 
-type Watcher = Subject<Wallet[]> | Subject<Coin[]> | Subject<Miner[]> | Subject<AppSettings>;
-
-export const watchers$: { [key: string]: Watcher } = {
-  wallets: new Subject<Wallet[]>(),
-  coins: new Subject<Coin[]>(),
-  miners: new Subject<Miner[]>(),
-  appSettings: new Subject<AppSettings>(),
-};
+export const watchers$ = new WatchersObservable();
 
 async function get<T>(key: SettingsKey, defaultValue: T) {
   const content = await settingsApi.read(key);
@@ -83,7 +84,9 @@ settingsApi.changed((key, content) => {
   // eslint-disable-next-line no-console
   console.log(`Config change detected: ${key}: ${content}`);
 
-  if (key in watchers$) {
-    watchers$[key].next(JSON.parse(content));
+  const typedKey = key as keyof WatchersObservable;
+
+  if (typedKey in watchers$) {
+    watchers$[typedKey].next(JSON.parse(content));
   }
 });
