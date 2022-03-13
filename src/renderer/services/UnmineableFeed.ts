@@ -1,6 +1,5 @@
-import { ReplaySubject, timer } from 'rxjs';
-import * as config from './AppSettingsService';
-import { minerState$ } from '../../models';
+import { withLatestFrom, map, ReplaySubject, timer, throttleTime } from 'rxjs';
+import { ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
 type TimeSeries = {
@@ -45,21 +44,10 @@ export type UnmineableCoin = {
 export const unmineableCoins$ = new ReplaySubject<UnmineableCoin[]>();
 export const unmineableWorkers$ = new ReplaySubject<UnmineableStats>();
 
+const REFRESH_THROTTLE = 1000 * 30;
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
 const updater$ = timer(0, UPDATE_INTERVAL);
-
-async function getCoins() {
-  const wallets = await config.getWallets();
-  const configuredCoins = (await config.getCoins()).filter((c) => c.enabled);
-
-  return configuredCoins.map((c) => {
-    return {
-      symbol: c.symbol,
-      address: wallets.find((w) => w.name === c.wallet)?.address ?? '',
-    };
-  });
-}
 
 async function updateCoin(coin: string, address: string) {
   return unmineableApi.getCoin(coin, address).then((r) => {
@@ -75,7 +63,7 @@ async function updateCoin(coin: string, address: string) {
   });
 }
 
-export async function updateWorkers(uuid: string) {
+async function updateWorkers(uuid: string) {
   const stats = await unmineableApi.getWorkers(uuid).then((w) => {
     const raw = JSON.parse(w);
 
@@ -90,17 +78,42 @@ export async function updateWorkers(uuid: string) {
   unmineableWorkers$.next(stats);
 }
 
-export async function updateCoins() {
-  const coins = (await getCoins()).filter((c) => c.address !== '');
+async function updateCoins(coins: ConfiguredCoin[]) {
   const updatedCoins = await Promise.all(coins.map((cm) => updateCoin(cm.symbol, cm.address)));
+  const currentCoin = coins.find((c) => c.current);
 
   unmineableCoins$.next(updatedCoins);
+
+  if (currentCoin) {
+    const id = updatedCoins.find((c) => c.symbol === currentCoin.symbol)?.uuid;
+
+    if (id) {
+      await updateWorkers(id);
+    }
+  }
 }
 
-updater$.subscribe(() => {
-  const service = minerState$.getValue();
+updater$
+  .pipe(
+    withLatestFrom(minerState$, enabledCoins$),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    map(([_, miner, coins]) => ({ state: miner.state, coins }))
+  )
+  .subscribe(({ state, coins }) => {
+    if (state === 'active') {
+      updateCoins(coins);
+    }
+  });
 
-  if (service.state === 'active') {
-    updateCoins();
-  }
-});
+refreshData$
+  .pipe(
+    throttleTime(REFRESH_THROTTLE),
+    withLatestFrom(minerState$, enabledCoins$),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    map(([_, miner, coins]) => ({ state: miner.state, coins }))
+  )
+  .subscribe(({ state, coins }) => {
+    if (state === 'active') {
+      updateCoins(coins);
+    }
+  });
