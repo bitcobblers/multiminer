@@ -8,13 +8,11 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/NavigateNext';
 
 // Services.
-import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$ } from '../../models';
+import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
-import { updateTicker } from '../services/CoinFeed';
-import { UnmineableStats, unmineableWorkers$, updateCoins } from '../services/UnmineableFeed';
+import { UnmineableStats, unmineableWorkers$ } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
 
-import { enabledCoins$ } from '../services/DataService';
 import { MinerContext } from '../MinerContext';
 
 // Screens.
@@ -28,10 +26,6 @@ export function HomeScreen(): JSX.Element {
   const [currentMinerStats, setCurrentMinerStats] = useState({} as MinerStatistic);
   const [workerStats, setWorkerStats] = useState<UnmineableStats>();
   const minerContext = useContext(MinerContext);
-
-  const refreshData = async () => {
-    await Promise.allSettled([updateCoins(), updateTicker()]);
-  };
 
   useEffect(() => {
     const minerSubscription = minerState$.subscribe((s) => setMinerActive(s.state === 'active'));
@@ -65,7 +59,7 @@ export function HomeScreen(): JSX.Element {
           <NextIcon />
           Next Coin
         </Button>
-        <Button onClick={async () => refreshData()}>
+        <Button onClick={() => refreshData$.next(Date.now())}>
           <RefreshIcon sx={{ pr: '0.2rem' }} />
           Refresh
         </Button>

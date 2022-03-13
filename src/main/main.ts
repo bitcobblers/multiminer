@@ -1,15 +1,25 @@
+/* eslint-disable max-classes-per-file */
 import EventEmitter from 'events';
 import { app, BrowserWindow } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { getAssetPath, getResolveHtmlPath } from './util';
+import { logger } from './logger';
+
+export default class AppUpdater {
+  constructor() {
+    autoUpdater.logger = logger;
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+}
 
 const AppName = 'Unmineable Multi-Miner';
 const defaultSettings = {
   title: AppName,
-  width: 1200,
-  height: 800,
-  minWidth: 1000,
-  minHeight: 600,
+  width: 1260,
+  height: 1024,
+  minWidth: 1260,
+  minHeight: 900,
   show: false,
   icon: getAssetPath('icon.png'),
 };
@@ -23,13 +33,21 @@ class MainWindow {
 
   onEvent: EventEmitter = new EventEmitter();
 
-  constructor(settings: { [key: string]: Setting } | null = null) {
-    this.settings = settings ? { ...settings } : { ...defaultSettings };
+  constructor(settings: { [key: string]: Setting }) {
+    this.settings = { ...settings, ...defaultSettings };
 
     app.on('ready', () => {
       this.window = this.createWindow();
+
+      if (process.env.NODE_ENV !== 'development') {
+        this.window.removeMenu();
+      }
+
       this.onEvent.emit('window-created');
     });
+
+    // eslint-disable-next-line no-new
+    new AppUpdater();
 
     app.on('window-all-closed', this.onWindowAllClosed);
     app.on('activate', this.onActivate);
