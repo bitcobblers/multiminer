@@ -133,67 +133,115 @@ describe('LolMiner Parser', () => {
   });
 
   describe('Summary Tests', () => {
-    const line = 'Total          93.29  24.24   1/0/0  33.7G  223.3   0.417';
+    const nonLHRLine = 'Total          93.29  24.24   1/0/0  33.7G  223.3   0.417';
     const lhrLine = 'Total 66.22 99.16 15/0/0 41.5G 223.2';
     const handler = SummaryLineHandler;
 
     it('Should match against filter', () => {
-      expect(handler.match.test(line)).toBe(true);
+      expect(handler.match.test(nonLHRLine)).toBe(true);
     });
 
     it('Should not match against LHR line', () => {
       expect(handler.match.test(lhrLine)).toBe(false);
     });
 
-    it('Should extract all fields', () => {
-      // Arrange.
-      const updateMiner = jest.fn();
-      const expected: MinerStatistic = {
-        hashrate: 93.29,
-        accepted: 1,
-        rejected: 0,
-        best: '33.7G',
-        power: 223.3,
-        efficiency: 417,
-      };
+    describe('Extractions', () => {
+      const scenarios = [
+        {
+          line: 'Total          93.29  24.24   1/0/0  33.7G  223.3   0.417',
+          stat: {
+            hashrate: 93.29,
+            accepted: 1,
+            rejected: 0,
+            best: '33.7G',
+            power: 223.3,
+            efficiency: 417,
+          },
+        },
+        {
+          line: 'Total          85.87  145.44   1/0/0   9.3G  223.3   0.384',
+          stat: {
+            hashrate: 85.87,
+            accepted: 1,
+            rejected: 0,
+            best: '9.3G',
+            power: 223.3,
+            efficiency: 384,
+          },
+        },
+        {
+          line: 'Total          92.21  0.00   0/0/0    0.0  223.3   0.412                        ',
+          stat: {
+            hashrate: 92.21,
+            accepted: 0,
+            rejected: 0,
+            best: '0.0',
+            power: 223.3,
+            efficiency: 412,
+          },
+        },
+      ];
 
-      // Act.
-      handler.parse(line, jest.fn(), updateMiner);
+      test.each(scenarios)('Given %p', ({ line, stat }) => {
+        // Arrange.
+        const updateMiner = jest.fn();
 
-      // Assert.
-      expect(updateMiner).toBeCalledWith(expected);
+        // Act.
+        handler.parse(line, jest.fn(), updateMiner);
+
+        // Assert.
+        expect(updateMiner).toBeCalledWith(stat);
+      });
     });
   });
 
   describe('Summary LHR Tests', () => {
-    const line = 'Total 66.22 99.16 15/0/0 41.5G 223.2';
+    const lhrLine = 'Total 66.22 99.16 15/0/0 41.5G 223.2';
     const nonLHRLine = 'Total          93.29  24.24   1/0/0  33.7G  223.3   0.417';
     const handler = SummaryLHRLineHandler;
 
     it('Should match against filter', () => {
-      expect(handler.match.test(line)).toBe(true);
+      expect(handler.match.test(lhrLine)).toBe(true);
     });
 
     it('Should not match against non-LHR line', () => {
       expect(handler.match.test(nonLHRLine)).toBe(false);
     });
 
-    it('Should extract all fields', () => {
-      // Arrange.
-      const updateMiner = jest.fn();
-      const expected: MinerStatistic = {
-        hashrate: 66.22,
-        accepted: 15,
-        rejected: 0,
-        best: '41.5G',
-        power: 223.2,
-      };
+    describe('Extractions', () => {
+      const scenarios = [
+        {
+          line: 'Total 66.22 99.16 15/0/0 41.5G 223.2',
+          stat: {
+            hashrate: 66.22,
+            accepted: 15,
+            rejected: 0,
+            best: '41.5G',
+            power: 223.2,
+          },
+        },
+        {
+          line: 'Total           6.75  0.00              0/0/0    0.0  202.5',
+          stat: {
+            hashrate: 6.75,
+            accepted: 0,
+            rejected: 0,
+            best: '0.0',
+            power: 202.5,
+          },
+        },
+      ];
 
-      // Act.
-      handler.parse(line, jest.fn(), updateMiner);
+      test.each(scenarios)('Given %p', ({ line, stat }) => {
+        // Arrange.
+        const updateMiner = jest.fn();
 
-      // Assert.
-      expect(updateMiner).toBeCalledWith(expected);
+        // Act.
+        handler.parse(line, jest.fn(), updateMiner);
+
+        // Assert.
+        expect(updateMiner).toBeCalledWith(stat);
+      });
     });
   });
 

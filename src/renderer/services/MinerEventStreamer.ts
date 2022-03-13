@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, withLatestFrom, map } from 'rxjs';
 
 import { minerStarted$, stdout$ } from './MinerService';
 import { GpuStatistic, MinerStatistic } from '../../models';
@@ -38,25 +38,32 @@ function combine<T>(item: T, other: Partial<T>) {
   return { ...item, ...other };
 }
 
-stdout$.subscribe((line) => {
-  const handler = handlers.find((h) => h.match.test(line) === true);
+stdout$
+  .pipe(
+    withLatestFrom(gpuStatistics$, minerStatistics$),
+    map(([line, prevGpu, prevMiner]) => ({
+      line: line.trim(),
+      prevGpu,
+      prevMiner,
+    }))
+  )
+  .subscribe(({ line, prevGpu, prevMiner }) => {
+    const handler = handlers.find((h) => h.match.test(line) === true);
 
-  handler?.parse(
-    line.trim(),
-    (stat) => {
-      const previous = gpuStatistics$.getValue();
-      const oldStat = previous.find((s) => s.id === stat.id);
-      const newStats = oldStat ? [...previous.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...previous, stat];
+    handler?.parse(
+      line,
+      (stat) => {
+        const oldStat = prevGpu.find((s) => s.id === stat.id);
+        const newStats = oldStat ? [...prevGpu.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...prevGpu, stat];
 
-      newStats.sort((a, b) => a.id.localeCompare(b.id ?? 0));
-      gpuStatistics$.next(newStats);
-    },
-    (stat) => {
-      const previous = minerStatistics$.getValue();
-      minerStatistics$.next(combine(previous, stat));
-    }
-  );
-});
+        newStats.sort((a, b) => a.id.localeCompare(b.id ?? 0));
+        gpuStatistics$.next(newStats);
+      },
+      (stat) => {
+        minerStatistics$.next(combine(prevMiner, stat));
+      }
+    );
+  });
 
 minerStarted$.subscribe(({ miner }) => {
   clearStatistics();
