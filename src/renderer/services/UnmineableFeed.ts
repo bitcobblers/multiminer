@@ -1,4 +1,4 @@
-import { withLatestFrom, map, ReplaySubject, timer } from 'rxjs';
+import { withLatestFrom, map, ReplaySubject, timer, throttleTime } from 'rxjs';
 import { ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
@@ -44,6 +44,7 @@ export type UnmineableCoin = {
 export const unmineableCoins$ = new ReplaySubject<UnmineableCoin[]>();
 export const unmineableWorkers$ = new ReplaySubject<UnmineableStats>();
 
+const REFRESH_THROTTLE = 1000 * 30;
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
 const updater$ = timer(0, UPDATE_INTERVAL);
@@ -106,6 +107,7 @@ updater$
 
 refreshData$
   .pipe(
+    throttleTime(REFRESH_THROTTLE),
     withLatestFrom(minerState$, enabledCoins$),
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     map(([_, miner, coins]) => ({ state: miner.state, coins }))

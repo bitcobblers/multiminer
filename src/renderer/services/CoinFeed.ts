@@ -1,4 +1,4 @@
-import { ReplaySubject, timer } from 'rxjs';
+import { ReplaySubject, timer, throttleTime } from 'rxjs';
 
 import { ALL_COINS, refreshData$ } from '../../models';
 import * as config from './AppSettingsService';
@@ -11,6 +11,7 @@ export type CoinTicker = {
 
 export const ticker$ = new ReplaySubject<CoinTicker[]>();
 
+const REFRESH_THROTTLE = 1000 * 30;
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
 
@@ -51,6 +52,6 @@ updater.subscribe(() => {
   updateTicker();
 });
 
-refreshData$.subscribe(() => {
+refreshData$.pipe(throttleTime(REFRESH_THROTTLE)).subscribe(() => {
   updateTicker();
 });
