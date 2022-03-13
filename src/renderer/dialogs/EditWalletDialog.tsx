@@ -102,7 +102,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
                 value={watch('memo') ?? null}
                 {...register('memo', {
                   pattern: {
-                    value: RegExp(chainInfo?.memo_format ?? '/*/'),
+                    value: RegExp(chainInfo?.memo_format ?? '/.*/'),
                     message: 'The memo provided does not match the format expected for this blockchain.',
                   },
                 })}
