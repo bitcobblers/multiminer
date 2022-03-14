@@ -97,7 +97,6 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               <Stack direction="row">
                 <TextField
                   required
-                  disabled
                   label="Installation Path"
                   value={watch('installationPath') ?? ''}
                   {...register('installationPath', {
