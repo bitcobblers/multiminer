@@ -40,9 +40,13 @@ export function MonitorScreen(): JSX.Element {
             bgcolor: (theme) => `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
             color: (theme) => (theme.palette.mode === 'dark' ? '#ff4343' : '#750f0f'),
           },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'stretch',
+          alignContent: 'stretch',
         }}
       >
-        <AutoScrollTextArea value={data} rows={15} readOnly min-width="99%" />
+        <AutoScrollTextArea value={data} readOnly min-width="99%" />
       </Box>
     </Container>
   );
