@@ -121,16 +121,18 @@ export function App() {
 
   const THEME_KEY = 'theme-mode';
   const [themeMode, setThemeMode] = useState<PaletteMode>((localStorage.getItem(THEME_KEY) as PaletteMode) ?? 'light');
-  const mdTheme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          primary: themeMode === 'dark' ? lightGreen : teal,
-          mode: themeMode,
+  const mdTheme = useMemo(() => {
+    const isDark = themeMode === 'dark';
+    return createTheme({
+      palette: {
+        primary: isDark ? lightGreen : teal,
+        text: {
+          primary: isDark ? '#C9D1D9' : 'rgba(0, 0, 0, 0.87);',
         },
-      }),
-    [themeMode]
-  );
+        mode: themeMode,
+      },
+    });
+  }, [themeMode]);
 
   return (
     <ThemeProvider theme={mdTheme}>
