@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
 import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner } from '../../models';
-import { AlgorithmMenuItem } from '../components/AlgorithmMenuItem';
-import { MinerTypeMenuItem } from '../components/MinerTypeMenuItem';
+import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
+import { dialogApi } from '../../shared/DialogApi';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -26,6 +26,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     watch,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<Omit<Miner, 'id'>>({ defaultValues: miner, mode: 'all' });
 
@@ -50,6 +51,14 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     }
 
     return minerTypeAlgorithms[0].name;
+  };
+
+  const browseFolder = async () => {
+    const path = await dialogApi.getPath();
+
+    if (path !== '') {
+      setValue('installationPath', path);
+    }
   };
 
   return (
@@ -88,6 +97,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               <Stack direction="row">
                 <TextField
                   required
+                  disabled
                   label="Installation Path"
                   value={watch('installationPath') ?? ''}
                   {...register('installationPath', {
@@ -96,7 +106,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                   error={!!errors?.installationPath}
                   helperText={errors?.installationPath?.message}
                 />
-                <Button>Browse</Button>
+                <Button onClick={browseFolder}>Browse</Button>
               </Stack>
               <TextField label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
               <Divider />
