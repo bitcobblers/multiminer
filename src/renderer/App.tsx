@@ -8,6 +8,9 @@ import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, Pal
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
 import { lightGreen, teal } from '@mui/material/colors';
 
+// Components.
+import { Toolbar } from './components/Toolbar';
+
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -97,12 +100,14 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
+                alignItems: 'stretch',
               },
             }}
             variant="persistent"
             open
           >
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+            <Toolbar />
             {themeToggle}
           </Drawer>
           <Switch>{safeReverse(links).map(NavScreen)}</Switch>
