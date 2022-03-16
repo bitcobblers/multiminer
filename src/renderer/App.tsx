@@ -8,9 +8,6 @@ import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, Pal
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
 import { lightGreen, teal } from '@mui/material/colors';
 
-// Components.
-import { Toolbar } from './components/Toolbar';
-
 // Navigation Icons.
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -19,6 +16,9 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
+
+// Components.
+import { Toolbar } from './components/Toolbar';
 
 // Context.
 import { MinerContext } from './MinerContext';
