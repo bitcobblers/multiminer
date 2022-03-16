@@ -1,7 +1,7 @@
 import NextIcon from '@mui/icons-material/NavigateNext';
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Stop from '@mui/icons-material/Stop';
-import { Box, FormControl, IconButton, InputLabel, Select, Tooltip, useTheme } from '@mui/material';
+import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { minerState$ } from 'models';
 import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
