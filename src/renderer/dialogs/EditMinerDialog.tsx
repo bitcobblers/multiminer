@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner } from '../../models';
+import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
 import { MinerReleaseData, getMinerReleases } from '../services/DownloadManager';
@@ -44,6 +44,10 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return selectedMiner?.releases.map((r) => r.tag) ?? [];
   }, [availableMiners, kind]);
 
+  const availableMinersAsMinerInfo = useMemo(() => {
+    return availableMiners.map((m) => AVAILABLE_MINERS.find((x) => x.name === m.name)).filter((m) => m !== undefined) as MinerInfo[];
+  }, [availableMiners]);
+
   useEffect(() => {
     async function init() {
       setAvailableMiners(await getMinerReleases(AVAILABLE_MINERS));
@@ -67,9 +71,11 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return minerTypeAlgorithms[0].name;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const pickVersion = (_current: string) => {
-    // NOTE: Don't remove this parameter.  We need the call to watch() to take place.
+  const pickVersion = (current: string) => {
+    if (current !== undefined && minerTypeVersions.find((ver) => ver === current)) {
+      return current;
+    }
+
     return minerTypeVersions[0];
   };
 
@@ -93,11 +99,11 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                 helperText={errors?.name?.message}
               />
               <TextField required label="Miner" select value={watch('kind')} {...register('kind')}>
-                {availableMiners
+                {availableMinersAsMinerInfo
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((m) => (
                     <MenuItem key={m.name} value={m.name}>
-                      <MinerTypeMenuItem miner={AVAILABLE_MINERS.find((x) => x.name === m.name)!} />
+                      <MinerTypeMenuItem miner={m} />
                     </MenuItem>
                   ))}
               </TextField>
