@@ -16,6 +16,12 @@ contextBridge.exposeInMainWorld('settings', {
   },
 });
 
+contextBridge.exposeInMainWorld('download', {
+  getMinerReleases(owner, repo) {
+    return ipcRenderer.invoke('ipc-getMinerReleases', owner, repo);
+  },
+});
+
 contextBridge.exposeInMainWorld('miner', {
   start(name, coin, path, args) {
     return ipcRenderer.invoke('ipc-startMiner', name, coin, path, args);
