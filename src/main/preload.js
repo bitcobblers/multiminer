@@ -20,6 +20,9 @@ contextBridge.exposeInMainWorld('download', {
   getMinerReleases(owner, repo) {
     return ipcRenderer.invoke('ipc-getMinerReleases', owner, repo);
   },
+  downloadMiner(name, version, url) {
+    return ipcRenderer.invoke('ipc-downloadMiner', name, version, url);
+  },
 });
 
 contextBridge.exposeInMainWorld('miner', {

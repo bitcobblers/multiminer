@@ -38,11 +38,13 @@ async function cacheReleases(descriptors: MinerInfo[]) {
         const releases = (JSON.parse(r) as MinerRelease[]).slice(0, MAX_VERSION_HISTORY);
         const data = {
           name: info.name,
-          releases: releases.map((release) => ({
-            tag: release.tag_name,
-            published: release.published_at,
-            url: release.assets.find((x) => x.content_type === 'application/zip')?.browser_download_url ?? '',
-          })),
+          releases: releases
+            .map((release) => ({
+              tag: release.tag_name,
+              published: release.published_at,
+              url: release.assets.find((x) => x.content_type === 'application/zip')?.browser_download_url ?? '',
+            }))
+            .filter((x) => x.url !== ''),
         } as MinerReleaseData;
 
         return data;
@@ -61,4 +63,15 @@ export async function getMinerReleases() {
   });
 
   return minerReleases;
+}
+
+export async function downloadMiner(name: string, version: string) {
+  const miner = (await getMinerReleases()).find((m) => m.name === name);
+  const url = miner?.releases.find((r) => r.tag === version)?.url;
+
+  if (url !== undefined) {
+    return downloadApi.downloadMiner(name, version, url);
+  }
+
+  return false;
 }
