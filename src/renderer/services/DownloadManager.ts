@@ -1,4 +1,5 @@
-import { MinerInfo } from '../../models';
+import AsyncLock from 'async-lock';
+import { AVAILABLE_MINERS, MinerInfo } from '../../models';
 import { downloadApi } from '../../shared/DownloadApi';
 
 const MAX_VERSION_HISTORY = 10;
@@ -23,7 +24,8 @@ export type MinerReleaseData = {
   }[];
 };
 
-let minerReleases: MinerReleaseData[] | null = null;
+const lock = new AsyncLock();
+let minerReleases = Array<MinerReleaseData>();
 
 async function cacheReleases(descriptors: MinerInfo[]) {
   const miners = await Promise.all(
@@ -51,10 +53,12 @@ async function cacheReleases(descriptors: MinerInfo[]) {
   return miners.filter((miner) => miner !== null) as MinerReleaseData[];
 }
 
-export async function getMinerReleases(descriptors: MinerInfo[]) {
-  if (minerReleases === null) {
-    minerReleases = await cacheReleases(descriptors);
-  }
+export async function getMinerReleases() {
+  await lock.acquire('miners', async () => {
+    if (minerReleases.length === 0) {
+      minerReleases = await cacheReleases(AVAILABLE_MINERS);
+    }
+  });
 
   return minerReleases;
 }

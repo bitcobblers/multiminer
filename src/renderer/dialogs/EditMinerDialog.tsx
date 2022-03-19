@@ -50,7 +50,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
 
   useEffect(() => {
     async function init() {
-      setAvailableMiners(await getMinerReleases(AVAILABLE_MINERS));
+      setAvailableMiners(await getMinerReleases());
     }
 
     init();
