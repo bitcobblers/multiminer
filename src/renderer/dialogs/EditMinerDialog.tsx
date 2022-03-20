@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
-import { DialogTitle, DialogContent, Button, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
-import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner } from '../../models';
+import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
+import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
-import { dialogApi } from '../../shared/DialogApi';
+import { MinerReleaseData, getMinerReleases } from '../services/DownloadManager';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -21,12 +21,13 @@ type EditMinerDialogProps = {
 export function EditMinerDialog(props: EditMinerDialogProps) {
   const { open, miner, existingMiners, onSave, onCancel, ...other } = props;
 
+  const [availableMiners, setAvailableMiners] = useState(Array<MinerReleaseData>());
+
   const {
     register,
     watch,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<Omit<Miner, 'id'>>({ defaultValues: miner, mode: 'all' });
 
@@ -37,6 +38,23 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     const selectedMinerAlgorithms = selectedMiner?.algorithms ?? [];
     return AVAILABLE_ALGORITHMS.filter((alg) => selectedMinerAlgorithms.includes(alg.name));
   }, [kind]);
+
+  const minerTypeVersions = useMemo(() => {
+    const selectedMiner = availableMiners.find((m) => m.name === kind);
+    return selectedMiner?.releases.map((r) => r.tag) ?? [];
+  }, [availableMiners, kind]);
+
+  const availableMinersAsMinerInfo = useMemo(() => {
+    return availableMiners.map((m) => AVAILABLE_MINERS.find((x) => x.name === m.name)).filter((m) => m !== undefined) as MinerInfo[];
+  }, [availableMiners]);
+
+  useEffect(() => {
+    async function init() {
+      setAvailableMiners(await getMinerReleases());
+    }
+
+    init();
+  });
 
   const handleOnSave = handleSubmit((val) => onSave({ ...val, id: miner.id }));
 
@@ -53,12 +71,12 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return minerTypeAlgorithms[0].name;
   };
 
-  const browseFolder = async () => {
-    const path = await dialogApi.getPath();
-
-    if (path !== '') {
-      setValue('installationPath', path);
+  const pickVersion = (current: string) => {
+    if (current !== undefined && minerTypeVersions.includes(current)) {
+      return current;
     }
+
+    return minerTypeVersions[0];
   };
 
   return (
@@ -81,9 +99,18 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                 helperText={errors?.name?.message}
               />
               <TextField required label="Miner" select value={watch('kind')} {...register('kind')}>
-                {AVAILABLE_MINERS.sort((a, b) => a.name.localeCompare(b.name)).map((m) => (
-                  <MenuItem key={m.name} value={m.name}>
-                    <MinerTypeMenuItem miner={m} />
+                {availableMinersAsMinerInfo
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((m) => (
+                    <MenuItem key={m.name} value={m.name}>
+                      <MinerTypeMenuItem miner={m} />
+                    </MenuItem>
+                  ))}
+              </TextField>
+              <TextField required label="Version" select value={pickVersion(watch('version'))} {...register('version')}>
+                {minerTypeVersions.map((version) => (
+                  <MenuItem key={version} value={version}>
+                    {version}
                   </MenuItem>
                 ))}
               </TextField>
@@ -94,19 +121,6 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                   </MenuItem>
                 ))}
               </TextField>
-              <Stack direction="row">
-                <TextField
-                  required
-                  label="Installation Path"
-                  value={watch('installationPath') ?? ''}
-                  {...register('installationPath', {
-                    required: 'The path to the miner installation must be provided.',
-                  })}
-                  error={!!errors?.installationPath}
-                  helperText={errors?.installationPath?.message}
-                />
-                <Button onClick={browseFolder}>Browse</Button>
-              </Stack>
               <TextField label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
               <Divider />
               <CustomDialogActions buttonType="submit" onCancel={handleOnCancel} />

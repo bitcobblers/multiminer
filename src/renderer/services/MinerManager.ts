@@ -5,6 +5,7 @@ import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
 import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
 import { getMiners } from './AppSettingsService';
+import { downloadMiner } from './DownloadManager';
 
 type CoinSelection = {
   miner: Miner;
@@ -89,13 +90,17 @@ async function changeCoin() {
       const { miner, minerInfo, coin, coinInfo, wallet } = selection;
 
       const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, miner.name, getRandom(coinInfo.referrals));
-      const filePath = path.join(miner.installationPath, minerInfo.exe);
+      const filePath = path.join(miner.version, minerInfo.exe);
       const args = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
 
       // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
-      await miningService.startMiner(miner.name, coin.symbol, filePath, args);
+      const downloadResult = await downloadMiner(miner.kind, miner.version);
+
+      if (downloadResult === true) {
+        await miningService.startMiner(miner.name, coin.symbol, miner.kind, minerInfo.exe, miner.version, args);
+      }
     }
   );
 }
