@@ -1,33 +1,22 @@
 import electron, { IpcMainInvokeEvent } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import StreamZip from 'node-stream-zip';
-import { getDownloadUrl, getRestUrl } from '../util';
+import extract from 'extract-zip';
+import { getDownloadUrl, getRestUrl } from '../httpHelper';
 import { SharedModule } from './SharedModule';
 import { logger } from '../logger';
 
-async function delay(seconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-}
-
 async function downloadFile(url: string, savePath: string) {
-  return getDownloadUrl(url).then((r) => {
+  return getDownloadUrl(url).then(async (r) => {
     if (r.ok === false) {
-      logger.error('An error occurred while calling downloading: %s - %s', r.status, r.statusText);
+      logger.error('Download failed: %s - %s', r.status, r.statusText);
       return false;
     }
 
-    r.body.pipe(fs.createWriteStream(savePath, { autoClose: true }));
+    fs.writeFileSync(savePath, await r.buffer());
     logger.info('Finished downloading');
     return true;
   });
-}
-
-async function extractArchive(savePath: string, destination: string) {
-  // eslint-disable-next-line new-cap
-  const zip = new StreamZip.async({ file: savePath });
-  await zip.extract(null, destination);
-  await zip.close();
 }
 
 async function getMinerReleases(_event: IpcMainInvokeEvent, owner: string, repo: string) {
@@ -75,29 +64,20 @@ async function downloadMiner(_event: IpcMainInvokeEvent, name: string, version: 
   fs.mkdirSync(downloadPath, { recursive: true });
 
   logger.info('Downloading miner.');
-  const downloadResult = await downloadFile(url, downloadFileName);
-
-  if (downloadResult === false) {
-    logger.error('Failed to download miner.');
+  if ((await downloadFile(url, downloadFileName)) === false) {
     return false;
   }
 
-  logger.debug('Pausing 1s');
-  await delay(1);
+  logger.info('Extracting archive.');
+  await extract(downloadFileName, { dir: downloadPath });
 
-  logger.debug('Extracting archive.');
-  extractArchive(downloadFileName, downloadPath);
-
-  logger.debug('Removing archive at %s', downloadFileName);
+  logger.info('Removing archive.');
   fs.rmSync(downloadFileName);
 
-  logger.debug('Pausing 1s');
-  await delay(1);
+  logger.info('Arraching files.');
+  await arrangeFiles(downloadPath);
 
-  logger.debug('Arranging files.');
-  arrangeFiles(downloadPath);
-
-  logger.info('Completed installing miner.');
+  logger.info('Successfully installed miner.');
   return true;
 }
 

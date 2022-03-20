@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { getAssetPath, getResolveHtmlPath } from './util';
+import { getAssetPath, getResolveHtmlPath } from './resourceHelper';
 import { logger } from './logger';
 
 export default class AppUpdater {

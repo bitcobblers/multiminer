@@ -1,6 +1,6 @@
 import { IpcMainInvokeEvent } from 'electron';
 import { SharedModule } from './SharedModule';
-import { getRestUrl } from '../util';
+import { getRestUrl } from '../httpHelper';
 
 const TICKER_URL = 'https://api.coingecko.com/api/v3/simple/price';
 

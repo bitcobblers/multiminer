@@ -1,6 +1,6 @@
 import { IpcMainInvokeEvent, shell } from 'electron';
 import { SharedModule } from './SharedModule';
-import { getRestUrl } from '../util';
+import { getRestUrl } from '../httpHelper';
 import { logger } from '../logger';
 
 const TICKER_URL = 'https://api.unmineable.com/v4/address';

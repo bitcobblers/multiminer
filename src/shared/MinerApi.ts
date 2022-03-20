@@ -4,7 +4,7 @@ type StartedCallback = (coin: string, miner: string) => void;
 type ErrorCallback = (message: string) => void;
 
 export interface MinerApi {
-  start: (name: string, coin: string, path: string, args: string) => Promise<string | null>;
+  start: (name: string, coin: string, kind: string, exe: string, version: string, args: string) => Promise<string | null>;
   stop: () => Promise<void>;
   status: () => Promise<{ state: 'active' | 'inactive'; currentCoin: string; miner: string }>;
   receive: (callback: ReceiveCallback) => Promise<void>;

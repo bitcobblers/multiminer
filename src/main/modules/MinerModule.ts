@@ -1,6 +1,7 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import * as fs from 'fs';
-import { IpcMainInvokeEvent } from 'electron';
+import path from 'path';
+import electron, { IpcMainInvokeEvent } from 'electron';
 import { SharedModule } from './SharedModule';
 import { logger } from '../logger';
 
@@ -52,25 +53,26 @@ export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendC
     });
 }
 
-export function launch(path: string, args: string, handlers: LaunchHandlers) {
-  if (fs.existsSync(path) === false) {
+export function launch(exePath: string, args: string, handlers: LaunchHandlers) {
+  if (fs.existsSync(exePath) === false) {
     return handlers.onError(`The path to the miner could not be found: ${path}.`);
   }
 
   try {
-    fs.accessSync(path, fs.constants.X_OK);
+    fs.accessSync(exePath, fs.constants.X_OK);
   } catch (error) {
     return handlers.onError(`The miner is not executable: ${error}`);
   }
 
-  return handlers.onSuccess(spawn(path, args.split(' ')));
+  return handlers.onSuccess(spawn(exePath, args.split(' ')));
 }
 
-function start(event: IpcMainInvokeEvent, name: string, coin: string, path: string, args: string) {
+function start(event: IpcMainInvokeEvent, name: string, coin: string, kind: string, exe: string, version: string, args: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-shadow
   const send = (channel: string, ...args: any[]) => event.sender.send(channel, ...args);
+  const exePath = path.join(electron.app.getPath('userData'), kind, version, exe);
 
-  return launch(path, args, {
+  return launch(exePath, args, {
     onError: (error: string) => {
       logger.error('Miner failed to start: %s', error);
       return error;
@@ -82,7 +84,7 @@ function start(event: IpcMainInvokeEvent, name: string, coin: string, path: stri
 
       attachHandlers(proc, send);
       send('ipc-minerStarted', coin, minerName);
-      logger.info('Started miner with at %s with args = %s', path, args);
+      logger.info('Started miner with at %s with args = %s', exePath, args);
       return null;
     },
   });
