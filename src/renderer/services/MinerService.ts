@@ -32,7 +32,7 @@ minerApi.error((message: string) => {
 export async function startMiner(name: string, coin: string, kind: string, exe: string, version: string, args: string) {
   // eslint-disable-next-line no-console
   console.log(`Starting miner with the following parameters: ${args}`);
-  const error = await minerApi.start(name, coin, exe, kind, version, args);
+  const error = await minerApi.start(name, coin, kind, exe, version, args);
 
   if (error !== null) {
     minerErrors$.next(error);

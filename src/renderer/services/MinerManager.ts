@@ -99,8 +99,7 @@ async function changeCoin() {
       const downloadResult = await downloadMiner(miner.kind, miner.version);
 
       if (downloadResult === true) {
-        // await miningService.startMiner(miner.name, coin.symbol, filePath, args);
-        await miningService.startMiner(miner.name, coin.symbol, miner.kind, minerInfo.exe, miner.version, miner.parameters);
+        await miningService.startMiner(miner.name, coin.symbol, miner.kind, minerInfo.exe, miner.version, args);
       }
     }
   );

@@ -55,7 +55,7 @@ export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendC
 
 export function launch(exePath: string, args: string, handlers: LaunchHandlers) {
   if (fs.existsSync(exePath) === false) {
-    return handlers.onError(`The path to the miner could not be found: ${path}.`);
+    return handlers.onError(`The path to the miner could not be found: ${exePath}.`);
   }
 
   try {
