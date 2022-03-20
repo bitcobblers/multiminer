@@ -72,7 +72,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const pickVersion = (current: string) => {
-    if (current !== undefined && minerTypeVersions.find((ver) => ver === current)) {
+    if (current !== undefined && minerTypeVersions.includes(current)) {
       return current;
     }
 
