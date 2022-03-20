@@ -1,5 +1,7 @@
 import { MinerName, AlgorithmName } from './Enums';
 
+const API_PORT = 60090;
+
 export type MinerInfo = {
   name: MinerName;
   owner: string;
@@ -26,7 +28,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     repo: 'lolMiner-releases',
     assetPattern: /^.+Win64\.zip$/,
     exe: 'lolminer.exe',
-    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor`,
+    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor --apiport ${API_PORT}`,
   },
   // {
   //   name: 'nbminer',

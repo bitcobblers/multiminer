@@ -39,8 +39,8 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 }
 
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
-  const minerName = minerState$.getValue().miner;
-  const miner = (await config.getMiners()).find((m) => m.name === minerName);
+  const minerProfile = minerState$.getValue().profile;
+  const miner = (await config.getMiners()).find((m) => m.name === minerProfile);
   const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
 
   if (miner === undefined) {
@@ -99,14 +99,15 @@ async function changeCoin() {
       const downloadResult = await downloadMiner(miner.kind, miner.version);
 
       if (downloadResult === true) {
-        await miningService.startMiner(miner.name, coin.symbol, miner.kind, minerInfo.exe, miner.version, args);
+        await miningService.startMiner(miner.name, coin.symbol, minerInfo, miner.version, args);
       }
     }
   );
 }
 
-export function setMiner(minerName: string | null) {
-  updateState({ miner: minerName });
+export async function setProfile(profile: string) {
+  const miner = (await getMiners()).find((m) => m.name === profile);
+  updateState({ profile, miner: miner?.kind });
 }
 
 export async function nextCoin() {
@@ -142,11 +143,11 @@ async function setInitialState() {
   if (minerState.state === 'active') {
     // eslint-disable-next-line no-console
     console.log(`Miner already active.  Updating state to reflect.  Coin is ${minerState.currentCoin}.`);
-    updateState(minerState);
+    updateState({ state: 'active' });
   } else {
     // eslint-disable-next-line no-console
     console.log('Miner not active.  Setting default miner to use.');
-    updateState({ miner: defaultMiner?.name });
+    updateState({ profile: defaultMiner?.name, miner: defaultMiner?.kind });
   }
 
   miningService.minerExited$.subscribe(() => {
@@ -156,11 +157,10 @@ async function setInitialState() {
     });
   });
 
-  miningService.minerStarted$.subscribe(({ coin, miner }) => {
+  miningService.minerStarted$.subscribe(({ coin }) => {
     updateState({
       state: 'active',
       currentCoin: coin,
-      miner,
     });
 
     // eslint-disable-next-line promise/catch-or-return

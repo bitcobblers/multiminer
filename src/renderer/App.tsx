@@ -65,7 +65,7 @@ function safeReverse<T>(items: Array<T>) {
 }
 
 function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
-  const [managerState, setManagerState] = useState({ state: 'inactive', currentCoin: '', miner: '' } as MinerState);
+  const [managerState, setManagerState] = useState<MinerState>({ state: 'inactive', currentCoin: '' });
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
