@@ -5,7 +5,7 @@ import { downloadApi } from '../../shared/DownloadApi';
 const MAX_VERSION_HISTORY = 10;
 
 type ReleaseAsset = {
-  content_type: string;
+  name: string;
   browser_download_url: string;
 };
 
@@ -42,7 +42,7 @@ async function cacheReleases(descriptors: MinerInfo[]) {
             .map((release) => ({
               tag: release.tag_name,
               published: release.published_at,
-              url: release.assets.find((x) => x.content_type === 'application/zip')?.browser_download_url ?? '',
+              url: release.assets.find((x) => info.assetPattern.test(x.name))?.browser_download_url ?? '',
             }))
             .filter((x) => x.url !== ''),
         } as MinerReleaseData;

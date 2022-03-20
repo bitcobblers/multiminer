@@ -4,6 +4,7 @@ export type MinerInfo = {
   name: MinerName;
   owner: string;
   repo: string;
+  assetPattern: RegExp;
   algorithms: AlgorithmName[];
   exe: string;
   getArgs: (algorithm: AlgorithmName, cs: string, url: string) => string;
@@ -23,6 +24,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     algorithms: ['ethash', 'etchash'],
     owner: 'lolliedieb',
     repo: 'lolMiner-releases',
+    assetPattern: /^.+Win64\.zip$/,
     exe: 'lolminer.exe',
     getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor`,
   },
