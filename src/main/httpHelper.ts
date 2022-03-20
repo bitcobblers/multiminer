@@ -21,11 +21,11 @@ globalStore.onDidChange('settings', (settings) => {
 });
 
 function callFetch(url: string) {
-  if (proxy.match(/^socks:/i)) {
+  if (proxy.toLowerCase().startsWith('socks://')) {
     return fetch(url, { agent: new SocksProxyAgent(proxy) });
   }
 
-  if (proxy.match(/^http:/i)) {
+  if (proxy.toLowerCase().startsWith('http://')) {
     return fetch(url, { agent: new HttpProxyAgent(proxy) });
   }
 
