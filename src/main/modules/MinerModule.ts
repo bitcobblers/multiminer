@@ -2,6 +2,7 @@ import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import * as fs from 'fs';
 import path from 'path';
 import electron, { IpcMainInvokeEvent } from 'electron';
+import { getRestUrl } from '../httpHelper';
 import { SharedModule } from './SharedModule';
 import { logger } from '../logger';
 
@@ -117,11 +118,16 @@ function status() {
   };
 }
 
+function stats(_event: IpcMainInvokeEvent, port: number) {
+  return getRestUrl(`http://localhost:${port}/`);
+}
+
 export const MinerModule: SharedModule = {
   name: 'miner',
   handlers: {
     'ipc-startMiner': start,
     'ipc-stopMiner': stop,
     'ipc-statusMiner': status,
+    'ipc-statsMiner': stats,
   },
 };

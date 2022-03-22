@@ -11,7 +11,7 @@ import NextIcon from '@mui/icons-material/NavigateNext';
 import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 import { UnmineableStats, unmineableWorkers$ } from '../services/UnmineableFeed';
-import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
+import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregator';
 
 import { MinerContext } from '../MinerContext';
 

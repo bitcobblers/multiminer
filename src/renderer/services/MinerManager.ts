@@ -25,7 +25,13 @@ function getRandom<T>(array: Array<T>) {
 
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
-  minerState$.next({ ...currentState, ...newState });
+  const mergedState = { ...currentState, ...newState };
+
+  // eslint-disable-next-line no-console
+  console.log(`New State: ${JSON.stringify(mergedState)}`);
+
+  minerState$.next(mergedState);
+  // minerState$.next({ ...currentState, ...newState });
 }
 
 function getConnectionString(symbol: string, address: string, memo: string, name: string, referral: string) {
@@ -97,6 +103,10 @@ async function changeCoin() {
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
 
       const downloadResult = await downloadMiner(miner.kind, miner.version);
+
+      updateState({
+        miner: miner.kind,
+      });
 
       if (downloadResult === true) {
         await miningService.startMiner(miner.name, coin.symbol, minerInfo, miner.version, args);

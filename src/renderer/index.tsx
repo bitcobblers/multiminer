@@ -7,6 +7,8 @@ import { UnmineableApi } from '../shared/UnmineableApi';
 import { TickerApi } from '../shared/TickerApi';
 import { DownloadApi } from '../shared/DownloadApi';
 
+import { useLolMiner } from './services/miners/lolminer';
+
 import { cleanup as cleanupDataService } from './services/DataService';
 
 declare global {
@@ -19,6 +21,10 @@ declare global {
     ticker: TickerApi;
   }
 }
+
+window.addEventListener('load', () => {
+  useLolMiner();
+});
 
 window.addEventListener('beforeunload', () => {
   cleanupDataService();

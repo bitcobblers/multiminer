@@ -1,6 +1,4 @@
-import { MinerName, AlgorithmName } from './Enums';
-
-const API_PORT = 60090;
+import { MinerName, AlgorithmName, API_PORT } from './Enums';
 
 export type MinerInfo = {
   name: MinerName;
