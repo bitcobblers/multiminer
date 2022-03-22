@@ -7,6 +7,7 @@ import { UnmineableApi } from '../shared/UnmineableApi';
 import { TickerApi } from '../shared/TickerApi';
 import { DownloadApi } from '../shared/DownloadApi';
 
+import { useScreenScraper } from './services/MinerEventStreamer';
 import { useLolMiner } from './services/miners/lolminer';
 
 import { cleanup as cleanupDataService } from './services/DataService';
@@ -23,6 +24,7 @@ declare global {
 }
 
 window.addEventListener('load', () => {
+  useScreenScraper();
   useLolMiner();
 });
 

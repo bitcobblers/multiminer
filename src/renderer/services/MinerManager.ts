@@ -104,10 +104,6 @@ async function changeCoin() {
 
       const downloadResult = await downloadMiner(miner.kind, miner.version);
 
-      updateState({
-        miner: miner.kind,
-      });
-
       if (downloadResult === true) {
         await miningService.startMiner(miner.name, coin.symbol, minerInfo, miner.version, args);
       }

@@ -40,7 +40,12 @@ export async function startMiner(profile: string, coin: string, miner: MinerInfo
 }
 
 export async function stopMiner() {
-  // eslint-disable-next-line no-console
-  console.log('Stopping miner.');
-  await minerApi.stop();
+  const status = await minerApi.status();
+
+  if (status.state === 'active') {
+    // eslint-disable-next-line no-console
+    console.log('Stopping miner.');
+
+    await minerApi.stop();
+  }
 }

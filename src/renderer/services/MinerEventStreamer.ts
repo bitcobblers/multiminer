@@ -23,6 +23,9 @@ export function setHandlers(miningHandlers: LineScraper[]) {
 export function setHandlerPack(name: string) {
   if (name in handlerPacks) {
     handlers = handlerPacks[name];
+
+    // eslint-disable-next-line no-console
+    console.log(`Set handler pack to ${name}`);
   }
 }
 
@@ -31,18 +34,15 @@ stdout$.subscribe((line) => {
   handler?.parse(line, addGpuStat, addMinerStat);
 });
 
-minerStarted$
-  .pipe(
-    withLatestFrom(minerState$),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    map(([_coin, state]) => ({
-      state,
-    }))
-  )
-  .subscribe(({ state }) => {
-    if (state.state === 'active') {
-      setHandlerPack(state.miner as string);
-    } else {
-      setHandlers([]);
-    }
-  });
+minerState$.subscribe((state) => {
+  if (state.state === 'active') {
+    setHandlerPack(state.miner as string);
+  } else {
+    setHandlers([]);
+  }
+});
+
+export function useScreenScraper() {
+  // eslint-disable-next-line no-console
+  console.log('Using screen scraper');
+}
