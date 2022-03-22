@@ -1,6 +1,4 @@
-import { withLatestFrom, map } from 'rxjs';
-
-import { minerStarted$, stdout$ } from './MinerService';
+import { stdout$ } from './MinerService';
 import { GpuStatistic, minerState$, MinerStatistic } from '../../models';
 import { LolMinerLineParsers } from './scrapers/LolMiner';
 import { addMinerStat, addGpuStat } from './StatisticsAggregator';
