@@ -119,7 +119,7 @@ function status() {
 }
 
 function stats(_event: IpcMainInvokeEvent, port: number) {
-  return getRestUrl(`http://localhost:${port}/`);
+  return getRestUrl(`http://localhost:${port}/`, true);
 }
 
 export const MinerModule: SharedModule = {

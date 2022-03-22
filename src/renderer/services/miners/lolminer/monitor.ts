@@ -55,13 +55,17 @@ function updateStats(stats: MinerAppStatistics) {
   }
 
   stats.Workers.forEach((worker) => {
+    const hashrate = stats.Algorithms[0].Worker_Performance[worker.Index];
+    const efficiency = hashrate === 0 || worker.Power === 0 ? 0 : (hashrate / worker.Power) * 100;
+
     addGpuStat({
       id: worker.Index.toString(),
       name: worker.Name,
-      hashrate: stats.Algorithms[0].Worker_Performance[worker.Index],
+      hashrate,
       accepted: stats.Algorithms[0].Worker_Accepted[worker.Index],
       rejected: stats.Algorithms[0].Worker_Rejected[worker.Index],
       power: worker.Power,
+      efficiency,
       coreClock: worker.CCLK,
       memClock: worker.MCLK,
       coreTemperature: worker.Core_Temp,
@@ -69,11 +73,16 @@ function updateStats(stats: MinerAppStatistics) {
     });
   });
 
+  const totalHashrate = stats.Algorithms[0].Total_Performance;
+  const totalPower = stats.Workers.map((w) => w.Power).reduce((a, b) => a + b, 0);
+  const totalEfficiency = totalHashrate === 0 || totalPower === 0 ? 0 : (totalHashrate / totalPower) * 100;
+
   addMinerStat({
-    hashrate: stats.Algorithms[0].Total_Performance,
-    found: stats.Algorithms[0].Total_Accepted,
+    hashrate: totalHashrate,
+    accepted: stats.Algorithms[0].Total_Accepted,
     rejected: stats.Algorithms[0].Total_Rejected,
-    power: stats.Workers.map((w) => w.Power).reduce((a, b) => a + b, 0),
+    power: totalPower,
+    efficiency: totalEfficiency,
     uptime: `${stats.Session.Uptime} seconds`,
   });
 }

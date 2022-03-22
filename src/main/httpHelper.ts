@@ -36,20 +36,22 @@ export function getDownloadUrl(url: string) {
   return callFetch(url);
 }
 
-export function getRestUrl(url: string) {
+export function getRestUrl(url: string, ignoreProxy = false) {
   logger.debug(`Invoking rest call to ${url}`);
 
-  return callFetch(url)
-    .then((r) => {
-      if (r.ok === false) {
-        logger.error('An error occurred while calling %s - %d: %s', url, r.status, r.statusText);
-        return '';
-      }
+  return ignoreProxy
+    ? fetch(url)
+    : callFetch(url)
+        .then((r) => {
+          if (r.ok === false) {
+            logger.error('An error occurred while calling %s - %d: %s', url, r.status, r.statusText);
+            return '';
+          }
 
-      return r.text();
-    })
-    .catch((error) => {
-      logger.error('An error occurred while calling %s - %o$', url, error);
-      return '';
-    });
+          return r.text();
+        })
+        .catch((error) => {
+          logger.error('An error occurred while calling %s - %o$', url, error);
+          return '';
+        });
 }
