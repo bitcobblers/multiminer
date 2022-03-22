@@ -1,4 +1,4 @@
-import { GpuStatistic, MinerStatistic } from '../../../models';
+import { GpuStatistic, MinerStatistic } from '../../../../models';
 
 const GPU_STATUS_LINE_REGEX = /^GPU (\d+).+\s(\d+\.\d+[GT]).+$/;
 const TOTAL_LINE_REGEX = /^Total\s.+\s(\d+\.\d+[GT])\s.+$/;

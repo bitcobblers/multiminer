@@ -1,6 +1,6 @@
 import { stdout$ } from './MinerService';
 import { GpuStatistic, minerState$, MinerStatistic } from '../../models';
-import { LolMinerLineParsers } from './scrapers/LolMiner';
+import { LolMinerLineParsers } from './miners/lolminer';
 import { addMinerStat, addGpuStat } from './StatisticsAggregator';
 
 type LineScraper = {

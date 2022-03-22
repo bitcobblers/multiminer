@@ -1,5 +1,5 @@
 import { GpuStatistic, MinerStatistic } from '../../../models';
-import { GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler } from '../../../renderer/services/scrapers/LolMiner';
+import { GpuStatusLineHandler, SummaryLineHandler, NewJobLineHandler } from '../../../renderer/services/miners/lolminer/ScreenScraper';
 
 describe('LolMiner Parser', () => {
   describe('Gpu Status Tests', () => {
