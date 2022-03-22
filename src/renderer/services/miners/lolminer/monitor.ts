@@ -112,5 +112,5 @@ monitor$
 
 export function useLolMiner() {
   // eslint-disable-next-line no-console
-  console.log('Enabling LolMiner statistics aggregates');
+  console.log('Enabling LolMiner statistics aggregates.');
 }
