@@ -91,7 +91,7 @@ async function changeCoin() {
 
       const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, miner.name, getRandom(coinInfo.referrals));
       const filePath = path.join(miner.version, minerInfo.exe);
-      const args = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
+      const args = `${minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm])} ${miner.parameters}`;
 
       // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
