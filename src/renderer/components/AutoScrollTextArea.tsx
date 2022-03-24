@@ -2,23 +2,28 @@ import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 
-type AutoScrollTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+type AutoScrollTextAreaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  isPaused?: boolean;
+};
 
 export function AutoScrollTextArea(props: AutoScrollTextAreaProps) {
-  const { value } = props;
+  const { isPaused, ...domProps } = props;
   const theme = useTheme();
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
-    if (textRef.current !== null) {
+    if (!isPaused && textRef.current !== null) {
       textRef.current.scrollTop = textRef.current.scrollHeight;
     }
-  }, [value]);
+
+    // eslint-disable-next-line react/destructuring-assignment
+  }, [isPaused, props.value]);
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return <textarea {...props} ref={textRef} style={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.secondary, height: 'calc(100vh - 10rem)' }} />;
+  return <textarea {...domProps} ref={textRef} style={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.secondary, height: 'calc(100vh - 10rem)' }} />;
 }
 
 AutoScrollTextArea.propTypes = {
   value: PropTypes.string.isRequired,
+  isPaused: PropTypes.bool.isRequired,
 };

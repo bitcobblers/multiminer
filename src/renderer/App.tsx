@@ -23,6 +23,7 @@ import { MinerState, minerState$, minerErrors$ } from '../models';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
+import { minerExited$, minerStarted$ } from './services/MinerService';
 
 const drawerWidth = 200;
 
@@ -71,7 +72,18 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
   useEffect(() => {
     const stateSubscription = minerState$.subscribe((s) => {
       setManagerState(s);
-      enqueueSnackbar(`Miner is now ${s.state}.`);
+    });
+
+    const startedSubscription = minerStarted$.subscribe(({ coin }) => {
+      enqueueSnackbar(`Miner is now mining ${coin}.`);
+    });
+
+    const stoppedSubscription = minerExited$.subscribe((code) => {
+      if (code) {
+        enqueueSnackbar(`Miner exited with code ${code}.`);
+      } else {
+        enqueueSnackbar('Miner exited.');
+      }
     });
 
     const alertSubscription = minerErrors$.subscribe((s) => {
@@ -80,6 +92,8 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
 
     return () => {
       stateSubscription.unsubscribe();
+      startedSubscription.unsubscribe();
+      stoppedSubscription.unsubscribe();
       alertSubscription.unsubscribe();
     };
   }, [enqueueSnackbar]);
