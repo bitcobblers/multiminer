@@ -34,7 +34,6 @@ export function MonitorScreen(): JSX.Element {
       <Divider />
       <Button onClick={() => setIsPaused(!isPaused)}>{isPaused ? <PlayArrowIcon /> : <PauseIcon />}</Button>
       <Button onClick={clearLog}>Clear Log</Button>
-      <Button />
       <Box
         sx={{
           '& .MuiDataGrid-cell--editing': {
