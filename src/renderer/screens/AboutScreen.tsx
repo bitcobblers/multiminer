@@ -49,9 +49,9 @@ export function AboutScreen(): JSX.Element {
       <br />
       <Typography variant="body1" gutterBottom>
         WARNING: Mining places a tremendous amount of stress on your PC components and can lead to can lead to premature failure or permanent damage if configured incorrectly. It also uses additional
-        electricity and increases the heat output of the PC, so be sure to regularly monitor the hardware internals to ensure that they stay within acceptable operating ranges. It is NOT recommended
-        to use this software on a laptop due to the increased risk of components overheating. All mining software in the application is configured by default to run with their default settings and
-        will not automatically apply any overclocking settings. Be sure to check the mining application&apos;s website for documentation on how to configure additional settings.
+        electricity and increases the heat output of the PC, so be sure to regularly monitor the hardware internals to ensure that they stay within acceptable operating ranges. All mining software in
+        the application is configured by default to run with their default settings and will not automatically apply any overclocking settings. Be sure to check the mining application&apos;s website
+        for documentation on how to configure additional settings.
       </Typography>
       <br />
       <Divider />
