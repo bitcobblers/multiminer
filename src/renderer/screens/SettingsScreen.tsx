@@ -35,6 +35,10 @@ export function SettingsScreen() {
     });
   });
 
+  const onReset = () => {
+    reset(defaults.settings);
+  };
+
   const DefaultSpacing = 2;
 
   return (
@@ -133,6 +137,7 @@ export function SettingsScreen() {
           <Button disabled={!isValid} onClick={onSave}>
             Save Changes
           </Button>
+          <Button onClick={onReset}>Restore Defaults</Button>
         </Stack>
       </FormControl>
     </Container>

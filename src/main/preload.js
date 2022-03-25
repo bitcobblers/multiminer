@@ -79,3 +79,18 @@ contextBridge.exposeInMainWorld('ticker', {
     return ipcRenderer.invoke('ipc-getTicker', coins);
   },
 });
+
+contextBridge.exposeInMainWorld('about', {
+  getName() {
+    return ipcRenderer.invoke('ipc-getAppName');
+  },
+  getVersion() {
+    return ipcRenderer.invoke('ipc-getAppVersion');
+  },
+  getElectronVersion() {
+    return ipcRenderer.invoke('ipc-getElectronVersion');
+  },
+  openBrowser(url) {
+    return ipcRenderer.invoke('ipc-openExternalSite', url);
+  },
+});
