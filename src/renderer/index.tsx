@@ -6,6 +6,7 @@ import { DialogApi } from '../shared/DialogApi';
 import { UnmineableApi } from '../shared/UnmineableApi';
 import { TickerApi } from '../shared/TickerApi';
 import { DownloadApi } from '../shared/DownloadApi';
+import { AboutApi } from '../shared/AboutApi';
 
 import { cleanup as cleanupDataService } from './services/DataService';
 
@@ -17,6 +18,7 @@ declare global {
     download: DownloadApi;
     unmineable: UnmineableApi;
     ticker: TickerApi;
+    about: AboutApi;
   }
 }
 
