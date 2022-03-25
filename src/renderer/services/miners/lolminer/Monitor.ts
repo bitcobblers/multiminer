@@ -1,4 +1,4 @@
-import { interval, withLatestFrom, map } from 'rxjs';
+import { interval, withLatestFrom, map, Subject, mergeMap } from 'rxjs';
 import { minerState$, API_PORT } from '../../../../models';
 import { addGpuStat, addMinerStat } from '../../StatisticsAggregator';
 import { minerApi } from '../../../../shared/MinerApi';
@@ -90,8 +90,7 @@ function updateStats(stats: MinerAppStatistics) {
 monitor$
   .pipe(
     withLatestFrom(minerState$),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    map(([_interval, miner]) => ({ miner }))
+    map(([, miner]) => ({ miner }))
   )
   .subscribe(({ miner }) => {
     if (miner.state !== 'active' || miner.miner !== 'lolminer') {
@@ -110,7 +109,13 @@ monitor$
     });
   });
 
+const init$ = new Subject();
+
+init$.pipe(
+  mergeMap(() => monitor$),
+  withLatestFrom(minerState$)
+);
+
 export function useLolMiner() {
-  // eslint-disable-next-line no-console
-  console.log('Enabling LolMiner statistics aggregates.');
+  init$.next(null);
 }

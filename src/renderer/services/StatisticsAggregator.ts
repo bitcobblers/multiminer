@@ -5,8 +5,21 @@ import { GpuStatistic, MinerStatistic } from '../../models';
 export const gpuStatistics$ = new BehaviorSubject<GpuStatistic[]>([]);
 export const minerStatistics$ = new BehaviorSubject<MinerStatistic>({});
 
-const internalGpuStats$ = new Subject<GpuStatistic>();
-const internalMinerStats$ = new Subject<MinerStatistic>();
+const internalGpuStats$ = new Subject<GpuStatistic>().pipe(
+  withLatestFrom(gpuStatistics$),
+  map(([stat, aggregateStats]) => ({
+    stat,
+    aggregateStats,
+  }))
+);
+
+const internalMinerStats$ = new Subject<MinerStatistic>().pipe(
+  withLatestFrom(minerStatistics$),
+  map(([stat, currentStats]) => ({
+    stat,
+    currentStats,
+  }))
+);
 
 function combine<T>(item: T, other: Partial<T>) {
   return { ...item, ...other };
@@ -28,30 +41,14 @@ minerStarted$.subscribe(() => {
   clearStatistics();
 });
 
-internalGpuStats$
-  .pipe(
-    withLatestFrom(gpuStatistics$),
-    map(([stat, aggregateStats]) => ({
-      stat,
-      aggregateStats,
-    }))
-  )
-  .subscribe(({ stat, aggregateStats }) => {
-    const oldStat = aggregateStats.find((s) => s.id === stat.id);
-    const newStats = oldStat ? [...aggregateStats.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...aggregateStats, stat];
+internalGpuStats$.subscribe(({ stat, aggregateStats }) => {
+  const oldStat = aggregateStats.find((s) => s.id === stat.id);
+  const newStats = oldStat ? [...aggregateStats.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...aggregateStats, stat];
 
-    newStats.sort((a, b) => a.id.localeCompare(b.id ?? 0));
-    gpuStatistics$.next(newStats);
-  });
+  newStats.sort((a, b) => a.id.localeCompare(b.id ?? 0));
+  gpuStatistics$.next(newStats);
+});
 
-internalMinerStats$
-  .pipe(
-    withLatestFrom(minerStatistics$),
-    map(([stat, currentStats]) => ({
-      stat,
-      currentStats,
-    }))
-  )
-  .subscribe(({ stat, currentStats }) => {
-    minerStatistics$.next(combine(currentStats, stat));
-  });
+internalMinerStats$.subscribe(({ stat, currentStats }) => {
+  minerStatistics$.next(combine(currentStats, stat));
+});

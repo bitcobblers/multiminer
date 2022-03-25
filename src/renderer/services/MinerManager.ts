@@ -149,12 +149,8 @@ async function setInitialState() {
   const defaultMiner = await getDefaultMiner();
 
   if (minerState.state === 'active') {
-    // eslint-disable-next-line no-console
-    console.log(`Miner already active.  Updating state to reflect.  Coin is ${minerState.currentCoin}.`);
     updateState({ state: 'active' });
   } else {
-    // eslint-disable-next-line no-console
-    console.log('Miner not active.  Setting default miner to use.');
     updateState({ profile: defaultMiner?.name, miner: defaultMiner?.kind });
   }
 
@@ -177,9 +173,6 @@ async function setInitialState() {
 
       // eslint-disable-next-line promise/always-return
       if (c !== undefined) {
-        // eslint-disable-next-line no-console
-        console.log(`Setting runtime for current coin to ${c.duration} hours.`);
-
         timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
       }
     });
