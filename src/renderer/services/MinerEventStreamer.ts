@@ -27,20 +27,20 @@ export function setHandlerPack(name: string) {
   }
 }
 
-stdout$.subscribe((line) => {
-  const handler = handlers.find((h) => h.match.test(line) === true);
-  handler?.parse(line, addGpuStat, addMinerStat);
-});
-
-minerState$.subscribe((state) => {
-  if (state.state === 'active') {
-    setHandlerPack(state.miner as string);
-  } else {
-    setHandlers([]);
-  }
-});
-
 export function useScreenScraper() {
+  stdout$.subscribe((line) => {
+    const handler = handlers.find((h) => h.match.test(line) === true);
+    handler?.parse(line, addGpuStat, addMinerStat);
+  });
+
+  minerState$.subscribe((state) => {
+    if (state.state === 'active') {
+      setHandlerPack(state.miner as string);
+    } else {
+      setHandlers([]);
+    }
+  });
+
   // eslint-disable-next-line no-console
   console.log('Using screen scraper');
 }

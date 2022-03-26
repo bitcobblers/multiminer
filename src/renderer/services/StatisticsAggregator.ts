@@ -5,21 +5,8 @@ import { GpuStatistic, MinerStatistic } from '../../models';
 export const gpuStatistics$ = new BehaviorSubject<GpuStatistic[]>([]);
 export const minerStatistics$ = new BehaviorSubject<MinerStatistic>({});
 
-const internalGpuStats$ = new Subject<GpuStatistic>().pipe(
-  withLatestFrom(gpuStatistics$),
-  map(([stat, aggregateStats]) => ({
-    stat,
-    aggregateStats,
-  }))
-);
-
-const internalMinerStats$ = new Subject<MinerStatistic>().pipe(
-  withLatestFrom(minerStatistics$),
-  map(([stat, currentStats]) => ({
-    stat,
-    currentStats,
-  }))
-);
+const internalGpuStats$ = new Subject<GpuStatistic>();
+const internalMinerStats$ = new Subject<MinerStatistic>();
 
 function combine<T>(item: T, other: Partial<T>) {
   return { ...item, ...other };
@@ -41,14 +28,22 @@ minerStarted$.subscribe(() => {
   clearStatistics();
 });
 
-internalGpuStats$.subscribe(({ stat, aggregateStats }) => {
-  const oldStat = aggregateStats.find((s) => s.id === stat.id);
-  const newStats = oldStat ? [...aggregateStats.filter((s) => s.id !== oldStat.id), combine(oldStat, stat)] : [...aggregateStats, stat];
+internalGpuStats$
+  .pipe(
+    withLatestFrom(gpuStatistics$),
+    map(([stat, allStats]) => ({
+      newStat: stat,
+      oldStat: allStats.find((s) => s.id === stat.id),
+      allStats,
+    })),
+    map(({ newStat, oldStat, allStats }) => (oldStat ? [...allStats.filter((s) => s.id !== oldStat.id), combine(oldStat, newStat)] : [...allStats, newStat])),
+    map((stats) => stats.sort((a, b) => a.id.localeCompare(b.id ?? 0)))
+  )
+  .subscribe((x) => gpuStatistics$.next(x));
 
-  newStats.sort((a, b) => a.id.localeCompare(b.id ?? 0));
-  gpuStatistics$.next(newStats);
-});
-
-internalMinerStats$.subscribe(({ stat, currentStats }) => {
-  minerStatistics$.next(combine(currentStats, stat));
-});
+internalMinerStats$
+  .pipe(
+    withLatestFrom(minerStatistics$),
+    map(([stat, currentStats]) => combine(currentStats, stat))
+  )
+  .subscribe((x) => minerStatistics$.next(x));

@@ -1,4 +1,4 @@
-import { interval, withLatestFrom, map, Subject, mergeMap } from 'rxjs';
+import { interval, withLatestFrom, map } from 'rxjs';
 import { minerState$, API_PORT } from '../../../../models';
 import { addGpuStat, addMinerStat } from '../../StatisticsAggregator';
 import { minerApi } from '../../../../shared/MinerApi';
@@ -87,35 +87,29 @@ function updateStats(stats: MinerAppStatistics) {
   });
 }
 
-monitor$
-  .pipe(
-    withLatestFrom(minerState$),
-    map(([, miner]) => ({ miner }))
-  )
-  .subscribe(({ miner }) => {
-    if (miner.state !== 'active' || miner.miner !== 'lolminer') {
-      return;
-    }
-
-    // eslint-disable-next-line promise/catch-or-return
-    minerApi.stats(API_PORT).then((result) => {
-      // eslint-disable-next-line promise/always-return
-      if (result === '') {
+export function useLolMiner() {
+  monitor$
+    .pipe(
+      withLatestFrom(minerState$),
+      map(([, miner]) => ({ miner }))
+    )
+    .subscribe(({ miner }) => {
+      if (miner.state !== 'active' || miner.miner !== 'lolminer') {
         return;
       }
 
-      const stats = JSON.parse(result) as MinerAppStatistics;
-      updateStats(stats);
+      // eslint-disable-next-line promise/catch-or-return
+      minerApi.stats(API_PORT).then((result) => {
+        // eslint-disable-next-line promise/always-return
+        if (result === '') {
+          return;
+        }
+
+        const stats = JSON.parse(result) as MinerAppStatistics;
+        updateStats(stats);
+      });
     });
-  });
 
-const init$ = new Subject();
-
-init$.pipe(
-  mergeMap(() => monitor$),
-  withLatestFrom(minerState$)
-);
-
-export function useLolMiner() {
-  init$.next(null);
+  // eslint-disable-next-line no-console
+  console.log('Enabled lolMiner support');
 }
