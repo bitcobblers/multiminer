@@ -87,7 +87,7 @@ function updateStats(stats: MinerAppStatistics) {
   });
 }
 
-export function useLolMiner() {
+export function enableLolMiner() {
   monitor$
     .pipe(
       withLatestFrom(minerState$),
@@ -111,5 +111,5 @@ export function useLolMiner() {
     });
 
   // eslint-disable-next-line no-console
-  console.log('Enabled lolMiner support');
+  console.log('Enabled lolMiner support.');
 }

@@ -8,9 +8,8 @@ import { TickerApi } from '../shared/TickerApi';
 import { DownloadApi } from '../shared/DownloadApi';
 import { AboutApi } from '../shared/AboutApi';
 
-import { useScreenScraper } from './services/MinerEventStreamer';
-import { useLolMiner } from './services/miners/lolminer';
-
+import { enableScreenScraper } from './services/MinerEventStreamer';
+import { enableLolMiner } from './services/miners/lolminer';
 import { cleanup as cleanupDataService } from './services/DataService';
 
 declare global {
@@ -26,8 +25,8 @@ declare global {
 }
 
 window.addEventListener('load', () => {
-  useScreenScraper();
-  useLolMiner();
+  enableScreenScraper();
+  enableLolMiner();
 });
 
 window.addEventListener('beforeunload', () => {
