@@ -1,4 +1,4 @@
-import NextIcon from '@mui/icons-material/NavigateNext';
+import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Stop from '@mui/icons-material/Stop';
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
@@ -36,9 +36,11 @@ export function Toolbar() {
         </Tooltip>
         <Separator />
         <Tooltip title="Next Coin">
-          <IconButton disabled={!minerActive || minerContext.miner === null} onClick={async () => nextCoin()}>
-            <NextIcon />
-          </IconButton>
+          <span>
+            <IconButton disabled={!minerActive || minerContext.miner === null} onClick={() => nextCoin()}>
+              <NextIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       </Box>
     </Box>
