@@ -73,6 +73,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
             <Stack spacing={2}>
               <TextField
                 required
+                autoFocus
                 label="Name"
                 value={watch('name') ?? null}
                 {...register('name', {
