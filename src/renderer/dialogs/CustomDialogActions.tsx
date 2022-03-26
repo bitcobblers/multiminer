@@ -5,17 +5,20 @@ interface CustomDialogActionsProps {
   onConfirm?: () => unknown;
   buttonType?: 'submit' | 'button' | 'reset';
   buttonText?: string;
+  secondaryButtonText?: string;
+  primaryButtonDisabled?: boolean;
 }
 
 export const CustomDialogActions = (props: CustomDialogActionsProps) => {
-  const { onConfirm, onCancel, buttonType, buttonText } = props;
+  const { onConfirm, onCancel, buttonType, buttonText, secondaryButtonText, primaryButtonDisabled } = props;
+
   return (
     <DialogActions sx={{ mt: '0.4rem', display: 'flex', '& .MuiButton-root': { flex: 1, height: '3rem' } }}>
-      <Button onClick={() => onConfirm?.()} type={buttonType ?? 'button'}>
+      <Button onClick={() => onConfirm?.()} type={buttonType ?? 'button'} disabled={primaryButtonDisabled}>
         {buttonText ?? 'Save'}
       </Button>
       <Button onClick={() => onCancel()} color="error">
-        Cancel
+        {secondaryButtonText ?? 'Cancel'}
       </Button>
     </DialogActions>
   );
@@ -23,6 +26,8 @@ export const CustomDialogActions = (props: CustomDialogActionsProps) => {
 
 CustomDialogActions.defaultProps = {
   onConfirm: undefined,
+  primaryButtonDisabled: undefined,
   buttonType: 'button',
   buttonText: 'Save',
+  secondaryButtonText: 'Cancel',
 };
