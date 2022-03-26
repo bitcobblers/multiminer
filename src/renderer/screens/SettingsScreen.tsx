@@ -44,10 +44,11 @@ export function SettingsScreen() {
   return (
     <Container>
       <ScreenHeader title="Settings" />
-      <Typography variant="h5">General Settings</Typography>
-      <br />
+      <Typography variant="h5" sx={{ my: 2 }}>
+        General Settings
+      </Typography>
       <FormControl fullWidth>
-        <Stack direction="column" spacing={DefaultSpacing}>
+        <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '15rem' }}>
           <ConfigurableControl description="The name that uniquely identifies this worker.">
             <TextField
               required
@@ -81,15 +82,16 @@ export function SettingsScreen() {
             <TextField label="Proxy Server" {...register('settings.proxy')} />
           </ConfigurableControl>
         </Stack>
-        <br />
-        <Divider />
-        <Typography variant="h5">Connection URLs</Typography>
-        <br />
-        <Stack direction="column" spacing={DefaultSpacing}>
+        <Divider sx={{ my: 2 }} />
+        <Typography variant="h5" sx={{ my: 2 }}>
+          Connection URLs
+        </Typography>
+        <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '20rem' }}>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the ethash algorithm.">
             <TextField
               required
               label="Ethash"
+              fullWidth
               {...register('pools.ethash', {
                 required: 'A pool url must be specified.',
               })}
@@ -101,6 +103,7 @@ export function SettingsScreen() {
             <TextField
               required
               label="Etchash"
+              fullWidth
               {...register('pools.etchash', {
                 required: 'A pool url must be specified.',
               })}
@@ -112,6 +115,7 @@ export function SettingsScreen() {
             <TextField
               required
               label="Kawpow"
+              fullWidth
               {...register('pools.kawpow', {
                 required: 'A pool url must be specified.',
               })}
@@ -123,6 +127,7 @@ export function SettingsScreen() {
             <TextField
               required
               label="RandomX"
+              fullWidth
               {...register('pools.randomx', {
                 required: 'A pool url must be specified.',
               })}

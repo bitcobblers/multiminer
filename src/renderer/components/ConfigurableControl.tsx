@@ -12,7 +12,7 @@ export function ConfigurableControl(props: ConfigurableControlProps) {
 
   return (
     <Grid container sx={{display: 'flex', alignItems: 'center'}}>
-      {children}
+      <div style={{flex: 1}}>{children}</div>
       <Tooltip title={description} sx={{ml: 1}}>
         <LightbulbIcon color="primary" />
       </Tooltip>
