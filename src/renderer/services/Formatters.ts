@@ -7,7 +7,7 @@ export function currency(value: number | undefined, maxDigits = 2) {
 }
 
 export function hashrate(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${value}MH/s`;
+  return value === undefined ? 'N/A' : `${number(value, 2)}MH/s`;
 }
 
 export function shares(accepted: number | undefined, rejected: number | undefined) {
@@ -23,7 +23,7 @@ export function found(accepted: number | undefined, rejected: number | undefined
 }
 
 export function power(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${number(value)}W`;
+  return value === undefined ? 'N/A' : `${number(value, 2)}W`;
 }
 
 export function efficiency(value: number | undefined) {
@@ -32,7 +32,7 @@ export function efficiency(value: number | undefined) {
   }
 
   // TODO: This needs special logic to handle miners that report this in KH/W vs MH/W.
-  return `${number(value)}KH/W`;
+  return `${number(value, 2)}KH/W`;
 }
 
 export function clockSpeed(speed: number | undefined) {

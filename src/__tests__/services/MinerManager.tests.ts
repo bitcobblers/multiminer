@@ -9,8 +9,6 @@ describe('Miner Manager Service', () => {
     const onError = jest.fn();
     const onSuccess = jest.fn();
 
-    manager.setMiner(null);
-
     // Act.
     await manager.selectCoin(onError, onSuccess);
 
@@ -25,7 +23,7 @@ describe('Miner Manager Service', () => {
     jest.spyOn(settings, 'getMiners').mockReturnValue(Promise.resolve([miner]));
     jest.spyOn(settings, 'getCoins').mockReturnValue(Promise.resolve([]));
 
-    manager.setMiner('miner');
+    manager.setProfile('miner');
 
     const onError = jest.fn();
     const onSuccess = jest.fn();
@@ -50,7 +48,7 @@ describe('Miner Manager Service', () => {
     const onError = jest.fn();
     const onSuccess = jest.fn();
 
-    manager.setMiner('miner');
+    manager.setProfile('miner');
 
     // Act.
     await manager.selectCoin(onError, onSuccess);
@@ -73,7 +71,7 @@ describe('Miner Manager Service', () => {
     const onError = jest.fn();
     const onSuccess = jest.fn();
 
-    manager.setMiner('miner');
+    manager.setProfile('miner');
 
     // Act.
     await manager.selectCoin(onError, onSuccess);

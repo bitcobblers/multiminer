@@ -8,6 +8,9 @@ import { TickerApi } from '../shared/TickerApi';
 import { DownloadApi } from '../shared/DownloadApi';
 import { AboutApi } from '../shared/AboutApi';
 
+import { useScreenScraper } from './services/MinerEventStreamer';
+import { useLolMiner } from './services/miners/lolminer';
+
 import { cleanup as cleanupDataService } from './services/DataService';
 
 declare global {
@@ -21,6 +24,11 @@ declare global {
     about: AboutApi;
   }
 }
+
+window.addEventListener('load', () => {
+  useScreenScraper();
+  useLolMiner();
+});
 
 window.addEventListener('beforeunload', () => {
   cleanupDataService();

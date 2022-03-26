@@ -26,14 +26,17 @@ contextBridge.exposeInMainWorld('download', {
 });
 
 contextBridge.exposeInMainWorld('miner', {
-  start(name, coin, kind, exe, version, args) {
-    return ipcRenderer.invoke('ipc-startMiner', name, coin, kind, exe, version, args);
+  start(profile, coin, miner, version, args) {
+    return ipcRenderer.invoke('ipc-startMiner', profile, coin, miner, version, args);
   },
   stop() {
     return ipcRenderer.invoke('ipc-stopMiner');
   },
   status() {
     return ipcRenderer.invoke('ipc-statusMiner');
+  },
+  stats(port) {
+    return ipcRenderer.invoke('ipc-statsMiner', port);
   },
   error(func) {
     ipcRenderer.removeAllListeners('ipc-minerError');

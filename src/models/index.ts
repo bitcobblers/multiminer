@@ -2,7 +2,7 @@ export { Chain, ALL_CHAINS } from './Chains';
 export { CoinDefinition, ALL_COINS } from './CoinDefinition';
 export { Wallet } from './Wallet';
 export { Coin } from './Coin';
-export { AlgorithmName, AlgorithmKind, MinerName } from './Enums';
+export { AlgorithmName, AlgorithmKind, MinerName, API_PORT } from './Enums';
 export { AlgorithmInfo, AVAILABLE_ALGORITHMS } from './AlgorithmInfo';
 export { GeneralSettings, AppSettings } from './AppSettings';
 export { Miner } from './Miner';
