@@ -18,7 +18,7 @@ export const CustomDialogActions = (props: CustomDialogActionsProps) => {
         {buttonText ?? 'Save'}
       </Button>
       <Button onClick={() => onCancel()} color="error">
-        {secondaryButtonText ?? 'cancel'}
+        {secondaryButtonText ?? 'Cancel'}
       </Button>
     </DialogActions>
   );
