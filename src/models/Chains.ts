@@ -7,6 +7,7 @@ export type Chain = {
 
 export const ALL_CHAINS: Chain[] = [
   { name: 'ADA', description: 'Cardano', token_format: '^(([0-9A-Za-z]{57,59})|([0-9A-Za-z]{100,104}))$' },
+  { name: 'ALGO', description: 'Algorand', token_format: '^[A-Z0-9]{58,58}$' },
   { name: 'ATOM', description: 'Cosmos', token_format: '^cosmos1[0-9a-z]{38}$', memo_format: '^[0-9A-Za-z\\-_]{1,120}$' },
   { name: 'BAND', description: 'Band Protocol', token_format: '^band1[0-9a-z]{38}$', memo_format: '^[0-9A-Za-z\\-_]{1,120}$' },
   { name: 'BCH', description: 'Bitcoin Cash', token_format: '^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$|^[0-9A-Za-z]{42,42}$' },
