@@ -16,7 +16,6 @@ export type GpuStatistic = {
 
 export type MinerStatistic = {
   hashrate?: number;
-  found?: number;
   accepted?: number;
   rejected?: number;
   best?: string;

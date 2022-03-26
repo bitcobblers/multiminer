@@ -20,13 +20,15 @@ globalStore.onDidChange('settings', (settings) => {
   proxy = appSettings.settings.proxy as string;
 });
 
-function callFetch(url: string) {
-  if (proxy.toLowerCase().startsWith('socks://')) {
-    return fetch(url, { agent: new SocksProxyAgent(proxy) });
-  }
+function callFetch(url: string, ignoreProxy = false) {
+  if (ignoreProxy === false) {
+    if (proxy.toLowerCase().startsWith('socks://')) {
+      return fetch(url, { agent: new SocksProxyAgent(proxy) });
+    }
 
-  if (proxy.toLowerCase().startsWith('http://')) {
-    return fetch(url, { agent: new HttpProxyAgent(proxy) });
+    if (proxy.toLowerCase().startsWith('http://')) {
+      return fetch(url, { agent: new HttpProxyAgent(proxy) });
+    }
   }
 
   return fetch(url);
@@ -36,10 +38,10 @@ export function getDownloadUrl(url: string) {
   return callFetch(url);
 }
 
-export function getRestUrl(url: string) {
+export function getRestUrl(url: string, ignoreProxy = false) {
   logger.debug(`Invoking rest call to ${url}`);
 
-  return callFetch(url)
+  return callFetch(url, ignoreProxy)
     .then((r) => {
       if (r.ok === false) {
         logger.error('An error occurred while calling %s - %d: %s', url, r.status, r.statusText);

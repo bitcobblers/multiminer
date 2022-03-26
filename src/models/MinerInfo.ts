@@ -1,4 +1,4 @@
-import { MinerName, AlgorithmName } from './Enums';
+import { MinerName, AlgorithmName, API_PORT } from './Enums';
 
 export type MinerInfo = {
   name: MinerName;
@@ -26,7 +26,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     repo: 'lolMiner-releases',
     assetPattern: /^.+Win64\.zip$/,
     exe: 'lolminer.exe',
-    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor`,
+    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor --apiport ${API_PORT}`,
   },
   // {
   //   name: 'nbminer',
