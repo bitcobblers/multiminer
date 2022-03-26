@@ -1,2 +1,2 @@
-export { useLolMiner } from './Monitor';
+export { enableLolMiner } from './Monitor';
 export { LolMinerLineParsers } from './ScreenScraper';

@@ -8,7 +8,7 @@ type ErrorCallback = (message: string) => void;
 export interface MinerApi {
   start: (profile: string, coin: string, miner: { name: MinerName; exe: string }, version: string, args: string) => Promise<string | null>;
   stop: () => Promise<void>;
-  status: () => Promise<{ state: 'active' | 'inactive'; currentCoin: string; miner: string }>;
+  status: () => Promise<{ state: 'active' | 'inactive'; currentCoin: string; miner: MinerName }>;
   stats: (port: number) => Promise<string>;
   receive: (callback: ReceiveCallback) => Promise<void>;
   exited: (callback: ExitedCallback) => Promise<void>;

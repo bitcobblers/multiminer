@@ -27,7 +27,7 @@ export function setHandlerPack(name: string) {
   }
 }
 
-export function useScreenScraper() {
+export function enableScreenScraper() {
   stdout$.subscribe((line) => {
     const handler = handlers.find((h) => h.match.test(line) === true);
     handler?.parse(line, addGpuStat, addMinerStat);
@@ -42,5 +42,5 @@ export function useScreenScraper() {
   });
 
   // eslint-disable-next-line no-console
-  console.log('Using screen scraper');
+  console.log('Enabled screen scraper support.');
 }
