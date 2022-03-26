@@ -27,11 +27,7 @@ function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
   const mergedState = { ...currentState, ...newState };
 
-  // eslint-disable-next-line no-console
-  console.log(`New State: ${JSON.stringify(mergedState)}`);
-
   minerState$.next(mergedState);
-  // minerState$.next({ ...currentState, ...newState });
 }
 
 function getConnectionString(symbol: string, address: string, memo: string, name: string, referral: string) {
@@ -149,7 +145,7 @@ async function setInitialState() {
   const defaultMiner = await getDefaultMiner();
 
   if (minerState.state === 'active') {
-    updateState({ state: 'active' });
+    updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner });
   } else {
     updateState({ profile: defaultMiner?.name, miner: defaultMiner?.kind });
   }
