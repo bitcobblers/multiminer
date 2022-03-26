@@ -26,6 +26,7 @@ export const CustomDialogActions = (props: CustomDialogActionsProps) => {
 
 CustomDialogActions.defaultProps = {
   onConfirm: undefined,
+  primaryButtonDisabled: undefined,
   buttonType: 'button',
   buttonText: 'Save',
   secondaryButtonText: 'Cancel',
