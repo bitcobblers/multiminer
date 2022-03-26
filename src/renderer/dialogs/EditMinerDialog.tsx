@@ -13,13 +13,13 @@ type EditMinerDialogProps = {
   open: boolean;
   miner: Miner;
   existingMiners: Miner[];
-
+  autoReset: boolean;
   onSave: (miner: Miner) => void;
   onCancel: () => void;
 };
 
 export function EditMinerDialog(props: EditMinerDialogProps) {
-  const { open, miner, existingMiners, onSave, onCancel, ...other } = props;
+  const { open, miner, existingMiners, autoReset, onSave, onCancel, ...other } = props;
 
   const [availableMiners, setAvailableMiners] = useState(Array<MinerReleaseData>());
 
@@ -56,7 +56,13 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     init();
   });
 
-  const handleOnSave = handleSubmit((val) => onSave({ ...val, id: miner.id }));
+  const handleOnSave = handleSubmit((val) => {
+    onSave({ ...val, id: miner.id });
+
+    if (autoReset) {
+      reset(miner);
+    }
+  });
 
   const handleOnCancel = () => {
     reset(miner);

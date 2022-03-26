@@ -47,7 +47,7 @@ export function EditMinerControls(props: EditMinerControlsProps) {
   return (
     <Stack direction="row" spacing={1}>
       <RemoveMinerDialog open={removeOpen} onClose={handleRemoveClose} />
-      <EditMinerDialog open={editOpen} miner={miner} existingMiners={existingMiners} onSave={handleEditSave} onCancel={handleEditCancel} />
+      <EditMinerDialog open={editOpen} miner={miner} existingMiners={existingMiners} autoReset={false} onSave={handleEditSave} onCancel={handleEditCancel} />
       <DeleteIcon onClick={handleOnRemoveClick} />
       <EditIcon onClick={handleOnEditClick} />
     </Stack>
