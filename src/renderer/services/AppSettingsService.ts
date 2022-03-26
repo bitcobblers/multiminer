@@ -25,9 +25,7 @@ export const defaults = {
     { symbol: 'TRX', wallet: 'mywallet3', enabled: true, duration: 5 },
   ] as Coin[],
 
-  miners: [
-    { id: '4dbc2b17-348f-4529-859a-7bcdfca20e1e', kind: 'lolminer', name: 'default', enabled: true, installationPath: 'C:\\ethereum\\lolminer\\1.42', algorithm: 'ethash', parameters: '' },
-  ] as Miner[],
+  miners: [{ id: '4dbc2b17-348f-4529-859a-7bcdfca20e1e', kind: 'lolminer', name: 'default', enabled: true, version: '1.46a', algorithm: 'ethash', parameters: '' }] as Miner[],
 
   settings: {
     settings: {

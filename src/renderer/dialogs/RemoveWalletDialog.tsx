@@ -1,7 +1,8 @@
+import { DialogContent, DialogTitle, Divider, Typography } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import { DialogTitle, DialogContent, Button, Typography, Divider } from '@mui/material';
-import { UsedByCoins } from '../components/UsedByCoins';
 import { Coin } from '../../models';
+import { UsedByCoins } from '../components/UsedByCoins';
+import { CustomDialogActions } from './CustomDialogActions';
 
 interface RemoveWalletDialogProps {
   name: string;
@@ -12,14 +13,6 @@ interface RemoveWalletDialogProps {
   onCancel: () => void;
 }
 
-const getPageContent = (isUsedByCoins: number) => {
-  if (isUsedByCoins === 0) {
-    return 'Are you sure you want to remove this wallet?';
-  }
-
-  return `Cannot remove this wallet because it is depended on by ${isUsedByCoins} coin(s).`;
-};
-
 export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
   const { open, name, id, coins, onRemove, onCancel, ...other } = props;
   const isUsedByCoins = coins.length;
@@ -27,16 +20,14 @@ export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Dialog sx={{ '& .MuiDialog-paper': { width: '450px' } }} open={open} {...other}>
-      <DialogTitle>Remove Wallet</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Remove Wallet</DialogTitle>
       <DialogContent dividers>
-        <Typography variant="h6">{getPageContent(coins.length)}</Typography>
-        <br />
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          {isUsedByCoins === 0 ? 'Are you sure you want to remove this wallet?' : `Cannot remove this wallet because it is depended on by ${isUsedByCoins} coin(s).`}
+        </Typography>
         <UsedByCoins coins={coins} />
         <Divider />
-        <Button disabled={isUsedByCoins > 0} onClick={() => onRemove(name, id)}>
-          Yes
-        </Button>
-        <Button onClick={onCancel}>No</Button>
+        <CustomDialogActions buttonType="submit" buttonText="Yes" onConfirm={() => () => onRemove(name, id)} secondaryButtonText="No" onCancel={onCancel} primaryButtonDisabled={isUsedByCoins > 0} />
       </DialogContent>
     </Dialog>
   );

@@ -5,6 +5,7 @@ import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
 import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
 import { getMiners } from './AppSettingsService';
+import { downloadMiner } from './DownloadManager';
 
 type CoinSelection = {
   miner: Miner;
@@ -24,7 +25,9 @@ function getRandom<T>(array: Array<T>) {
 
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
-  minerState$.next({ ...currentState, ...newState });
+  const mergedState = { ...currentState, ...newState };
+
+  minerState$.next(mergedState);
 }
 
 function getConnectionString(symbol: string, address: string, memo: string, name: string, referral: string) {
@@ -38,8 +41,8 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 }
 
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
-  const minerName = minerState$.getValue().miner;
-  const miner = (await config.getMiners()).find((m) => m.name === minerName);
+  const minerProfile = minerState$.getValue().profile;
+  const miner = (await config.getMiners()).find((m) => m.name === minerProfile);
   const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
 
   if (miner === undefined) {
@@ -89,19 +92,26 @@ async function changeCoin() {
       const { miner, minerInfo, coin, coinInfo, wallet } = selection;
 
       const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, miner.name, getRandom(coinInfo.referrals));
-      const filePath = path.join(miner.installationPath, minerInfo.exe);
-      const args = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
+      const filePath = path.join(miner.version, minerInfo.exe);
+      const minerArgs = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
+      const extraArgs = miner.parameters;
+      const mergedArgs = `${minerArgs} ${extraArgs}`;
 
       // eslint-disable-next-line no-console
-      console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${args}`);
+      console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${mergedArgs}`);
 
-      await miningService.startMiner(miner.name, coin.symbol, filePath, args);
+      const downloadResult = await downloadMiner(miner.kind, miner.version);
+
+      if (downloadResult === true) {
+        await miningService.startMiner(miner.name, coin.symbol, minerInfo, miner.version, mergedArgs);
+      }
     }
   );
 }
 
-export function setMiner(minerName: string | null) {
-  updateState({ miner: minerName });
+export async function setProfile(profile: string) {
+  const miner = (await getMiners()).find((m) => m.name === profile);
+  updateState({ profile, miner: miner?.kind });
 }
 
 export async function nextCoin() {
@@ -135,13 +145,9 @@ async function setInitialState() {
   const defaultMiner = await getDefaultMiner();
 
   if (minerState.state === 'active') {
-    // eslint-disable-next-line no-console
-    console.log(`Miner already active.  Updating state to reflect.  Coin is ${minerState.currentCoin}.`);
-    updateState(minerState);
+    updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner });
   } else {
-    // eslint-disable-next-line no-console
-    console.log('Miner not active.  Setting default miner to use.');
-    updateState({ miner: defaultMiner?.name });
+    updateState({ profile: defaultMiner?.name, miner: defaultMiner?.kind });
   }
 
   miningService.minerExited$.subscribe(() => {
@@ -151,11 +157,10 @@ async function setInitialState() {
     });
   });
 
-  miningService.minerStarted$.subscribe(({ coin, miner }) => {
+  miningService.minerStarted$.subscribe(({ coin }) => {
     updateState({
       state: 'active',
       currentCoin: coin,
-      miner,
     });
 
     // eslint-disable-next-line promise/catch-or-return
@@ -164,9 +169,6 @@ async function setInitialState() {
 
       // eslint-disable-next-line promise/always-return
       if (c !== undefined) {
-        // eslint-disable-next-line no-console
-        console.log(`Setting runtime for current coin to ${c.duration} hours.`);
-
         timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
       }
     });

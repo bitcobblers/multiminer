@@ -12,7 +12,7 @@ import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 
 const getEmptyMiner = (): Miner => {
-  return { id: uuid(), kind: 'lolminer', name: '', enabled: false, installationPath: '', algorithm: 'ethash', parameters: '' };
+  return { id: uuid(), kind: 'lolminer', name: '', version: '', enabled: false, algorithm: 'ethash', parameters: '' };
 };
 
 export function MinersScreen() {
@@ -22,11 +22,11 @@ export function MinersScreen() {
   const [miners, setLoadedMiners] = useState(defaults.miners);
 
   useEffect(() => {
-    const readConfigAsync = async () => {
+    const init = async () => {
       setLoadedMiners(await getMiners());
     };
 
-    readConfigAsync();
+    init();
   }, []);
 
   const handleOnAddMiner = () => {
@@ -88,12 +88,12 @@ export function MinersScreen() {
           <Table aria-label="Miners">
             <TableHead>
               <TableRow>
-                <TableCell width="80px" />
-                <TableCell width="40px">Enabled</TableCell>
-                <TableCell width="10%">Miner</TableCell>
-                <TableCell width="10%">Name</TableCell>
-                <TableCell width="10%">Algorithm</TableCell>
-                <TableCell width="70%">Installation Path</TableCell>
+                <TableCell />
+                <TableCell>Enabled</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Miner</TableCell>
+                <TableCell>Version</TableCell>
+                <TableCell>Algorithm</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -103,10 +103,10 @@ export function MinersScreen() {
                     <EditMinerControls miner={m} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
                   </TableCell>
                   <TableCell>{m.enabled ? <CheckIcon /> : <></>}</TableCell>
-                  <TableCell>{m.kind}</TableCell>
                   <TableCell>{m.name}</TableCell>
+                  <TableCell>{m.kind}</TableCell>
+                  <TableCell>{m.version}</TableCell>
                   <TableCell>{m.algorithm}</TableCell>
-                  <TableCell>{m.installationPath}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

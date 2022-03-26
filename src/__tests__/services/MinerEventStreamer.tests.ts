@@ -1,8 +1,11 @@
 import { GpuStatistic, MinerStatistic } from '../../models';
-import { setHandlers, clearStatistics, gpuStatistics$, minerStatistics$ } from '../../renderer/services/MinerEventStreamer';
+import { setHandlers, enableScreenScraper } from '../../renderer/services/MinerEventStreamer';
+import { clearStatistics, gpuStatistics$, minerStatistics$ } from '../../renderer/services/StatisticsAggregator';
 import { stdout$ } from '../../renderer/services/MinerService';
 
 describe('Miner Streaming Service Tests', () => {
+  enableScreenScraper();
+
   it('Clearing handlers should not fire statistics', () => {
     // Arrange.
     setHandlers([]);

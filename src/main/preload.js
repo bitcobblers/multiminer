@@ -16,15 +16,27 @@ contextBridge.exposeInMainWorld('settings', {
   },
 });
 
+contextBridge.exposeInMainWorld('download', {
+  getMinerReleases(owner, repo) {
+    return ipcRenderer.invoke('ipc-getMinerReleases', owner, repo);
+  },
+  downloadMiner(name, version, url) {
+    return ipcRenderer.invoke('ipc-downloadMiner', name, version, url);
+  },
+});
+
 contextBridge.exposeInMainWorld('miner', {
-  start(name, coin, path, args) {
-    return ipcRenderer.invoke('ipc-startMiner', name, coin, path, args);
+  start(profile, coin, miner, version, args) {
+    return ipcRenderer.invoke('ipc-startMiner', profile, coin, miner, version, args);
   },
   stop() {
     return ipcRenderer.invoke('ipc-stopMiner');
   },
   status() {
     return ipcRenderer.invoke('ipc-statusMiner');
+  },
+  stats(port) {
+    return ipcRenderer.invoke('ipc-statsMiner', port);
   },
   error(func) {
     ipcRenderer.removeAllListeners('ipc-minerError');
@@ -65,5 +77,20 @@ contextBridge.exposeInMainWorld('unmineable', {
 contextBridge.exposeInMainWorld('ticker', {
   getTicker(coins) {
     return ipcRenderer.invoke('ipc-getTicker', coins);
+  },
+});
+
+contextBridge.exposeInMainWorld('about', {
+  getName() {
+    return ipcRenderer.invoke('ipc-getAppName');
+  },
+  getVersion() {
+    return ipcRenderer.invoke('ipc-getAppVersion');
+  },
+  getElectronVersion() {
+    return ipcRenderer.invoke('ipc-getElectronVersion');
+  },
+  openBrowser(url) {
+    return ipcRenderer.invoke('ipc-openExternalSite', url);
   },
 });

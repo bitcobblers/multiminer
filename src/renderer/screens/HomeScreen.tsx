@@ -11,7 +11,7 @@ import NextIcon from '@mui/icons-material/NavigateNext';
 import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 import { UnmineableStats, unmineableWorkers$ } from '../services/UnmineableFeed';
-import { gpuStatistics$, minerStatistics$ } from '../services/MinerEventStreamer';
+import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregator';
 
 import { MinerContext } from '../MinerContext';
 
@@ -48,14 +48,14 @@ export function HomeScreen(): JSX.Element {
       <ScreenHeader title="Home" />
       <Divider />
       <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%', '& .MuiButton-root': { minWidth: '8.8rem' } }}>
-        <Button disabled={minerActive || minerContext.miner === null} onClick={async () => startMiner()}>
+        <Button disabled={minerActive || !minerContext.profile} onClick={async () => startMiner()}>
           <PlayArrowIcon /> Start Miner
         </Button>
         <Button disabled={!minerActive} onClick={async () => stopMiner()}>
           <StopIcon />
           Stop Miner
         </Button>
-        <Button disabled={!minerActive || minerContext.miner === null} onClick={async () => nextCoin()}>
+        <Button disabled={!minerActive || !minerContext.profile} onClick={async () => nextCoin()}>
           <NextIcon />
           Next Coin
         </Button>
