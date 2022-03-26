@@ -95,6 +95,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
               <TextField
                 required
+                autoFocus
                 label="Name"
                 value={watch('name') ?? null}
                 {...register('name', {
