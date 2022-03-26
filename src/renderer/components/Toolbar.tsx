@@ -30,17 +30,9 @@ export function Toolbar() {
         <InputLabel id="miner-label">Miner</InputLabel>
         <Select labelId="miner-label" label="Miner"></Select>
       </FormControl> */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Tooltip title="Start Miner">
-          <IconButton disabled={minerActive || minerContext.miner === null} onClick={async () => startMiner()}>
-            <PlayArrow />
-          </IconButton>
-        </Tooltip>
-        <Separator />
-        <Tooltip title="Stop Miner">
-          <IconButton disabled={!minerActive} onClick={async () => stopMiner()}>
-            <Stop />
-          </IconButton>
+      <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+        <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
+          <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop /> : <PlayArrow />}</IconButton>
         </Tooltip>
         <Separator />
         <Tooltip title="Next Coin">
