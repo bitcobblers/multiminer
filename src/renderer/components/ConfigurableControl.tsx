@@ -11,9 +11,9 @@ export function ConfigurableControl(props: ConfigurableControlProps) {
   const { description, children } = props;
 
   return (
-    <Grid container>
+    <Grid container sx={{display: 'flex', alignItems: 'center'}}>
       {children}
-      <Tooltip title={description}>
+      <Tooltip title={description} sx={{ml: 1}}>
         <LightbulbIcon color="primary" />
       </Tooltip>
     </Grid>
