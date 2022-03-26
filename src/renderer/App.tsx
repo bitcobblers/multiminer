@@ -121,10 +121,12 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
             open
           >
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-            <Toolbar />
             {themeToggle}
           </Drawer>
-          <Switch>{safeReverse(links).map(NavScreen)}</Switch>
+          <div style={{ marginBottom: '3.5rem' }}>
+            <Switch>{safeReverse(links).map(NavScreen)}</Switch>
+          </div>
+          <Toolbar drawerWidth={drawerWidth} />
         </Box>
       </Router>
     </MinerContext.Provider>

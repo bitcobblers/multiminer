@@ -1,38 +1,65 @@
 import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Stop from '@mui/icons-material/Stop';
-import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
-import { minerState$ } from 'models';
+import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { MinerState, minerState$, MinerStatistic } from 'models';
 import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
+import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
 
 function Separator() {
   const theme = useTheme();
-  return <span style={{ fontSize: '1.4rem', fontWeight: 'lighter', color: theme.palette.text.disabled }}>|</span>;
+  return <span style={{ fontSize: '1.4rem', fontWeight: 'lighter', color: theme.palette.text.disabled, margin: '0 0.2rem' }}>|</span>;
 }
 
-export function Toolbar() {
+export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
   const minerContext = useContext(MinerContext);
-  const [minerActive, setMinerActive] = useState(false);
+  const theme = useTheme();
+
+  const [minerState, setMinerState] = useState<MinerState>();
+  const minerActive = minerState?.state === 'active';
+
+  const [minerStatistic, setMinerStatistic] = useState<MinerStatistic>();
 
   useEffect(() => {
-    const minerSubscription = minerState$.subscribe((s) => setMinerActive(s.state === 'active'));
+    const minerSubscription = minerState$.subscribe((s) => setMinerState(s));
+    const statsSubscription = minerStatistics$.subscribe((s) => setMinerStatistic(s));
     return () => {
       minerSubscription.unsubscribe();
+      statsSubscription.unsubscribe();
     };
-  }, [minerContext.currentCoin]);
+  }, []);
 
   return (
-    <Box sx={{ mx: '1rem' }}>
+    <Box
+      sx={{
+        width: `calc(100vw - ${drawerWidth}px)`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: minerActive ? 'space-between' : 'flex-end',
+        height: '3.5rem',
+        position: 'fixed',
+        bottom: 0,
+        ml: `${drawerWidth}px`,
+        px: 2,
+        backgroundColor: theme.palette.background.paper,
+        borderTop: `2px solid ${theme.palette.divider}`,
+      }}
+    >
       {/* TODO: add default miner selection (https://github.com/bitcobblers/multiminer/issues/33) */}
-      {/* <FormControl fullWidth size="small" sx={{ mb: '0.5rem' }}>
+      {/* <FormControl size="small" sx={{minWidth: '10rem'}}>
         <InputLabel id="miner-label">Miner</InputLabel>
         <Select labelId="miner-label" label="Miner"></Select>
       </FormControl> */}
+      {minerActive && (
+        <Typography sx={{ mr: 2 }}>
+          <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {minerStatistic?.hashrate} MH/s{' '}
+        </Typography>
+      )}
       <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
         <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
-          <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop /> : <PlayArrow />}</IconButton>
+          <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop color="error" /> : <PlayArrow color="primary" />}</IconButton>
         </Tooltip>
         <Separator />
         <Tooltip title="Next Coin">
