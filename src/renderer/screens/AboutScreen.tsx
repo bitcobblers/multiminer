@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Container, Typography, Divider, Button } from '@mui/material';
-import { ScreenHeader } from '../components';
-import { aboutApi } from '../../shared/AboutApi';
 import { GitHub } from '@mui/icons-material';
+import { Button, Container, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useEffect, useState } from 'react';
+import { aboutApi } from '../../shared/AboutApi';
+import { ScreenHeader } from '../components';
 
 function ExternalLink(props: { label: string; text: string; url: string }) {
   const { label, text, url } = props;
