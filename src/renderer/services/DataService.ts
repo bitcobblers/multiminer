@@ -68,10 +68,6 @@ function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
       return c;
     }
 
-    // if (c.current) {
-    //   updateWorkers(ticker.uuid);
-    // }
-
     return {
       ...c,
       ...{
