@@ -48,7 +48,13 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
     return `Cannot change blockchain.  Already bound to ${coins.length} coins.`;
   };
 
-  const handleOnSave = handleSubmit((val) => onSave({ ...val, id: wallet.id }));
+  const handleOnSave = handleSubmit((val) => {
+    onSave({ ...val, id: wallet.id });
+
+    if (isNew) {
+      reset(wallet);
+    }
+  });
 
   const handleOnCancel = () => {
     reset(wallet);

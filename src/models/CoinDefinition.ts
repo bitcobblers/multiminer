@@ -39,7 +39,7 @@ export const ALL_COINS: CoinDefinition[] = [
     icon: CoinIcons.Algo,
     name: 'Algorand',
     symbol: 'ALGO',
-    blockchains: ['ETH', 'BSC'],
+    blockchains: ['ALGO'],
     referrals: ['4rcp-6phh', 'j8id-kdqh'],
   },
   {
