@@ -1,4 +1,4 @@
-import { withLatestFrom, map, ReplaySubject, timer, throttleTime } from 'rxjs';
+import { withLatestFrom, map, ReplaySubject, timer, throttleTime, filter } from 'rxjs';
 import { ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
 import { unmineableApi } from '../../shared/UnmineableApi';
 
@@ -51,6 +51,10 @@ const updater$ = timer(0, UPDATE_INTERVAL);
 
 async function updateCoin(coin: string, address: string) {
   return unmineableApi.getCoin(coin, address).then((r) => {
+    if (r === '') {
+      return null;
+    }
+
     const raw = JSON.parse(r);
 
     return {
@@ -63,23 +67,36 @@ async function updateCoin(coin: string, address: string) {
   });
 }
 
-async function updateWorkers(uuid: string) {
-  const stats = await unmineableApi.getWorkers(uuid).then((w) => {
-    const raw = JSON.parse(w);
+function updateWorkers(uuid: string) {
+  // eslint-disable-next-line promise/catch-or-return
+  unmineableApi
+    .getWorkers(uuid)
+    .then((w) => {
+      if (w === '') {
+        return null;
+      }
 
-    return {
-      ethash: raw.data.ethash,
-      etchash: raw.data.etchash,
-      kawpow: raw.data.kawpow,
-      randomx: raw.data.randomx,
-    } as UnmineableStats;
-  });
+      const raw = JSON.parse(w);
 
-  unmineableWorkers$.next(stats);
+      return {
+        ethash: raw.data.ethash,
+        etchash: raw.data.etchash,
+        kawpow: raw.data.kawpow,
+        randomx: raw.data.randomx,
+      } as UnmineableStats;
+    })
+    .then((stats) => {
+      // eslint-disable-next-line promise/always-return
+      if (stats !== null) {
+        unmineableWorkers$.next(stats);
+      }
+    });
 }
 
 async function updateCoins(coins: ConfiguredCoin[]) {
-  const updatedCoins = await Promise.all(coins.map((cm) => updateCoin(cm.symbol, cm.address)));
+  const queriedCoins = await Promise.allSettled(coins.map((cm) => updateCoin(cm.symbol, cm.address)));
+  const fullfilledCoins = queriedCoins.filter(({ status }) => status === 'fulfilled').map((p) => (p as PromiseFulfilledResult<UnmineableCoin | null>).value);
+  const updatedCoins = fullfilledCoins.filter((c): c is UnmineableCoin => c !== null);
   const currentCoin = coins.find((c) => c.current);
 
   unmineableCoins$.next(updatedCoins);
@@ -88,7 +105,7 @@ async function updateCoins(coins: ConfiguredCoin[]) {
     const id = updatedCoins.find((c) => c.symbol === currentCoin.symbol)?.uuid;
 
     if (id) {
-      await updateWorkers(id);
+      updateWorkers(id);
     }
   }
 }
@@ -96,24 +113,20 @@ async function updateCoins(coins: ConfiguredCoin[]) {
 updater$
   .pipe(
     withLatestFrom(minerState$, enabledCoins$),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    map(([_, miner, coins]) => ({ state: miner.state, coins }))
+    map(([, miner, coins]) => ({ state: miner.state, coins })),
+    filter(({ state }) => state === 'active')
   )
-  .subscribe(({ state, coins }) => {
-    if (state === 'active') {
-      updateCoins(coins);
-    }
+  .subscribe(({ coins }) => {
+    updateCoins(coins);
   });
 
 refreshData$
   .pipe(
     throttleTime(REFRESH_THROTTLE),
     withLatestFrom(minerState$, enabledCoins$),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    map(([_, miner, coins]) => ({ state: miner.state, coins }))
+    map(([, miner, coins]) => ({ state: miner.state, coins })),
+    filter(({ state }) => state === 'active')
   )
-  .subscribe(({ state, coins }) => {
-    if (state === 'active') {
-      updateCoins(coins);
-    }
+  .subscribe(({ coins }) => {
+    updateCoins(coins);
   });

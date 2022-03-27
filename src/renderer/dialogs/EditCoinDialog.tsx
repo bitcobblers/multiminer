@@ -28,6 +28,7 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
     formState: { errors },
     handleSubmit,
     reset,
+    setValue,
   } = useForm<Coin>({ defaultValues: coin, mode: 'all' });
 
   const handleOnSave = handleSubmit((value) => {
@@ -49,6 +50,19 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
     return compatibleWallets.length === 0 ? 'No compatible wallets' : 'Wallet';
   };
 
+  const pickWallet = (current: string | null) => {
+    if (current === null) {
+      if (compatibleWallets.length > 0) {
+        setValue('wallet', compatibleWallets[0].name);
+        return compatibleWallets[0].name;
+      }
+
+      return '';
+    }
+
+    return current;
+  };
+
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
@@ -68,13 +82,7 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
               </div>
               <Divider />
               <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
-              <TextField
-                label={walletLabel()}
-                select
-                disabled={shouldDisableWalletSelection()}
-                {...register('wallet')}
-                value={watch('wallet') ?? compatibleWallets.length ? compatibleWallets[0].name : ''}
-              >
+              <TextField label={walletLabel()} select disabled={shouldDisableWalletSelection()} {...register('wallet')} value={pickWallet(watch('wallet'))}>
                 {compatibleWallets
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((w) => (
