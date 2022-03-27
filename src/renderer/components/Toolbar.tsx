@@ -1,12 +1,14 @@
 import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Stop from '@mui/icons-material/Stop';
-import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Tooltip, Typography, useTheme, Button } from '@mui/material';
 import { MinerState, minerState$, MinerStatistic } from 'models';
 import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
+
+import { adminApi } from '../../shared/AdminApi';
 
 function Separator() {
   const theme = useTheme();
@@ -58,6 +60,8 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         </Typography>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+        <Button onClick={() => adminApi.unsubscribeAll()}>unsubscribe</Button>
+
         <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
           <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop color="error" /> : <PlayArrow color="primary" />}</IconButton>
         </Tooltip>

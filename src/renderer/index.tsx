@@ -7,6 +7,7 @@ import { UnmineableApi } from '../shared/UnmineableApi';
 import { TickerApi } from '../shared/TickerApi';
 import { DownloadApi } from '../shared/DownloadApi';
 import { AboutApi } from '../shared/AboutApi';
+import { AdminApi } from '../shared/AdminApi';
 
 import { enableScreenScraper } from './services/MinerEventStreamer';
 import { enableLolMiner } from './services/miners/lolminer';
@@ -26,6 +27,7 @@ declare global {
     unmineable: UnmineableApi;
     ticker: TickerApi;
     about: AboutApi;
+    admin: AdminApi;
   }
 }
 

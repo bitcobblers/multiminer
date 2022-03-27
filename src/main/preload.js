@@ -1,5 +1,18 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+contextBridge.exposeInMainWorld('admin', {
+  unsubscribeAll() {
+    const channels = ['ipc-settingChanged', 'ipc-minerError', 'ipc-minerData', 'ipc-minerExited', 'ipc-minerStarted'];
+
+    channels.forEach((c) => {
+      // eslint-disable-next-line no-console
+      console.log(`Removing listeners for channel: ${c}.`);
+
+      ipcRenderer.removeAllListeners(c);
+    });
+  },
+});
+
 contextBridge.exposeInMainWorld('settings', {
   read(key) {
     return ipcRenderer.invoke('ipc-readSetting', key);
@@ -11,8 +24,7 @@ contextBridge.exposeInMainWorld('settings', {
     ipcRenderer.invoke('ipc-watchSetting', key);
   },
   changed(func) {
-    const ref = ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
-    return () => ref.removeAllListeners('ipc-settingChanged');
+    ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
   },
 });
 
@@ -39,20 +51,16 @@ contextBridge.exposeInMainWorld('miner', {
     return ipcRenderer.invoke('ipc-statsMiner', port);
   },
   error(func) {
-    const ref = ipcRenderer.on('ipc-minerError', (_event, ...args) => func(...args));
-    return () => ref.removeAllListeners('ipc-minerError');
+    ipcRenderer.on('ipc-minerError', (_event, ...args) => func(...args));
   },
   receive(func) {
-    const ref = ipcRenderer.on('ipc-minerData', (_event, ...args) => func(...args));
-    return () => ref.removeAllListeners('ipc-minerData');
+    ipcRenderer.on('ipc-minerData', (_event, ...args) => func(...args));
   },
   exited(func) {
-    const ref = ipcRenderer.on('ipc-minerExited', (_event, ...args) => func(...args));
-    return () => ref.removeAllListeners('ipc-minerExited');
+    ipcRenderer.on('ipc-minerExited', (_event, ...args) => func(...args));
   },
   started(func) {
-    const ref = ipcRenderer.on('ipc-minerStarted', (_event, ...args) => func(...args));
-    return () => ref.removeAllListeners('ipc-minerStarted');
+    ipcRenderer.on('ipc-minerStarted', (_event, ...args) => func(...args));
   },
 });
 
