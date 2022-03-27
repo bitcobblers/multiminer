@@ -23,6 +23,27 @@ describe('Chains Format Validation', () => {
     });
   });
 
+  describe('ALGO', () => {
+    const cases = [
+      'NW6PSNWSPPWOKDQ7WGATTCNM4B7KLNHNXIY44R7DT6TBRC3QHF46C4FHRA',
+      'XMZ5KZVFPITXAAVCC2ZTTIKRMIGIZ5GNWVOYMQ7O7YKM67HPUR22PBEEHI',
+      'ZW3ISEHZUHPO7OZGMKLKIIMKVICOUDRCERI454I3DB2BH52HGLSO67W754',
+      '3DYPOYVFDKTQKNUUTLLPJSK3PN44VIZW6I42QECXQ7O3HZN2L2SJGECLZU',
+      'BP4HZ6W6TTEHTKQ2SGRB4JMJSQAKDHCVEDZJ4JDF7CDMXFF7E7RZVYOOFU',
+    ];
+
+    const chain = ALL_CHAINS.find((c) => c.name === 'ALGO')!;
+    const format = new RegExp(chain.token_format);
+
+    test.each(cases)('Should match %p', (address) => {
+      // Act.
+      const result = format.test(address);
+
+      // Assert.
+      expect(result).toBe(true);
+    });
+  });
+
   describe('ATOM', () => {
     const cases = [
       'cosmos1ug4fwtd7t9slhundztj2rsdyxnmgvuhge7pcdw',

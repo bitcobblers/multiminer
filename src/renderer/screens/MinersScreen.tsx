@@ -83,7 +83,7 @@ export function MinersScreen() {
           },
         }}
       >
-        <EditMinerDialog key="edit-new-miner" open={newOpen} miner={newMiner} existingMiners={miners} onSave={addMiner} onCancel={() => setNewOpen(false)} />
+        <EditMinerDialog key="edit-new-miner" open={newOpen} miner={newMiner} existingMiners={miners} autoReset onSave={addMiner} onCancel={() => setNewOpen(false)} />
         <TableContainer>
           <Table aria-label="Miners">
             <TableHead>
