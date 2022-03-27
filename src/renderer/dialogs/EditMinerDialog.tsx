@@ -57,7 +57,11 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   });
 
   const handleOnSave = handleSubmit((val) => {
-    onSave({ ...val, id: miner.id });
+    if (watch('version') === '') {
+      onSave({ ...val, id: miner.id, version: minerTypeVersions[0] });
+    } else {
+      onSave({ ...val, id: miner.id });
+    }
 
     if (autoReset) {
       reset(miner);
@@ -78,11 +82,11 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   const pickVersion = (current: string) => {
-    if (current !== undefined && minerTypeVersions.includes(current)) {
-      return current;
+    if (current === undefined || minerTypeVersions.includes(current) === false) {
+      return minerTypeVersions[0];
     }
 
-    return minerTypeVersions[0];
+    return current;
   };
 
   return (
