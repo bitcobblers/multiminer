@@ -123,9 +123,15 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
             {themeToggle}
           </Drawer>
-          <div style={{ marginBottom: '3.5rem' }}>
+          <Box
+            sx={{
+              marginBottom: '3.5rem',
+              flex: 1,
+              '& .MuiContainer-root': { ml: 0 },
+            }}
+          >
             <Switch>{safeReverse(links).map(NavScreen)}</Switch>
-          </div>
+          </Box>
           <Toolbar drawerWidth={drawerWidth} />
         </Box>
       </Router>
