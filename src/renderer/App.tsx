@@ -17,6 +17,9 @@ import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
+// Components.
+import { Toolbar } from './components/Toolbar';
+
 // Context.
 import { MinerContext } from './MinerContext';
 import { MinerState, minerState$, minerErrors$ } from '../models';
@@ -111,6 +114,7 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
+                alignItems: 'stretch',
               },
             }}
             variant="persistent"
@@ -119,7 +123,10 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
             {themeToggle}
           </Drawer>
-          <Switch>{safeReverse(links).map(NavScreen)}</Switch>
+          <div style={{ marginBottom: '3.5rem' }}>
+            <Switch>{safeReverse(links).map(NavScreen)}</Switch>
+          </div>
+          <Toolbar drawerWidth={drawerWidth} />
         </Box>
       </Router>
     </MinerContext.Provider>
