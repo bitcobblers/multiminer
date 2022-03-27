@@ -82,7 +82,7 @@ export function SettingsScreen() {
             <TextField label="Proxy Server" {...register('settings.proxy')} />
           </ConfigurableControl>
         </Stack>
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{ mt: 2 }} />
         <Typography variant="h5" sx={{ my: 2 }}>
           Connection URLs
         </Typography>
