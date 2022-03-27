@@ -13,11 +13,6 @@ import { enableScreenScraper } from './services/MinerEventStreamer';
 import { enableLolMiner } from './services/miners/lolminer';
 import { enableDataService } from './services/DataService';
 
-import MinerService from './services/MinerService';
-import AppSettingsService from './services/AppSettingsService';
-
-const services = [MinerService, AppSettingsService];
-
 declare global {
   interface Window {
     settings: SettingsApi;
@@ -35,24 +30,6 @@ window.addEventListener('load', () => {
   enableScreenScraper();
   enableLolMiner();
   enableDataService();
-
-  services.forEach((s) => {
-    // eslint-disable-next-line no-console
-    console.log(`Loading ${s.name}.`);
-
-    s.load();
-  });
-});
-
-window.addEventListener('beforeunload', () => {
-  // cleanupDataService();
-
-  services.forEach((s) => {
-    // eslint-disable-next-line no-console
-    console.log(`Unoading ${s.name}.`);
-
-    s.unload();
-  });
 });
 
 render(<App />, document.getElementById('root'));
