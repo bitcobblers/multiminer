@@ -3,7 +3,7 @@ import { Button, Stack, TextField, Container, Typography, Divider, FormControl }
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
-import { AppSettings } from 'models/AppSettings';
+import { AppSettings } from '../../models';
 import { ScreenHeader, ConfigurableControl } from '../components';
 import { getAppSettings, setAppSettings, defaults } from '../services/AppSettingsService';
 

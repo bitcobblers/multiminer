@@ -1,4 +1,5 @@
 import { MinerName } from '../models';
+import UnsubscribeMethod from './UnsubscribeMethod';
 
 type ReceiveCallback = (data: string) => void;
 type ExitedCallback = (code: number | void) => void;
@@ -10,10 +11,10 @@ export interface MinerApi {
   stop: () => Promise<void>;
   status: () => Promise<{ state: 'active' | 'inactive'; currentCoin: string; miner: MinerName }>;
   stats: (port: number) => Promise<string>;
-  receive: (callback: ReceiveCallback) => Promise<void>;
-  exited: (callback: ExitedCallback) => Promise<void>;
-  started: (callback: StartedCallback) => Promise<void>;
-  error: (callback: ErrorCallback) => Promise<void>;
+  receive: (callback: ReceiveCallback) => Promise<UnsubscribeMethod>;
+  exited: (callback: ExitedCallback) => Promise<UnsubscribeMethod>;
+  started: (callback: StartedCallback) => Promise<UnsubscribeMethod>;
+  error: (callback: ErrorCallback) => Promise<UnsubscribeMethod>;
 }
 
 export const minerApi = window.miner ?? {
@@ -21,8 +22,8 @@ export const minerApi = window.miner ?? {
   stop: () => Promise.resolve(),
   status: () => Promise.resolve({}),
   stats: () => Promise.resolve(''),
-  receive: () => Promise.resolve(),
-  exited: () => Promise.resolve(),
-  started: () => Promise.resolve(),
-  error: () => Promise.resolve(),
+  receive: () => Promise.resolve(() => {}),
+  exited: () => Promise.resolve(() => {}),
+  started: () => Promise.resolve(() => {}),
+  error: () => Promise.resolve(() => {}),
 };

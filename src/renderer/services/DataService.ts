@@ -68,10 +68,6 @@ function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
       return c;
     }
 
-    // if (c.current) {
-    //   updateWorkers(ticker.uuid);
-    // }
-
     return {
       ...c,
       ...{
@@ -133,5 +129,22 @@ export function cleanup() {
   configWatcherSubscription?.unsubscribe();
 }
 
-// One-time load.
-loadCoins();
+export async function enableDataService() {
+  const loadedCoins = (await config.getCoins()).filter((c) => c.enabled);
+  const wallets = await config.getWallets();
+
+  enabledCoins$.next(
+    loadedCoins.map((c) => {
+      const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
+      const wallet = wallets.find((w) => c.wallet === w.name);
+
+      return {
+        current: false,
+        icon: cd?.icon ?? '',
+        symbol: c.symbol,
+        duration: Number(c.duration),
+        address: wallet?.address ?? '',
+      };
+    })
+  );
+}

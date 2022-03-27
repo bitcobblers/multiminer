@@ -10,7 +10,12 @@ import { AboutApi } from '../shared/AboutApi';
 
 import { enableScreenScraper } from './services/MinerEventStreamer';
 import { enableLolMiner } from './services/miners/lolminer';
-import { cleanup as cleanupDataService } from './services/DataService';
+import { enableDataService } from './services/DataService';
+
+import MinerService from './services/MinerService';
+import AppSettingsService from './services/AppSettingsService';
+
+const services = [MinerService, AppSettingsService];
 
 declare global {
   interface Window {
@@ -27,10 +32,25 @@ declare global {
 window.addEventListener('load', () => {
   enableScreenScraper();
   enableLolMiner();
+  enableDataService();
+
+  services.forEach((s) => {
+    // eslint-disable-next-line no-console
+    console.log(`Loading ${s.name}.`);
+
+    s.load();
+  });
 });
 
 window.addEventListener('beforeunload', () => {
-  cleanupDataService();
+  // cleanupDataService();
+
+  services.forEach((s) => {
+    // eslint-disable-next-line no-console
+    console.log(`Unoading ${s.name}.`);
+
+    s.unload();
+  });
 });
 
 render(<App />, document.getElementById('root'));

@@ -1,7 +1,9 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 import { Subject } from 'rxjs';
 import { Coin, Wallet, Miner, AppSettings } from '../../models';
 import { settingsApi } from '../../shared/SettingsApi';
+import { SubscriptionService } from './SubscriptionService';
 
 type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
 
@@ -78,13 +80,25 @@ settingsApi.watch('coins');
 settingsApi.watch('miners');
 settingsApi.watch('settings');
 
-settingsApi.changed((key, content) => {
-  // eslint-disable-next-line no-console
-  console.log(`Config change detected: ${key}: ${content}`);
-
-  const typedKey = key as keyof WatchersObservable;
-
-  if (typedKey in watchers$) {
-    watchers$[typedKey].next(JSON.parse(content));
+class AppSettingsService extends SubscriptionService {
+  constructor() {
+    super('AppSettingsService');
   }
-});
+
+  public async load() {
+    this.addSubscription(
+      await settingsApi.changed((key, content) => {
+        // eslint-disable-next-line no-console
+        console.log(`Config change detected: ${key}: ${content}`);
+
+        const typedKey = key as keyof WatchersObservable;
+
+        if (typedKey in watchers$) {
+          watchers$[typedKey].next(JSON.parse(content));
+        }
+      })
+    );
+  }
+}
+
+export default new AppSettingsService();
