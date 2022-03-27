@@ -86,7 +86,6 @@ export function SettingsScreen() {
             <TextField label="Proxy Server" {...register('settings.proxy')} fullWidth />
           </ConfigurableControl>
         </Stack>
-
         <Divider sx={{ mt: 2 }} />
         <Typography variant="h5" sx={{ my: 2 }}>
           Connection URLs
@@ -141,8 +140,7 @@ export function SettingsScreen() {
             />
           </ConfigurableControl>
         </Stack>
-        <br />
-        <Divider />
+        <Divider sx={{ mt: 2, mb: 1 }} />
         <Stack direction="row">
           <Button disabled={!isValid} onClick={onSave}>
             Save Changes
