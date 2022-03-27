@@ -53,6 +53,7 @@ export function SettingsScreen() {
             <TextField
               required
               label="Worker Name"
+              fullWidth
               {...register('settings.workerName', {
                 required: 'A worker name must be provided.',
                 maxLength: { value: 30, message: 'A worker name cannot be more than 30 characters long.' },
@@ -66,6 +67,7 @@ export function SettingsScreen() {
             <TextField
               required
               label="Update Interval (minutes)"
+              fullWidth
               type="number"
               {...register('settings.updateInterval', {
                 required: 'The interval must be specified.',
@@ -76,17 +78,20 @@ export function SettingsScreen() {
             />
           </ConfigurableControl>
           <ConfigurableControl description="How often to wait between invocations of the mining software.">
-            <TextField label="Cooldown Interval (seconds)" type="number" {...register('settings.cooldownInterval')} />
-          </ConfigurableControl>
-          <ConfigurableControl description="The optional proxy server to use for network calls.">
-            <TextField label="Proxy Server" {...register('settings.proxy')} />
+            <TextField label="Cooldown Interval (seconds)" fullWidth type="number" {...register('settings.cooldownInterval')} />
           </ConfigurableControl>
         </Stack>
+        <Stack sx={{ width: '25rem', mt: 2 }}>
+          <ConfigurableControl description="The optional proxy server to use for network calls.">
+            <TextField label="Proxy Server" {...register('settings.proxy')} fullWidth />
+          </ConfigurableControl>
+        </Stack>
+
         <Divider sx={{ mt: 2 }} />
         <Typography variant="h5" sx={{ my: 2 }}>
           Connection URLs
         </Typography>
-        <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '20rem' }}>
+        <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '25rem' }}>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the ethash algorithm.">
             <TextField
               required
