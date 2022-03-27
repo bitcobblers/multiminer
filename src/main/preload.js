@@ -10,9 +10,6 @@ contextBridge.exposeInMainWorld('settings', {
   watch(key) {
     ipcRenderer.invoke('ipc-watchSetting', key);
   },
-  unwatchAll() {
-    ipcRenderer.invoke('ipc-unwatchSettings');
-  },
   changed(func) {
     ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
   },

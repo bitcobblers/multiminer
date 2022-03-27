@@ -5,7 +5,7 @@ import { logger } from '../logger';
 
 type Unsubscribe = () => void;
 
-const subscriptions = Array<Unsubscribe>();
+const watchers = new Map<string, Unsubscribe>();
 
 async function readSetting(_event: IpcMainInvokeEvent, key: string) {
   let result = null;
@@ -26,16 +26,14 @@ async function writeSetting(_event: IpcMainInvokeEvent, key: string, value: stri
 
 function watchSetting(event: IpcMainInvokeEvent, key: string) {
   logger.debug('Watching for settings changes on: %s', key);
-  const unsubscribe = globalStore.onDidChange(key, (change) => {
-    event.sender.send('ipc-settingChanged', key, change);
-  });
 
-  subscriptions.push(() => unsubscribe());
-}
+  if (watchers.has(key) === false) {
+    const unsubscribe = globalStore.onDidChange(key, (change) => {
+      event.sender.send('ipc-settingChanged', key, change);
+    });
 
-function unwatchAll() {
-  subscriptions.forEach((s) => s());
-  subscriptions.splice(0, subscriptions.length);
+    watchers.set(key, unsubscribe);
+  }
 }
 
 export const SettingsModule: SharedModule = {
@@ -44,7 +42,6 @@ export const SettingsModule: SharedModule = {
     'ipc-readSetting': readSetting,
     'ipc-writeSetting': writeSetting,
     'ipc-watchSetting': watchSetting,
-    'ipc-unwatchSettings': unwatchAll,
   },
   reset: () => {
     globalStore.set('wallets', '');
