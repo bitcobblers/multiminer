@@ -3,26 +3,6 @@ import * as config from './AppSettingsService';
 import { CoinTicker, ticker$ } from './CoinFeed';
 import { UnmineableCoin, unmineableCoins$ } from './UnmineableFeed';
 
-async function loadCoins() {
-  const loadedCoins = (await config.getCoins()).filter((c) => c.enabled);
-  const wallets = await config.getWallets();
-
-  enabledCoins$.next(
-    loadedCoins.map((c) => {
-      const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
-      const wallet = wallets.find((w) => c.wallet === w.name);
-
-      return {
-        current: false,
-        icon: cd?.icon ?? '',
-        symbol: c.symbol,
-        duration: Number(c.duration),
-        address: wallet?.address ?? '',
-      };
-    })
-  );
-}
-
 function minerStateChanged(state: MinerState) {
   // eslint-disable-next-line no-console
   console.log(`Miner state changed to ${state.state}`);
