@@ -157,7 +157,7 @@ export function App() {
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
+      <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
         <AppContent
           themeToggle={
             <div className="theme-toggle">
