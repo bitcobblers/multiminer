@@ -1,18 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('admin', {
-  unsubscribeAll() {
-    const channels = ['ipc-settingChanged', 'ipc-minerError', 'ipc-minerData', 'ipc-minerExited', 'ipc-minerStarted'];
-
-    channels.forEach((c) => {
-      // eslint-disable-next-line no-console
-      console.log(`Removing listeners for channel: ${c}.`);
-
-      ipcRenderer.removeAllListeners(c);
-    });
-  },
-});
-
 contextBridge.exposeInMainWorld('settings', {
   read(key) {
     return ipcRenderer.invoke('ipc-readSetting', key);
@@ -22,6 +9,9 @@ contextBridge.exposeInMainWorld('settings', {
   },
   watch(key) {
     ipcRenderer.invoke('ipc-watchSetting', key);
+  },
+  unwatchAll() {
+    ipcRenderer.invoke('ipc-unwatchSettings');
   },
   changed(func) {
     ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));

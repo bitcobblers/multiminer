@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { App } from './App';
-import { SettingsApi } from '../shared/SettingsApi';
+import { settingsApi, SettingsApi } from '../shared/SettingsApi';
 import { MinerApi } from '../shared/MinerApi';
 import { DialogApi } from '../shared/DialogApi';
 import { UnmineableApi } from '../shared/UnmineableApi';
@@ -30,6 +30,10 @@ window.addEventListener('load', () => {
   enableScreenScraper();
   enableLolMiner();
   enableDataService();
+});
+
+window.addEventListener('unload', () => {
+  settingsApi.unwatchAll();
 });
 
 render(<App />, document.getElementById('root'));
