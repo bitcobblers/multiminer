@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
+import * as formatter from 'renderer/services/Formatters';
 
 import { adminApi } from '../../shared/AdminApi';
 
@@ -56,7 +57,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
       </FormControl> */}
       {minerActive && (
         <Typography sx={{ mr: 2 }}>
-          <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {minerStatistic?.hashrate} MH/s{' '}
+          <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
         </Typography>
       )}
       <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>

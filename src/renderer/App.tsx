@@ -123,9 +123,15 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
             {themeToggle}
           </Drawer>
-          <div style={{ marginBottom: '3.5rem' }}>
+          <Box
+            sx={{
+              marginBottom: '3.5rem',
+              flex: 1,
+              '& .MuiContainer-root': { ml: 0 },
+            }}
+          >
             <Switch>{safeReverse(links).map(NavScreen)}</Switch>
-          </div>
+          </Box>
           <Toolbar drawerWidth={drawerWidth} />
         </Box>
       </Router>
@@ -157,7 +163,7 @@ export function App() {
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
+      <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
         <AppContent
           themeToggle={
             <div className="theme-toggle">
