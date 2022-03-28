@@ -107,7 +107,7 @@ export const ALL_COINS: CoinDefinition[] = [
     referrals: ['r067-lzbs', '3xff-jeo2'],
   },
   {
-    id: 'bittorrent-2',
+    id: 'bittorrent',
     icon: CoinIcons.Btt,
     name: 'BitTorrent',
     symbol: 'BTT',
