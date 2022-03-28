@@ -3,6 +3,10 @@ import { SharedModule } from './SharedModule';
 import { globalStore } from '../globals';
 import { logger } from '../logger';
 
+type Unsubscribe = () => void;
+
+const watchers = new Map<string, Unsubscribe>();
+
 async function readSetting(_event: IpcMainInvokeEvent, key: string) {
   let result = null;
 
@@ -22,9 +26,14 @@ async function writeSetting(_event: IpcMainInvokeEvent, key: string, value: stri
 
 function watchSetting(event: IpcMainInvokeEvent, key: string) {
   logger.debug('Watching for settings changes on: %s', key);
-  globalStore.onDidChange(key, (change) => {
-    event.sender.send('ipc-settingChanged', key, change);
-  });
+
+  if (watchers.has(key) === false) {
+    const unsubscribe = globalStore.onDidChange(key, (change) => {
+      event.sender.send('ipc-settingChanged', key, change);
+    });
+
+    watchers.set(key, unsubscribe);
+  }
 }
 
 export const SettingsModule: SharedModule = {

@@ -10,7 +10,7 @@ import { AboutApi } from '../shared/AboutApi';
 
 import { enableScreenScraper } from './services/MinerEventStreamer';
 import { enableLolMiner } from './services/miners/lolminer';
-import { cleanup as cleanupDataService } from './services/DataService';
+import { enableDataService } from './services/DataService';
 
 declare global {
   interface Window {
@@ -27,10 +27,7 @@ declare global {
 window.addEventListener('load', () => {
   enableScreenScraper();
   enableLolMiner();
-});
-
-window.addEventListener('beforeunload', () => {
-  cleanupDataService();
+  enableDataService();
 });
 
 render(<App />, document.getElementById('root'));
