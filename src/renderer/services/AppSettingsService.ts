@@ -30,7 +30,6 @@ export const defaults = {
   settings: {
     settings: {
       workerName: 'default',
-      updateInterval: 30,
       cooldownInterval: 15,
       proxy: '',
     },
