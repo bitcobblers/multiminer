@@ -15,7 +15,7 @@ const REFRESH_THROTTLE = 1000 * 30;
 const MILLISECONDS_PER_MINUTE = 1000 * 60;
 const UPDATE_INTERVAL = 5 * MILLISECONDS_PER_MINUTE;
 
-const updater = timer(0, UPDATE_INTERVAL);
+const updater$ = timer(0, UPDATE_INTERVAL);
 
 export async function updateTicker() {
   const coins = (await config.getCoins()).filter((c) => c.enabled);
@@ -48,7 +48,7 @@ export async function updateTicker() {
   }
 }
 
-updater.subscribe(() => {
+updater$.subscribe(() => {
   updateTicker();
 });
 

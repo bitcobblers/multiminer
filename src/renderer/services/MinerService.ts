@@ -6,29 +6,6 @@ export const stdout$ = new Subject<string>();
 export const minerExited$ = new Subject<number | void>();
 export const minerStarted$ = new Subject<{ coin: string }>();
 
-minerApi.receive((data: string) => {
-  data
-    .replace(/(\r\n)/gm, '\n')
-    .trim()
-    .split('\n')
-    .filter((l) => l !== '')
-    .forEach((l) => {
-      stdout$.next(l);
-    });
-});
-
-minerApi.exited((code: number | void) => {
-  minerExited$.next(code);
-});
-
-minerApi.started((coin: string) => {
-  minerStarted$.next({ coin });
-});
-
-minerApi.error((message: string) => {
-  minerErrors$.next(message);
-});
-
 export async function startMiner(profile: string, coin: string, miner: MinerInfo, version: string, args: string) {
   // eslint-disable-next-line no-console
   console.log(`Starting miner with the following parameters: ${args}`);
@@ -49,3 +26,26 @@ export async function stopMiner() {
     await minerApi.stop();
   }
 }
+
+minerApi.receive((data: string) => {
+  data
+    .replace(/(\r\n)/gm, '\n')
+    .trim()
+    .split('\n')
+    .filter((l) => l !== '')
+    .forEach((l) => {
+      stdout$.next(l);
+    });
+});
+
+minerApi.started((coin: string) => {
+  minerStarted$.next({ coin });
+});
+
+minerApi.exited((code: number | void) => {
+  minerExited$.next(code);
+});
+
+minerApi.error((message: string) => {
+  minerErrors$.next(message);
+});
