@@ -95,20 +95,6 @@ export function SettingsScreen() {
               helperText={errors?.settings?.workerName?.message}
             />
           </ConfigurableControl>
-          <ConfigurableControl description="How often to poll the servers for updated statistics.">
-            <TextField
-              required
-              label="Update Interval (minutes)"
-              fullWidth
-              type="number"
-              {...register('settings.updateInterval', {
-                required: 'The interval must be specified.',
-                minLength: { value: 5, message: 'The interval cannot be less than 5 minutes.' },
-              })}
-              error={!!errors.settings?.updateInterval}
-              helperText={!!errors.settings?.updateInterval?.message}
-            />
-          </ConfigurableControl>
           <ConfigurableControl description="How often to wait between invocations of the mining software.">
             <TextField label="Cooldown Interval (seconds)" fullWidth type="number" {...register('settings.cooldownInterval')} />
           </ConfigurableControl>

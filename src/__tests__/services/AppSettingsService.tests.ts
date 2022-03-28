@@ -123,7 +123,6 @@ describe('App Settings Service', () => {
       const appSettings: AppSettings = {
         settings: {
           workerName: 'worker',
-          updateInterval: 1,
           cooldownInterval: 30,
           proxy: '',
         },
