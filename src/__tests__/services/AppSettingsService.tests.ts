@@ -4,17 +4,6 @@ import { Wallet, Coin, Miner, AppSettings } from '../../models';
 
 describe('App Settings Service', () => {
   describe('Wallets tests', () => {
-    it('No content returns default setting', async () => {
-      // Arrange.
-      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
-
-      // Act.
-      const result = await settings.getWallets();
-
-      // Assert.
-      expect(result).toBe(settings.defaults.wallets);
-    });
-
     it('Returns stored content', async () => {
       // Arrange.
       const wallets: Wallet[] = [
@@ -38,17 +27,6 @@ describe('App Settings Service', () => {
   });
 
   describe('Coins tests', () => {
-    it('No content returns default setting', async () => {
-      // Arrange.
-      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
-
-      // Act.
-      const result = await settings.getCoins();
-
-      // Assert.
-      expect(result).toBe(settings.defaults.coins);
-    });
-
     it('Returns stored content', async () => {
       // Arrange.
       const coins: Coin[] = [
@@ -71,17 +49,6 @@ describe('App Settings Service', () => {
   });
 
   describe('Miners tests', () => {
-    it('No content returns default setting', async () => {
-      // Arrange.
-      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
-
-      // Act.
-      const result = await settings.getMiners();
-
-      // Assert.
-      expect(result).toBe(settings.defaults.miners);
-    });
-
     it('Returns stored content', async () => {
       // Arrange.
       const miners: Miner[] = [
@@ -107,17 +74,6 @@ describe('App Settings Service', () => {
   });
 
   describe('Settings tests', () => {
-    it('No content returns default setting', async () => {
-      // Arrange.
-      jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(''));
-
-      // Act.
-      const result = await settings.getAppSettings();
-
-      // Assert.
-      expect(result).toBe(settings.defaults.settings);
-    });
-
     it('Returns stored content', async () => {
       // Arrange.
       const appSettings: AppSettings = {

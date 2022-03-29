@@ -5,12 +5,12 @@ import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { AppSettings } from 'models';
+import { AppSettings, DefaultSettings } from 'models';
 import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfigurableControl, ScreenHeader } from '../components';
-import { defaults, getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { getAppSettings, setAppSettings } from '../services/AppSettingsService';
 import { dialogApi } from '../../shared/DialogApi';
 import { settingsApi } from '../../shared/SettingsApi';
 
@@ -51,7 +51,7 @@ export function SettingsScreen() {
     formState: { errors, isValid },
     handleSubmit,
     reset,
-  } = useForm<AppSettings>({ defaultValues: defaults.settings });
+  } = useForm<AppSettings>({ defaultValues: DefaultSettings.settings });
 
   useEffect(() => {
     getAppSettings()
@@ -70,7 +70,7 @@ export function SettingsScreen() {
   });
 
   const onReset = () => {
-    reset(defaults.settings);
+    reset(DefaultSettings.settings);
   };
 
   const onExport = async () => {
