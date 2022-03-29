@@ -1,14 +1,18 @@
 import MenuIcon from '@mui/icons-material/MoreVert';
 import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import DownloadIcon from '@mui/icons-material/Download';
+import UploadIcon from '@mui/icons-material/Upload';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { AppSettings } from 'models/AppSettings';
+import { AppSettings } from 'models';
 import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfigurableControl, ScreenHeader } from '../components';
 import { defaults, getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { dialogApi } from '../../shared/DialogApi';
+import { settingsApi } from '../../shared/SettingsApi';
 
 function SettingsMenu(props: { onReset: () => unknown }) {
   const { onReset } = props;
@@ -69,6 +73,24 @@ export function SettingsScreen() {
     reset(defaults.settings);
   };
 
+  const onExport = async () => {
+    const path = await dialogApi.getSaveFile();
+
+    if (path !== '') {
+      await settingsApi.export(path);
+      enqueueSnackbar('Settings exported');
+    }
+  };
+
+  const onImport = async () => {
+    const path = await dialogApi.getOpenFile();
+
+    if (path !== '') {
+      await settingsApi.import(path);
+      enqueueSnackbar('Settings imported');
+    }
+  };
+
   const DefaultSpacing = 2;
 
   return (
@@ -76,6 +98,13 @@ export function SettingsScreen() {
       <ScreenHeader title="Settings">
         <SettingsMenu onReset={onReset} />
       </ScreenHeader>
+      <Button startIcon={<DownloadIcon />} onClick={onExport}>
+        Export
+      </Button>
+      <Button startIcon={<UploadIcon />} onClick={onImport}>
+        Import
+      </Button>
+      <Divider />
       <Typography variant="h5" sx={{ my: 2 }}>
         General Settings
       </Typography>

@@ -47,7 +47,7 @@ export const watchers$ = new WatchersObservable();
 async function get<T>(key: SettingsKey, defaultValue: T) {
   const content = await settingsApi.read(key);
 
-  if (content === '') {
+  if (content === '""') {
     return defaultValue;
   }
 

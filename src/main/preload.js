@@ -10,6 +10,12 @@ contextBridge.exposeInMainWorld('settings', {
   watch(key) {
     ipcRenderer.invoke('ipc-watchSetting', key);
   },
+  import(settingsPath) {
+    ipcRenderer.invoke('ipc-importSettings', settingsPath);
+  },
+  export(settingsPath) {
+    ipcRenderer.invoke('ipc-exportSettings', settingsPath);
+  },
   changed(func) {
     ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
   },
@@ -54,6 +60,12 @@ contextBridge.exposeInMainWorld('miner', {
 contextBridge.exposeInMainWorld('dialog', {
   getPath() {
     return ipcRenderer.invoke('ipc-selectFolder');
+  },
+  getSaveFile() {
+    return ipcRenderer.invoke('ipc-selectSaveFile');
+  },
+  getOpenFile() {
+    return ipcRenderer.invoke('ipc-selectOpenFile');
   },
 });
 
