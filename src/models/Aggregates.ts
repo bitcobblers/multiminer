@@ -24,5 +24,5 @@ export type MinerStatistic = {
   job?: string;
   epoch?: number;
   difficulty?: string;
-  uptime?: string;
+  uptime?: number;
 };
