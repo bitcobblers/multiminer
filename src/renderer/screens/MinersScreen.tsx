@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
 import { Miner } from '../../models';
@@ -69,8 +70,11 @@ export function MinersScreen() {
 
   return (
     <Container>
-      <ScreenHeader title="Miners" />
-      <Button onClick={handleOnAddMiner}>Add Miner</Button>
+      <ScreenHeader title="Miners">
+        <Button startIcon={<AddIcon />} onClick={handleOnAddMiner}>
+          Add Miner
+        </Button>
+      </ScreenHeader>
       <Box
         sx={{
           '& .MuiDataGrid-cell--editing': {
