@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { SharedModule } from './SharedModule';
 import { globalStore } from '../globals';
 import { logger } from '../logger';
-import { DefaultSettings } from '../../models';
+import { DefaultSettings } from '../../models/DefaultSettings';
 
 type Unsubscribe = () => void;
 
