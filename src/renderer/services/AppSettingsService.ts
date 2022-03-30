@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 import { Subject } from 'rxjs';
-import { Coin, Wallet, Miner, AppSettings, DefaultSettings } from '../../models';
+import { Coin, Wallet, Miner, AppSettings, DefaultSettings, SettingsSchemaType } from '../../models';
 import { settingsApi } from '../../shared/SettingsApi';
-
-type SettingsKey = 'wallets' | 'coins' | 'miners' | 'settings';
 
 class WatchersObservable {
   wallets = new Subject<Wallet[]>();
@@ -14,7 +12,7 @@ class WatchersObservable {
 
 export const watchers$ = new WatchersObservable();
 
-async function get<T>(key: SettingsKey, defaultValue: T) {
+async function get<T>(key: keyof SettingsSchemaType, defaultValue: T) {
   const content = await settingsApi.read(key);
 
   if (content === '""') {
@@ -24,7 +22,7 @@ async function get<T>(key: SettingsKey, defaultValue: T) {
   return JSON.parse(content) as T;
 }
 
-async function set<T>(key: SettingsKey, setting: T) {
+async function set<T>(key: keyof SettingsSchemaType, setting: T) {
   const content = JSON.stringify(setting);
 
   await settingsApi.write(key, content);

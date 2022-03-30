@@ -32,3 +32,10 @@ export const DefaultSettings = {
     },
   } as AppSettings,
 };
+
+export type SettingsSchemaType = {
+  settings: AppSettings;
+  wallets: Wallet[];
+  coins: Coin[];
+  miners: Miner[];
+};

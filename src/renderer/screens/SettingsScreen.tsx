@@ -77,8 +77,13 @@ export function SettingsScreen() {
     const path = await dialogApi.getSaveFile();
 
     if (path !== '') {
-      await settingsApi.export(path);
-      enqueueSnackbar('Settings exported');
+      const result = await settingsApi.export(path);
+
+      if (result) {
+        enqueueSnackbar(`Export settings failed: ${result}.`, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Settings exported', { variant: 'success' });
+      }
     }
   };
 
@@ -86,8 +91,13 @@ export function SettingsScreen() {
     const path = await dialogApi.getOpenFile();
 
     if (path !== '') {
-      await settingsApi.import(path);
-      enqueueSnackbar('Settings imported');
+      const result = await settingsApi.import(path);
+
+      if (result) {
+        enqueueSnackbar(`Import settings failed: ${result}.`, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Settings imported', { variant: 'success' });
+      }
     }
   };
 
