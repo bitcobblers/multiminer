@@ -2,7 +2,7 @@ import React from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack } from '@mui/material';
+import { Stack, Tooltip, IconButton } from '@mui/material';
 
 import { Wallet, Coin } from '../../models';
 import { EditWalletDialog, RemoveWalletDialog } from '../dialogs';
@@ -81,8 +81,16 @@ export class EditWalletControls extends React.Component<EditWalletControlsProps,
       <Stack direction="row" spacing={1}>
         <EditWalletDialog open={editOpen} wallet={wallet} existingWallets={existingWallets} coins={usedCoins} isNew={false} onCancel={this.handleCancelEditWallet} onSave={this.handleSaveWallet} />
         <RemoveWalletDialog open={removeOpen} name={wallet.name} id={wallet.id} coins={usedCoins} onCancel={this.handleCancelRemoveWallet} onRemove={this.handleRemoveWallet} />
-        <DeleteIcon onClick={this.handleOpenRemoveDialog} />
-        <EditIcon onClick={this.handleOpenEditDialog} />
+        <Tooltip title="Remove Wallet">
+          <IconButton aria-label="Remove Wallet" onClick={this.handleOpenRemoveDialog}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Edit Wallet">
+          <IconButton aria-label="Edit Wallet" onClick={this.handleOpenEditDialog}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
       </Stack>
     );
   }
