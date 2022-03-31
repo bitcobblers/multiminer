@@ -9,7 +9,7 @@ export function ScreenHeader(props: PropsWithChildren<{ title: string }>) {
         <span>{title}</span>
       </Typography>
       <Divider />
-      <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%', '& .MuiButton-root': { minWidth: '8.8rem' } }}>{children}</Box>
+      <Box sx={{ my: '0.6rem', display: 'flex', '& .MuiButton-root': { minWidth: '8.8rem' } }}>{children}</Box>
       <Divider />
     </>
   );
