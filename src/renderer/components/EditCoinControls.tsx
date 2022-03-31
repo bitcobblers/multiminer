@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack } from '@mui/material';
+import { Stack, IconButton, Tooltip } from '@mui/material';
 
 import { Wallet, Coin } from '../../models';
 import { EditCoinDialog } from '../dialogs/EditCoinDialog';
@@ -35,7 +35,11 @@ export function EditCoinControls(props: EditCoinControlsProps) {
   return (
     <Stack direction="row" spacing={1}>
       <EditCoinDialog open={open} icon={icon} symbol={coin.symbol} blockchains={blockchains} onSave={handleSave} onCancel={handleCancel} wallets={wallets} coin={coin} />
-      <EditIcon onClick={handleOnEditClick} />
+      <Tooltip title="Edit Coin">
+        <IconButton aria-label="Edit Coin" onClick={handleOnEditClick}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 }
