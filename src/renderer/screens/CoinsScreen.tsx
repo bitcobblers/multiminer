@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 
 import CheckIcon from '@mui/icons-material/Check';
-import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch, TextField, Box } from '@mui/material';
+import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch, TextField } from '@mui/material';
 import { ALL_COINS, Coin, Wallet } from '../../models';
 import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
 import { ScreenHeader, EditCoinControls } from '../components';
@@ -93,11 +93,10 @@ export function CoinsScreen() {
 
   return (
     <Container>
-      <ScreenHeader title="Coins" />
-      <Box sx={{ display: 'flex', mt: '1rem' }}>
+      <ScreenHeader title="Coins">
         <TextField size="small" sx={{ mr: '1rem' }} placeholder="Filter..." onChange={(event) => setFilter(event.target.value)} />
         <FormControlLabel control={<Switch checked={enabledOnly} onChange={handleEnabledOnlyChange} />} label="Only Show Enabled" />
-      </Box>
+      </ScreenHeader>
       <TableContainer>
         <Table aria-label="Coins">
           <TableHead>

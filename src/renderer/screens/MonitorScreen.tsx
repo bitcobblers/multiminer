@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { screenBuffer, clearBuffer } from '../services/ScreenBuffer';
 import { AutoScrollTextArea, ScreenHeader } from '../components';
 
@@ -27,13 +28,18 @@ export function MonitorScreen(): JSX.Element {
 
   return (
     <Container>
-      <ScreenHeader title="Monitor" />
+      <ScreenHeader title="Monitor">
+        <Button startIcon={isPaused ? <PlayArrowIcon /> : <PauseIcon />} onClick={() => setIsPaused(!isPaused)}>
+          {isPaused ? 'Resume' : 'Pause'}
+        </Button>
+        <Button startIcon={<DeleteIcon />} onClick={clearLog}>
+          Clear Log
+        </Button>
+      </ScreenHeader>
       <Typography variant="body1" gutterBottom>
         Here you can monitor the raw output for the mining application that is currently running.
       </Typography>
       <Divider />
-      <Button onClick={() => setIsPaused(!isPaused)}>{isPaused ? <PlayArrowIcon /> : <PauseIcon />}</Button>
-      <Button onClick={clearLog}>Clear Log</Button>
       <Box
         sx={{
           '& .MuiDataGrid-cell--editing': {
