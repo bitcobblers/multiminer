@@ -83,7 +83,7 @@ function updateStats(stats: MinerAppStatistics) {
     rejected: stats.Algorithms[0].Total_Rejected,
     power: totalPower,
     efficiency: totalEfficiency,
-    uptime: `${stats.Session.Uptime} seconds`,
+    uptime: stats.Session.Uptime,
   });
 }
 

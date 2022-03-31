@@ -30,7 +30,7 @@ export function MinerTable(props: { miner: MinerStatistic }) {
             <TableCell>{formatter.power(power)}</TableCell>
             <TableCell>{formatter.efficiency(efficiency)}</TableCell>
             <TableCell>{formatter.difficulty(difficulty)}</TableCell>
-            <TableCell>{uptime}</TableCell>
+            <TableCell>{formatter.uptime(uptime)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
