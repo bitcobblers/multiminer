@@ -58,3 +58,27 @@ export function progress(mined: number | undefined, threshold: number | undefine
 export function minedValue(mined: number | undefined, price: number | undefined) {
   return mined === undefined || price === undefined ? currency(0) : currency(mined * price);
 }
+
+export function uptime(value: number | undefined) {
+  if (value === undefined) {
+    return 'N/A';
+  }
+
+  const SECONDS_PER_MINUTE = 60;
+  const SECONDS_PER_HOUR = 3600;
+  const SECONDS_PER_DAY = 86400;
+
+  const totalDays = Math.floor(value / SECONDS_PER_DAY);
+  const totalHours = Math.floor((value - totalDays * SECONDS_PER_DAY) / SECONDS_PER_HOUR);
+  const totalMinutes = Math.floor((value - totalDays * SECONDS_PER_DAY - totalHours * SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+  const totalSeconds = value - totalDays * SECONDS_PER_DAY - totalHours * SECONDS_PER_HOUR - totalMinutes * SECONDS_PER_MINUTE;
+
+  const daysStr = totalDays ? `${totalDays}d` : '';
+  const hoursStr = totalHours ? `${totalHours}hr` : '';
+  const minutesStr = totalMinutes ? `${totalMinutes}min` : '';
+  const secondsStr = totalSeconds ? `${totalSeconds}s` : '';
+
+  const parts = [daysStr, hoursStr, minutesStr, secondsStr].filter((x) => x !== '');
+
+  return parts.join(' ');
+}

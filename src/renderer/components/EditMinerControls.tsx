@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack } from '@mui/material';
+import { Stack, Tooltip, IconButton } from '@mui/material';
 
 import { Miner } from '../../models';
 import { RemoveMinerDialog, EditMinerDialog } from '../dialogs';
@@ -48,8 +48,16 @@ export function EditMinerControls(props: EditMinerControlsProps) {
     <Stack direction="row" spacing={1}>
       <RemoveMinerDialog open={removeOpen} onClose={handleRemoveClose} />
       <EditMinerDialog open={editOpen} miner={miner} existingMiners={existingMiners} autoReset={false} onSave={handleEditSave} onCancel={handleEditCancel} />
-      <DeleteIcon onClick={handleOnRemoveClick} />
-      <EditIcon onClick={handleOnEditClick} />
+      <Tooltip title="Delete Miner">
+        <IconButton aria-label="Delete Miner" onClick={handleOnRemoveClick}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Edit Miner">
+        <IconButton aria-label="Edit Miner" onClick={handleOnEditClick}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 }
