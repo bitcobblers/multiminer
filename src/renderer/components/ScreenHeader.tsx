@@ -10,7 +10,7 @@ export function ScreenHeader(props: PropsWithChildren<{ title: string }>) {
       </Typography>
       <Divider />
       <Box sx={{ my: '0.6rem', display: 'flex', '& .MuiButton-root': { minWidth: '8.8rem' } }}>{children}</Box>
-      <Divider />
+      {children ? <Divider /> : <></>}
     </>
   );
 }

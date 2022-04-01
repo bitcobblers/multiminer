@@ -61,19 +61,19 @@ export function HomeScreen(): JSX.Element {
       </ScreenHeader>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Typography variant="h4">Devices</Typography>
+          <Typography variant="h5">GPUs</Typography>
           <ComputeTable gpus={currentGpuStats} />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h4">Miner</Typography>
+          <Typography variant="h5">General</Typography>
           <MinerTable miner={currentMinerStats} />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h4">Coins</Typography>
+          <Typography variant="h5">Enabled Coins</Typography>
           <CoinsTable coins={configuredCoins} />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h4">Graphs</Typography>
+          <Typography variant="h5">Graphs</Typography>
           <WorkersGraphs workers={workerStats} />
         </Grid>
       </Grid>
