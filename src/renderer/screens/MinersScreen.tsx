@@ -6,8 +6,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
-import { Miner } from '../../models';
-import { getMiners, setMiners, defaults } from '../services/AppSettingsService';
+import { Miner, DefaultSettings } from '../../models';
+import { getMiners, setMiners } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
@@ -20,7 +20,7 @@ export function MinersScreen() {
   const { enqueueSnackbar } = useSnackbar();
   const [newOpen, setNewOpen] = useState(false);
   const [newMiner, setNewMiner] = useState(getEmptyMiner());
-  const [miners, setLoadedMiners] = useState(defaults.miners);
+  const [miners, setLoadedMiners] = useState(DefaultSettings.miners);
 
   useEffect(() => {
     const init = async () => {

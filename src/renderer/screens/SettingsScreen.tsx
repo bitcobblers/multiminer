@@ -1,14 +1,18 @@
 import MenuIcon from '@mui/icons-material/MoreVert';
 import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import DownloadIcon from '@mui/icons-material/Download';
+import UploadIcon from '@mui/icons-material/Upload';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { AppSettings } from 'models/AppSettings';
+import { AppSettings, DefaultSettings } from 'models';
 import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfigurableControl, ScreenHeader } from '../components';
-import { defaults, getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { dialogApi } from '../../shared/DialogApi';
+import { settingsApi } from '../../shared/SettingsApi';
 
 function SettingsMenu(props: { onReset: () => unknown }) {
   const { onReset } = props;
@@ -47,7 +51,7 @@ export function SettingsScreen() {
     formState: { errors, isValid },
     handleSubmit,
     reset,
-  } = useForm<AppSettings>({ defaultValues: defaults.settings });
+  } = useForm<AppSettings>({ defaultValues: DefaultSettings.settings });
 
   useEffect(() => {
     getAppSettings()
@@ -66,7 +70,35 @@ export function SettingsScreen() {
   });
 
   const onReset = () => {
-    reset(defaults.settings);
+    reset(DefaultSettings.settings);
+  };
+
+  const onExport = async () => {
+    const path = await dialogApi.getSaveFile();
+
+    if (path !== '') {
+      const result = await settingsApi.exportSettings(path);
+
+      if (result) {
+        enqueueSnackbar(`Export settings failed: ${result}.`, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Settings exported', { variant: 'success' });
+      }
+    }
+  };
+
+  const onImport = async () => {
+    const path = await dialogApi.getOpenFile();
+
+    if (path !== '') {
+      const result = await settingsApi.importSettings(path);
+
+      if (result) {
+        enqueueSnackbar(`Import settings failed: ${result}.`, { variant: 'error' });
+      } else {
+        enqueueSnackbar('Settings imported', { variant: 'success' });
+      }
+    }
   };
 
   const DefaultSpacing = 2;
@@ -76,6 +108,13 @@ export function SettingsScreen() {
       <ScreenHeader title="Settings">
         <SettingsMenu onReset={onReset} />
       </ScreenHeader>
+      <Button startIcon={<DownloadIcon />} onClick={onExport}>
+        Export
+      </Button>
+      <Button startIcon={<UploadIcon />} onClick={onImport}>
+        Import
+      </Button>
+      <Divider />
       <Typography variant="h5" sx={{ my: 2 }}>
         General Settings
       </Typography>

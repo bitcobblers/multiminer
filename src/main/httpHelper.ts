@@ -2,22 +2,15 @@ import fetch from 'node-fetch';
 import { HttpProxyAgent } from 'http-proxy-agent';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import { globalStore } from './globals';
-import { AppSettings } from '../models';
 import { logger } from './logger';
 
 // Config tracking.
 let proxy = globalStore.get('settings.settings.proxy', '') as string;
 
 globalStore.onDidChange('settings', (settings) => {
-  const rawSettings = (settings as string) ?? '';
-
-  if (rawSettings === '') {
-    return;
+  if (settings !== undefined) {
+    proxy = settings.settings.proxy;
   }
-
-  const appSettings = JSON.parse(settings as string) as AppSettings;
-
-  proxy = appSettings.settings.proxy as string;
 });
 
 function callFetch(url: string, ignoreProxy = false) {

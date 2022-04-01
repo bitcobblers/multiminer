@@ -1,13 +1,15 @@
 import { IpcMainInvokeEvent } from 'electron';
+import * as fs from 'fs';
 import { SharedModule } from './SharedModule';
 import { globalStore } from '../globals';
 import { logger } from '../logger';
+import { DefaultSettings, SettingsSchemaType } from '../../models/DefaultSettings';
 
 type Unsubscribe = () => void;
 
 const watchers = new Map<string, Unsubscribe>();
 
-async function readSetting(_event: IpcMainInvokeEvent, key: string) {
+function readSetting(_event: IpcMainInvokeEvent, key: keyof SettingsSchemaType) {
   let result = null;
 
   if (globalStore.has(key)) {
@@ -16,24 +18,57 @@ async function readSetting(_event: IpcMainInvokeEvent, key: string) {
 
   logger.debug('ipc-readSetting invoked with: %s.  Result: %o', key, result);
 
-  return result ?? '';
+  return JSON.stringify(result ?? {});
 }
 
-async function writeSetting(_event: IpcMainInvokeEvent, key: string, value: string) {
-  logger.debug('Called write-settings with key: %s, value: %o', key, value);
-  globalStore.set(key, value);
+function writeSetting(_event: IpcMainInvokeEvent, key: keyof SettingsSchemaType, value: string) {
+  const parsedValue = JSON.parse(value);
+
+  logger.debug('Called write-settings with key: %s, value: %o', key, parsedValue);
+  globalStore.set(key, parsedValue);
 }
 
-function watchSetting(event: IpcMainInvokeEvent, key: string) {
+function watchSetting(event: IpcMainInvokeEvent, key: keyof SettingsSchemaType) {
   logger.debug('Watching for settings changes on: %s', key);
 
   if (watchers.has(key) === false) {
     const unsubscribe = globalStore.onDidChange(key, (change) => {
-      event.sender.send('ipc-settingChanged', key, change);
+      event.sender.send('ipc-settingChanged', key, JSON.stringify(change));
     });
 
     watchers.set(key, unsubscribe);
   }
+}
+
+export function importSettings(_event: IpcMainInvokeEvent, settingsPath: string) {
+  logger.debug('Importing settings from %s', settingsPath);
+
+  try {
+    const content = fs.readFileSync(settingsPath);
+    const allSettings = JSON.parse(content.toString());
+
+    globalStore.set('wallets', allSettings.wallets);
+    globalStore.set('coins', allSettings.coins);
+    globalStore.set('settings', allSettings.settings);
+    globalStore.set('miners', allSettings.miners);
+  } catch (error) {
+    return error;
+  }
+
+  return null;
+}
+
+export function exportSettings(_current: IpcMainInvokeEvent, settingsPath: string) {
+  logger.debug('Exporting settings from %s', settingsPath);
+
+  const allSettings = {
+    wallets: globalStore.get('wallets'),
+    coins: globalStore.get('coins'),
+    settings: globalStore.get('settings'),
+    miners: globalStore.get('miners'),
+  };
+
+  fs.writeFileSync(settingsPath, JSON.stringify(allSettings, null, 2));
 }
 
 export const SettingsModule: SharedModule = {
@@ -42,11 +77,13 @@ export const SettingsModule: SharedModule = {
     'ipc-readSetting': readSetting,
     'ipc-writeSetting': writeSetting,
     'ipc-watchSetting': watchSetting,
+    'ipc-importSettings': importSettings,
+    'ipc-exportSettings': exportSettings,
   },
   reset: () => {
-    globalStore.set('wallets', '');
-    globalStore.set('coins', '');
-    globalStore.set('settings', '');
-    globalStore.set('miners', '');
+    globalStore.set('wallets', DefaultSettings.wallets);
+    globalStore.set('coins', DefaultSettings.coins);
+    globalStore.set('settings', DefaultSettings.settings);
+    globalStore.set('miners', DefaultSettings.miners);
   },
 };

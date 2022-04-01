@@ -11,3 +11,4 @@ export { GpuStatistic, MinerStatistic } from './Aggregates';
 export { ConfiguredCoin } from './ConfiguredCoin';
 export { MinerState } from './MinerState';
 export { minerErrors$, minerState$, enabledCoins$, refreshData$ } from './Observables';
+export { DefaultSettings, SettingsSchemaType } from './DefaultSettings';

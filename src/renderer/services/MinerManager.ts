@@ -42,7 +42,8 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
   const minerProfile = minerState$.getValue().profile;
-  const miner = (await config.getMiners()).find((m) => m.name === minerProfile);
+  const allMiners = await config.getMiners();
+  const miner = allMiners.find((m) => m.name === minerProfile);
   const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
 
   if (miner === undefined) {
