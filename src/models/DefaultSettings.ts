@@ -8,7 +8,7 @@ export const DefaultSettings = {
 
   coins: [] as Coin[],
 
-  miners: [{ id: '4dbc2b17-348f-4529-859a-7bcdfca20e1e', kind: 'lolminer', name: 'default', enabled: true, version: '1.46a', algorithm: 'ethash', parameters: '' }] as Miner[],
+  miners: [{ id: '4dbc2b17-348f-4529-859a-7bcdfca20e1e', kind: 'lolminer', name: 'default', version: '1.46a', algorithm: 'ethash', parameters: '' }] as Miner[],
 
   settings: {
     settings: {

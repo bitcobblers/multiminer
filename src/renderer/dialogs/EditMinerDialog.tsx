@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
-import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, FormControlLabel, Switch } from '@mui/material';
+import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
 import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
@@ -96,7 +96,6 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
         <form onSubmit={handleOnSave}>
           <FormControl fullWidth>
             <Stack spacing={2}>
-              <FormControlLabel label="Enabled" control={<Switch name="enabled" checked={watch('enabled')} inputRef={register('enabled').ref} onChange={register('enabled').onChange} />} />
               <TextField
                 required
                 autoFocus
