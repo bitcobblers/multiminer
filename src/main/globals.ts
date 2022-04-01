@@ -16,7 +16,6 @@ export const globalStore = new Store<SettingsSchemaType>({
           type: 'object',
           properties: {
             workerName: { type: 'string' },
-            cooldownInterval: { type: 'number' },
             proxy: { type: 'string' },
           },
           required: [],

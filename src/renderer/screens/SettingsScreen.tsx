@@ -105,9 +105,6 @@ export function SettingsScreen() {
               helperText={errors?.settings?.workerName?.message}
             />
           </ConfigurableControl>
-          <ConfigurableControl description="How often to wait between invocations of the mining software.">
-            <TextField label="Cooldown Interval (seconds)" fullWidth type="number" {...register('settings.cooldownInterval')} />
-          </ConfigurableControl>
         </Stack>
         <Stack sx={{ width: '25rem', mt: 2 }}>
           <ConfigurableControl description="The optional proxy server to use for network calls.">
