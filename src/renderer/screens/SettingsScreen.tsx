@@ -1,45 +1,15 @@
-import MenuIcon from '@mui/icons-material/MoreVert';
 import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { AppSettings, DefaultSettings } from 'models';
 import { useSnackbar } from 'notistack';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfigurableControl, ScreenHeader } from '../components';
 import { getAppSettings, setAppSettings } from '../services/AppSettingsService';
 import { dialogApi } from '../../shared/DialogApi';
 import { settingsApi } from '../../shared/SettingsApi';
-
-function SettingsMenu(props: { onReset: () => unknown }) {
-  const { onReset } = props;
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  return (
-    <div>
-      <IconButton aria-label="more" aria-controls="long-menu" aria-haspopup="true" onClick={handleClick}>
-        <MenuIcon />
-      </IconButton>
-      <Menu id="long-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-        {/* TODO: add import/export functionality (https://github.com/bitcobblers/multiminer/issues/36) */}
-        {/* <MenuItem>Import</MenuItem>
-        <MenuItem>Export</MenuItem> */}
-        <MenuItem onClick={() => onReset()}>Restore Defaults</MenuItem>
-      </Menu>
-    </div>
-  );
-}
 
 // react-hook-form's API requires prop spreading to register controls
 /* eslint-disable react/jsx-props-no-spreading */
@@ -106,15 +76,16 @@ export function SettingsScreen() {
   return (
     <Container>
       <ScreenHeader title="Settings">
-        <SettingsMenu onReset={onReset} />
+        <Button startIcon={<DownloadIcon />} onClick={onExport}>
+          Export
+        </Button>
+        <Button startIcon={<UploadIcon />} onClick={onImport}>
+          Import
+        </Button>
+        <Button startIcon={<SettingsBackupRestoreIcon />} onClick={() => onReset()}>
+          Restore Defaults
+        </Button>
       </ScreenHeader>
-      <Button startIcon={<DownloadIcon />} onClick={onExport}>
-        Export
-      </Button>
-      <Button startIcon={<UploadIcon />} onClick={onImport}>
-        Import
-      </Button>
-      <Divider />
       <Typography variant="h5" sx={{ my: 2 }}>
         General Settings
       </Typography>
