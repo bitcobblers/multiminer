@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 
 // UI.
-import { Container, Divider, Grid, Button, Typography, Box } from '@mui/material';
+import { Container, Grid, Button, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RefreshIcon from '@mui/icons-material/Cached';
@@ -45,25 +45,20 @@ export function HomeScreen(): JSX.Element {
 
   return (
     <Container>
-      <ScreenHeader title="Home" />
-      <Divider />
-      <Box sx={{ my: '0.6rem', display: 'flex', justifyContent: 'space-between', maxWidth: '50%', '& .MuiButton-root': { minWidth: '8.8rem' } }}>
-        <Button disabled={minerActive || !minerContext.profile} onClick={async () => startMiner()}>
-          <PlayArrowIcon /> Start Miner
+      <ScreenHeader title="Home">
+        <Button startIcon={<PlayArrowIcon />} disabled={minerActive || !minerContext.profile} onClick={async () => startMiner()}>
+          Start Miner
         </Button>
-        <Button disabled={!minerActive} onClick={async () => stopMiner()}>
-          <StopIcon />
+        <Button startIcon={<StopIcon />} disabled={!minerActive} onClick={async () => stopMiner()}>
           Stop Miner
         </Button>
-        <Button disabled={!minerActive || !minerContext.profile} onClick={async () => nextCoin()}>
-          <NextIcon />
+        <Button startIcon={<NextIcon />} disabled={!minerActive || !minerContext.profile} onClick={async () => nextCoin()}>
           Next Coin
         </Button>
-        <Button onClick={() => refreshData$.next(Date.now())}>
-          <RefreshIcon sx={{ pr: '0.2rem' }} />
+        <Button startIcon={<RefreshIcon />} onClick={() => refreshData$.next(Date.now())}>
           Refresh
         </Button>
-      </Box>
+      </ScreenHeader>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="h4">Devices</Typography>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
 import { Wallet, Coin } from '../../models';
@@ -70,8 +71,11 @@ export function WalletsScreen() {
 
   return (
     <Container>
-      <ScreenHeader title="Wallets" />
-      <Button onClick={addWallet}>Add Wallet</Button>
+      <ScreenHeader title="Wallets">
+        <Button startIcon={<AddIcon />} onClick={addWallet}>
+          Add Wallet
+        </Button>
+      </ScreenHeader>
       <Box
         sx={{
           '& .MuiDataGrid-cell--editing': {

@@ -47,7 +47,7 @@ class MainWindow {
     });
 
     // eslint-disable-next-line no-new
-    new AppUpdater();
+    // new AppUpdater();
 
     app.on('window-all-closed', this.onWindowAllClosed);
     app.on('activate', this.onActivate);
