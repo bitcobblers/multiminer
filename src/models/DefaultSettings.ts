@@ -13,7 +13,6 @@ export const DefaultSettings = {
   settings: {
     settings: {
       workerName: 'default',
-      cooldownInterval: 0,
       proxy: '',
     },
     pools: {

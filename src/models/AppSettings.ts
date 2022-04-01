@@ -1,6 +1,5 @@
 export type GeneralSettings = {
   workerName: string;
-  cooldownInterval: number;
   proxy: string;
 };
 
