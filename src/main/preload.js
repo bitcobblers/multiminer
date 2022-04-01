@@ -10,10 +10,10 @@ contextBridge.exposeInMainWorld('settings', {
   watch(key) {
     ipcRenderer.invoke('ipc-watchSetting', key);
   },
-  import(settingsPath) {
+  importSettings(settingsPath) {
     return ipcRenderer.invoke('ipc-importSettings', settingsPath);
   },
-  export(settingsPath) {
+  exportSettings(settingsPath) {
     return ipcRenderer.invoke('ipc-exportSettings', settingsPath);
   },
   changed(func) {

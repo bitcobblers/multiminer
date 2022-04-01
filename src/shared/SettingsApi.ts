@@ -5,8 +5,8 @@ export interface SettingsApi {
   write: (key: keyof SettingsSchemaType, content: string) => Promise<void>;
   watch: (key: keyof SettingsSchemaType) => Promise<void>;
   changed: (callback: (key: keyof SettingsSchemaType, content: string) => void) => Promise<void>;
-  import: (settingsPath: string) => Promise<string>;
-  export: (settingsPath: string) => Promise<string>;
+  importSettings: (settingsPath: string) => Promise<string>;
+  exportSettings: (settingsPath: string) => Promise<string>;
 }
 
 export const settingsApi = window.settings ?? {
@@ -14,6 +14,6 @@ export const settingsApi = window.settings ?? {
   write: async () => Promise.resolve(),
   watch: async () => Promise.resolve(),
   changed: async () => Promise.resolve(),
-  import: async () => Promise.resolve(''),
-  export: async () => Promise.resolve(''),
+  importSettings: async () => Promise.resolve(''),
+  exportSettings: async () => Promise.resolve(''),
 };

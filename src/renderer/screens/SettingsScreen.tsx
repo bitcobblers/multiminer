@@ -77,7 +77,7 @@ export function SettingsScreen() {
     const path = await dialogApi.getSaveFile();
 
     if (path !== '') {
-      const result = await settingsApi.export(path);
+      const result = await settingsApi.exportSettings(path);
 
       if (result) {
         enqueueSnackbar(`Export settings failed: ${result}.`, { variant: 'error' });
@@ -91,7 +91,7 @@ export function SettingsScreen() {
     const path = await dialogApi.getOpenFile();
 
     if (path !== '') {
-      const result = await settingsApi.import(path);
+      const result = await settingsApi.importSettings(path);
 
       if (result) {
         enqueueSnackbar(`Import settings failed: ${result}.`, { variant: 'error' });
