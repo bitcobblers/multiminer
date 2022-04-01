@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { SharedModule } from './SharedModule';
 import { globalStore } from '../globals';
 import { logger } from '../logger';
-import { DefaultSettings, SettingsSchemaType } from '../../models/DefaultSettings';
+import { SettingsSchemaType } from '../../models/DefaultSettings';
 
 type Unsubscribe = () => void;
 
@@ -79,11 +79,5 @@ export const SettingsModule: SharedModule = {
     'ipc-watchSetting': watchSetting,
     'ipc-importSettings': importSettings,
     'ipc-exportSettings': exportSettings,
-  },
-  reset: () => {
-    globalStore.set('wallets', DefaultSettings.wallets);
-    globalStore.set('coins', DefaultSettings.coins);
-    globalStore.set('settings', DefaultSettings.settings);
-    globalStore.set('miners', DefaultSettings.miners);
   },
 };
