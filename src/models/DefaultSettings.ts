@@ -13,6 +13,7 @@ export const DefaultSettings = {
   settings: {
     settings: {
       workerName: 'default',
+      defaultMiner: 'default',
       proxy: '',
     },
     pools: {

@@ -78,6 +78,7 @@ describe('App Settings Service', () => {
       const appSettings: AppSettings = {
         settings: {
           workerName: 'worker',
+          defaultMiner: '',
           proxy: '',
         },
         pools: {
