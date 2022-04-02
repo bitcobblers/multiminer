@@ -7,7 +7,7 @@ class WatchersObservable {
   wallets = new Subject<Wallet[]>();
   coins = new Subject<Coin[]>();
   miners = new Subject<Miner[]>();
-  appSettings = new Subject<AppSettings>();
+  settings = new Subject<AppSettings>();
 }
 
 export const watchers$ = new WatchersObservable();
@@ -52,6 +52,8 @@ settingsApi.changed((key, content) => {
   const typedKey = key as keyof WatchersObservable;
 
   if (typedKey in watchers$) {
+    // eslint-disable-next-line no-console
+    console.log(`Triggering change for ${typedKey}`);
     watchers$[typedKey].next(JSON.parse(content));
   }
 });
