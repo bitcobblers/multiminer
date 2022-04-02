@@ -1,4 +1,5 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
+import ps from 'ps-node';
 import * as fs from 'fs';
 import path from 'path';
 import electron, { IpcMainInvokeEvent } from 'electron';
@@ -16,7 +17,7 @@ type LaunchHandlers = {
   onSuccess: (proc: ChildProcessWithoutNullStreams) => null;
 };
 
-let process: ChildProcessWithoutNullStreams | null = null;
+let child: ChildProcessWithoutNullStreams | null = null;
 let minerProfile: string | null = null;
 let minerInfo: MinerInfo | null = null;
 let currentCoin: string | null = null;
@@ -27,7 +28,7 @@ export function handleExit(code: number | null, signal: NodeJS.Signals | null, s
   }
 
   send('ipc-minerExited', code);
-  process = null;
+  child = null;
   minerProfile = null;
   minerInfo = null;
   currentCoin = null;
@@ -45,11 +46,16 @@ export function handleData(data: string, send: SendCallback) {
 }
 
 export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendCallback) {
-  proc
-    .on('exit', (code, signal) => {
-      handleExit(code, signal, send);
-    })
-    .stdout.setEncoding('utf8')
+  proc.on('exit', (code, signal) => {
+    handleExit(code, signal, send);
+  });
+
+  proc.stderr.setEncoding('utf8').on('data', (data) => {
+    handleData(data, send);
+  });
+
+  proc.stdout
+    .setEncoding('utf8')
     .on('error', (error) => {
       handleError(error, send);
     })
@@ -69,7 +75,7 @@ export function launch(exePath: string, args: string, handlers: LaunchHandlers) 
     return handlers.onError(`The miner is not executable: ${error}`);
   }
 
-  return handlers.onSuccess(spawn(exePath, args.split(' ')));
+  return handlers.onSuccess(spawn(exePath, args.split(' '), { detached: true }));
 }
 
 function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: MinerInfo, version: string, args: string) {
@@ -83,7 +89,7 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
       return error;
     },
     onSuccess: (proc: ChildProcessWithoutNullStreams) => {
-      process = proc;
+      child = proc;
       minerProfile = profile;
       minerInfo = miner;
       currentCoin = coin;
@@ -97,12 +103,22 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
 }
 
 function stop(event: IpcMainInvokeEvent) {
-  if (process !== null) {
-    process.kill('SIGINT');
-    event.sender.send('ipc-minerExited', process.exitCode);
-    logger.debug('Stopped miner with exit code %o', process.exitCode);
+  if (child?.pid !== undefined) {
+    ps.lookup({ command: minerInfo?.exe }, (error, list) => {
+      if (error) {
+        logger.error('Error locking for miner process: %s', error.message);
+      } else {
+        list.forEach((p) => {
+          logger.debug('Killing process: %s', p.pid);
+          process.kill(p.pid);
+        });
+      }
+    });
 
-    process = null;
+    event.sender.send('ipc-minerExited', child.exitCode);
+    logger.debug('Stopped miner with exit code %o', child.exitCode);
+
+    child = null;
     minerProfile = null;
     minerInfo = null;
     currentCoin = null;
@@ -111,7 +127,7 @@ function stop(event: IpcMainInvokeEvent) {
 
 function status() {
   return {
-    state: process === null ? 'inactive' : 'active',
+    state: child === null ? 'inactive' : 'active',
     currentCoin,
     profile: minerProfile,
     miner: minerInfo?.name,
