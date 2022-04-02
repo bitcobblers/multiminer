@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
 import { Miner } from '../../models';
-import { getMiners, setMiners, getAppSettings, setAppSettings, watchers$ } from '../services/AppSettingsService';
+import { getMiners, setMiners, getAppSettings, setAppSettings } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
@@ -29,18 +29,7 @@ export function MinersScreen() {
       setLoadedMiners(await getMiners());
     };
 
-    const subscriptionAppSettings = watchers$.settings.subscribe(async () => {
-      // eslint-disable-next-line no-console
-      console.log('Refreshing miners');
-
-      setLoadedMiners(await getMiners());
-    });
-
     init();
-
-    return () => {
-      subscriptionAppSettings.unsubscribe();
-    };
   }, []);
 
   const handleOnAddMiner = () => {
