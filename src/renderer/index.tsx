@@ -10,6 +10,7 @@ import { AboutApi } from '../shared/AboutApi';
 
 import { enableScreenScraper } from './services/MinerEventStreamer';
 import { enableLolMiner } from './services/miners/lolminer';
+import { enableNBMiner } from './services/miners/nbminer';
 import { enableDataService } from './services/DataService';
 
 declare global {
@@ -27,6 +28,7 @@ declare global {
 window.addEventListener('load', () => {
   enableScreenScraper();
   enableLolMiner();
+  enableNBMiner();
   enableDataService();
 });
 

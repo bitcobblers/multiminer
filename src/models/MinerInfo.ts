@@ -28,14 +28,15 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     exe: 'lolminer.exe',
     getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor --apiport ${API_PORT}`,
   },
-  // {
-  //   name: 'nbminer',
-  //   algorithms: ['ethash', 'etchash', 'kawpow'],
-  //   owner: 'NebuTech',
-  //   repo: 'NBMiner',
-  //   exe: 'nbminer.exe',
-  //   getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} -log`,
-  // },
+  {
+    name: 'nbminer',
+    algorithms: ['ethash', 'etchash', 'kawpow'],
+    owner: 'NebuTech',
+    repo: 'NBMiner',
+    assetPattern: /^NBMiner.+_Win\.zip$/,
+    exe: 'nbminer.exe',
+    getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} --no-color --cmd-output 1 --api 127.0.0.1:60090`,
+  },
   // {
   //   name: 'trexminer',
   //   algorithms: ['ethash', 'etchash', 'kawpow'],

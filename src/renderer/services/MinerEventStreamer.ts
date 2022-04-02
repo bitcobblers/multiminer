@@ -23,7 +23,10 @@ export function setHandlerPack(name: string) {
     handlers = handlerPacks[name];
 
     // eslint-disable-next-line no-console
-    console.log(`Set handler pack to ${name}`);
+    console.log(`Set handler pack to ${name}.`);
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(`Unknown handler pack specified ${name}.`);
   }
 }
 
