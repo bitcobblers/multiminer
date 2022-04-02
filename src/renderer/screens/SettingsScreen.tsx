@@ -94,6 +94,7 @@ export function SettingsScreen() {
           <ConfigurableControl description="The name that uniquely identifies this worker.">
             <TextField
               required
+              spellCheck="false"
               label="Worker Name"
               fullWidth
               {...register('settings.workerName', {
@@ -108,7 +109,7 @@ export function SettingsScreen() {
         </Stack>
         <Stack sx={{ width: '25rem', mt: 2 }}>
           <ConfigurableControl description="The optional proxy server to use for network calls.">
-            <TextField label="Proxy Server (http or socks)" {...register('settings.proxy')} fullWidth />
+            <TextField spellCheck="false" label="Proxy Server (http or socks)" {...register('settings.proxy')} fullWidth />
           </ConfigurableControl>
         </Stack>
         <Divider sx={{ mt: 2 }} />
@@ -119,6 +120,7 @@ export function SettingsScreen() {
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the ethash algorithm.">
             <TextField
               required
+              spellCheck="false"
               label="Ethash"
               fullWidth
               {...register('pools.ethash', {
@@ -131,6 +133,7 @@ export function SettingsScreen() {
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the etchash algorithm.">
             <TextField
               required
+              spellCheck="false"
               label="Etchash"
               fullWidth
               {...register('pools.etchash', {
@@ -143,6 +146,7 @@ export function SettingsScreen() {
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the kawpow algorithm.">
             <TextField
               required
+              spellCheck="false"
               label="Kawpow"
               fullWidth
               {...register('pools.kawpow', {
@@ -155,6 +159,7 @@ export function SettingsScreen() {
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the randomx algorithm.">
             <TextField
               required
+              spellCheck="false"
               label="RandomX"
               fullWidth
               {...register('pools.randomx', {
