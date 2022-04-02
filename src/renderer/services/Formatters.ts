@@ -68,10 +68,12 @@ export function uptime(value: number | undefined) {
   const SECONDS_PER_HOUR = 3600;
   const SECONDS_PER_DAY = 86400;
 
-  const totalDays = Math.floor(value / SECONDS_PER_DAY);
-  const totalHours = Math.floor((value - totalDays * SECONDS_PER_DAY) / SECONDS_PER_HOUR);
-  const totalMinutes = Math.floor((value - totalDays * SECONDS_PER_DAY - totalHours * SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
-  const totalSeconds = value - totalDays * SECONDS_PER_DAY - totalHours * SECONDS_PER_HOUR - totalMinutes * SECONDS_PER_MINUTE;
+  const flooredValue = Math.floor(value);
+
+  const totalDays = Math.floor(flooredValue / SECONDS_PER_DAY);
+  const totalHours = Math.floor((flooredValue - totalDays * SECONDS_PER_DAY) / SECONDS_PER_HOUR);
+  const totalMinutes = Math.floor((flooredValue - totalDays * SECONDS_PER_DAY - totalHours * SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+  const totalSeconds = flooredValue - totalDays * SECONDS_PER_DAY - totalHours * SECONDS_PER_HOUR - totalMinutes * SECONDS_PER_MINUTE;
 
   const daysStr = totalDays ? `${totalDays}d` : '';
   const hoursStr = totalHours ? `${totalHours}hr` : '';
