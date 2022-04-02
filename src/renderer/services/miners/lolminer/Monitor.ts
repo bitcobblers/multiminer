@@ -100,7 +100,7 @@ export function enableLolMiner() {
       }
 
       // eslint-disable-next-line promise/catch-or-return
-      minerApi.stats(API_PORT).then((result) => {
+      minerApi.stats(API_PORT, '').then((result) => {
         // eslint-disable-next-line promise/always-return
         if (result === '') {
           return;

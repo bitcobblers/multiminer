@@ -9,7 +9,7 @@ export interface MinerApi {
   start: (profile: string, coin: string, miner: { name: MinerName; exe: string }, version: string, args: string) => Promise<string | null>;
   stop: () => Promise<void>;
   status: () => Promise<{ state: 'active' | 'inactive'; currentCoin: string; miner: MinerName }>;
-  stats: (port: number) => Promise<string>;
+  stats: (port: number, args: string) => Promise<string>;
   receive: (callback: ReceiveCallback) => Promise<void>;
   exited: (callback: ExitedCallback) => Promise<void>;
   started: (callback: StartedCallback) => Promise<void>;

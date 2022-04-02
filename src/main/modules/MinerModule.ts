@@ -112,16 +112,16 @@ function stop(event: IpcMainInvokeEvent) {
           logger.debug('Killing process: %s', p.pid);
           process.kill(p.pid);
         });
+
+        event.sender.send('ipc-minerExited', child?.exitCode);
+        logger.debug('Stopped miner with exit code %o', child?.exitCode);
+
+        child = null;
+        minerProfile = null;
+        minerInfo = null;
+        currentCoin = null;
       }
     });
-
-    event.sender.send('ipc-minerExited', child.exitCode);
-    logger.debug('Stopped miner with exit code %o', child.exitCode);
-
-    child = null;
-    minerProfile = null;
-    minerInfo = null;
-    currentCoin = null;
   }
 }
 
@@ -134,8 +134,8 @@ function status() {
   };
 }
 
-function stats(_event: IpcMainInvokeEvent, port: number) {
-  return getRestUrl(`http://localhost:${port}/`, true);
+function stats(_event: IpcMainInvokeEvent, port: number, args: string) {
+  return getRestUrl(`http://localhost:${port}/${args}`, true);
 }
 
 export const MinerModule: SharedModule = {
