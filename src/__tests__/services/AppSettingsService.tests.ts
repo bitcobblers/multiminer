@@ -78,7 +78,6 @@ describe('App Settings Service', () => {
       const appSettings: AppSettings = {
         settings: {
           workerName: 'worker',
-          cooldownInterval: 30,
           proxy: '',
         },
         pools: {

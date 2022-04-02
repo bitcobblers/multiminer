@@ -23,6 +23,20 @@ function getRandom<T>(array: Array<T>) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+function getRandomCoin(currentCoin: string | null, coins: Coin[]): Coin {
+  if (coins.length === 1) {
+    return coins[0];
+  }
+
+  const newCoin = getRandom(coins);
+
+  if (currentCoin !== newCoin.symbol) {
+    return newCoin;
+  }
+
+  return getRandomCoin(currentCoin, coins);
+}
+
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
   const mergedState = { ...currentState, ...newState };
@@ -41,9 +55,9 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 }
 
 export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
-  const minerProfile = minerState$.getValue().profile;
+  const { profile, currentCoin } = minerState$.getValue();
   const allMiners = await config.getMiners();
-  const miner = allMiners.find((m) => m.name === minerProfile);
+  const miner = allMiners.find((m) => m.name === profile);
   const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
 
   if (miner === undefined) {
@@ -63,7 +77,7 @@ export async function selectCoin(onError: (message: string) => void, onSuccess: 
     return;
   }
 
-  const coin = getRandom(enabledCoins);
+  const coin = getRandomCoin(currentCoin, enabledCoins);
   const coinInfo = ALL_COINS.find((c) => c.symbol === coin.symbol);
 
   if (coinInfo === undefined) {
@@ -82,8 +96,6 @@ export async function selectCoin(onError: (message: string) => void, onSuccess: 
 }
 
 async function changeCoin() {
-  await miningService.stopMiner();
-
   selectCoin(
     (error) => {
       minerErrors$.next(error);
@@ -104,6 +116,7 @@ async function changeCoin() {
       const downloadResult = await downloadMiner(miner.kind, miner.version);
 
       if (downloadResult === true) {
+        await miningService.stopMiner();
         await miningService.startMiner(miner.name, coin.symbol, minerInfo, miner.version, mergedArgs);
       }
     }
