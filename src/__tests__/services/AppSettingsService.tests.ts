@@ -57,7 +57,6 @@ describe('App Settings Service', () => {
           kind: 'lolminer',
           name: 'miner',
           version: '',
-          enabled: true,
           algorithm: 'ethash',
           parameters: '',
         },

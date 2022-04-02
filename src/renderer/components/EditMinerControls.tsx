@@ -9,13 +9,15 @@ import { RemoveMinerDialog, EditMinerDialog } from '../dialogs';
 
 interface EditMinerControlsProps {
   miner: Miner;
+  // eslint-disable-next-line react/require-default-props
+  isDefault?: boolean;
   existingMiners: Miner[];
   onSave: (miner: Miner) => void;
   onRemove: (name: string, id: string) => void;
 }
 
 export function EditMinerControls(props: EditMinerControlsProps) {
-  const { miner, existingMiners, onSave, onRemove } = props;
+  const { miner, isDefault, existingMiners, onSave, onRemove } = props;
   const [editOpen, setEditOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
 
@@ -48,10 +50,12 @@ export function EditMinerControls(props: EditMinerControlsProps) {
     <Stack direction="row" spacing={1}>
       <RemoveMinerDialog open={removeOpen} onClose={handleRemoveClose} />
       <EditMinerDialog open={editOpen} miner={miner} existingMiners={existingMiners} autoReset={false} onSave={handleEditSave} onCancel={handleEditCancel} />
-      <Tooltip title="Delete Miner">
-        <IconButton aria-label="Delete Miner" onClick={handleOnRemoveClick}>
-          <DeleteIcon />
-        </IconButton>
+      <Tooltip title={isDefault ? 'Cannot remove miner because it is currently selected as the default miner.' : 'Delete Miner'}>
+        <div>
+          <IconButton aria-label="Delete Miner" disabled={isDefault} onClick={handleOnRemoveClick}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
       </Tooltip>
       <Tooltip title="Edit Miner">
         <IconButton aria-label="Edit Miner" onClick={handleOnEditClick}>

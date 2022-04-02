@@ -5,7 +5,6 @@ export type Miner = {
   kind: MinerName;
   version: string;
   name: string;
-  enabled: boolean;
   algorithm: AlgorithmName;
   parameters: string;
 };

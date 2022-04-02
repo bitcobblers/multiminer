@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
@@ -11,9 +11,10 @@ import { getMiners, setMiners } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
+import { MinerContext } from '../MinerContext';
 
 const getEmptyMiner = (): Miner => {
-  return { id: uuid(), kind: 'lolminer', name: '', version: '', enabled: false, algorithm: 'ethash', parameters: '' };
+  return { id: uuid(), kind: 'lolminer', name: '', version: '', algorithm: 'ethash', parameters: '' };
 };
 
 export function MinersScreen() {
@@ -21,6 +22,7 @@ export function MinersScreen() {
   const [newOpen, setNewOpen] = useState(false);
   const [newMiner, setNewMiner] = useState(getEmptyMiner());
   const [miners, setLoadedMiners] = useState(Array<Miner>());
+  const minerContext = useContext(MinerContext);
 
   useEffect(() => {
     const init = async () => {
@@ -93,7 +95,7 @@ export function MinersScreen() {
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell>Enabled</TableCell>
+                <TableCell>Default</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Miner</TableCell>
                 <TableCell>Version</TableCell>
@@ -104,9 +106,9 @@ export function MinersScreen() {
               {miners.map((m) => (
                 <TableRow key={m.id}>
                   <TableCell>
-                    <EditMinerControls miner={m} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
+                    <EditMinerControls miner={m} isDefault={minerContext.profile === m.name} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
                   </TableCell>
-                  <TableCell>{m.enabled ? <CheckIcon /> : <></>}</TableCell>
+                  <TableCell>{m.name === minerContext.profile ? <CheckIcon /> : <></>}</TableCell>
                   <TableCell>{m.name}</TableCell>
                   <TableCell>{m.kind}</TableCell>
                   <TableCell>{m.version}</TableCell>

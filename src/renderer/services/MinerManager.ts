@@ -149,9 +149,7 @@ async function getMinerState() {
 
 async function getDefaultMiner() {
   const miners = await getMiners();
-  const miner = miners.find((m) => m.enabled);
-
-  return miner !== undefined ? miner : undefined;
+  return miners.length > 0 ? miners[0] : undefined;
 }
 
 async function setInitialState() {
