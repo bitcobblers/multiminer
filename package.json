@@ -41,9 +41,8 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": ["nsis"],
+      "requestedExecutionLevel": "requireAdministrator"
     },
     "directories": {
       "app": "release/app",
