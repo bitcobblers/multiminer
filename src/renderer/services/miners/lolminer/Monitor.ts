@@ -1,4 +1,4 @@
-import { interval, withLatestFrom, map } from 'rxjs';
+import { interval, withLatestFrom, map, filter } from 'rxjs';
 import { minerState$, API_PORT } from '../../../../models';
 import { addGpuStat, addMinerStat } from '../../StatisticsAggregator';
 import { minerApi } from '../../../../shared/MinerApi';
@@ -92,22 +92,17 @@ export function enableLolMiner() {
   monitor$
     .pipe(
       withLatestFrom(minerState$),
-      map(([, miner]) => ({ miner }))
+      map(([, miner]) => ({ name: miner.miner, state: miner.state })),
+      filter(({ name, state }) => state === 'active' && name === 'lolminer')
     )
-    .subscribe(({ miner }) => {
-      if (miner.state !== 'active' || miner.miner !== 'lolminer') {
-        return;
-      }
-
+    .subscribe(() => {
       // eslint-disable-next-line promise/catch-or-return
-      minerApi.stats(API_PORT).then((result) => {
+      minerApi.stats(API_PORT, '').then((result) => {
         // eslint-disable-next-line promise/always-return
-        if (result === '') {
-          return;
+        if (result !== '') {
+          const stats = JSON.parse(result) as MinerAppStatistics;
+          updateStats(stats);
         }
-
-        const stats = JSON.parse(result) as MinerAppStatistics;
-        updateStats(stats);
       });
     });
 
