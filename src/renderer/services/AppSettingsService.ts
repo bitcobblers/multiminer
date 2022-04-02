@@ -52,8 +52,6 @@ settingsApi.changed((key, content) => {
   const typedKey = key as keyof WatchersObservable;
 
   if (typedKey in watchers$) {
-    // eslint-disable-next-line no-console
-    console.log(`Triggering change for ${typedKey}`);
     watchers$[typedKey].next(JSON.parse(content));
   }
 });
