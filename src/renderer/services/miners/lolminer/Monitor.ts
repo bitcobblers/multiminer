@@ -69,6 +69,7 @@ function updateStats(stats: MinerAppStatistics) {
       coreClock: worker.CCLK,
       memClock: worker.MCLK,
       coreTemperature: worker.Core_Temp,
+      memTemperature: worker.Mem_Temp,
       fanSpeed: worker.Fan_Speed,
     });
   });
