@@ -1,5 +1,4 @@
-import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
-import ps from 'ps-node';
+import { spawn, ChildProcessWithoutNullStreams, execSync } from 'child_process';
 import * as fs from 'fs';
 import path from 'path';
 import electron, { IpcMainInvokeEvent } from 'electron';
@@ -50,12 +49,12 @@ export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendC
     handleExit(code, signal, send);
   });
 
-  proc.stderr.setEncoding('utf8').on('data', (data) => {
+  proc.stderr.setEncoding('utf-8').on('data', (data) => {
     handleData(data, send);
   });
 
   proc.stdout
-    .setEncoding('utf8')
+    .setEncoding('utf-8')
     .on('error', (error) => {
       handleError(error, send);
     })
@@ -76,6 +75,19 @@ export function launch(exePath: string, args: string, handlers: LaunchHandlers) 
   }
 
   return handlers.onSuccess(spawn(exePath, args.split(' '), { detached: true }));
+}
+
+function getMinerProcesses(exe: string | undefined) {
+  if (exe === undefined) {
+    return [];
+  }
+
+  return execSync('tasklist /fo table /nh')
+    .toString('utf-8')
+    .split('\r\n')
+    .map((line) => line.split(/\s+/))
+    .filter(([name]) => name === exe)
+    .map(([, pid]) => Number(pid));
 }
 
 function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: MinerInfo, version: string, args: string) {
@@ -104,24 +116,18 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
 
 function stop(event: IpcMainInvokeEvent) {
   if (child?.pid !== undefined) {
-    ps.lookup({ command: minerInfo?.exe }, (error, list) => {
-      if (error) {
-        logger.error('Error locking for miner process: %s', error.message);
-      } else {
-        list.forEach((p) => {
-          logger.debug('Killing process: %s', p.pid);
-          process.kill(p.pid);
-        });
-
-        event.sender.send('ipc-minerExited', child?.exitCode);
-        logger.debug('Stopped miner with exit code %o', child?.exitCode);
-
-        child = null;
-        minerProfile = null;
-        minerInfo = null;
-        currentCoin = null;
-      }
+    getMinerProcesses(minerInfo?.exe).forEach((pid) => {
+      logger.debug('Killing process: %s', pid);
+      process.kill(pid);
     });
+
+    event.sender.send('ipc-minerExited', child?.exitCode);
+    logger.debug('Stopped miner with exit code %o', child?.exitCode);
+
+    child = null;
+    minerProfile = null;
+    minerInfo = null;
+    currentCoin = null;
   }
 }
 
