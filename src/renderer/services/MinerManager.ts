@@ -4,7 +4,7 @@ import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
 import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
-import { getMiners } from './AppSettingsService';
+import { getMiners, getAppSettings } from './AppSettingsService';
 import { downloadMiner } from './DownloadManager';
 
 type CoinSelection = {
@@ -148,8 +148,11 @@ async function getMinerState() {
 }
 
 async function getDefaultMiner() {
+  const appSettings = await getAppSettings();
   const miners = await getMiners();
-  return miners.length > 0 ? miners[0] : undefined;
+  const miner = miners.find((m) => m.name === appSettings.settings.defaultMiner);
+
+  return miner !== undefined ? miner : undefined;
 }
 
 async function setInitialState() {

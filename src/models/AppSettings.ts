@@ -1,5 +1,6 @@
 export type GeneralSettings = {
   workerName: string;
+  defaultMiner: string;
   proxy: string;
 };
 
