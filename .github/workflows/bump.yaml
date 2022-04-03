@@ -20,9 +20,7 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v2
-        with:
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+        uses: actions/checkout@v3
 
       - name: Configure Environment
         uses: actions/setup-node@v2
