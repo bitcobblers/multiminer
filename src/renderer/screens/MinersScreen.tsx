@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
 import { Miner } from '../../models';
-import { getMiners, setMiners } from '../services/AppSettingsService';
+import { getMiners, setMiners, getAppSettings, setAppSettings } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
@@ -70,6 +70,12 @@ export function MinersScreen() {
     enqueueSnackbar(`Miner ${name} removed.`, { variant: 'success' });
   };
 
+  const setDefaultMiner = async (name: string) => {
+    const appSettings = await getAppSettings();
+    appSettings.settings.defaultMiner = name;
+    await setAppSettings(appSettings);
+  };
+
   return (
     <Container>
       <ScreenHeader title="Miners">
@@ -108,7 +114,15 @@ export function MinersScreen() {
                   <TableCell>
                     <EditMinerControls miner={m} isDefault={minerContext.profile === m.name} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
                   </TableCell>
-                  <TableCell>{m.name === minerContext.profile ? <CheckIcon /> : <></>}</TableCell>
+                  <TableCell>
+                    {m.name === minerContext.profile ? (
+                      <CheckIcon />
+                    ) : (
+                      <Button variant="outlined" size="small" onClick={() => setDefaultMiner(m.name)}>
+                        Set Default
+                      </Button>
+                    )}
+                  </TableCell>
                   <TableCell>{m.name}</TableCell>
                   <TableCell>{m.kind}</TableCell>
                   <TableCell>{m.version}</TableCell>

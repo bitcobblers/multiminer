@@ -7,7 +7,7 @@ class WatchersObservable {
   wallets = new Subject<Wallet[]>();
   coins = new Subject<Coin[]>();
   miners = new Subject<Miner[]>();
-  appSettings = new Subject<AppSettings>();
+  settings = new Subject<AppSettings>();
 }
 
 export const watchers$ = new WatchersObservable();

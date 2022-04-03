@@ -4,7 +4,7 @@ import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
 import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
-import { getMiners, getAppSettings } from './AppSettingsService';
+import { getMiners, getAppSettings, watchers$ as settingsWatcher$ } from './AppSettingsService';
 import { downloadMiner } from './DownloadManager';
 
 type CoinSelection = {
@@ -14,8 +14,6 @@ type CoinSelection = {
   coinInfo: CoinDefinition;
   wallet: Wallet;
 };
-
-const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
 
 let timeout: NodeJS.Timeout;
 
@@ -147,17 +145,17 @@ async function getMinerState() {
   return minerApi.status();
 }
 
-async function getDefaultMiner() {
-  const appSettings = await getAppSettings();
+async function getDefaultMiner(defaultMiner: string) {
   const miners = await getMiners();
-  const miner = miners.find((m) => m.name === appSettings.settings.defaultMiner);
+  const miner = miners.find((m) => m.name === defaultMiner);
 
-  return miner !== undefined ? miner : undefined;
+  return miner !== undefined ? miner : miners[0];
 }
 
 async function setInitialState() {
   const minerState = await getMinerState();
-  const defaultMiner = await getDefaultMiner();
+  const appSettings = await getAppSettings();
+  const defaultMiner = await getDefaultMiner(appSettings.settings.defaultMiner);
 
   if (minerState.state === 'active') {
     updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner });
@@ -180,6 +178,7 @@ async function setInitialState() {
 
     // eslint-disable-next-line promise/catch-or-return
     config.getCoins().then((coins) => {
+      const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
       const c = coins.find((x) => x.symbol === coin);
 
       // eslint-disable-next-line promise/always-return
@@ -187,6 +186,11 @@ async function setInitialState() {
         timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
       }
     });
+  });
+
+  settingsWatcher$.settings.subscribe(async (updatedAppSettings) => {
+    const miner = await getDefaultMiner(updatedAppSettings.settings.defaultMiner);
+    updateState({ profile: miner.name, miner: miner.kind });
   });
 }
 
