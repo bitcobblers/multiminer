@@ -36,7 +36,10 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
   const [miners, setLoadedMiners] = useState(Array<Miner>());
 
   useEffect(() => {
-    getMiners().then(setLoadedMiners);
+    getMiners()
+      .then(setLoadedMiners)
+      // eslint-disable-next-line no-console
+      .catch((err) => console.error('Failed to load miners: ', err));
   }, []);
 
   const setDefaultMiner = async (name: string) => {
