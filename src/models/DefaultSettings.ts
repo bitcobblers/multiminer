@@ -22,6 +22,7 @@ export const DefaultSettings = {
       kawpow: 'kp.unmineable.com:3333',
       randomx: 'rx.unmineable.com:3333',
     },
+    appearance: { theme: 'light' },
   } as AppSettings,
 };
 

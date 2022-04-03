@@ -1,4 +1,4 @@
-import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, Divider, FormControl, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
@@ -21,6 +21,7 @@ export function SettingsScreen() {
     formState: { errors, isValid },
     handleSubmit,
     reset,
+    watch,
   } = useForm<AppSettings>({ defaultValues: DefaultSettings.settings });
 
   useEffect(() => {
@@ -111,6 +112,27 @@ export function SettingsScreen() {
           <ConfigurableControl description="The optional proxy server to use for network calls.">
             <TextField spellCheck="false" label="Proxy Server (http or socks)" {...register('settings.proxy')} fullWidth />
           </ConfigurableControl>
+        </Stack>
+        <Divider sx={{ mt: 2 }} />
+        <Typography variant="h5" sx={{ my: 2 }}>
+          Appearance
+        </Typography>
+        <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '15rem' }}>
+          <TextField
+            label="Theme"
+            select
+            required
+            fullWidth
+            {...register('appearance.theme', {
+              required: 'Theme is required.',
+            })}
+            error={!!errors?.appearance?.theme}
+            helperText={errors?.appearance?.theme?.message}
+            value={watch('appearance.theme')}
+          >
+            <MenuItem value="light">Light</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+          </TextField>
         </Stack>
         <Divider sx={{ mt: 2 }} />
         <Typography variant="h5" sx={{ my: 2 }}>
