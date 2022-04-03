@@ -3,7 +3,7 @@ import path from 'path-browserify';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
-import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$, AppSettings } from '../../models';
+import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
 import { getMiners, getAppSettings, watchers$ as settingsWatcher$ } from './AppSettingsService';
 import { downloadMiner } from './DownloadManager';
 
@@ -145,16 +145,17 @@ async function getMinerState() {
   return minerApi.status();
 }
 
-async function getDefaultMiner(appSettings: AppSettings) {
+async function getDefaultMiner(defaultMiner: string) {
   const miners = await getMiners();
-  const miner = miners.find((m) => m.name === appSettings.settings.defaultMiner);
+  const miner = miners.find((m) => m.name === defaultMiner);
 
   return miner !== undefined ? miner : miners[0];
 }
 
 async function setInitialState() {
   const minerState = await getMinerState();
-  const defaultMiner = await getDefaultMiner(await getAppSettings());
+  const appSettings = await getAppSettings();
+  const defaultMiner = await getDefaultMiner(appSettings.settings.defaultMiner);
 
   if (minerState.state === 'active') {
     updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner });
@@ -187,8 +188,8 @@ async function setInitialState() {
     });
   });
 
-  settingsWatcher$.settings.subscribe(async (appSettings) => {
-    const miner = await getDefaultMiner(appSettings);
+  settingsWatcher$.settings.subscribe(async (updatedAppSettings) => {
+    const miner = await getDefaultMiner(updatedAppSettings.settings.defaultMiner);
     updateState({ profile: miner.name, miner: miner.kind });
   });
 }
