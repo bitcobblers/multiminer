@@ -1,11 +1,11 @@
-import { useState } from 'react';
-
+import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Stack, Tooltip, IconButton } from '@mui/material';
-
+import { IconButton, Stack, Tooltip } from '@mui/material';
+import { useState } from 'react';
+import { getAppSettings, setAppSettings } from 'renderer/services/AppSettingsService';
 import { Miner } from '../../models';
-import { RemoveMinerDialog, EditMinerDialog } from '../dialogs';
+import { EditMinerDialog, RemoveMinerDialog } from '../dialogs';
 
 interface EditMinerControlsProps {
   miner: Miner;
@@ -46,21 +46,36 @@ export function EditMinerControls(props: EditMinerControlsProps) {
     setRemoveOpen(false);
   };
 
+  const setDefaultMiner = async (name: string) => {
+    const appSettings = await getAppSettings();
+    appSettings.settings.defaultMiner = name;
+    await setAppSettings(appSettings);
+  };
+
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={0}>
       <RemoveMinerDialog open={removeOpen} onClose={handleRemoveClose} />
       <EditMinerDialog open={editOpen} miner={miner} existingMiners={existingMiners} autoReset={false} onSave={handleEditSave} onCancel={handleEditCancel} />
+      <Tooltip title={isDefault ? 'Default' : 'Set Default'}>
+        {isDefault ? (
+          <CheckIcon color="primary" style={{ margin: '8px' }} />
+        ) : (
+          <IconButton onClick={() => setDefaultMiner(miner.name)}>
+            <CheckIcon color="disabled" />
+          </IconButton>
+        )}
+      </Tooltip>
+      <Tooltip title="Edit Miner">
+        <IconButton aria-label="Edit Miner" onClick={handleOnEditClick}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
       <Tooltip title={isDefault ? 'Cannot remove miner because it is currently selected as the default miner.' : 'Delete Miner'}>
         <div>
           <IconButton aria-label="Delete Miner" disabled={isDefault} onClick={handleOnRemoveClick}>
             <DeleteIcon />
           </IconButton>
         </div>
-      </Tooltip>
-      <Tooltip title="Edit Miner">
-        <IconButton aria-label="Edit Miner" onClick={handleOnEditClick}>
-          <EditIcon />
-        </IconButton>
       </Tooltip>
     </Stack>
   );

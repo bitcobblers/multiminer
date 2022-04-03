@@ -2,12 +2,11 @@ import { useState, useEffect, useContext } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
 import { Miner } from '../../models';
-import { getMiners, setMiners, getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { getMiners, setMiners } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
@@ -70,12 +69,6 @@ export function MinersScreen() {
     enqueueSnackbar(`Miner ${name} removed.`, { variant: 'success' });
   };
 
-  const setDefaultMiner = async (name: string) => {
-    const appSettings = await getAppSettings();
-    appSettings.settings.defaultMiner = name;
-    await setAppSettings(appSettings);
-  };
-
   return (
     <Container>
       <ScreenHeader title="Miners">
@@ -100,8 +93,7 @@ export function MinersScreen() {
           <Table aria-label="Miners">
             <TableHead>
               <TableRow>
-                <TableCell />
-                <TableCell>Default</TableCell>
+                <TableCell aria-label="Actions" width="15rem" />
                 <TableCell>Name</TableCell>
                 <TableCell>Miner</TableCell>
                 <TableCell>Version</TableCell>
@@ -113,15 +105,6 @@ export function MinersScreen() {
                 <TableRow key={m.id}>
                   <TableCell>
                     <EditMinerControls miner={m} isDefault={minerContext.profile === m.name} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
-                  </TableCell>
-                  <TableCell>
-                    {m.name === minerContext.profile ? (
-                      <CheckIcon />
-                    ) : (
-                      <Button variant="outlined" size="small" onClick={() => setDefaultMiner(m.name)}>
-                        Set Default
-                      </Button>
-                    )}
                   </TableCell>
                   <TableCell>{m.name}</TableCell>
                   <TableCell>{m.kind}</TableCell>
