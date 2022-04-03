@@ -1,13 +1,14 @@
 import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Stop from '@mui/icons-material/Stop';
-import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
-import { MinerState, minerState$, MinerStatistic } from 'models';
+import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Tooltip, Typography, useTheme } from '@mui/material';
+import { Miner, MinerState, minerState$, MinerStatistic } from 'models';
 import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
+import { getAppSettings, getMiners, setAppSettings } from 'renderer/services/AppSettingsService';
+import * as formatter from 'renderer/services/Formatters';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
-import * as formatter from 'renderer/services/Formatters';
 
 function Separator() {
   const theme = useTheme();
@@ -32,6 +33,20 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
     };
   }, []);
 
+  const [miners, setLoadedMiners] = useState(Array<Miner>());
+
+  useEffect(() => {
+    getMiners()
+      .then(setLoadedMiners)
+      // eslint-disable-next-line no-console
+      .catch((err) => console.error('Failed to load miners: ', err));
+  }, []);
+
+  const setDefaultMiner = async (name: string) => {
+    const appSettings = await getAppSettings();
+    await setAppSettings({ ...appSettings, settings: { ...appSettings.settings, defaultMiner: name } });
+  };
+
   return (
     <Box
       sx={{
@@ -48,11 +63,16 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         borderTop: `2px solid ${theme.palette.divider}`,
       }}
     >
-      {/* TODO: add default miner selection (https://github.com/bitcobblers/multiminer/issues/33) */}
-      {/* <FormControl size="small" sx={{minWidth: '10rem'}}>
+      <FormControl size="small" sx={{ minWidth: '12rem' }}>
         <InputLabel id="miner-label">Miner</InputLabel>
-        <Select labelId="miner-label" label="Miner"></Select>
-      </FormControl> */}
+        <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={minerContext.profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
+          {miners.map((miner) => (
+            <MenuItem key={miner.name} value={miner.name}>
+              {miner.name} ({miner.kind})
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       {minerActive && (
         <Typography sx={{ mr: 2 }}>
           <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
