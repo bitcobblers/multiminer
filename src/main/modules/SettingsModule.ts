@@ -45,7 +45,7 @@ export function importSettings(_event: IpcMainInvokeEvent, settingsPath: string)
 
   try {
     const content = fs.readFileSync(settingsPath);
-    const allSettings = JSON.parse(content.toString());
+    const allSettings: SettingsSchemaType = JSON.parse(content.toString());
 
     globalStore.set('wallets', allSettings.wallets);
     globalStore.set('coins', allSettings.coins);
@@ -61,7 +61,7 @@ export function importSettings(_event: IpcMainInvokeEvent, settingsPath: string)
 export function exportSettings(_current: IpcMainInvokeEvent, settingsPath: string) {
   logger.debug('Exporting settings from %s', settingsPath);
 
-  const allSettings = {
+  const allSettings: SettingsSchemaType = {
     wallets: globalStore.get('wallets'),
     coins: globalStore.get('coins'),
     settings: globalStore.get('settings'),

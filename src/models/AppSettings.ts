@@ -4,8 +4,13 @@ export type GeneralSettings = {
   proxy: string;
 };
 
+type AppearanceSettings = {
+  theme: 'light' | 'dark';
+};
+
 export type AppSettings = {
   settings: GeneralSettings;
+  appearance: AppearanceSettings;
   pools: {
     ethash: string;
     etchash: string;

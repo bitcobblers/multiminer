@@ -1,10 +1,13 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { map } from 'rxjs/operators';
+import { aboutApi } from 'shared/AboutApi';
 import './App.css';
 
 // Material.
+import { BugReport } from '@mui/icons-material';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, Switch as ToggleSwitch, ListItemButton } from '@mui/material';
+import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, ListItemButton } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
 import { lightGreen, teal } from '@mui/material/colors';
 
@@ -27,6 +30,7 @@ import { MinerState, minerState$, minerErrors$ } from '../models';
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 import { minerExited$, minerStarted$ } from './services/MinerService';
+import { watchers$ } from './services/AppSettingsService';
 
 const drawerWidth = 200;
 
@@ -68,7 +72,7 @@ function safeReverse<T>(items: Array<T>) {
   return [...items].reverse();
 }
 
-function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
+function AppContent() {
   const [managerState, setManagerState] = useState<MinerState>({ state: 'inactive', currentCoin: '' });
   const { enqueueSnackbar } = useSnackbar();
 
@@ -121,7 +125,11 @@ function AppContent({ themeToggle }: { themeToggle: React.ReactNode }) {
             open
           >
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-            {themeToggle}
+            <div style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
+              <Button variant="text" size="small" startIcon={<BugReport />} onClick={() => aboutApi.openBrowser('https://github.com/bitcobblers/multiminer/issues/new/choose')}>
+                Report a bug
+              </Button>
+            </div>
           </Drawer>
           <Box
             sx={{
@@ -146,8 +154,12 @@ export function App() {
     snackRef.current?.closeSnackbar(key);
   };
 
-  const THEME_KEY = 'theme-mode';
-  const [themeMode, setThemeMode] = useState<PaletteMode>((localStorage.getItem(THEME_KEY) as PaletteMode) ?? 'light');
+  const [themeMode, setThemeMode] = useState<PaletteMode>();
+  useEffect(() => {
+    const subscription = watchers$.settings.pipe(map((settings) => settings.appearance.theme)).subscribe((theme) => setThemeMode(theme as PaletteMode));
+    return () => subscription.unsubscribe();
+  }, []);
+
   const mdTheme = useMemo(() => {
     const isDark = themeMode === 'dark';
     return createTheme({
@@ -164,21 +176,7 @@ export function App() {
   return (
     <ThemeProvider theme={mdTheme}>
       <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
-        <AppContent
-          themeToggle={
-            <div className="theme-toggle">
-              <span style={{ textTransform: 'capitalize' }}>{themeMode} mode</span>
-              <ToggleSwitch
-                checked={themeMode === 'dark'}
-                onChange={(event) => {
-                  const mode = event.target.checked ? 'dark' : 'light';
-                  localStorage.setItem(THEME_KEY, mode);
-                  setThemeMode(mode);
-                }}
-              />
-            </div>
-          }
-        />
+        <AppContent />
       </SnackbarProvider>
     </ThemeProvider>
   );
