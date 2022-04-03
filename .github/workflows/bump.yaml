@@ -30,6 +30,11 @@ jobs:
       - name: Install Dependencies
         run: |
           npm ci
+
+      - name: Setup Git
+        run: |
+          git config user.name 'Bitcobblers'
+          git config user.email 'admin@bitcobblers.com'
          
       - name: Bump Version
         run: |
