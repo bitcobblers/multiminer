@@ -241,5 +241,6 @@
     ],
     "singleQuote": true,
     "printWidth": 200
-  }
+  },
+  "version": "0.0.1"
 }
