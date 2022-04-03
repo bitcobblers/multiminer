@@ -41,7 +41,9 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "requestedExecutionLevel": "requireAdministrator"
     },
     "directories": {
@@ -132,7 +134,7 @@
     "@typescript-eslint/parser": "^5.8.0",
     "browserslist-config-erb": "^0.0.3",
     "chalk": "^4.1.2",
-    "concurrently": "^6.5.1",
+    "concurrently": "^7.1.0",
     "core-js": "^3.20.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.5.1",
@@ -150,7 +152,7 @@
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-compat": "^4.0.0",
     "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jest": "^25.3.2",
+    "eslint-plugin-jest": "^26.1.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.28.0",
@@ -175,7 +177,7 @@
     "ts-jest": "^27.1.2",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4",
+    "typescript": "^4.6.3",
     "url-loader": "^4.1.1",
     "webpack": "^5.65.0",
     "webpack-bundle-analyzer": "^4.5.0",
@@ -198,7 +200,6 @@
     "electron-store": "^8.0.1",
     "electron-updater": "^4.6.4",
     "extract-zip": "^2.0.1",
-    "history": "4.x.x",
     "https-proxy-agent": "^5.0.0",
     "node-fetch": "^2.6.7",
     "notistack": "^2.0.3",
