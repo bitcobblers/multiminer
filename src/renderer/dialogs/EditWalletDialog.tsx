@@ -74,6 +74,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
               <TextField
                 required
                 autoFocus
+                spellCheck="false"
                 label="Name"
                 value={watch('name') ?? null}
                 {...register('name', {
@@ -92,6 +93,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
               </TextField>
               <TextField
                 required
+                spellCheck="false"
                 label="Address"
                 value={watch('address') ?? null}
                 {...register('address', {
@@ -105,6 +107,7 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
                 helperText={errors?.address?.message}
               />
               <TextField
+                spellCheck="false"
                 label="Memo"
                 value={watch('memo') ?? null}
                 {...register('memo', {

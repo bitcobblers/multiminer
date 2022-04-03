@@ -99,6 +99,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
               <TextField
                 required
                 autoFocus
+                spellCheck="false"
                 label="Name"
                 value={watch('name') ?? null}
                 {...register('name', {
@@ -131,7 +132,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
+              <TextField spellCheck="false" label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
               <Divider />
               <CustomDialogActions buttonType="submit" onCancel={handleOnCancel} />
             </Stack>
