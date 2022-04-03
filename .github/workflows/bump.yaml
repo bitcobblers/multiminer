@@ -30,13 +30,7 @@ jobs:
       - name: Install Dependencies
         run: |
           npm ci
-
-      - name: Setup Git
-        run: |
-          ls -lh
-          git config user.name 'Michael Vastarelli'
-          git config user.email 'admin@bitcobblers.com'
-          
+         
       - name: Bump Version
         run: |
           npm version ${{ github.event.inputs.version }}
