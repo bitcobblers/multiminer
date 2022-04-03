@@ -19,8 +19,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out Git Repository
+      - name: Check out source
         uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Configure Environment
         uses: actions/setup-node@v2
