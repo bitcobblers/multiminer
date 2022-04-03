@@ -118,16 +118,7 @@ export function SettingsScreen() {
           Appearance
         </Typography>
         <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '15rem' }}>
-          <TextField
-            label="Theme"
-            select
-            required
-            fullWidth
-            {...register('appearance.theme', {
-              required: 'Theme is required.',
-            })}
-            value={watch('appearance.theme')}
-          >
+          <TextField label="Theme" select fullWidth {...register('appearance.theme')} value={watch('appearance.theme')}>
             <MenuItem value="light">Light</MenuItem>
             <MenuItem value="dark">Dark</MenuItem>
           </TextField>
