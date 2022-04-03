@@ -1,0 +1,46 @@
+
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version type (major, minor, or patch)'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  bump-version:
+    runs-on: self-hosted
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out Git Repository
+        uses: actions/checkout@v2
+
+      - name: Configure Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+
+      - name: Setup Git
+        run: |
+          ls -lh
+          git config user.name 'Michael Vastarelli'
+          git config user.email 'admin@bitcobblers.com'
+          
+      - name: Bump Version
+        run: |
+          npm version ${{ github.event.inputs.version }}
+          
+      - name: Push Latest
+        run: |
+          git push origin main --follow-tags
