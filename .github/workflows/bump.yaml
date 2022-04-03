@@ -38,7 +38,7 @@ jobs:
          
       - name: Bump Version
         run: |
-          npm version --prefix releases/app ${{ github.event.inputs.version }}
+          npm version --prefix release/app ${{ github.event.inputs.version }}
           
       - name: Push Latest
         env:
