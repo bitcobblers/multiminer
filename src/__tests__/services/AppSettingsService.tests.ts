@@ -87,6 +87,9 @@ describe('App Settings Service', () => {
           kawpow: '',
           randomx: '',
         },
+        appearance: {
+          theme: 'light',
+        },
       };
 
       jest.spyOn(settingsApi, 'read').mockReturnValue(Promise.resolve(JSON.stringify(appSettings)));
