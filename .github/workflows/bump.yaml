@@ -35,6 +35,7 @@ jobs:
          
       - name: Bump Version
         run: |
+          ls -lha
           npm version ${{ github.event.inputs.version }}
           
       - name: Push Latest
