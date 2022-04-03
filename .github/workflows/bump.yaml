@@ -44,4 +44,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git commit -m "Bumped ${{ github.event.inputs.version }} Version"
           git push origin main --follow-tags
