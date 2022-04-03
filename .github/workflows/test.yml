@@ -1,9 +1,9 @@
-name: Test
+name: Build and Test
 
 on: [push, pull_request]
 
 jobs:
-  release:
+  build-and-test:
     runs-on: self-hosted
     timeout-minutes: 10
 
@@ -18,7 +18,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install
+          npm ci
 
       - name: Run Build
         run: |
