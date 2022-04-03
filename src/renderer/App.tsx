@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { map } from 'rxjs/operators';
+import { aboutApi } from 'shared/AboutApi';
 import './App.css';
 
 // Material.
+import { BugReport } from '@mui/icons-material';
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { Button, ListItemIcon, ListItemText, CssBaseline, Drawer, List, Box, PaletteMode, ListItemButton } from '@mui/material';
 import { SnackbarProvider, SnackbarKey, useSnackbar } from 'notistack';
@@ -123,6 +125,11 @@ function AppContent() {
             open
           >
             <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+            <div style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
+              <Button variant="text" size="small" startIcon={<BugReport />} onClick={() => aboutApi.openBrowser('https://github.com/bitcobblers/multiminer/issues/new/choose')}>
+                Report a bug
+              </Button>
+            </div>
           </Drawer>
           <Box
             sx={{
