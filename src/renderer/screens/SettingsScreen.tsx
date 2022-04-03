@@ -126,8 +126,6 @@ export function SettingsScreen() {
             {...register('appearance.theme', {
               required: 'Theme is required.',
             })}
-            error={!!errors?.appearance?.theme}
-            helperText={errors?.appearance?.theme?.message}
             value={watch('appearance.theme')}
           >
             <MenuItem value="light">Light</MenuItem>
