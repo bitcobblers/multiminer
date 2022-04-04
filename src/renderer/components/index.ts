@@ -11,3 +11,4 @@ export { ScreenHeader } from './ScreenHeader';
 export { TabPanel } from './TabPanel';
 export { UsedByCoinsProps, UsedByCoins } from './UsedByCoins';
 export { WalletMenuItemProps, WalletMenuItem } from './WalletMenuItem';
+export { ThemeToggle } from './ThemeToggle';
