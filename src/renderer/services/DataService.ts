@@ -1,7 +1,11 @@
-import { Coin, ALL_COINS, MinerState, minerState$, enabledCoins$ } from '../../models';
+import { Coin, ALL_COINS, MinerState, minerState$, enabledCoins$, ConfiguredCoin } from '../../models';
 import * as config from './AppSettingsService';
 import { CoinTicker, ticker$ } from './CoinFeed';
 import { UnmineableCoin, unmineableCoins$ } from './UnmineableFeed';
+
+function publishCoins(coins: ConfiguredCoin[]) {
+  enabledCoins$.next(coins.sort((a, b) => a.symbol.localeCompare(b.symbol)));
+}
 
 function minerStateChanged(state: MinerState) {
   // eslint-disable-next-line no-console
@@ -14,7 +18,7 @@ function minerStateChanged(state: MinerState) {
     };
   });
 
-  enabledCoins$.next(updatedCoins);
+  publishCoins(updatedCoins);
 }
 
 function tickerUpdated(coins: CoinTicker[]) {
@@ -34,7 +38,7 @@ function tickerUpdated(coins: CoinTicker[]) {
     };
   });
 
-  enabledCoins$.next(updatedCoins);
+  publishCoins(updatedCoins);
 }
 
 function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
@@ -57,7 +61,7 @@ function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
     };
   });
 
-  enabledCoins$.next(updatedCoins);
+  publishCoins(updatedCoins);
 }
 
 function reloadCoins(coins: Coin[]) {
@@ -90,7 +94,7 @@ function reloadCoins(coins: Coin[]) {
   };
 
   // eslint-disable-next-line promise/catch-or-return
-  updateCoins().then((updatedCoins) => enabledCoins$.next(updatedCoins));
+  updateCoins().then(publishCoins);
 }
 
 const minerStateSubscription = minerState$.subscribe(minerStateChanged);
@@ -113,7 +117,7 @@ export async function enableDataService() {
   const loadedCoins = (await config.getCoins()).filter((c) => c.enabled);
   const wallets = await config.getWallets();
 
-  enabledCoins$.next(
+  publishCoins(
     loadedCoins.map((c) => {
       const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
       const wallet = wallets.find((w) => c.wallet === w.name);
