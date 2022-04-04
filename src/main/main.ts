@@ -40,7 +40,7 @@ class MainWindow {
       this.window = this.createWindow();
 
       if (process.env.NODE_ENV !== 'development') {
-        this.window.removeMenu();
+        // this.window.removeMenu();
       }
 
       this.onEvent.emit('window-created');

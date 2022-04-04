@@ -32,7 +32,7 @@ export function handleExit(code: number | null, signal: NodeJS.Signals | null, s
   minerInfo = null;
   currentCoin = null;
 
-  logger.debug('Stopped miner with exit code %o', code);
+  logger.info('Stopped miner with exit code %o', code);
 }
 
 export function handleError(error: Error, send: SendCallback) {
@@ -122,7 +122,7 @@ function stop(event: IpcMainInvokeEvent) {
     });
 
     event.sender.send('ipc-minerExited', child?.exitCode);
-    logger.debug('Stopped miner with exit code %o', child?.exitCode);
+    logger.info('Stopped miner with exit code %o', child?.exitCode);
 
     child = null;
     minerProfile = null;

@@ -41,7 +41,7 @@ function watchSetting(event: IpcMainInvokeEvent, key: keyof SettingsSchemaType) 
 }
 
 export function importSettings(_event: IpcMainInvokeEvent, settingsPath: string) {
-  logger.debug('Importing settings from %s', settingsPath);
+  logger.info('Importing settings from %s', settingsPath);
 
   try {
     const content = fs.readFileSync(settingsPath);
@@ -59,7 +59,7 @@ export function importSettings(_event: IpcMainInvokeEvent, settingsPath: string)
 }
 
 export function exportSettings(_current: IpcMainInvokeEvent, settingsPath: string) {
-  logger.debug('Exporting settings from %s', settingsPath);
+  logger.info('Exporting settings from %s', settingsPath);
 
   const allSettings: SettingsSchemaType = {
     wallets: globalStore.get('wallets'),
