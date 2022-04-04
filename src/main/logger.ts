@@ -9,11 +9,12 @@ function getLogger() {
 
   const logger = winston.createLogger({
     level: isDevelopment ? 'debug' : 'info',
-    transports: [
-      new winston.transports.Console({ format: consoleFormat }),
-      new winston.transports.File({ dirname: electron.app.getPath('userData'), filename: 'multiminer.log', maxsize: MAX_LOG_SIZE, tailable: true, format: fileFormat }),
-    ],
+    transports: [new winston.transports.Console({ format: consoleFormat })],
   });
+
+  if (isDevelopment) {
+    logger.add(new winston.transports.File({ dirname: electron.app.getPath('userData'), filename: 'multiminer.log', maxsize: MAX_LOG_SIZE, tailable: true, format: fileFormat }));
+  }
 
   return logger;
 }

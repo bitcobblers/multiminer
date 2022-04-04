@@ -21,11 +21,7 @@ let minerProfile: string | null = null;
 let minerInfo: MinerInfo | null = null;
 let currentCoin: string | null = null;
 
-export function handleExit(code: number | null, signal: NodeJS.Signals | null, send: SendCallback) {
-  if (signal === 'SIGINT') {
-    return;
-  }
-
+export function handleExit(code: number | null, send: SendCallback) {
   send('ipc-minerExited', code);
   child = null;
   minerProfile = null;
@@ -45,8 +41,8 @@ export function handleData(data: string, send: SendCallback) {
 }
 
 export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendCallback) {
-  proc.on('exit', (code, signal) => {
-    handleExit(code, signal, send);
+  proc.on('exit', (code) => {
+    handleExit(code, send);
   });
 
   proc.stderr.setEncoding('utf-8').on('data', (data) => {
@@ -114,20 +110,12 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
   });
 }
 
-function stop(event: IpcMainInvokeEvent) {
+function stop() {
   if (child?.pid !== undefined) {
     getMinerProcesses(minerInfo?.exe).forEach((pid) => {
       logger.debug('Killing process: %s', pid);
       process.kill(pid);
     });
-
-    event.sender.send('ipc-minerExited', child?.exitCode);
-    logger.info('Stopped miner with exit code %o', child?.exitCode);
-
-    child = null;
-    minerProfile = null;
-    minerInfo = null;
-    currentCoin = null;
   }
 }
 
