@@ -1,7 +1,7 @@
 import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Stop from '@mui/icons-material/Stop';
-import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import { Miner, MinerState, minerState$, MinerStatistic } from 'models';
 import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
@@ -53,7 +53,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         width: `calc(100vw - ${drawerWidth}px)`,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: minerActive ? 'space-between' : 'flex-end',
+        justifyContent: 'space-between',
         height: '3.5rem',
         position: 'fixed',
         bottom: 0,
@@ -63,34 +63,38 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         borderTop: `2px solid ${theme.palette.divider}`,
       }}
     >
-      <FormControl size="small" sx={{ minWidth: '12rem' }}>
-        <InputLabel id="miner-label">Miner</InputLabel>
-        <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={minerContext.profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
-          {miners.map((miner) => (
-            <MenuItem key={miner.name} value={miner.name}>
-              {miner.name} ({miner.kind})
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {minerActive && (
-        <Typography sx={{ mr: 2 }}>
-          <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
-        </Typography>
-      )}
-      <Box sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-        <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
-          <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop color="error" /> : <PlayArrow color="primary" />}</IconButton>
-        </Tooltip>
-        <Separator />
-        <Tooltip title="Next Coin">
-          <span>
-            <IconButton disabled={!minerActive || minerContext.miner === null} onClick={() => nextCoin()}>
-              <NextIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
+      <Box>
+        {minerActive && (
+          <Typography sx={{ mr: 2 }}>
+            <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
+          </Typography>
+        )}
       </Box>
+      <Stack direction="row" gap={1} alignItems="center">
+        <FormControl size="small" sx={{ minWidth: '12rem' }}>
+          <InputLabel id="miner-label">Miner</InputLabel>
+          <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={minerContext.profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
+            {miners.map((miner) => (
+              <MenuItem key={miner.name} value={miner.name}>
+                {miner.name} ({miner.kind})
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Stack justifyContent="space-around" alignItems="center" direction="row">
+          <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
+            <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop color="error" /> : <PlayArrow color="primary" />}</IconButton>
+          </Tooltip>
+          <Separator />
+          <Tooltip title="Next Coin">
+            <span>
+              <IconButton disabled={!minerActive || minerContext.miner === null} onClick={() => nextCoin()}>
+                <NextIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Stack>
+      </Stack>
     </Box>
   );
 }
