@@ -86,7 +86,7 @@ function getMinerProcesses(exe: string | undefined) {
     .toString('utf-8')
     .split('\r\n')
     .map((line) => line.split(/\s+/))
-    .filter(([name]) => name === exe)
+    .filter(([name]) => name.toLowerCase() === exe.toLowerCase())
     .map(([, pid]) => Number(pid));
 }
 
