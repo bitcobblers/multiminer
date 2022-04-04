@@ -13,7 +13,7 @@ export default class AppUpdater {
   }
 }
 
-const AppName = 'Unmineable Multi-Miner';
+const AppName = 'Multi-Miner';
 const defaultSettings = {
   title: AppName,
   width: 1260,
