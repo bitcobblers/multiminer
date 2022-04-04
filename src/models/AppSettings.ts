@@ -4,7 +4,7 @@ export type GeneralSettings = {
   proxy: string;
 };
 
-type AppearanceSettings = {
+export type AppearanceSettings = {
   theme: 'light' | 'dark';
 };
 
