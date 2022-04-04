@@ -65,6 +65,27 @@ describe('Chains Format Validation', () => {
     });
   });
 
+  describe('AVAX C-Chain', () => {
+    const cases = [
+      '0x7fCb4849e25FE18e3b393a9d996354DAd7d3ad2E',
+      '0x0436C1913DB92783425DE87FfBf5CbEDF320af00',
+      '0xCab73b04A43dD39B8b4dbC3dd76a5faFDD97CC3c',
+      '0xb945f4Cc708A74b8f7FC70d689e445cdEb9bC9f4',
+      '0xD26d652E4aCBdBDF7EE5295a33654271A220d268',
+    ];
+
+    const chain = ALL_CHAINS.find((c) => c.name === 'AVAXC')!;
+    const format = new RegExp(chain.token_format);
+
+    test.each(cases)('Should match %p', (address) => {
+      // Act.
+      const result = format.test(address);
+
+      // Assert.
+      expect(result).toBe(true);
+    });
+  });
+
   describe('BAND', () => {
     const cases = [
       'band1hlj3cuvvvqn8kzc3kl075u24cfr8nsek76lj98',
