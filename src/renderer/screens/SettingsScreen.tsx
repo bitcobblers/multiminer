@@ -1,4 +1,4 @@
-import { Button, Container, Divider, FormControl, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
@@ -6,7 +6,7 @@ import { AppSettings, DefaultSettings } from 'models';
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { ConfigurableControl, ScreenHeader } from '../components';
+import { ConfigurableControl, ScreenHeader, ThemeToggle } from 'renderer/components';
 import { getAppSettings, setAppSettings } from '../services/AppSettingsService';
 import { dialogApi } from '../../shared/DialogApi';
 import { settingsApi } from '../../shared/SettingsApi';
@@ -21,7 +21,6 @@ export function SettingsScreen() {
     formState: { errors, isValid },
     handleSubmit,
     reset,
-    watch,
   } = useForm<AppSettings>({ defaultValues: DefaultSettings.settings });
 
   useEffect(() => {
@@ -117,11 +116,9 @@ export function SettingsScreen() {
         <Typography variant="h5" sx={{ my: 2 }}>
           Appearance
         </Typography>
-        <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '15rem' }}>
-          <TextField label="Theme" select fullWidth {...register('appearance.theme')} value={watch('appearance.theme')}>
-            <MenuItem value="light">Light</MenuItem>
-            <MenuItem value="dark">Dark</MenuItem>
-          </TextField>
+        <Stack direction="row" alignItems="center">
+          Theme:
+          <ThemeToggle />
         </Stack>
         <Divider sx={{ mt: 2 }} />
         <Typography variant="h5" sx={{ my: 2 }}>
