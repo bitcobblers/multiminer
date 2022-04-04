@@ -63,6 +63,11 @@ export function AboutScreen(): JSX.Element {
       </Typography>
       <Divider />
       <Typography variant="body1" gutterBottom sx={{ my: 2 }}>
+        Notice of Non-Affiliation: This application is not endorsed by, directly affiliated with, maintained, authorized, or sponsored by UnMineable. All product and company names are the registered
+        trademarks of their original owners. The use of any trade name or trademark is for identification and reference purposes only and does not imply any association with the trademark holder of
+        their product brand.
+      </Typography>
+      <Typography variant="body1" gutterBottom sx={{ my: 2 }}>
         THIS SOFTWARE IS PROVIDED BY THE AUTHOR &apos;&apos;AS IS&apos;&apos; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
         FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
         LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
