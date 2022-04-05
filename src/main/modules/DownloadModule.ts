@@ -71,10 +71,10 @@ async function downloadMiner(_event: IpcMainInvokeEvent, name: string, version: 
   logger.info('Extracting archive.');
   await extract(downloadFileName, { dir: downloadPath });
 
-  logger.info('Removing archive.');
+  logger.debug('Removing archive.');
   fs.rmSync(downloadFileName);
 
-  logger.info('Arraching files.');
+  logger.debug('Arraching files.');
   await arrangeFiles(downloadPath);
 
   logger.info('Successfully installed miner.');

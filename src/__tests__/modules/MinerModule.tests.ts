@@ -5,6 +5,7 @@ import { logger } from '../../main/logger';
 require('child_process').spawn = jest.fn();
 
 describe('Miner Module', () => {
+  logger.info = jest.fn();
   logger.debug = jest.fn();
   logger.error = jest.fn();
 
@@ -63,23 +64,12 @@ describe('Miner Module', () => {
     expect(handlers.onSuccess).toBeCalled();
   });
 
-  it('Should not send an event when process is interrupted.', () => {
-    // Arrange.
-    const send = jest.fn();
-
-    // Act.
-    minerModule.handleExit(0, 'SIGINT', send);
-
-    // Assert.
-    expect(send).not.toHaveBeenCalled();
-  });
-
   it('Should send an event when process is killed.', async () => {
     // Arrange.
     const send = jest.fn();
 
     // Act.
-    minerModule.handleExit(0, 'SIGKILL', send);
+    minerModule.handleExit(0, send);
 
     // Assert.
     expect(send).toHaveBeenCalled();
