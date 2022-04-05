@@ -38,7 +38,7 @@ export const ALL_CHAINS: Chain[] = [
   { name: 'VET', description: 'VeChain', token_format: '^0x[0-9A-Fa-f]{40}$' },
   { name: 'WAVES', description: 'Waves', token_format: '^3P[0-9A-Za-z]{33}$' },
   { name: 'XLM', description: 'Stellar Lumens', token_format: '^G[A-D][A-Z2-7]{54}$', memo_format: '^[0-9A-Za-z]{1,28}$' },
-  { name: 'XMR', description: 'Monero', token_format: '^48[a-zA-Z0-9]{94}([a-zA-Z0-9]{11})?$' },
+  { name: 'XMR', description: 'Monero', token_format: '^[48][a-zA-Z|\\d]{94}([a-zA-Z|\\d]{11})?$' },
   { name: 'XRP', description: 'Ripple', token_format: '^r[1-9A-HJ-NP-Za-km-z]{25,34}$', memo_format: '^((?!0){0-9}{1,19})$' },
   { name: 'XTZ', description: 'Tezos', token_format: '^(tz[1,2,3]|KT1)[a-zA-Z0-9]{33}$' },
   { name: 'XVG', description: 'Verge', token_format: '^D[A-Za-z0-9]{33}$' },

@@ -662,6 +662,21 @@ describe('Chains Format Validation', () => {
     });
   });
 
+  describe('XMR', () => {
+    const cases = ['87pU7jRKGeyJqCMtXJHPfj86h6dsjJgTc1x35XA8RYtNUoUoariuKZjQcPvnF1HFDvQK5HzpJWaJZVBQ1jFa6wjtNeidthx'];
+
+    const chain = ALL_CHAINS.find((c) => c.name === 'XMR')!;
+    const format = new RegExp(chain.token_format);
+
+    test.each(cases)('Should match %p', (address) => {
+      // Act.
+      const result = format.test(address);
+
+      // Assert.
+      expect(result).toBe(true);
+    });
+  });
+
   describe('XRP (Ripple)', () => {
     const cases = [
       'r3rhWeE31Jt5sWmi4QiGLMZnY3ENgqw96W',

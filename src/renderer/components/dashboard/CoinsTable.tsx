@@ -32,27 +32,29 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {coins.map((c) => (
-            <TableRow key={c.symbol}>
-              <TableCell>{c.current ? <CheckIcon /> : <></>} </TableCell>
-              <TableCell>
-                <Button onClick={async () => openBrowser(c.symbol, c.address)} sx={{ minWidth: '5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
-                    {c.symbol}
-                  </div>
-                </Button>
-              </TableCell>
-              <TableCell>{formatter.number(c.mined, 6)}</TableCell>
-              <TableCell>{formatter.currency(c.price, 8)}</TableCell>
-              <TableCell>{formatter.minedValue(c.price, c.mined)}</TableCell>
-              <TableCell>{formatter.number(c.threshold)}</TableCell>
-              <TableCell>
-                <LinearProgressWithLabel value={progress(c.mined, c.threshold)} />
-              </TableCell>
-              <TableCell>{`${c.duration.toLocaleString()} hours`}</TableCell>
-            </TableRow>
-          ))}
+          {coins
+            .sort((a, b) => a.symbol.localeCompare(b.symbol))
+            .map((c) => (
+              <TableRow key={c.symbol}>
+                <TableCell>{c.current ? <CheckIcon /> : <></>} </TableCell>
+                <TableCell>
+                  <Button onClick={async () => openBrowser(c.symbol, c.address)} sx={{ minWidth: '5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <img src={c.icon} alt="icon" style={{ height: '1.5rem', marginRight: '0.5rem' }} />
+                      {c.symbol}
+                    </div>
+                  </Button>
+                </TableCell>
+                <TableCell>{formatter.number(c.mined, 6)}</TableCell>
+                <TableCell>{formatter.currency(c.price, 8)}</TableCell>
+                <TableCell>{formatter.minedValue(c.price, c.mined)}</TableCell>
+                <TableCell>{formatter.number(c.threshold)}</TableCell>
+                <TableCell>
+                  <LinearProgressWithLabel value={progress(c.mined, c.threshold)} />
+                </TableCell>
+                <TableCell>{`${c.duration.toLocaleString()} hours`}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
