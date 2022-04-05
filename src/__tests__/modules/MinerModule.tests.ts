@@ -64,17 +64,6 @@ describe('Miner Module', () => {
     expect(handlers.onSuccess).toBeCalled();
   });
 
-  it('Should send an event when process is killed.', async () => {
-    // Arrange.
-    const send = jest.fn();
-
-    // Act.
-    minerModule.handleExit(0, send);
-
-    // Assert.
-    expect(send).toHaveBeenCalled();
-  });
-
   it('Should send an event when the error handler is called.', () => {
     // Arrange.
     const send = jest.fn();
