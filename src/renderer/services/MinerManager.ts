@@ -102,7 +102,7 @@ async function changeCoin() {
       const appSettings = await config.getAppSettings();
       const { miner, minerInfo, coin, coinInfo, wallet } = selection;
 
-      const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, miner.name, getRandom(coinInfo.referrals));
+      const cs = getConnectionString(coin.symbol, wallet.address, wallet.memo, appSettings.settings.workerName, getRandom(coinInfo.referrals));
       const filePath = path.join(miner.version, minerInfo.exe);
       const minerArgs = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
       const extraArgs = miner.parameters;
