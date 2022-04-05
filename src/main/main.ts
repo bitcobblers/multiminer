@@ -40,6 +40,7 @@ class MainWindow {
       this.window = this.createWindow();
 
       if (process.env.NODE_ENV !== 'development') {
+        // TODO: Uncomment this line for the official release.  This is needed for debugging pre-release builds.
         // this.window.removeMenu();
       }
 
