@@ -13,7 +13,7 @@ import 'regenerator-runtime/runtime';
 import { mainWindow } from './main';
 import { addApi } from './ipc';
 import { isDevelopment } from './globals';
-import { DialogModule, MinerModule, SettingsModule, TickerModule, UnmineableModule, DownloadModule, AboutModule } from './modules';
+import { AboutModule, DialogModule, DownloadModule, LoggingModule, MinerModule, SettingsModule, TickerModule, UnmineableModule } from './modules';
 
 if (isDevelopment) {
   require('electron-debug')();
@@ -35,13 +35,14 @@ const installExtensions = async () => {
 mainWindow.onEvent.on('window-created', async () => {
   await installExtensions();
 
-  addApi(SettingsModule);
-  addApi(MinerModule);
-  addApi(DialogModule);
-  addApi(UnmineableModule);
-  addApi(TickerModule);
-  addApi(DownloadModule);
   addApi(AboutModule);
+  addApi(DialogModule);
+  addApi(DownloadModule);
+  addApi(LoggingModule);
+  addApi(MinerModule);
+  addApi(SettingsModule);
+  addApi(TickerModule);
+  addApi(UnmineableModule);
 
   if (process.env.NODE_ENV === 'production') {
     const sourceMapSupport = require('source-map-support');
