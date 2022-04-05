@@ -51,6 +51,14 @@ export const ALL_COINS: CoinDefinition[] = [
     referrals: ['futc-3x8d', 'fd84-367b'],
   },
   {
+    id: 'avalanche-2',
+    icon: CoinIcons.Avax,
+    name: 'Avalanche',
+    symbol: 'AVAX',
+    blockchains: ['BSC', 'AVAXC'],
+    referrals: ['zjta-6504', 'ar1x-l2yj'],
+  },
+  {
     id: 'baby-doge-coin',
     icon: CoinIcons.BabyDoge,
     name: 'Baby Doge',

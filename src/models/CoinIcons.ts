@@ -3,6 +3,7 @@ import AaveIcon from '../../assets/coins/aave.svg';
 import AdaIcon from '../../assets/coins/ada.svg';
 import AlgoIcon from '../../assets/coins/algo.svg';
 import AtomIcon from '../../assets/coins/atom.svg';
+import AvaxIcon from '../../assets/coins/avax.svg';
 import BabyDogeIcon from '../../assets/coins/babydoge.svg';
 import BandIcon from '../../assets/coins/band.svg';
 import BatIcon from '../../assets/coins/bat.svg';
@@ -71,6 +72,7 @@ export const CoinIcons = {
   Ada: AdaIcon,
   Algo: AlgoIcon,
   Atom: AtomIcon,
+  Avax: AvaxIcon,
   BabyDoge: BabyDogeIcon,
   Band: BandIcon,
   Bat: BatIcon,
