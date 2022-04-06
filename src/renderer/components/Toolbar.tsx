@@ -5,7 +5,7 @@ import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tool
 import { Miner, MinerState, minerState$, MinerStatistic } from 'models';
 import { useContext, useEffect, useState } from 'react';
 import { MinerContext } from 'renderer/MinerContext';
-import { getAppSettings, getMiners, setAppSettings } from 'renderer/services/AppSettingsService';
+import { getAppSettings, getMiners, setAppSettings, watchers$ } from 'renderer/services/AppSettingsService';
 import * as formatter from 'renderer/services/Formatters';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
@@ -20,20 +20,22 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
   const theme = useTheme();
 
   const [minerState, setMinerState] = useState<MinerState>();
-  const minerActive = minerState?.state === 'active';
-
   const [minerStatistic, setMinerStatistic] = useState<MinerStatistic>();
+  const [miners, setLoadedMiners] = useState(Array<Miner>());
+
+  const minerActive = minerState?.state === 'active';
 
   useEffect(() => {
     const minerSubscription = minerState$.subscribe((s) => setMinerState(s));
     const statsSubscription = minerStatistics$.subscribe((s) => setMinerStatistic(s));
+    const minerConfigSubscription = watchers$.miners.subscribe((s) => setLoadedMiners(s));
+
     return () => {
       minerSubscription.unsubscribe();
       statsSubscription.unsubscribe();
+      minerConfigSubscription.unsubscribe();
     };
   }, []);
-
-  const [miners, setLoadedMiners] = useState(Array<Miner>());
 
   useEffect(() => {
     getMiners()
@@ -74,11 +76,13 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         <FormControl size="small" sx={{ minWidth: '12rem' }}>
           <InputLabel id="miner-label">Miner</InputLabel>
           <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={minerContext.profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
-            {miners.map((miner) => (
-              <MenuItem key={miner.name} value={miner.name}>
-                {miner.name} ({miner.kind})
-              </MenuItem>
-            ))}
+            {miners
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((miner) => (
+                <MenuItem key={miner.name} value={miner.name}>
+                  {miner.name} ({miner.kind})
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <Stack justifyContent="space-around" alignItems="center" direction="row">
