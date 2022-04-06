@@ -42,11 +42,11 @@ jobs:
 
       - name: Package
         run: |
-          sudo dpkg --add-architecture i386
+          dpkg --add-architecture i386
           wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-          sudo add-apt-repository ppa:cybermax-dexter/sdl2-backport
-          sudo apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
-          sudo apt install --install-recommends winehq-stable
+          add-apt-repository ppa:cybermax-dexter/sdl2-backport
+          apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
+          apt install --install-recommends winehq-stable
           npm run package -- --win
       
       - name: Archive Binaries
