@@ -41,4 +41,10 @@ jobs:
 
       - name: Package
         run: |
-          npm run package
+          npm run package -- --win
+      
+      - name: Archive Binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-installer
+          path: release/build/*.exe
