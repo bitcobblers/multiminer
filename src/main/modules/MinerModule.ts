@@ -70,7 +70,7 @@ export function launch(exePath: string, args: string, handlers: LaunchHandlers) 
     return handlers.onError(`The miner is not executable: ${error}`);
   }
 
-  return handlers.onSuccess(spawn(exePath, args.split(' '), { detached: true }));
+  return handlers.onSuccess(spawn(exePath, args.split(' ')));
 }
 
 function getMinerProcesses(exe: string | undefined) {
