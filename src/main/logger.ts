@@ -1,6 +1,11 @@
 import winston from 'winston';
 import electron from 'electron';
+import path from 'path';
 import { isDevelopment } from './globals';
+
+export function getLoggingPath() {
+  return path.join(electron.app.getPath('userData'), 'logs');
+}
 
 function getLogger() {
   const MAX_LOG_SIZE = 2 ** 20 * 5; // 5MB
@@ -13,7 +18,7 @@ function getLogger() {
   });
 
   if (isDevelopment) {
-    logger.add(new winston.transports.File({ dirname: electron.app.getPath('userData'), filename: 'multiminer.log', maxsize: MAX_LOG_SIZE, tailable: true, format: fileFormat }));
+    logger.add(new winston.transports.File({ dirname: getLoggingPath(), filename: 'multiminer.log', maxsize: MAX_LOG_SIZE, tailable: true, format: fileFormat }));
   }
 
   return logger;

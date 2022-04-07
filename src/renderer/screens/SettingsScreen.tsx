@@ -1,6 +1,8 @@
 import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
+import SaveIcon from '@mui/icons-material/Save';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { AppSettings, DefaultSettings } from 'models';
 import { useSnackbar } from 'notistack';
@@ -10,6 +12,7 @@ import { ConfigurableControl, ScreenHeader, ThemeToggle } from 'renderer/compone
 import { getAppSettings, setAppSettings } from '../services/AppSettingsService';
 import { dialogApi } from '../../shared/DialogApi';
 import { settingsApi } from '../../shared/SettingsApi';
+import { loggingApi } from '../../shared/LoggingApi';
 
 // react-hook-form's API requires prop spreading to register controls
 /* eslint-disable react/jsx-props-no-spreading */
@@ -71,6 +74,10 @@ export function SettingsScreen() {
     }
   };
 
+  const onOpenLogs = async () => {
+    await loggingApi.openLogFolder();
+  };
+
   const DefaultSpacing = 2;
 
   return (
@@ -84,6 +91,9 @@ export function SettingsScreen() {
         </Button>
         <Button startIcon={<SettingsBackupRestoreIcon />} onClick={() => onReset()}>
           Restore Defaults
+        </Button>
+        <Button startIcon={<OpenInNewIcon />} onClick={() => onOpenLogs()}>
+          Open Logs
         </Button>
       </ScreenHeader>
       <Typography variant="h5" sx={{ my: 2 }}>
@@ -180,7 +190,7 @@ export function SettingsScreen() {
         </Stack>
         <Divider sx={{ mt: 2, mb: 1 }} />
         <Stack direction="row">
-          <Button disabled={!isValid} onClick={onSave}>
+          <Button startIcon={<SaveIcon />} disabled={!isValid} onClick={onSave}>
             Save Changes
           </Button>
         </Stack>

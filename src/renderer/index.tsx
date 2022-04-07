@@ -1,12 +1,13 @@
 import { render } from 'react-dom';
 import { App } from './App';
-import { SettingsApi } from '../shared/SettingsApi';
-import { MinerApi } from '../shared/MinerApi';
-import { DialogApi } from '../shared/DialogApi';
-import { UnmineableApi } from '../shared/UnmineableApi';
-import { TickerApi } from '../shared/TickerApi';
-import { DownloadApi } from '../shared/DownloadApi';
 import { AboutApi } from '../shared/AboutApi';
+import { DialogApi } from '../shared/DialogApi';
+import { DownloadApi } from '../shared/DownloadApi';
+import { LoggingApi } from '../shared/LoggingApi';
+import { MinerApi } from '../shared/MinerApi';
+import { SettingsApi } from '../shared/SettingsApi';
+import { TickerApi } from '../shared/TickerApi';
+import { UnmineableApi } from '../shared/UnmineableApi';
 
 import { enableScreenScraper } from './services/MinerEventStreamer';
 import { enableLolMiner } from './services/miners/lolminer';
@@ -16,13 +17,14 @@ import { enableDataService } from './services/DataService';
 
 declare global {
   interface Window {
-    settings: SettingsApi;
-    miner: MinerApi;
+    about: AboutApi;
     dialog: DialogApi;
     download: DownloadApi;
-    unmineable: UnmineableApi;
+    logging: LoggingApi;
+    miner: MinerApi;
+    settings: SettingsApi;
     ticker: TickerApi;
-    about: AboutApi;
+    unmineable: UnmineableApi;
   }
 }
 

@@ -1,23 +1,29 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('settings', {
-  read(key) {
-    return ipcRenderer.invoke('ipc-readSetting', key);
+contextBridge.exposeInMainWorld('about', {
+  getName() {
+    return ipcRenderer.invoke('ipc-getAppName');
   },
-  write(key, value) {
-    ipcRenderer.invoke('ipc-writeSetting', key, value);
+  getVersion() {
+    return ipcRenderer.invoke('ipc-getAppVersion');
   },
-  watch(key) {
-    ipcRenderer.invoke('ipc-watchSetting', key);
+  getElectronVersion() {
+    return ipcRenderer.invoke('ipc-getElectronVersion');
   },
-  importSettings(settingsPath) {
-    return ipcRenderer.invoke('ipc-importSettings', settingsPath);
+  openBrowser(url) {
+    return ipcRenderer.invoke('ipc-openExternalSite', url);
   },
-  exportSettings(settingsPath) {
-    return ipcRenderer.invoke('ipc-exportSettings', settingsPath);
+});
+
+contextBridge.exposeInMainWorld('dialog', {
+  getPath() {
+    return ipcRenderer.invoke('ipc-selectFolder');
   },
-  changed(func) {
-    ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
+  getSaveFile() {
+    return ipcRenderer.invoke('ipc-selectSaveFile');
+  },
+  getOpenFile() {
+    return ipcRenderer.invoke('ipc-selectOpenFile');
   },
 });
 
@@ -27,6 +33,12 @@ contextBridge.exposeInMainWorld('download', {
   },
   downloadMiner(name, version, url) {
     return ipcRenderer.invoke('ipc-downloadMiner', name, version, url);
+  },
+});
+
+contextBridge.exposeInMainWorld('logging', {
+  openLogFolder() {
+    ipcRenderer.invoke('ipc-openLogFolder');
   },
 });
 
@@ -57,15 +69,30 @@ contextBridge.exposeInMainWorld('miner', {
   },
 });
 
-contextBridge.exposeInMainWorld('dialog', {
-  getPath() {
-    return ipcRenderer.invoke('ipc-selectFolder');
+contextBridge.exposeInMainWorld('settings', {
+  read(key) {
+    return ipcRenderer.invoke('ipc-readSetting', key);
   },
-  getSaveFile() {
-    return ipcRenderer.invoke('ipc-selectSaveFile');
+  write(key, value) {
+    ipcRenderer.invoke('ipc-writeSetting', key, value);
   },
-  getOpenFile() {
-    return ipcRenderer.invoke('ipc-selectOpenFile');
+  watch(key) {
+    ipcRenderer.invoke('ipc-watchSetting', key);
+  },
+  importSettings(settingsPath) {
+    return ipcRenderer.invoke('ipc-importSettings', settingsPath);
+  },
+  exportSettings(settingsPath) {
+    return ipcRenderer.invoke('ipc-exportSettings', settingsPath);
+  },
+  changed(func) {
+    ipcRenderer.on('ipc-settingChanged', (_event, ...args) => func(...args));
+  },
+});
+
+contextBridge.exposeInMainWorld('ticker', {
+  getTicker(coins) {
+    return ipcRenderer.invoke('ipc-getTicker', coins);
   },
 });
 
@@ -78,26 +105,5 @@ contextBridge.exposeInMainWorld('unmineable', {
   },
   openBrowser(coin, address) {
     return ipcRenderer.invoke('ipc-openUnmineableWeb', coin, address);
-  },
-});
-
-contextBridge.exposeInMainWorld('ticker', {
-  getTicker(coins) {
-    return ipcRenderer.invoke('ipc-getTicker', coins);
-  },
-});
-
-contextBridge.exposeInMainWorld('about', {
-  getName() {
-    return ipcRenderer.invoke('ipc-getAppName');
-  },
-  getVersion() {
-    return ipcRenderer.invoke('ipc-getAppVersion');
-  },
-  getElectronVersion() {
-    return ipcRenderer.invoke('ipc-getElectronVersion');
-  },
-  openBrowser(url) {
-    return ipcRenderer.invoke('ipc-openExternalSite', url);
   },
 });
