@@ -37,14 +37,15 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     exe: 'nbminer.exe',
     getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} --no-color --cmd-output 1 --api 127.0.0.1:60090`,
   },
-  // {
-  //   name: 'trexminer',
-  //   algorithms: ['ethash', 'etchash', 'kawpow'],
-  //   owner: 'trexminer',
-  //   repo: 't-rex',
-  //   exe: 't-reg.exe',
-  //   getArgs: (alg, cs, url) => `-a ${alg} -o ${url} -u ${cs} -p x`,
-  // },
+  {
+    name: 'trexminer',
+    algorithms: ['ethash', 'etchash', 'kawpow'],
+    owner: 'trexminer',
+    repo: 't-rex',
+    assetPattern: /^t-rex-.+win.zip$/,
+    exe: 't-rex.exe',
+    getArgs: (alg, cs, url) => `-a ${alg} -o ${url} -u ${cs} -p x --api-bind-http 127.0.0.1:60090 --api-read-only --no-color`,
+  },
   // {
   //   name: 'xmrig',
   //   algorithms: ['randomx'],
