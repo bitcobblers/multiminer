@@ -16,19 +16,27 @@ type LaunchHandlers = {
   onSuccess: (proc: ChildProcessWithoutNullStreams) => null;
 };
 
-let child: ChildProcessWithoutNullStreams | null = null;
 let minerProfile: string | null = null;
 let minerInfo: MinerInfo | null = null;
 let currentCoin: string | null = null;
 
-export function handleExit(code: number | null, send: SendCallback) {
-  send('ipc-minerExited', code);
-  child = null;
+function clearState() {
   minerProfile = null;
   minerInfo = null;
   currentCoin = null;
+}
 
+export function handleExit(coin: string, code: number | null, send: SendCallback) {
   logger.info('Stopped miner with exit code %o', code);
+
+  if (currentCoin === coin) {
+    // The miner was end-tasked.  We need to clean up here otherwise status() will continue to return 'active'.
+    clearState();
+    send('ipc-minerExited', code);
+  } else if (currentCoin === null) {
+    // The miner was stopped normally.
+    send('ipc-minerExited', code);
+  }
 }
 
 export function handleError(error: Error, send: SendCallback) {
@@ -40,9 +48,9 @@ export function handleData(data: string, send: SendCallback) {
   send('ipc-minerData', data);
 }
 
-export function attachHandlers(proc: ChildProcessWithoutNullStreams, send: SendCallback) {
+export function attachHandlers(coin: string, proc: ChildProcessWithoutNullStreams, send: SendCallback) {
   proc.on('exit', (code) => {
-    handleExit(code, send);
+    handleExit(coin, code, send);
   });
 
   proc.stderr.setEncoding('utf-8').on('data', (data) => {
@@ -97,12 +105,11 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
       return error;
     },
     onSuccess: (proc: ChildProcessWithoutNullStreams) => {
-      child = proc;
       minerProfile = profile;
       minerInfo = miner;
       currentCoin = coin;
 
-      attachHandlers(proc, send);
+      attachHandlers(coin, proc, send);
       send('ipc-minerStarted', coin);
       logger.info('Started miner with at %s with args = %s', exePath, args);
       return null;
@@ -111,8 +118,11 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
 }
 
 function stop() {
-  if (child?.pid !== undefined) {
-    getMinerProcesses(minerInfo?.exe).forEach((pid) => {
+  const exe = minerInfo?.exe;
+
+  if (exe !== undefined) {
+    clearState();
+    getMinerProcesses(exe).forEach((pid) => {
       logger.debug('Killing process: %s', pid);
       process.kill(pid);
     });
@@ -121,7 +131,7 @@ function stop() {
 
 function status() {
   return {
-    state: child === null ? 'inactive' : 'active',
+    state: minerInfo === null ? 'inactive' : 'active',
     currentCoin,
     profile: minerProfile,
     miner: minerInfo?.name,
