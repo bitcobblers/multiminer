@@ -4,7 +4,7 @@ import { unmineableApi } from '../../shared/UnmineableApi';
 
 type TimeSeries = {
   data: number[];
-  timestamps: Date[];
+  timestamps: number[];
 };
 
 type Chart = {
@@ -130,3 +130,28 @@ refreshData$
   .subscribe(({ coins }) => {
     updateCoins(coins);
   });
+
+minerState$.pipe(filter((s) => s.state === 'active')).subscribe(() => {
+  const blankStat = () => {
+    return {
+      workers: [],
+      chart: {
+        reported: {
+          data: [],
+          timestamps: [],
+        },
+        calculated: {
+          data: [],
+          timestamps: [],
+        },
+      },
+    };
+  };
+
+  unmineableWorkers$.next({
+    ethash: blankStat(),
+    etchash: blankStat(),
+    kawpow: blankStat(),
+    randomx: blankStat(),
+  });
+});
