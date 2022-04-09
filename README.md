@@ -82,14 +82,15 @@ To begin mining, navigate to the `Home` screen and click on the `START MINER` bu
 You can also view the raw output from the configured miner by navigating to the `Monitor` screen.  From here, the `STDOUT` from the mining application will be continuously streamed.  This screen can also be used to troubleshoot any configuration issues with the miner.
 
 ## Supported Miners
-Multi-Miner currently supports [lolMiner](https://lolminer.site/) and [NBMiner](https://nbminer.info/). Support for additional miners is in the works and is expected to be made available shortly.  See the table below for more information.  
+Multi-Miner currently supports several popular mining applications with more in the works.  See the table below for more information.  Don't see your preferred mining application?  Request it [here](https://github.com/bitcobblers/multiminer/issues/new?assignees=&labels=enhancement&template=3-Feature_request.md).
+
 | Miner        | Type | Supported          | Expected Release |
 |--------------|------|--------------------|------------------|
-| lolMiner     | GPU  | :white_check_mark: | 1.0              |
-| NBMiner      | GPU  | :white_check_mark: | 1.0              |
-| PhoenixMiner | GPU  | :x:                | 2.0              |
-| T-Rex Miner  | GPU  | :x:                | 2.0              |
-| XMRig        | CPU  | :x:                | 2.0              |
+| lolMiner     | GPU  | :white_check_mark: | Pre-Release      |
+| NBMiner      | GPU  | :white_check_mark: | Pre-Release      |
+| T-Rex Miner  | GPU  | :white_check_mark: | Pre-Release      |
+| PhoenixMiner | GPU  | :x:                | Official Release |
+| XMRig        | CPU  | :x:                | Official Release |
 
 ## Make This Software Better
 While this application started its life as a couple of PowerShell scripts cobbled together over a weekend, it has grown into something much larger.  Although we strive to keep the application as free of defects as possible, it is very new and this is also our first time designing fully-fledged UI applications with Electron/React.  If you notice any issues, oddities, or things that "don't seem right", please [open an issue](https://github.com/bitcobblers/multiminer/issues/new) so we can fix them.
