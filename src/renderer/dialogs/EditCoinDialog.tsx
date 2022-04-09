@@ -108,10 +108,11 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
                 required
                 type="number"
                 label="Duration (hours)"
-                value={watch('duration') ?? null}
+                value={Number(watch('duration') ?? 1)}
                 {...register('duration', {
                   required: 'A duration in hours must be specified.',
                   min: { value: 1, message: 'The duration must be at least 1 hour.' },
+                  valueAsNumber: true,
                 })}
                 error={!!errors?.duration}
                 helperText={errors?.duration?.message}
