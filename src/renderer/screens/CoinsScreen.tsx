@@ -5,6 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch, TextField } from '@mui/material';
 import { ALL_COINS, Coin, Wallet } from '../../models';
 import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
+import * as formatter from '../services/Formatters';
 import { ScreenHeader, EditCoinControls } from '../components';
 
 type CoinRecord = {
@@ -132,7 +133,7 @@ export function CoinsScreen() {
                   ))}
                 </TableCell>
                 <TableCell>{c.coin.wallet ?? 'None'}</TableCell>
-                <TableCell>{c.coin.duration}</TableCell>
+                <TableCell>{formatter.duration(c.coin.duration)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

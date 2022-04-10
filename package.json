@@ -1,5 +1,5 @@
 {
-  "name": "unmineable-multiminer-app",
+  "name": "bitcobblers-multiminer-app",
   "description": "Front-end application for manage multiple coin mining with Unmineable.",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
