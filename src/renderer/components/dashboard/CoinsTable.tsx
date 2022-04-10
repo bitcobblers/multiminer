@@ -1,6 +1,6 @@
 import { Button, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tooltip, IconButton } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import Stop from '@mui/icons-material/Stop';
 import { LinearProgressWithLabel } from '..';
 import * as formatter from '../../services/Formatters';
 import { ConfiguredCoin } from '../../../models';
@@ -9,11 +9,13 @@ import { unmineableApi } from '../../../shared/UnmineableApi';
 type CoinsTableProps = {
   coins: ConfiguredCoin[];
   setCurrent: (coin: string) => void;
+  stopCurrent: () => void;
 };
 
 type CurrentIndicatorProps = {
   current: boolean;
-  onClick: () => void;
+  onStart: () => void;
+  onStop: () => void;
 };
 
 async function openBrowser(coin: string, address: string) {
@@ -21,15 +23,21 @@ async function openBrowser(coin: string, address: string) {
 }
 
 function CurrentIndicator(props: CurrentIndicatorProps) {
-  const { current, onClick } = props;
+  const { current, onStart, onStop } = props;
 
   if (current) {
-    return <CheckIcon />;
+    return (
+      <Tooltip title="Stop mining">
+        <IconButton onClick={onStop}>
+          <Stop color="error" />
+        </IconButton>
+      </Tooltip>
+    );
   }
 
   return (
     <Tooltip title="Mine now">
-      <IconButton onClick={onClick}>
+      <IconButton onClick={onStart}>
         <PlayArrowIcon color="primary" />
       </IconButton>
     </Tooltip>
@@ -37,7 +45,7 @@ function CurrentIndicator(props: CurrentIndicatorProps) {
 }
 
 export function CoinsTable(props: CoinsTableProps) {
-  const { coins, setCurrent } = props;
+  const { coins, setCurrent, stopCurrent } = props;
 
   return (
     <TableContainer>
@@ -60,7 +68,7 @@ export function CoinsTable(props: CoinsTableProps) {
             .map((c) => (
               <TableRow key={c.symbol}>
                 <TableCell>
-                  <CurrentIndicator current={c.current} onClick={() => setCurrent(c.symbol)} />
+                  <CurrentIndicator current={c.current} onStart={() => setCurrent(c.symbol)} onStop={() => stopCurrent()} />
                 </TableCell>
                 <TableCell>
                   <Button onClick={async () => openBrowser(c.symbol, c.address)} sx={{ minWidth: '5rem' }}>
