@@ -2,6 +2,7 @@ import { Wallet } from './Wallet';
 import { Coin } from './Coin';
 import { Miner } from './Miner';
 import { AppSettings } from './AppSettings';
+import { MinerRelease } from './MinerRelease';
 
 export const DefaultSettings = {
   wallets: [] as Wallet[],
@@ -24,6 +25,8 @@ export const DefaultSettings = {
     },
     appearance: { theme: 'light' },
   } as AppSettings,
+
+  minerReleases: Array<MinerRelease>(),
 };
 
 export type SettingsSchemaType = {
@@ -31,4 +34,5 @@ export type SettingsSchemaType = {
   wallets: Wallet[];
   coins: Coin[];
   miners: Miner[];
+  minerReleases: MinerRelease[];
 };
