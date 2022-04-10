@@ -33,4 +33,24 @@ describe('Formatters Service', () => {
       expect(result).toBe(expected);
     });
   });
+
+  describe('Duration', () => {
+    const cases = [
+      { expected: 'N/A' },
+      { given: 1, expected: '1hr' },
+      { given: 24, expected: '1d' },
+      { given: 30, expected: '1d 6hr' },
+      { given: 168, expected: '1w' },
+      { given: 192, expected: '1w 1d' },
+      { given: 193, expected: '1w 1d 1hr' },
+    ];
+
+    test.each(cases)('%p', ({ given, expected }) => {
+      // Act.
+      const result = formatter.duration(given);
+
+      // Assert.
+      expect(result).toBe(expected);
+    });
+  });
 });

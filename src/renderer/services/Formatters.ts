@@ -84,3 +84,26 @@ export function uptime(value: number | undefined) {
 
   return parts.join(' ');
 }
+
+export function duration(value: number | undefined) {
+  if (value === undefined) {
+    return 'N/A';
+  }
+
+  const HOURS_PER_DAY = 24;
+  const HOURS_PER_WEEK = 168;
+
+  const flooredValue = Math.floor(value);
+
+  const totalWeeks = Math.floor(flooredValue / HOURS_PER_WEEK);
+  const totalDays = Math.floor((flooredValue - totalWeeks * HOURS_PER_WEEK) / HOURS_PER_DAY);
+  const totalHours = flooredValue - totalWeeks * HOURS_PER_WEEK - totalDays * HOURS_PER_DAY;
+
+  const weeksStr = totalWeeks ? `${totalWeeks}w` : '';
+  const daysStr = totalDays ? `${totalDays}d` : '';
+  const hoursStr = totalHours ? `${totalHours}hr` : '';
+
+  const parts = [weeksStr, daysStr, hoursStr].filter((x) => x !== '');
+
+  return parts.join(' ');
+}
