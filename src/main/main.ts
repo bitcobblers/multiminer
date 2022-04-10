@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import EventEmitter from 'events';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Tray, Menu } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 import { getAssetPath, getResolveHtmlPath } from './resourceHelper';
@@ -29,6 +29,10 @@ type Setting = string | number | boolean;
 class MainWindow {
   settings: { [key: string]: Setting };
 
+  appIcon?: Tray;
+
+  contextMenu?: Menu;
+
   window!: BrowserWindow;
 
   onEvent: EventEmitter = new EventEmitter();
@@ -39,6 +43,15 @@ class MainWindow {
     app.on('ready', () => {
       this.window = this.createWindow();
 
+      this.appIcon = new Tray(this.settings.icon as string);
+      this.contextMenu = Menu.buildFromTemplate([
+        { label: 'Show', click: () => this.window.show() },
+        { label: 'Quit', click: () => this.window.close() },
+      ]);
+
+      this.appIcon.setContextMenu(this.contextMenu);
+      this.appIcon.on('click', () => this.window.show());
+
       if (process.env.NODE_ENV !== 'development') {
         // TODO: Uncomment this line for the official release.  This is needed for debugging pre-release builds.
         // this.window.removeMenu();
@@ -47,6 +60,7 @@ class MainWindow {
       this.onEvent.emit('window-created');
     });
 
+    // TODO: Uncomment this to enable auto-update once the app is GA.
     // eslint-disable-next-line no-new
     // new AppUpdater();
 
@@ -74,6 +88,11 @@ class MainWindow {
       } else {
         window.show();
       }
+    });
+
+    window.on('minimize', (event: Event) => {
+      event.preventDefault();
+      window.hide();
     });
 
     return window;
