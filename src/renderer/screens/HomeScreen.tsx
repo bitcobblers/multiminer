@@ -70,7 +70,7 @@ export function HomeScreen(): JSX.Element {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">Enabled Coins</Typography>
-          <CoinsTable coins={configuredCoins} />
+          <CoinsTable coins={configuredCoins} setCurrent={(symbol) => nextCoin(symbol)} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">Graphs</Typography>

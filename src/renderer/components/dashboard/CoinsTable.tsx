@@ -1,20 +1,43 @@
-import { Button, Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
+import { Button, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tooltip, IconButton } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { LinearProgressWithLabel } from '..';
 import * as formatter from '../../services/Formatters';
 import { ConfiguredCoin } from '../../../models';
 import { unmineableApi } from '../../../shared/UnmineableApi';
 
-function progress(mined: number | undefined, threshold: number | undefined) {
-  return mined === undefined || threshold === undefined || mined === 0 || threshold === 0 ? 0 : (100 * mined) / threshold;
-}
+type CoinsTableProps = {
+  coins: ConfiguredCoin[];
+  setCurrent: (coin: string) => void;
+};
+
+type CurrentIndicatorProps = {
+  current: boolean;
+  onClick: () => void;
+};
 
 async function openBrowser(coin: string, address: string) {
   await unmineableApi.openBrowser(coin, address);
 }
 
-export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
-  const { coins } = props;
+function CurrentIndicator(props: CurrentIndicatorProps) {
+  const { current, onClick } = props;
+
+  if (current) {
+    return <CheckIcon />;
+  }
+
+  return (
+    <Tooltip title="Mine now">
+      <IconButton onClick={onClick}>
+        <PlayArrowIcon />
+      </IconButton>
+    </Tooltip>
+  );
+}
+
+export function CoinsTable(props: CoinsTableProps) {
+  const { coins, setCurrent } = props;
 
   return (
     <TableContainer>
@@ -36,7 +59,9 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
             .sort((a, b) => a.symbol.localeCompare(b.symbol))
             .map((c) => (
               <TableRow key={c.symbol}>
-                <TableCell>{c.current ? <CheckIcon /> : <></>} </TableCell>
+                <TableCell>
+                  <CurrentIndicator current={c.current} onClick={() => setCurrent(c.symbol)} />
+                </TableCell>
                 <TableCell>
                   <Button onClick={async () => openBrowser(c.symbol, c.address)} sx={{ minWidth: '5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -50,7 +75,7 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
                 <TableCell>{formatter.minedValue(c.price, c.mined)}</TableCell>
                 <TableCell>{formatter.number(c.threshold)}</TableCell>
                 <TableCell>
-                  <LinearProgressWithLabel value={progress(c.mined, c.threshold)} />
+                  <LinearProgressWithLabel value={formatter.progress(c.mined, c.threshold)} />
                 </TableCell>
                 <TableCell>{formatter.duration(c.duration)}</TableCell>
               </TableRow>
