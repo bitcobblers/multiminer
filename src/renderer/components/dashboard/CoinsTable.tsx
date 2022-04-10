@@ -30,7 +30,7 @@ function CurrentIndicator(props: CurrentIndicatorProps) {
   return (
     <Tooltip title="Mine now">
       <IconButton onClick={onClick}>
-        <PlayArrowIcon />
+        <PlayArrowIcon color="primary" />
       </IconButton>
     </Tooltip>
   );
@@ -44,7 +44,7 @@ export function CoinsTable(props: CoinsTableProps) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Current</TableCell>
+            <TableCell />
             <TableCell>Coin</TableCell>
             <TableCell>Mined</TableCell>
             <TableCell>Price</TableCell>
