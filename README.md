@@ -1,4 +1,4 @@
-# Unmineable Multi-Miner
+# BitCobblers Multi-Miner
 
 ## Introduction
 
