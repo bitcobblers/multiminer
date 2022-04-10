@@ -8,7 +8,7 @@ class WatchersObservable {
   coins = new Subject<Coin[]>();
   miners = new Subject<Miner[]>();
   settings = new Subject<AppSettings>();
-  miner_releases = new Subject<MinerRelease[]>();
+  minerReleases = new Subject<MinerRelease[]>();
 }
 
 export const watchers$ = new WatchersObservable();
@@ -41,14 +41,14 @@ export const setMiners = (miners: Miner[]) => set('miners', miners);
 export const getAppSettings = () => get<AppSettings>('settings', DefaultSettings.settings);
 export const setAppSettings = (settings: AppSettings) => set('settings', settings);
 
-export const getMinerReleases = () => get<MinerRelease[]>('miner_releases', DefaultSettings.miner_releases);
-export const setMinerReleases = (releases: MinerRelease[]) => set('miner_releases', releases);
+export const getMinerReleases = () => get<MinerRelease[]>('minerReleases', DefaultSettings.minerReleases);
+export const setMinerReleases = (releases: MinerRelease[]) => set('minerReleases', releases);
 
 settingsApi.watch('wallets');
 settingsApi.watch('coins');
 settingsApi.watch('miners');
 settingsApi.watch('settings');
-settingsApi.watch('miner_releases');
+settingsApi.watch('minerReleases');
 
 settingsApi.changed((key, content) => {
   // eslint-disable-next-line no-console

@@ -26,7 +26,7 @@ export const DefaultSettings = {
     appearance: { theme: 'light' },
   } as AppSettings,
 
-  miner_releases: Array<MinerRelease>(),
+  minerReleases: Array<MinerRelease>(),
 };
 
 export type SettingsSchemaType = {
@@ -34,5 +34,5 @@ export type SettingsSchemaType = {
   wallets: Wallet[];
   coins: Coin[];
   miners: Miner[];
-  miner_releases: MinerRelease[];
+  minerReleases: MinerRelease[];
 };
