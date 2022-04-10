@@ -7,6 +7,7 @@ export const globalStore = new Store<SettingsSchemaType>({
     coins: DefaultSettings.coins,
     miners: DefaultSettings.miners,
     settings: DefaultSettings.settings,
+    minerReleases: DefaultSettings.minerReleases,
   },
   schema: {
     settings: {
@@ -74,6 +75,26 @@ export const globalStore = new Store<SettingsSchemaType>({
           parameters: { type: 'string' },
         },
         required: [],
+      },
+    },
+    minerReleases: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          version: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                tag: { type: 'string' },
+                published: { type: 'string' },
+                url: { type: 'string' },
+              },
+            },
+          },
+        },
       },
     },
   },

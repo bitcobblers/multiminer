@@ -4,10 +4,10 @@ import { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
-import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo } from '../../models';
+import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo, MinerRelease } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
-import { MinerReleaseData, getMinerReleases } from '../services/DownloadManager';
+import { getMinerReleases } from '../services/DownloadManager';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -21,7 +21,7 @@ type EditMinerDialogProps = {
 export function EditMinerDialog(props: EditMinerDialogProps) {
   const { open, miner, existingMiners, autoReset, onSave, onCancel, ...other } = props;
 
-  const [availableMiners, setAvailableMiners] = useState(Array<MinerReleaseData>());
+  const [availableMiners, setAvailableMiners] = useState(Array<MinerRelease>());
 
   const {
     register,
@@ -41,7 +41,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
 
   const minerTypeVersions = useMemo(() => {
     const selectedMiner = availableMiners.find((m) => m.name === kind);
-    return selectedMiner?.releases.map((r) => r.tag) ?? [];
+    return selectedMiner?.versions.map((r) => r.tag) ?? [];
   }, [availableMiners, kind]);
 
   const availableMinersAsMinerInfo = useMemo(() => {
