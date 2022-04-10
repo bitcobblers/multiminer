@@ -52,7 +52,7 @@ export function CoinsTable(props: { coins: ConfiguredCoin[] }) {
                 <TableCell>
                   <LinearProgressWithLabel value={progress(c.mined, c.threshold)} />
                 </TableCell>
-                <TableCell>{`${c.duration.toLocaleString()} hours`}</TableCell>
+                <TableCell>{formatter.duration(c.duration)}</TableCell>
               </TableRow>
             ))}
         </TableBody>
