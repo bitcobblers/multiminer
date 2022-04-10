@@ -148,5 +148,5 @@ export function enableTrexMiner() {
     });
 
   // eslint-disable-next-line no-console
-  console.log('Enabled NBMiner support.');
+  console.log('Enabled T-Rex Miner support.');
 }
