@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 import { Subject } from 'rxjs';
-import { Coin, Wallet, Miner, AppSettings, DefaultSettings, SettingsSchemaType } from '../../models';
+import { Coin, Wallet, Miner, AppSettings, DefaultSettings, SettingsSchemaType, MinerRelease } from '../../models';
 import { settingsApi } from '../../shared/SettingsApi';
 
 class WatchersObservable {
@@ -8,6 +8,7 @@ class WatchersObservable {
   coins = new Subject<Coin[]>();
   miners = new Subject<Miner[]>();
   settings = new Subject<AppSettings>();
+  minerReleases = new Subject<MinerRelease[]>();
 }
 
 export const watchers$ = new WatchersObservable();
@@ -40,10 +41,14 @@ export const setMiners = (miners: Miner[]) => set('miners', miners);
 export const getAppSettings = () => get<AppSettings>('settings', DefaultSettings.settings);
 export const setAppSettings = (settings: AppSettings) => set('settings', settings);
 
+export const getMinerReleases = () => get<MinerRelease[]>('minerReleases', DefaultSettings.minerReleases);
+export const setMinerReleases = (releases: MinerRelease[]) => set('minerReleases', releases);
+
 settingsApi.watch('wallets');
 settingsApi.watch('coins');
 settingsApi.watch('miners');
 settingsApi.watch('settings');
+settingsApi.watch('minerReleases');
 
 settingsApi.changed((key, content) => {
   // eslint-disable-next-line no-console

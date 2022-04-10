@@ -51,6 +51,7 @@ export function importSettings(_event: IpcMainInvokeEvent, settingsPath: string)
     globalStore.set('coins', allSettings.coins);
     globalStore.set('settings', allSettings.settings);
     globalStore.set('miners', allSettings.miners);
+    globalStore.set('minerReleases', allSettings.minerReleases);
   } catch (error) {
     return error;
   }
@@ -66,6 +67,7 @@ export function exportSettings(_current: IpcMainInvokeEvent, settingsPath: strin
     coins: globalStore.get('coins'),
     settings: globalStore.get('settings'),
     miners: globalStore.get('miners'),
+    minerReleases: globalStore.get('minerReleases'),
   };
 
   fs.writeFileSync(settingsPath, JSON.stringify(allSettings, null, 2));
