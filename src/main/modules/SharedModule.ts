@@ -8,4 +8,5 @@ type Handlers = {
 export type SharedModule = {
   name: string;
   handlers: Handlers;
+  dispose?: () => void;
 };

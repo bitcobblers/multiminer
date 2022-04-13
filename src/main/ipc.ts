@@ -8,3 +8,10 @@ export function addApi(module: SharedModule) {
     ipcMain.handle(key, module.handlers[key]);
   });
 }
+
+export function disposeApi(module: SharedModule) {
+  if (module.dispose !== undefined) {
+    logger.debug('Disposing api: %s', module.name);
+    module.dispose();
+  }
+}
