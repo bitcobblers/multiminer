@@ -16,6 +16,7 @@ type LaunchHandlers = {
   onSuccess: (proc: ChildProcessWithoutNullStreams) => null;
 };
 
+let isDisposing = false;
 let minerProfile: string | null = null;
 let minerInfo: MinerInfo | null = null;
 let currentCoin: string | null = null;
@@ -96,7 +97,12 @@ function getMinerProcesses(exe: string | undefined) {
 
 function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: MinerInfo, version: string, args: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-shadow
-  const send = (channel: string, ...args: any[]) => event.sender.send(channel, ...args);
+  const send = (channel: string, ...args: any[]) => {
+    if (!isDisposing) {
+      event.sender.send(channel, ...args);
+    }
+  };
+
   const exePath = path.join(electron.app.getPath('userData'), miner.name, version, miner.exe);
 
   return launch(exePath, args, {
@@ -149,5 +155,9 @@ export const MinerModule: SharedModule = {
     'ipc-stopMiner': stop,
     'ipc-statusMiner': status,
     'ipc-statsMiner': stats,
+  },
+  dispose: () => {
+    isDisposing = true;
+    stop();
   },
 };
