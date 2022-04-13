@@ -8,7 +8,7 @@ on:
 
 jobs:
   release:
-    runs-on: self-hosted
+    runs-on: windows-latest
     timeout-minutes: 10
 
     steps:
@@ -40,9 +40,11 @@ jobs:
       - name: Package
         run: |
           npm run package -- --win
+          Get-FileHash -Algorithm SHA256 .\release\build\*.exe | ForEach-Object { $_.Hash | Out-File "$($_.Path).$($_.Algorithm.ToLower())" }
       
       - name: Archive Binaries
         uses: actions/upload-artifact@v3
         with:
-          name: windows-installer
-          path: release/build/*.exe
+          path: |
+            release/build/*.exe
+            release/build/*.sha256
