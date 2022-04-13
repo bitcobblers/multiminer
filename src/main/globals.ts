@@ -101,3 +101,5 @@ export const globalStore = new Store<SettingsSchemaType>({
 });
 
 export const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
+export const isJestTest = process.env.JEST_WORKER_ID !== undefined;
