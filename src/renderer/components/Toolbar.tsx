@@ -1,6 +1,6 @@
 import NextIcon from '@mui/icons-material/FastForward';
-import PlayArrow from '@mui/icons-material/PlayArrow';
-import Stop from '@mui/icons-material/Stop';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
 import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import { Miner, MinerState, minerState$, MinerStatistic } from 'models';
 import { useContext, useEffect, useState } from 'react';
@@ -87,7 +87,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         </FormControl>
         <Stack justifyContent="space-around" alignItems="center" direction="row">
           <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
-            <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <Stop color="error" /> : <PlayArrow color="primary" />}</IconButton>
+            <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <StopIcon color="error" /> : <PlayArrowIcon color="primary" />}</IconButton>
           </Tooltip>
           <Separator />
           <Tooltip title="Next Coin">

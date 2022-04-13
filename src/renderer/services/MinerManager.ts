@@ -35,6 +35,11 @@ function getRandomCoin(currentCoin: string | null, coins: Coin[]): Coin {
   return getRandomCoin(currentCoin, coins);
 }
 
+function lookupCoin(symbol: string | null, coins: Coin[]) {
+  const result = coins.find((c) => c.symbol === symbol);
+  return result !== undefined ? result : null;
+}
+
 function updateState(newState: Partial<MinerState>) {
   const currentState = minerState$.getValue();
   const mergedState = { ...currentState, ...newState };
@@ -52,7 +57,7 @@ function getConnectionString(symbol: string, address: string, memo: string, name
   return `${symbol}:${sanitize(address)}:${sanitize(memo)}.${sanitize(name)}#${referral}`;
 }
 
-export async function selectCoin(onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
+export async function selectCoin(symbol: string | null, onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
   const { profile, currentCoin } = minerState$.getValue();
   const allMiners = await config.getMiners();
   const miner = allMiners.find((m) => m.name === profile);
@@ -75,7 +80,7 @@ export async function selectCoin(onError: (message: string) => void, onSuccess: 
     return;
   }
 
-  const coin = getRandomCoin(currentCoin, enabledCoins);
+  const coin = lookupCoin(symbol, enabledCoins) ?? getRandomCoin(currentCoin, enabledCoins);
   const coinInfo = ALL_COINS.find((c) => c.symbol === coin.symbol);
 
   if (coinInfo === undefined) {
@@ -93,8 +98,9 @@ export async function selectCoin(onError: (message: string) => void, onSuccess: 
   await onSuccess({ miner, minerInfo, coin, coinInfo, wallet });
 }
 
-async function changeCoin() {
+async function changeCoin(symbol: string | null) {
   selectCoin(
+    symbol,
     (error) => {
       minerErrors$.next(error);
     },
@@ -126,9 +132,9 @@ export async function setProfile(profile: string) {
   updateState({ profile, miner: miner?.kind });
 }
 
-export async function nextCoin() {
+export async function nextCoin(symbol?: string) {
   clearTimeout(timeout);
-  await changeCoin();
+  await changeCoin(symbol === undefined ? null : symbol);
 }
 
 export async function stopMiner() {
@@ -138,7 +144,7 @@ export async function stopMiner() {
 
 export async function startMiner() {
   clearTimeout(timeout);
-  await changeCoin();
+  await changeCoin(null);
 }
 
 async function getMinerState() {
@@ -183,7 +189,7 @@ async function setInitialState() {
 
       // eslint-disable-next-line promise/always-return
       if (c !== undefined) {
-        timeout = setTimeout(changeCoin, Number(c.duration) * MILLISECONDS_PER_HOUR);
+        timeout = setTimeout(() => changeCoin(null), Number(c.duration) * MILLISECONDS_PER_HOUR);
       }
     });
   });

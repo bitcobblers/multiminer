@@ -52,7 +52,7 @@ export function difficulty(value: string | undefined) {
 }
 
 export function progress(mined: number | undefined, threshold: number | undefined) {
-  return mined === undefined || threshold === undefined || mined === 0 || threshold === 0 ? 'N/A' : `${number((100 * mined) / threshold, 2)}%`;
+  return mined === undefined || threshold === undefined || mined === 0 || threshold === 0 ? 0 : (100 * mined) / threshold;
 }
 
 export function minedValue(mined: number | undefined, price: number | undefined) {
