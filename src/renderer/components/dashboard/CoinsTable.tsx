@@ -1,6 +1,6 @@
 import { Button, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tooltip, IconButton } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import Stop from '@mui/icons-material/Stop';
+import StopIcon from '@mui/icons-material/Stop';
 import { LinearProgressWithLabel } from '..';
 import * as formatter from '../../services/Formatters';
 import { ConfiguredCoin } from '../../../models';
@@ -29,7 +29,7 @@ function CurrentIndicator(props: CurrentIndicatorProps) {
     return (
       <Tooltip title="Stop mining">
         <IconButton onClick={onStop}>
-          <Stop color="error" />
+          <StopIcon color="error" />
         </IconButton>
       </Tooltip>
     );
