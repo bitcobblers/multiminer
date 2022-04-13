@@ -33,8 +33,6 @@ jobs:
           npm run lint
 
       - name: Run Tests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm exec tsc
           npm test
