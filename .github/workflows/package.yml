@@ -40,11 +40,16 @@ jobs:
       - name: Package
         run: |
           npm run package -- --win
+
+      - name: Create Signatures
+        run: |
           Get-FileHash -Algorithm SHA256 .\release\build\*.exe | ForEach-Object { $_.Hash | Out-File "$($_.Path).$($_.Algorithm.ToLower())" }
-      
+          Get-ChildItem .\release\build\*.sha256 | ForEach-Object { Write-Host "$($_.Name) - $(Get-Content $_.FullName)" }
+
       - name: Archive Binaries
         uses: actions/upload-artifact@v3
         with:
+          name: windows-installer
           path: |
             release/build/*.exe
             release/build/*.sha256
