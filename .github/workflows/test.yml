@@ -4,8 +4,8 @@ on: [push, pull_request]
 
 jobs:
   build-and-test:
-    runs-on: self-hosted
-    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Check out Git Repository
@@ -29,8 +29,6 @@ jobs:
           npm run lint
 
       - name: Run Tests
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm exec tsc
           npm test
