@@ -15,8 +15,8 @@ on:
 
 jobs:
   bump-version:
-    runs-on: self-hosted
-    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Check out source
