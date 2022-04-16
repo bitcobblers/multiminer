@@ -1,0 +1,56 @@
+{
+    "Software": "lolMiner 1.48",
+    "Session": {
+        "Startup": 1649998396,
+        "Startup_String": "2022-04-15_00-53-16",
+        "Uptime": 60,
+        "Last_Update": 1649998456
+    },
+    "Num_Workers": 1,
+    "Workers": [
+        {
+            "Index": 0,
+            "Name": "NVIDIA GeForce RTX 3080",
+            "Power": 195.14099999999999,
+            "CCLK": 1019,
+            "MCLK": 9242,
+            "Core_Temp": 53,
+            "Juc_Temp": 66,
+            "Mem_Temp": 84,
+            "Fan_Speed": 70,
+            "PCIE_Address": "2:0"
+        }
+    ],
+    "Num_Algorithms": 1,
+    "Algorithms": [
+        {
+            "Algorithm": "Ethash",
+            "Algorithm_Appendix": "",
+            "Pool": "ethash.unmineable.com:3333",
+            "User": "ETH:0xe141167eb550b999cb59f9ac202d2dfdd240a4a0.default#a83j-r7ty",
+            "Worker": "default#a83j-r7ty",
+            "Performance_Unit": "Mh\/s",
+            "Performance_Factor": 1000000,
+            "Total_Performance": 82.873358077730046,
+            "Total_Accepted": 1,
+            "Total_Rejected": 0,
+            "Total_Stales": 0,
+            "Total_Errors": 0,
+            "Worker_Performance": [
+                82.87
+            ],
+            "Worker_Accepted": [
+                1
+            ],
+            "Worker_Rejected": [
+                0
+            ],
+            "Worker_Stales": [
+                0
+            ],
+            "Worker_Errors": [
+                0
+            ]
+        }
+    ]
+}
