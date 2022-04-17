@@ -1,5 +1,6 @@
 export { Chain, ALL_CHAINS } from './Chains';
 export { CoinDefinition, ALL_COINS } from './CoinDefinition';
+export { CoinSelection } from './CoinSelection';
 export { Wallet } from './Wallet';
 export { Coin } from './Coin';
 export { AlgorithmName, AlgorithmKind, MinerName, API_PORT } from './Enums';
