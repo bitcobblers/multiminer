@@ -1,5 +1,4 @@
 import { Coin } from '../../../models';
-import * as config from '../../../renderer/services/AppSettingsService';
 import { selectCoin } from '../../../renderer/services/strategies/Skynet';
 
 describe('Skynet Coin Selection', () => {
@@ -14,10 +13,8 @@ describe('Skynet Coin Selection', () => {
       },
     ];
 
-    jest.spyOn(config, 'getCoins').mockReturnValue(Promise.resolve(coins));
-
     // Act.
-    const result = await selectCoin('ETH');
+    const result = selectCoin('ETH', coins);
 
     // Assert.
     expect(result.symbol).toBe('ETH');
@@ -40,11 +37,9 @@ describe('Skynet Coin Selection', () => {
       },
     ];
 
-    jest.spyOn(config, 'getCoins').mockReturnValue(Promise.resolve(coins));
-
     // Act.
-    const result1 = await selectCoin('ETH');
-    const result2 = await selectCoin('TRX');
+    const result1 = selectCoin('ETH', coins);
+    const result2 = selectCoin('TRX', coins);
 
     // Assert.
     expect(result1.symbol).toBe('TRX');

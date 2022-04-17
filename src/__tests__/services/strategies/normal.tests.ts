@@ -1,5 +1,4 @@
 import { Coin } from '../../../models';
-import * as config from '../../../renderer/services/AppSettingsService';
 import { selectCoin } from '../../../renderer/services/strategies/Normal';
 
 describe('Normal Coin Selection', () => {
@@ -14,10 +13,8 @@ describe('Normal Coin Selection', () => {
       },
     ];
 
-    jest.spyOn(config, 'getCoins').mockReturnValue(Promise.resolve(coins));
-
     // Act.
-    const result = await selectCoin(null);
+    const result = selectCoin(null, coins);
 
     // Assert.
     expect(result.symbol).toBe('ETH');
@@ -34,10 +31,8 @@ describe('Normal Coin Selection', () => {
       },
     ];
 
-    jest.spyOn(config, 'getCoins').mockReturnValue(Promise.resolve(coins));
-
     // Act.
-    const result = await selectCoin('unknown');
+    const result = selectCoin('unknown', coins);
 
     // Assert.
     expect(result.symbol).toBe('ETH');
@@ -60,10 +55,8 @@ describe('Normal Coin Selection', () => {
       },
     ];
 
-    jest.spyOn(config, 'getCoins').mockReturnValue(Promise.resolve(coins));
-
     // Act.
-    const result = await selectCoin('TRX');
+    const result = selectCoin('TRX', coins);
 
     // Assert.
     expect(result.symbol).toBe('ETH');
@@ -86,10 +79,8 @@ describe('Normal Coin Selection', () => {
       },
     ];
 
-    jest.spyOn(config, 'getCoins').mockReturnValue(Promise.resolve(coins));
-
     // Act.
-    const result = await selectCoin('ETH');
+    const result = selectCoin('ETH', coins);
 
     // Assert.
     expect(result.symbol).toBe('TRX');

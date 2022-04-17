@@ -1,5 +1,4 @@
 import { Coin } from '../../../models';
-import * as config from '../AppSettingsService';
 
 function pickCoin(currentCoin: string, enabledCoins: Coin[]) {
   const index = enabledCoins.findIndex((c) => c.symbol === currentCoin);
@@ -11,7 +10,7 @@ function pickCoin(currentCoin: string, enabledCoins: Coin[]) {
   return enabledCoins[index + 1];
 }
 
-export async function selectCoin(currentCoin: string | null) {
-  const enabledCoins = (await config.getCoins()).filter((c) => c.enabled).sort((a, b) => a.symbol.localeCompare(b.symbol));
-  return currentCoin === null ? enabledCoins[0] : pickCoin(currentCoin, enabledCoins);
+export function selectCoin(currentCoin: string | null, enabledCoins: Coin[]) {
+  const sortedCoins = [...enabledCoins].sort((a, b) => a.symbol.localeCompare(b.symbol));
+  return currentCoin === null ? sortedCoins[0] : pickCoin(currentCoin, sortedCoins);
 }

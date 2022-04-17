@@ -1,5 +1,4 @@
 import { Coin } from '../../../models';
-import * as config from '../AppSettingsService';
 
 function getRandom<T>(array: Array<T>) {
   return array[Math.floor(Math.random() * array.length)];
@@ -19,7 +18,6 @@ function getRandomCoin(currentCoin: string | null, coins: Coin[]): Coin {
   return getRandomCoin(currentCoin, coins);
 }
 
-export async function selectCoin(currentCoin: string | null) {
-  const enabledCoins = (await config.getCoins()).filter((c) => c.enabled);
+export function selectCoin(currentCoin: string | null, enabledCoins: Coin[]) {
   return getRandomCoin(currentCoin, enabledCoins);
 }
