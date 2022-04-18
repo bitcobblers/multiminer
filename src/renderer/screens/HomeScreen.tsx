@@ -5,7 +5,7 @@ import { Container, Grid, Button, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RefreshIcon from '@mui/icons-material/Cached';
-import NextIcon from '@mui/icons-material/NavigateNext';
+import NextIcon from '@mui/icons-material/FastForward';
 
 // Services.
 import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
