@@ -1,4 +1,4 @@
-import { MinerName } from '../models';
+import { MinerName, MinerState } from '../models';
 
 type ReceiveCallback = (data: string) => void;
 type ExitedCallback = (code: number | void) => void;
@@ -8,7 +8,7 @@ type ErrorCallback = (message: string) => void;
 export interface MinerApi {
   start: (profile: string, coin: string, miner: { name: MinerName; exe: string }, version: string, args: string) => Promise<string | null>;
   stop: () => Promise<void>;
-  status: () => Promise<{ state: 'active' | 'inactive'; currentCoin: string; miner: MinerName }>;
+  status: () => Promise<MinerState>;
   stats: (port: number, args: string) => Promise<string>;
   receive: (callback: ReceiveCallback) => Promise<void>;
   exited: (callback: ExitedCallback) => Promise<void>;
