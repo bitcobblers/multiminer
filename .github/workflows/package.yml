@@ -1,10 +1,7 @@
 name: Package Installer
 
 on:
-  push:
-    branches:
-      - main
-      - 'releases/**'
+  workflow_dispatch:
 
 jobs:
   release:
