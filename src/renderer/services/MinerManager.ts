@@ -164,7 +164,7 @@ async function setInitialState() {
   const defaultMiner = await getDefaultMiner(appSettings.settings.defaultMiner);
 
   if (minerState.state === 'active') {
-    updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner });
+    updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner, profile: minerState.profile });
   } else {
     updateState({ profile: defaultMiner?.name, miner: defaultMiner?.kind });
   }
