@@ -5,6 +5,7 @@ export type MinerInfo = {
   owner: string;
   repo: string;
   assetPattern: RegExp;
+  optionsUrl: string;
   algorithms: AlgorithmName[];
   exe: string;
   getArgs: (algorithm: AlgorithmName, cs: string, url: string) => string;
@@ -25,6 +26,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     owner: 'lolliedieb',
     repo: 'lolMiner-releases',
     assetPattern: /^.+Win64\.zip$/,
+    optionsUrl: 'https://lolminer.site/documentation/arguments/',
     exe: 'lolminer.exe',
     getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor --apiport ${API_PORT}`,
   },
@@ -34,6 +36,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     owner: 'NebuTech',
     repo: 'NBMiner',
     assetPattern: /^NBMiner.+_Win\.zip$/,
+    optionsUrl: 'https://nbminer.info/documentation/arguments/',
     exe: 'nbminer.exe',
     getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} --no-color --cmd-output 1 --api 127.0.0.1:60090`,
   },
@@ -43,6 +46,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     owner: 'trexminer',
     repo: 't-rex',
     assetPattern: /^t-rex-.+win.zip$/,
+    optionsUrl: 'https://trexminer.info/documentation/arguments/',
     exe: 't-rex.exe',
     getArgs: (alg, cs, url) => `-a ${alg} -o ${url} -u ${cs} -p x --api-bind-http 127.0.0.1:60090 --api-read-only --no-color`,
   },
