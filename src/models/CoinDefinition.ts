@@ -192,7 +192,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Dogecoin',
     symbol: 'DOGE',
     blockchains: ['DOGE'],
-    referrals: ['pdwb-af48', '1f6v-fy9m'],
+    referrals: ['3q5x-94gx', '1f6v-fy9m'],
   },
   {
     id: 'dogelon-mars',
@@ -256,7 +256,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'Gas',
     symbol: 'GAS',
     blockchains: ['NEO'],
-    referrals: ['FractalMedia'],
+    referrals: ['i8ho-agu9'],
   },
   {
     id: 'holotoken',
@@ -352,7 +352,7 @@ export const ALL_COINS: CoinDefinition[] = [
     name: 'PancakeSwap',
     symbol: 'CAKE',
     blockchains: ['BSC'],
-    referrals: ['i0kx-z4kc'],
+    referrals: ['ofq5-w659'],
   },
   {
     id: 'qtum',
@@ -459,20 +459,20 @@ export const ALL_COINS: CoinDefinition[] = [
     referrals: ['o9d3-o66o', 'j5xo-3ut6'],
   },
   {
-    id: 'uniswap',
-    icon: CoinIcons.Uni,
-    name: 'Uniswap',
-    symbol: 'UNI',
-    blockchains: ['ETH'],
-    referrals: ['c8dz-rwtz', 'fvsd-8ank'],
-  },
-  {
     id: 'tether',
     icon: CoinIcons.Usdt,
     name: 'TetherUS',
     symbol: 'USDT',
     blockchains: ['BSC', 'ETH', 'TRX'],
     referrals: ['arrh-soac', 'a61w-a53t'],
+  },
+  {
+    id: 'uniswap',
+    icon: CoinIcons.Uni,
+    name: 'Uniswap',
+    symbol: 'UNI',
+    blockchains: ['ETH'],
+    referrals: ['c8dz-rwtz', 'fvsd-8ank'],
   },
   {
     id: 'vechain',
