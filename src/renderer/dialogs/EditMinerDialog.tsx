@@ -3,11 +3,13 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
-import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider } from '@mui/material';
+import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, Button } from '@mui/material';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo, MinerRelease } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
 import { getMinerReleases } from '../services/DownloadManager';
+import { aboutApi } from '../../shared/AboutApi';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -89,6 +91,14 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return current;
   };
 
+  const openReference = () => {
+    const currentMiner = availableMinersAsMinerInfo.find((m) => m.name === kind);
+
+    if (currentMiner !== undefined) {
+      aboutApi.openBrowser(currentMiner.optionsUrl);
+    }
+  };
+
   return (
     <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
       <DialogTitle sx={{ textAlign: 'center' }}>Edit Miner</DialogTitle>
@@ -132,7 +142,12 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField spellCheck="false" label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
+              <Stack direction="row" gap={1} alignItems="center">
+                <TextField style={{ width: '22rem' }} spellCheck="false" label="Parameters" {...register('parameters')} value={watch('parameters') ?? ''} />
+                <Button startIcon={<OpenInNewIcon />} size="small" variant="outlined" onClick={openReference}>
+                  Reference
+                </Button>
+              </Stack>
               <Divider />
               <CustomDialogActions buttonType="submit" onCancel={handleOnCancel} />
             </Stack>
