@@ -8,7 +8,7 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
 
 // Services.
-import { GpuStatistic, MinerStatistic, ConfiguredCoin, minerState$, enabledCoins$, refreshData$ } from '../../models';
+import { GpuStatistic, MinerStatistic, ConfiguredCoin, enabledCoins$, refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 import { UnmineableStats, unmineableWorkers$ } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregator';
@@ -20,7 +20,6 @@ import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
-  const [minerActive, setMinerActive] = useState(false);
   const [configuredCoins, setConfiguredCoins] = useState(Array<ConfiguredCoin>());
   const [currentGpuStats, setCurrentGpuStats] = useState(Array<GpuStatistic>());
   const [currentMinerStats, setCurrentMinerStats] = useState({} as MinerStatistic);
@@ -28,20 +27,20 @@ export function HomeScreen(): JSX.Element {
   const minerContext = useContext(MinerContext);
 
   useEffect(() => {
-    const minerSubscription = minerState$.subscribe((s) => setMinerActive(s.state === 'active'));
     const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => setWorkerStats(stats));
     const coinsSubscription = enabledCoins$.subscribe((coins) => setConfiguredCoins(coins));
     const gpuStatsSubscription = gpuStatistics$.subscribe((stats) => setCurrentGpuStats(stats));
     const minerStatsSubscription = minerStatistics$.subscribe((stats) => setCurrentMinerStats(stats));
 
     return () => {
-      minerSubscription.unsubscribe();
       unmineableWorkersSubscription.unsubscribe();
       coinsSubscription.unsubscribe();
       gpuStatsSubscription.unsubscribe();
       minerStatsSubscription.unsubscribe();
     };
   }, [minerContext.currentCoin]);
+
+  const minerActive = minerContext.state === 'active';
 
   return (
     <Container>
