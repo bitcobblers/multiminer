@@ -17,6 +17,8 @@ export const globalStore = new Store<SettingsSchemaType>({
           type: 'object',
           properties: {
             workerName: { type: 'string' },
+            defaultMiner: { type: 'string' },
+            coinStrategy: { type: 'string' },
             proxy: { type: 'string' },
           },
           required: [],
