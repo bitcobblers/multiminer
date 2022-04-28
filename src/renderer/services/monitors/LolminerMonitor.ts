@@ -1,4 +1,4 @@
-import { addGpuStat, addMinerStat } from '../StatisticsAggregator';
+import { addGpuStats, addMinerStat } from '../StatisticsAggregator';
 import { MinerMonitor } from './MinerMonitor';
 
 type MinerAppStatistics = {
@@ -48,25 +48,27 @@ function updateStats(stats: MinerAppStatistics) {
     return;
   }
 
-  stats.Workers.forEach((worker) => {
-    const hashrate = stats.Algorithms[0].Worker_Performance[worker.Index];
-    const efficiency = hashrate === 0 || worker.Power === 0 ? 0 : (hashrate / worker.Power) * 1000;
+  addGpuStats(
+    stats.Workers.map((worker) => {
+      const hashrate = stats.Algorithms[0].Worker_Performance[worker.Index];
+      const efficiency = hashrate === 0 || worker.Power === 0 ? 0 : (hashrate / worker.Power) * 1000;
 
-    addGpuStat({
-      id: worker.Index.toString(),
-      name: worker.Name,
-      hashrate,
-      accepted: stats.Algorithms[0].Worker_Accepted[worker.Index],
-      rejected: stats.Algorithms[0].Worker_Rejected[worker.Index],
-      power: worker.Power,
-      efficiency,
-      coreClock: worker.CCLK,
-      memClock: worker.MCLK,
-      coreTemperature: worker.Core_Temp,
-      memTemperature: worker.Mem_Temp,
-      fanSpeed: worker.Fan_Speed,
-    });
-  });
+      return {
+        id: worker.Index.toString(),
+        name: worker.Name,
+        hashrate,
+        accepted: stats.Algorithms[0].Worker_Accepted[worker.Index],
+        rejected: stats.Algorithms[0].Worker_Rejected[worker.Index],
+        power: worker.Power,
+        efficiency,
+        coreClock: worker.CCLK,
+        memClock: worker.MCLK,
+        coreTemperature: worker.Core_Temp,
+        memTemperature: worker.Mem_Temp,
+        fanSpeed: worker.Fan_Speed,
+      };
+    })
+  );
 
   const totalHashrate = stats.Algorithms[0].Total_Performance;
   const totalPower = stats.Workers.map((w) => w.Power).reduce((a, b) => a + b, 0);

@@ -1,4 +1,4 @@
-import { addGpuStat, addMinerStat } from '../StatisticsAggregator';
+import { addGpuStats, addMinerStat } from '../StatisticsAggregator';
 import { MinerMonitor } from './MinerMonitor';
 
 type MinerAppStatistics = {
@@ -90,24 +90,26 @@ type MinerAppStatistics = {
 };
 
 function updateStats(stats: MinerAppStatistics) {
-  stats.gpus.forEach((device) => {
-    const efficiency = device.power === 0 ? undefined : device.hashrate / 1000 / device.power;
+  addGpuStats(
+    stats.gpus.map((device) => {
+      const efficiency = device.power === 0 ? undefined : device.hashrate / 1000 / device.power;
 
-    addGpuStat({
-      id: device.gpu_id.toString(),
-      name: device.name,
-      hashrate: device.hashrate / 1000000,
-      accepted: device.shares.accepted_count,
-      rejected: device.shares.rejected_count,
-      power: device.power,
-      efficiency,
-      coreClock: device.cclock,
-      memClock: device.mclock,
-      coreTemperature: device.temperature,
-      memTemperature: device.memory_temperature,
-      fanSpeed: device.fan_speed,
-    });
-  });
+      return {
+        id: device.gpu_id.toString(),
+        name: device.name,
+        hashrate: device.hashrate / 1000000,
+        accepted: device.shares.accepted_count,
+        rejected: device.shares.rejected_count,
+        power: device.power,
+        efficiency,
+        coreClock: device.cclock,
+        memClock: device.mclock,
+        coreTemperature: device.temperature,
+        memTemperature: device.memory_temperature,
+        fanSpeed: device.fan_speed,
+      };
+    })
+  );
 
   const totalPower = stats.gpus.reduce((a, b) => a + b.power, 0);
   const totalEfficiency = totalPower === 0 ? undefined : stats.hashrate / 1000 / totalPower;
