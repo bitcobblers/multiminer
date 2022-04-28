@@ -9,7 +9,7 @@ import { SettingsApi } from '../shared/SettingsApi';
 import { TickerApi } from '../shared/TickerApi';
 import { UnmineableApi } from '../shared/UnmineableApi';
 
-import { enableMonitor } from './services/MonitorService';
+import { enableMonitors } from './services/MonitorService';
 import { enableDataService } from './services/DataService';
 
 declare global {
@@ -26,7 +26,7 @@ declare global {
 }
 
 window.addEventListener('load', () => {
-  enableMonitor();
+  enableMonitors();
   enableDataService();
 });
 

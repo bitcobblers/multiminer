@@ -6,7 +6,7 @@ import { lolminerMonitor, nbminerMonitor, trexminerMonitor, MinerMonitor } from 
 const UPDATE_INTERVAL = 1000 * 5;
 const monitor$ = interval(UPDATE_INTERVAL);
 
-export function enableMonitor() {
+export function enableMonitors() {
   const monitors = [nbminerMonitor, lolminerMonitor, trexminerMonitor];
   const monitorNames = monitors.map((m) => m.name);
 
