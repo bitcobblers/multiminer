@@ -79,6 +79,7 @@ describe('App Settings Service', () => {
         settings: {
           workerName: 'worker',
           defaultMiner: '',
+          coinStrategy: 'normal',
           proxy: '',
         },
         pools: {

@@ -1,4 +1,4 @@
-import { Button, Container, Divider, FormControl, Stack, TextField, Typography } from '@mui/material';
+import { Button, Container, Divider, FormControl, Stack, TextField, Typography, MenuItem } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadIcon from '@mui/icons-material/Upload';
 import SaveIcon from '@mui/icons-material/Save';
@@ -24,6 +24,7 @@ export function SettingsScreen() {
     formState: { errors, isValid },
     handleSubmit,
     reset,
+    watch,
   } = useForm<AppSettings>({ defaultValues: DefaultSettings.settings });
 
   useEffect(() => {
@@ -78,6 +79,10 @@ export function SettingsScreen() {
     await loggingApi.openLogFolder();
   };
 
+  const pickCoinStrategy = (current: string) => {
+    return current === undefined ? 'normal' : current;
+  };
+
   const DefaultSpacing = 2;
 
   return (
@@ -115,6 +120,14 @@ export function SettingsScreen() {
               error={!!errors?.settings?.workerName}
               helperText={errors?.settings?.workerName?.message}
             />
+          </ConfigurableControl>
+        </Stack>
+        <Stack sx={{ width: '17.6rem', mt: 2 }}>
+          <ConfigurableControl description="How should the app pick the next coin to mine.">
+            <TextField label="Coin Strategy" select value={pickCoinStrategy(watch('settings.coinStrategy'))} {...register('settings.coinStrategy')}>
+              <MenuItem value="normal">Normal (next coin in the list)</MenuItem>
+              <MenuItem value="skynet">Skynet (let the app decide)</MenuItem>
+            </TextField>
           </ConfigurableControl>
         </Stack>
         <Stack sx={{ width: '25rem', mt: 2 }}>

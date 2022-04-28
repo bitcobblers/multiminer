@@ -6,6 +6,7 @@ import { minerApi } from '../../shared/MinerApi';
 import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
 import { getMiners, getAppSettings, watchers$ as settingsWatcher$ } from './AppSettingsService';
 import { downloadMiner } from './DownloadManager';
+import * as coinStrategy from './strategies';
 
 type CoinSelection = {
   miner: Miner;
@@ -15,24 +16,17 @@ type CoinSelection = {
   wallet: Wallet;
 };
 
+class CoinStrategies {
+  normal = coinStrategy.normal;
+
+  skynet = coinStrategy.skynet;
+}
+
+const coinStrategies = new CoinStrategies();
 let timeout: NodeJS.Timeout;
 
 function getRandom<T>(array: Array<T>) {
   return array[Math.floor(Math.random() * array.length)];
-}
-
-function getRandomCoin(currentCoin: string | null, coins: Coin[]): Coin {
-  if (coins.length === 1) {
-    return coins[0];
-  }
-
-  const newCoin = getRandom(coins);
-
-  if (currentCoin !== newCoin.symbol) {
-    return newCoin;
-  }
-
-  return getRandomCoin(currentCoin, coins);
 }
 
 function lookupCoin(symbol: string | null, coins: Coin[]) {
@@ -59,9 +53,11 @@ function getConnectionString(symbol: string, address: string, memo: string, name
 
 export async function selectCoin(symbol: string | null, onError: (message: string) => void, onSuccess: (selection: CoinSelection) => Promise<void>) {
   const { profile, currentCoin } = minerState$.getValue();
+  const appSettings = await config.getAppSettings();
   const allMiners = await config.getMiners();
   const miner = allMiners.find((m) => m.name === profile);
   const minerInfo = AVAILABLE_MINERS.find((m) => m.name === miner?.kind);
+  const selectCoinStrategy = coinStrategies[appSettings.settings.coinStrategy ?? 'normal'];
 
   if (miner === undefined) {
     onError('No miners have been enabled.');
@@ -80,7 +76,7 @@ export async function selectCoin(symbol: string | null, onError: (message: strin
     return;
   }
 
-  const coin = lookupCoin(symbol, enabledCoins) ?? getRandomCoin(currentCoin, enabledCoins);
+  const coin = lookupCoin(symbol, enabledCoins) ?? selectCoinStrategy(currentCoin, enabledCoins);
   const coinInfo = ALL_COINS.find((c) => c.symbol === coin.symbol);
 
   if (coinInfo === undefined) {
