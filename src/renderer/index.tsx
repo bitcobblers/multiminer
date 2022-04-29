@@ -9,9 +9,7 @@ import { SettingsApi } from '../shared/SettingsApi';
 import { TickerApi } from '../shared/TickerApi';
 import { UnmineableApi } from '../shared/UnmineableApi';
 
-import { enableLolMiner } from './services/miners/lolminer';
-import { enableNBMiner } from './services/miners/nbminer';
-import { enableTrexMiner } from './services/miners/trexminer';
+import { enableMonitors } from './services/MonitorService';
 import { enableDataService } from './services/DataService';
 
 declare global {
@@ -28,9 +26,7 @@ declare global {
 }
 
 window.addEventListener('load', () => {
-  enableLolMiner();
-  enableNBMiner();
-  enableTrexMiner();
+  enableMonitors();
   enableDataService();
 });
 

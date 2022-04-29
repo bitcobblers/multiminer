@@ -1,9 +1,5 @@
-import { interval, withLatestFrom, map, filter } from 'rxjs';
-import { minerState$, API_PORT } from '../../../../models';
-import { addGpuStat, addMinerStat } from '../../StatisticsAggregator';
-import { minerApi } from '../../../../shared/MinerApi';
-
-const UPDATE_INTERVAL = 1000 * 5;
+import { addGpuStats, addMinerStat } from '../StatisticsAggregator';
+import { MinerMonitor } from './MinerMonitor';
 
 type MinerAppStatistics = {
   accepted_count: number;
@@ -93,27 +89,27 @@ type MinerAppStatistics = {
   };
 };
 
-const monitor$ = interval(UPDATE_INTERVAL);
-
 function updateStats(stats: MinerAppStatistics) {
-  stats.gpus.forEach((device) => {
-    const efficiency = device.power === 0 ? undefined : device.hashrate / 1000 / device.power;
+  addGpuStats(
+    stats.gpus.map((device) => {
+      const efficiency = device.power === 0 ? undefined : device.hashrate / 1000 / device.power;
 
-    addGpuStat({
-      id: device.gpu_id.toString(),
-      name: device.name,
-      hashrate: device.hashrate / 1000000,
-      accepted: device.shares.accepted_count,
-      rejected: device.shares.rejected_count,
-      power: device.power,
-      efficiency,
-      coreClock: device.cclock,
-      memClock: device.mclock,
-      coreTemperature: device.temperature,
-      memTemperature: device.memory_temperature,
-      fanSpeed: device.fan_speed,
-    });
-  });
+      return {
+        id: device.gpu_id.toString(),
+        name: device.name,
+        hashrate: device.hashrate / 1000000,
+        accepted: device.shares.accepted_count,
+        rejected: device.shares.rejected_count,
+        power: device.power,
+        efficiency,
+        coreClock: device.cclock,
+        memClock: device.mclock,
+        coreTemperature: device.temperature,
+        memTemperature: device.memory_temperature,
+        fanSpeed: device.fan_speed,
+      };
+    })
+  );
 
   const totalPower = stats.gpus.reduce((a, b) => a + b.power, 0);
   const totalEfficiency = totalPower === 0 ? undefined : stats.hashrate / 1000 / totalPower;
@@ -129,24 +125,8 @@ function updateStats(stats: MinerAppStatistics) {
   });
 }
 
-export function enableTrexMiner() {
-  monitor$
-    .pipe(
-      withLatestFrom(minerState$),
-      map(([, miner]) => ({ name: miner.miner, state: miner.state })),
-      filter(({ name, state }) => state === 'active' && name === 'trexminer')
-    )
-    .subscribe(() => {
-      // eslint-disable-next-line promise/catch-or-return
-      minerApi.stats(API_PORT, 'summary').then((result) => {
-        // eslint-disable-next-line promise/always-return
-        if (result !== '') {
-          const stats = JSON.parse(result) as MinerAppStatistics;
-          updateStats(stats);
-        }
-      });
-    });
-
-  // eslint-disable-next-line no-console
-  console.log('Enabled T-Rex Miner support.');
-}
+export const monitor: MinerMonitor = {
+  name: 'trexminer',
+  statsUrl: 'summary',
+  update: (stats) => updateStats(JSON.parse(stats)),
+};
