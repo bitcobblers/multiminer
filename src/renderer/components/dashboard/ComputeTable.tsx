@@ -14,7 +14,6 @@ export function ComputeTable(props: { gpus: GpuStatistic[] }) {
             <TableCell>Name</TableCell>
             <TableCell>Hashrate</TableCell>
             <TableCell>Shares</TableCell>
-            <TableCell>Best</TableCell>
             <TableCell>Power</TableCell>
             <TableCell>Efficiency</TableCell>
             <TableCell>Core Clock</TableCell>
@@ -31,7 +30,6 @@ export function ComputeTable(props: { gpus: GpuStatistic[] }) {
               <TableCell>{gpu.name}</TableCell>
               <TableCell>{formatter.hashrate(gpu.hashrate)}</TableCell>
               <TableCell>{formatter.shares(gpu.accepted, gpu.rejected)}</TableCell>
-              <TableCell>{formatter.best(gpu.best)}</TableCell>
               <TableCell>{formatter.power(gpu.power)}</TableCell>
               <TableCell>{formatter.efficiency(gpu.efficiency)}</TableCell>
               <TableCell>{formatter.clockSpeed(gpu.coreClock)}</TableCell>

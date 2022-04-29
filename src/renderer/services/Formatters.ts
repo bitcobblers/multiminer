@@ -14,10 +14,6 @@ export function shares(accepted: number | undefined, rejected: number | undefine
   return `${number(accepted ?? 0)} / ${number(rejected ?? 0)}`;
 }
 
-export function best(value: string | undefined) {
-  return value === undefined ? 'N/A' : value;
-}
-
 export function found(accepted: number | undefined, rejected: number | undefined) {
   return number((accepted ?? 0) + (rejected ?? 0));
 }
