@@ -43,6 +43,14 @@ export const ALL_COINS: CoinDefinition[] = [
     referrals: ['4rcp-6phh', 'j8id-kdqh'],
   },
   {
+    id: 'apecoin',
+    icon: CoinIcons.Ape,
+    name: 'Apecoin',
+    symbol: 'APE',
+    blockchains: ['ETH', 'BSC'],
+    referrals: ['wulk-7x1e'],
+  },
+  {
     id: 'augur',
     icon: CoinIcons.Rep,
     name: 'Augur',
