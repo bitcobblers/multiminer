@@ -2,6 +2,7 @@ import OneInchIcon from '../../assets/coins/1inch.svg';
 import AaveIcon from '../../assets/coins/aave.svg';
 import AdaIcon from '../../assets/coins/ada.svg';
 import AlgoIcon from '../../assets/coins/algo.svg';
+import ApeIcon from '../../assets/coins/ape.svg';
 import AtomIcon from '../../assets/coins/atom.svg';
 import AvaxIcon from '../../assets/coins/avax.svg';
 import BabyDogeIcon from '../../assets/coins/babydoge.svg';
@@ -71,6 +72,7 @@ export const CoinIcons = {
   Aave: AaveIcon,
   Ada: AdaIcon,
   Algo: AlgoIcon,
+  Ape: ApeIcon,
   Atom: AtomIcon,
   Avax: AvaxIcon,
   BabyDoge: BabyDogeIcon,
