@@ -31,7 +31,6 @@ export function SettingsScreen() {
     getAppSettings()
       .then((s) => reset(s))
       .catch((error) => {
-        // eslint-disable-next-line no-console
         console.log(`Unable to load settings: ${error}`);
       });
   }, [reset]);

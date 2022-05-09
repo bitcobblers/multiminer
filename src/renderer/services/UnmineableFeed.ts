@@ -68,7 +68,6 @@ async function updateCoin(coin: string, address: string) {
 }
 
 function updateWorkers(uuid: string) {
-  // eslint-disable-next-line promise/catch-or-return
   unmineableApi
     .getWorkers(uuid)
     .then((w) => {
@@ -86,7 +85,6 @@ function updateWorkers(uuid: string) {
       } as UnmineableStats;
     })
     .then((stats) => {
-      // eslint-disable-next-line promise/always-return
       if (stats !== null) {
         unmineableWorkers$.next(stats);
       }

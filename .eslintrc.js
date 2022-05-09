@@ -8,6 +8,9 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['warn'],
+    'promise/catch-or-return': 'off',
+    'promise/always-return': 'off',
+    'no-console': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

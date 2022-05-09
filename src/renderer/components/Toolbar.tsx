@@ -40,7 +40,6 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
   useEffect(() => {
     getMiners()
       .then(setLoadedMiners)
-      // eslint-disable-next-line no-console
       .catch((err) => console.error('Failed to load miners: ', err));
   }, []);
 
