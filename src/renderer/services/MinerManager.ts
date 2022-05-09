@@ -84,7 +84,7 @@ export async function selectCoin(symbol: string | null, onError: (message: strin
     return;
   }
 
-  const wallet = (await config.getWallets()).find((w) => w.name === coin.wallet);
+  const wallet = (await config.getWallets()).find((w) => w.id === coin.wallet);
 
   if (wallet === undefined) {
     onError(`The wallet '${coin.wallet}' associated with ${coin.symbol} could not be found.`);
