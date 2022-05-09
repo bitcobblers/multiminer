@@ -92,6 +92,15 @@ export function CoinsScreen() {
     setEnabledOnly(e.target.checked);
   };
 
+  const getWalletName = (id: string | null) => {
+    if (id === null) {
+      return 'None';
+    }
+
+    const wallet = wallets.find((w) => w.id === id);
+    return wallet?.name ?? '<unknown>';
+  };
+
   return (
     <Container>
       <ScreenHeader title="Coins">
@@ -132,7 +141,7 @@ export function CoinsScreen() {
                     <Chip key={`${c.name}-${chain}`} label={chain} />
                   ))}
                 </TableCell>
-                <TableCell>{c.coin.wallet ?? 'None'}</TableCell>
+                <TableCell>{getWalletName(c.coin.wallet)}</TableCell>
                 <TableCell>{formatter.duration(c.coin.duration)}</TableCell>
               </TableRow>
             ))}

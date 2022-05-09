@@ -53,8 +53,8 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
   const pickWallet = (current: string | null) => {
     if (current === null) {
       if (compatibleWallets.length > 0) {
-        setValue('wallet', compatibleWallets[0].name);
-        return compatibleWallets[0].name;
+        setValue('wallet', compatibleWallets[0].id);
+        return compatibleWallets[0].id;
       }
 
       return '';
@@ -99,7 +99,7 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
                 {compatibleWallets
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((w) => (
-                    <MenuItem key={w.name} value={w.name}>
+                    <MenuItem key={w.name} value={w.id}>
                       <WalletMenuItem wallet={w} />
                     </MenuItem>
                   ))}
