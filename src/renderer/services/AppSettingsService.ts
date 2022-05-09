@@ -51,7 +51,6 @@ settingsApi.watch('settings');
 settingsApi.watch('minerReleases');
 
 settingsApi.changed((key, content) => {
-  // eslint-disable-next-line no-console
   console.log(`Config change detected: ${key}: ${content}`);
 
   const typedKey = key as keyof WatchersObservable;

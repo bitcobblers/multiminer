@@ -110,7 +110,6 @@ async function changeCoin(symbol: string | null) {
       const extraArgs = miner.parameters;
       const mergedArgs = `${minerArgs} ${extraArgs}`;
 
-      // eslint-disable-next-line no-console
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${mergedArgs}`);
 
       const downloadResult = await downloadMiner(miner.kind, miner.version);
@@ -178,12 +177,10 @@ async function setInitialState() {
       currentCoin: coin,
     });
 
-    // eslint-disable-next-line promise/catch-or-return
     config.getCoins().then((coins) => {
       const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
       const c = coins.find((x) => x.symbol === coin);
 
-      // eslint-disable-next-line promise/always-return
       if (c !== undefined) {
         timeout = setTimeout(() => changeCoin(null), Number(c.duration) * MILLISECONDS_PER_HOUR);
       }

@@ -19,15 +19,12 @@ export function enableMonitors() {
       filter((m): m is MinerMonitor => m !== undefined)
     )
     .subscribe((monitor) => {
-      // eslint-disable-next-line promise/catch-or-return
       minerApi.stats(API_PORT, monitor.statsUrl).then((result) => {
-        // eslint-disable-next-line promise/always-return
         if (result !== '') {
           monitor.update(result);
         }
       });
     });
 
-  // eslint-disable-next-line no-console
   console.log(`Enabled miner monitor support for: ${monitorNames.join(', ')}.`);
 }

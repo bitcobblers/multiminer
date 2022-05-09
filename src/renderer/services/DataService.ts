@@ -4,7 +4,6 @@ import { CoinTicker, ticker$ } from './CoinFeed';
 import { UnmineableCoin, unmineableCoins$ } from './UnmineableFeed';
 
 function minerStateChanged(state: MinerState) {
-  // eslint-disable-next-line no-console
   console.log(`Miner state changed to ${state.state}`);
 
   const updatedCoins = enabledCoins$.getValue().map((c) => {
@@ -18,7 +17,6 @@ function minerStateChanged(state: MinerState) {
 }
 
 function tickerUpdated(coins: CoinTicker[]) {
-  // eslint-disable-next-line no-console
   console.log('Updating coins from ticker feed.');
 
   const updatedCoins = enabledCoins$.getValue().map((c) => {
@@ -38,7 +36,6 @@ function tickerUpdated(coins: CoinTicker[]) {
 }
 
 function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
-  // eslint-disable-next-line no-console
   console.log('Updating coins from unmineable feed.');
 
   const updatedCoins = enabledCoins$.getValue().map((c) => {
@@ -61,7 +58,6 @@ function unmineableCoinsUpdated(coins: UnmineableCoin[]) {
 }
 
 function reloadCoins(coins: Coin[]) {
-  // eslint-disable-next-line no-console
   console.log('Reloading coins from configuration.');
 
   const updateCoins = async () => {
@@ -89,7 +85,6 @@ function reloadCoins(coins: Coin[]) {
       });
   };
 
-  // eslint-disable-next-line promise/catch-or-return
   updateCoins().then((updatedCoins) => enabledCoins$.next(updatedCoins));
 }
 
@@ -99,7 +94,6 @@ const unmineableCoinsSubscription = unmineableCoins$.subscribe(unmineableCoinsUp
 const configWatcherSubscription = config.watchers$.coins.subscribe(reloadCoins);
 
 export function cleanup() {
-  // eslint-disable-next-line no-console
   console.log('Cleaning up data service.');
 
   minerStateSubscription.unsubscribe();
