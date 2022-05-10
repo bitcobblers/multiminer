@@ -69,7 +69,7 @@ function reloadCoins(coins: Coin[]) {
       .filter((c) => c.enabled)
       .map((c) => {
         const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
-        const wallet = wallets.find((w) => c.wallet === w.name);
+        const wallet = wallets.find((w) => c.wallet === w.id);
 
         const previousCoin = previouslyLoadedCoins.find((x) => x.symbol === c.symbol);
         return {
@@ -110,7 +110,7 @@ export async function enableDataService() {
   enabledCoins$.next(
     loadedCoins.map((c) => {
       const cd = ALL_COINS.find((x) => x.symbol === c.symbol);
-      const wallet = wallets.find((w) => c.wallet === w.name);
+      const wallet = wallets.find((w) => c.wallet === w.id);
 
       return {
         current: false,
