@@ -1,26 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Container, Typography, Divider, Button, Box } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { screenBuffer, clearBuffer } from '../services/ScreenBuffer';
 import { AutoScrollTextArea, ScreenHeader } from '../components';
+import { useObservable } from '../hooks';
 
 export function MonitorScreen(): JSX.Element {
   const [data, setData] = useState(screenBuffer.value);
   const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => {
-    const dataReceived = (content: string) => {
-      setData(content);
-    };
-
-    const subscription = screenBuffer.subscribe(dataReceived);
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  });
+  useObservable(screenBuffer, setData);
 
   const clearLog = () => {
     clearBuffer();

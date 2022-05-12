@@ -20,7 +20,7 @@ import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager'
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
 
 // Hooks.
-import { useProfile } from '../hooks';
+import { useProfile, useObservable } from '../hooks';
 
 function Separator() {
   const theme = useTheme();
@@ -36,19 +36,11 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
   const [minerStatistic, setMinerStatistic] = useState<MinerStatistic>();
   const [miners, setLoadedMiners] = useState(Array<Miner>());
 
+  useObservable(minerState$, setMinerState);
+  useObservable(minerStatistics$, setMinerStatistic);
+  useObservable(watchers$.miners, setLoadedMiners);
+
   const minerActive = minerState?.state === 'active';
-
-  useEffect(() => {
-    const minerSubscription = minerState$.subscribe((s) => setMinerState(s));
-    const statsSubscription = minerStatistics$.subscribe((s) => setMinerStatistic(s));
-    const minerConfigSubscription = watchers$.miners.subscribe((s) => setLoadedMiners(s));
-
-    return () => {
-      minerSubscription.unsubscribe();
-      statsSubscription.unsubscribe();
-      minerConfigSubscription.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => {
     getMiners()

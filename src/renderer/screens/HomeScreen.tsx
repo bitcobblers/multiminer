@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 
 // UI.
 import { Container, Grid, Button, Typography } from '@mui/material';
@@ -15,7 +15,7 @@ import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregat
 
 import { MinerContext } from '../MinerContext';
 
-import { useProfile } from '../hooks';
+import { useProfile, useObservable } from '../hooks';
 
 // Screens.
 import { ScreenHeader } from '../components';
@@ -30,19 +30,10 @@ export function HomeScreen(): JSX.Element {
 
   const profile = useProfile();
 
-  useEffect(() => {
-    const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => setWorkerStats(stats));
-    const coinsSubscription = enabledCoins$.subscribe((coins) => setConfiguredCoins(coins));
-    const gpuStatsSubscription = gpuStatistics$.subscribe((stats) => setCurrentGpuStats(stats));
-    const minerStatsSubscription = minerStatistics$.subscribe((stats) => setCurrentMinerStats(stats));
-
-    return () => {
-      unmineableWorkersSubscription.unsubscribe();
-      coinsSubscription.unsubscribe();
-      gpuStatsSubscription.unsubscribe();
-      minerStatsSubscription.unsubscribe();
-    };
-  }, [minerContext.currentCoin]);
+  useObservable(unmineableWorkers$, setWorkerStats);
+  useObservable(enabledCoins$, setConfiguredCoins);
+  useObservable(gpuStatistics$, setCurrentGpuStats);
+  useObservable(minerStatistics$, setCurrentMinerStats);
 
   const minerActive = minerContext.state === 'active';
 
