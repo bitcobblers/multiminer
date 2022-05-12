@@ -8,19 +8,19 @@ import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tool
 import { Miner, minerState$ } from 'models';
 
 // React.
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
 // Hooks.
 import { MinerContext } from 'renderer/MinerContext';
 
 // Services.
-import { getAppSettings, getMiners, setAppSettings, watchers$ } from 'renderer/services/AppSettingsService';
+import { getAppSettings, setAppSettings, watchers$ } from 'renderer/services/AppSettingsService';
 import * as formatter from 'renderer/services/Formatters';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
 
 // Hooks.
-import { useProfile, useObservableState } from '../hooks';
+import { useProfile, useObservableState, useLoadData } from '../hooks';
 
 function Separator() {
   const theme = useTheme();
@@ -38,11 +38,11 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
 
   const minerActive = minerState?.state === 'active';
 
-  useEffect(() => {
+  useLoadData(async ({ getMiners }) => {
     getMiners()
       .then(setLoadedMiners)
       .catch((err) => console.error('Failed to load miners: ', err));
-  }, [setLoadedMiners]);
+  });
 
   const setDefaultMiner = async (name: string) => {
     const appSettings = await getAppSettings();

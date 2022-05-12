@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import { getAppSettings, watchers$ } from '../services/AppSettingsService';
+import { useLoadData } from './loadData';
 
 export function useProfile() {
   const [profile, setProfile] = useState('');
 
-  useEffect(() => {
-    const loadProfile = async () => {
-      const appSettings = await getAppSettings();
-      setProfile(appSettings.settings.defaultMiner);
-    };
+  useLoadData(async () => {
+    const appSettings = await getAppSettings();
+    setProfile(appSettings.settings.defaultMiner);
+  });
 
+  useEffect(() => {
     const configSubscription = watchers$.settings.subscribe((appSettings) => {
       setProfile(appSettings.settings.defaultMiner);
     });
 
-    loadProfile();
     return () => {
       configSubscription.unsubscribe();
     };

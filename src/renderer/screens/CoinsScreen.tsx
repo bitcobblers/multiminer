@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 
 import CheckIcon from '@mui/icons-material/Check';
 import { Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Chip, Table, FormControlLabel, Switch, TextField } from '@mui/material';
 import { ALL_COINS, Coin, Wallet } from '../../models';
-import { getCoins, setCoins, getWallets } from '../services/AppSettingsService';
+import { getCoins, setCoins } from '../services/AppSettingsService';
 import * as formatter from '../services/Formatters';
 import { ScreenHeader, EditCoinControls } from '../components';
+import { useLoadData } from '../hooks';
 
 type CoinRecord = {
   id: string;
@@ -63,14 +64,10 @@ export function CoinsScreen() {
     [coins, enabledOnly, filter]
   );
 
-  useEffect(() => {
-    const readConfigAsync = async () => {
-      setWallets(await getWallets());
-      setLoadedCoins(await loadCoins());
-    };
-
-    readConfigAsync();
-  }, []);
+  useLoadData(async ({ getWallets }) => {
+    setWallets(await getWallets());
+    setLoadedCoins(await loadCoins());
+  });
 
   const handleOnEditCoinSave = async (coin: Coin) => {
     await setCoins(

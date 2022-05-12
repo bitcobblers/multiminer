@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
@@ -7,11 +7,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
 import { Miner } from '../../models';
-import { getMiners, setMiners, getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { setMiners, getAppSettings, setAppSettings } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 import { MinerContext } from '../MinerContext';
+import { useLoadData } from '../hooks';
 
 const getEmptyMiner = (): Miner => {
   return { id: uuid(), kind: 'lolminer', name: '', version: '', algorithm: 'ethash', parameters: '' };
@@ -24,13 +25,9 @@ export function MinersScreen() {
   const [miners, setLoadedMiners] = useState(Array<Miner>());
   const minerContext = useContext(MinerContext);
 
-  useEffect(() => {
-    const init = async () => {
-      setLoadedMiners(await getMiners());
-    };
-
-    init();
-  }, []);
+  useLoadData(async ({ getMiners }) => {
+    setLoadedMiners(await getMiners());
+  });
 
   const handleOnAddMiner = () => {
     setNewOpen(true);

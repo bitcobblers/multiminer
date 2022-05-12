@@ -25,18 +25,3 @@ export function useObservableState<T>(observable: Observable<T>, defaultValue: T
 
   return state;
 }
-
-// export function useObservableStateWithDefault<T>(observable: Observable<T>, defaultValue: T) {
-//   const state = useState(defaultValue);
-//   const [, setCurrent] = state;
-
-//   useEffect(() => {
-//     const subscription = observable.subscribe(setCurrent);
-
-//     return () => {
-//       subscription.unsubscribe();
-//     };
-//   }, [observable, setCurrent]);
-
-//   return state;
-// }

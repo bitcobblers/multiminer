@@ -25,7 +25,7 @@ describe('Profile Hook', () => {
 
   it('Returns appSettings setting by default.', async () => {
     // Arrange.
-    jest.spyOn(settings, 'getAppSettings').mockReturnValue(Promise.resolve(defaultAppSettings));
+    jest.spyOn(settings, 'getAppSettings').mockResolvedValue(defaultAppSettings);
 
     // Act.
     const { result, waitForNextUpdate } = renderHook(() => useProfile());

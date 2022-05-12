@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
@@ -9,6 +9,7 @@ import { Wallet, Coin } from '../../models';
 import { ScreenHeader, EditWalletControls } from '../components';
 import { EditWalletDialog } from '../dialogs/EditWalletDialog';
 import * as config from '../services/AppSettingsService';
+import { useLoadData } from '../hooks';
 
 const getEmptyWallet = (): Wallet => {
   return { id: uuid(), name: '', network: 'ETH', address: '', memo: '' };
@@ -21,14 +22,10 @@ export function WalletsScreen() {
   const [wallets, setWallets] = useState(Array<Wallet>());
   const [isEditingNew, setIsEditingNew] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      setCoins(await config.getCoins());
-      setWallets(await config.getWallets());
-    };
-
-    loadData();
-  }, []);
+  useLoadData(async (settings) => {
+    setCoins(await settings.getCoins());
+    setWallets(await settings.getWallets());
+  });
 
   const handleOnRemoveWalletConfirm = async (name: string, id: string) => {
     if (id !== '') {

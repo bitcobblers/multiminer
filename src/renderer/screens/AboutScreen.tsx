@@ -1,9 +1,10 @@
 import { GitHub } from '@mui/icons-material';
 import { Button, Container, Divider, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { aboutApi } from '../../shared/AboutApi';
 import { ScreenHeader } from '../components';
+import { useLoadData } from '../hooks';
 
 function ExternalLink(props: { label: string; text: string; url: string }) {
   const { label, text, url } = props;
@@ -21,14 +22,10 @@ export function AboutScreen(): JSX.Element {
   const [appVersion, setAppVersion] = useState('');
   const [electronVersion, setElectronVersion] = useState('');
 
-  useEffect(() => {
-    const loadData = async () => {
-      setAppName(await aboutApi.getName());
-      setAppVersion(await aboutApi.getVersion());
-      setElectronVersion(await aboutApi.getElectronVersion());
-    };
-
-    loadData();
+  useLoadData(async () => {
+    setAppName(await aboutApi.getName());
+    setAppVersion(await aboutApi.getVersion());
+    setElectronVersion(await aboutApi.getElectronVersion());
   });
 
   return (

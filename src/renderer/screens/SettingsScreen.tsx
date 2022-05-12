@@ -6,13 +6,13 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { AppSettings, DefaultSettings } from 'models';
 import { useSnackbar } from 'notistack';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfigurableControl, ScreenHeader, ThemeToggle } from 'renderer/components';
-import { getAppSettings, setAppSettings } from '../services/AppSettingsService';
+import { setAppSettings } from '../services/AppSettingsService';
 import { dialogApi } from '../../shared/DialogApi';
 import { settingsApi } from '../../shared/SettingsApi';
 import { loggingApi } from '../../shared/LoggingApi';
+import { useLoadData } from '../hooks';
 
 // react-hook-form's API requires prop spreading to register controls
 /* eslint-disable react/jsx-props-no-spreading */
@@ -27,13 +27,13 @@ export function SettingsScreen() {
     watch,
   } = useForm<AppSettings>({ defaultValues: DefaultSettings.settings });
 
-  useEffect(() => {
+  useLoadData(async ({ getAppSettings }) => {
     getAppSettings()
       .then((s) => reset(s))
       .catch((error) => {
         console.log(`Unable to load settings: ${error}`);
       });
-  }, [reset]);
+  });
 
   const onSave = handleSubmit(async (value) => {
     await setAppSettings(value);
