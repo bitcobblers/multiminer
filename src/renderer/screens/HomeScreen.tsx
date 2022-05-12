@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 
 // UI.
 import { Container, Grid, Button, Typography } from '@mui/material';
@@ -8,32 +8,28 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
 
 // Services.
-import { GpuStatistic, MinerStatistic, ConfiguredCoin, enabledCoins$, refreshData$ } from '../../models';
+import { enabledCoins$, refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
-import { UnmineableStats, unmineableWorkers$ } from '../services/UnmineableFeed';
+import { unmineableWorkers$ } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregator';
 
 import { MinerContext } from '../MinerContext';
 
-import { useProfile, useObservable } from '../hooks';
+import { useProfile, useObservableState } from '../hooks';
 
 // Screens.
 import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
-  const [configuredCoins, setConfiguredCoins] = useState(Array<ConfiguredCoin>());
-  const [currentGpuStats, setCurrentGpuStats] = useState(Array<GpuStatistic>());
-  const [currentMinerStats, setCurrentMinerStats] = useState({} as MinerStatistic);
-  const [workerStats, setWorkerStats] = useState<UnmineableStats>();
   const minerContext = useContext(MinerContext);
 
-  const profile = useProfile();
+  const [configuredCoins] = useObservableState(enabledCoins$, []);
+  const [currentGpuStats] = useObservableState(gpuStatistics$, []);
+  const [currentMinerStats] = useObservableState(minerStatistics$, {});
+  const [workerStats] = useObservableState(unmineableWorkers$, null);
 
-  useObservable(unmineableWorkers$, setWorkerStats);
-  useObservable(enabledCoins$, setConfiguredCoins);
-  useObservable(gpuStatistics$, setCurrentGpuStats);
-  useObservable(minerStatistics$, setCurrentMinerStats);
+  const profile = useProfile();
 
   const minerActive = minerContext.state === 'active';
 

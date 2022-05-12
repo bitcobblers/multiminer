@@ -5,10 +5,10 @@ import StopIcon from '@mui/icons-material/Stop';
 
 // Material UI.
 import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tooltip, Typography, useTheme } from '@mui/material';
-import { Miner, MinerState, minerState$, MinerStatistic } from 'models';
+import { Miner, minerState$ } from 'models';
 
 // React.
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 
 // Hooks.
 import { MinerContext } from 'renderer/MinerContext';
@@ -20,7 +20,7 @@ import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager'
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
 
 // Hooks.
-import { useProfile, useObservable } from '../hooks';
+import { useProfile, useObservableState } from '../hooks';
 
 function Separator() {
   const theme = useTheme();
@@ -32,13 +32,9 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
   const theme = useTheme();
   const profile = useProfile();
 
-  const [minerState, setMinerState] = useState<MinerState>();
-  const [minerStatistic, setMinerStatistic] = useState<MinerStatistic>();
-  const [miners, setLoadedMiners] = useState(Array<Miner>());
-
-  useObservable(minerState$, setMinerState);
-  useObservable(minerStatistics$, setMinerStatistic);
-  useObservable(watchers$.miners, setLoadedMiners);
+  const [minerState] = useObservableState(minerState$, null);
+  const [minerStatistic] = useObservableState(minerStatistics$, null);
+  const [miners, setLoadedMiners] = useObservableState(watchers$.miners, []);
 
   const minerActive = minerState?.state === 'active';
 
@@ -46,7 +42,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
     getMiners()
       .then(setLoadedMiners)
       .catch((err) => console.error('Failed to load miners: ', err));
-  }, []);
+  }, [setLoadedMiners]);
 
   const setDefaultMiner = async (name: string) => {
     const appSettings = await getAppSettings();
@@ -80,7 +76,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         <FormControl size="small" sx={{ minWidth: '12rem' }}>
           <InputLabel id="miner-label">Miner</InputLabel>
           <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
-            {miners
+            {(miners ?? Array<Miner>())
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((miner) => (
                 <MenuItem key={miner.name} value={miner.name}>

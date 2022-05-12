@@ -83,7 +83,7 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
   return <Line options={options} data={data} />;
 }
 
-export function WorkersGraphs(props: { workers?: UnmineableStats }) {
+export function WorkersGraphs(props: { workers: UnmineableStats | null }) {
   const { workers } = props;
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -91,7 +91,7 @@ export function WorkersGraphs(props: { workers?: UnmineableStats }) {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
   }, []);
 
-  if (workers === undefined) {
+  if (workers === null) {
     return <p>No data to display!</p>;
   }
 
@@ -123,7 +123,3 @@ export function WorkersGraphs(props: { workers?: UnmineableStats }) {
     </div>
   );
 }
-
-WorkersGraphs.defaultProps = {
-  workers: undefined,
-};
