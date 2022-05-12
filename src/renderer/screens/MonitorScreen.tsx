@@ -5,11 +5,11 @@ import PauseIcon from '@mui/icons-material/Pause';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { screenBuffer, clearBuffer } from '../services/ScreenBuffer';
 import { AutoScrollTextArea, ScreenHeader } from '../components';
-import { useObservableStateWithDefault } from '../hooks';
+import { useObservableState } from '../hooks';
 
 export function MonitorScreen(): JSX.Element {
   const [isPaused, setIsPaused] = useState(false);
-  const [data] = useObservableStateWithDefault(screenBuffer, screenBuffer.getValue());
+  const [data] = useObservableState(screenBuffer, screenBuffer.getValue());
 
   const clearLog = () => {
     clearBuffer();
