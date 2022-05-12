@@ -7,12 +7,6 @@ import StopIcon from '@mui/icons-material/Stop';
 import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import { Miner, minerState$ } from 'models';
 
-// React.
-import { useContext } from 'react';
-
-// Hooks.
-import { MinerContext } from 'renderer/MinerContext';
-
 // Services.
 import { getAppSettings, setAppSettings, watchers$ } from 'renderer/services/AppSettingsService';
 import * as formatter from 'renderer/services/Formatters';
@@ -28,7 +22,6 @@ function Separator() {
 }
 
 export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
-  const minerContext = useContext(MinerContext);
   const theme = useTheme();
   const profile = useProfile();
 
@@ -92,7 +85,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
           <Separator />
           <Tooltip title="Next Coin">
             <span>
-              <IconButton disabled={!minerActive || minerContext.miner === null} onClick={() => nextCoin()}>
+              <IconButton disabled={!minerActive || !profile} onClick={() => nextCoin()}>
                 <NextIcon />
               </IconButton>
             </span>

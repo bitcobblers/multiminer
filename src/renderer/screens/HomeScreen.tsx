@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-
 // UI.
 import { Container, Grid, Button, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -8,12 +6,10 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
 
 // Services.
-import { enabledCoins$, refreshData$ } from '../../models';
+import { enabledCoins$, refreshData$, minerState$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 import { unmineableWorkers$ } from '../services/UnmineableFeed';
 import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregator';
-
-import { MinerContext } from '../MinerContext';
 
 import { useProfile, useObservableState } from '../hooks';
 
@@ -22,16 +18,14 @@ import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
-  const minerContext = useContext(MinerContext);
-
   const [configuredCoins] = useObservableState(enabledCoins$, []);
   const [currentGpuStats] = useObservableState(gpuStatistics$, []);
   const [currentMinerStats] = useObservableState(minerStatistics$, {});
   const [workerStats] = useObservableState(unmineableWorkers$, null);
+  const [minerState] = useObservableState(minerState$, null);
 
   const profile = useProfile();
-
-  const minerActive = minerContext.state === 'active';
+  const minerActive = minerState?.state === 'active';
 
   return (
     <Container>

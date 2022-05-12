@@ -8,7 +8,9 @@ export function useObservable<T>(observable: Observable<T>, handler: (value: T) 
     return () => {
       subscription.unsubscribe();
     };
-  }, [handler, observable]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }
 
 export function useObservableState<T>(observable: Observable<T>, defaultValue: T) {
@@ -21,7 +23,9 @@ export function useObservableState<T>(observable: Observable<T>, defaultValue: T
     return () => {
       subscription.unsubscribe();
     };
-  }, [observable, setCurrent]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return state;
 }

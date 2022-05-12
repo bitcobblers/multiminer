@@ -24,9 +24,8 @@ import InfoIcon from '@mui/icons-material/Info';
 // Components.
 import { Toolbar } from './components/Toolbar';
 
-// Context.
-import { MinerContext } from './MinerContext';
-import { MinerState, minerState$, minerErrors$ } from '../models';
+// Models.
+import { minerErrors$ } from '../models';
 
 // Screens.
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
@@ -74,14 +73,9 @@ function safeReverse<T>(items: Array<T>) {
 }
 
 function AppContent() {
-  const [managerState, setManagerState] = useState<MinerState>({ state: 'inactive', currentCoin: '' });
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const stateSubscription = minerState$.subscribe((s) => {
-      setManagerState(s);
-    });
-
     const startedSubscription = minerStarted$.subscribe(({ coin }) => {
       enqueueSnackbar(`Miner is now mining ${coin}.`);
     });
@@ -99,7 +93,6 @@ function AppContent() {
     });
 
     return () => {
-      stateSubscription.unsubscribe();
       startedSubscription.unsubscribe();
       stoppedSubscription.unsubscribe();
       alertSubscription.unsubscribe();
@@ -107,44 +100,42 @@ function AppContent() {
   }, [enqueueSnackbar]);
 
   return (
-    <MinerContext.Provider value={managerState}>
-      <Router>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <Drawer
-            style={{ width: drawerWidth, display: 'flex' }}
-            sx={{
-              '& .MuiPaper-root': {
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'stretch',
-              },
-            }}
-            variant="persistent"
-            open
-          >
-            <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-            <div style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
-              <Button variant="text" size="small" startIcon={<BugReport />} onClick={() => aboutApi.openBrowser('https://github.com/bitcobblers/multiminer/issues/new/choose')}>
-                Report a bug
-              </Button>
-            </div>
-          </Drawer>
-          <Box
-            sx={{
-              marginBottom: '3.5rem',
+    <Router>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <Drawer
+          style={{ width: drawerWidth, display: 'flex' }}
+          sx={{
+            '& .MuiPaper-root': {
               flex: 1,
-              '& .MuiContainer-root': { ml: 0 },
-            }}
-          >
-            <Switch>{safeReverse(links).map(NavScreen)}</Switch>
-          </Box>
-          <Toolbar drawerWidth={drawerWidth} />
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'stretch',
+            },
+          }}
+          variant="persistent"
+          open
+        >
+          <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+          <div style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
+            <Button variant="text" size="small" startIcon={<BugReport />} onClick={() => aboutApi.openBrowser('https://github.com/bitcobblers/multiminer/issues/new/choose')}>
+              Report a bug
+            </Button>
+          </div>
+        </Drawer>
+        <Box
+          sx={{
+            marginBottom: '3.5rem',
+            flex: 1,
+            '& .MuiContainer-root': { ml: 0 },
+          }}
+        >
+          <Switch>{safeReverse(links).map(NavScreen)}</Switch>
         </Box>
-      </Router>
-    </MinerContext.Provider>
+        <Toolbar drawerWidth={drawerWidth} />
+      </Box>
+    </Router>
   );
 }
 
