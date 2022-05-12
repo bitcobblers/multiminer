@@ -27,7 +27,7 @@ export function RemoveWalletDialog(props: RemoveWalletDialogProps) {
         </Typography>
         <UsedByCoins coins={coins} />
         <Divider />
-        <CustomDialogActions buttonType="submit" buttonText="Yes" onConfirm={() => () => onRemove(name, id)} secondaryButtonText="No" onCancel={onCancel} primaryButtonDisabled={isUsedByCoins > 0} />
+        <CustomDialogActions buttonType="submit" buttonText="Yes" onConfirm={() => onRemove(name, id)} secondaryButtonText="No" onCancel={onCancel} primaryButtonDisabled={isUsedByCoins > 0} />
       </DialogContent>
     </Dialog>
   );
