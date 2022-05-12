@@ -15,6 +15,8 @@ import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregat
 
 import { MinerContext } from '../MinerContext';
 
+import { useProfile } from '../hooks';
+
 // Screens.
 import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
@@ -25,6 +27,8 @@ export function HomeScreen(): JSX.Element {
   const [currentMinerStats, setCurrentMinerStats] = useState({} as MinerStatistic);
   const [workerStats, setWorkerStats] = useState<UnmineableStats>();
   const minerContext = useContext(MinerContext);
+
+  const profile = useProfile();
 
   useEffect(() => {
     const unmineableWorkersSubscription = unmineableWorkers$.subscribe((stats) => setWorkerStats(stats));
@@ -45,13 +49,13 @@ export function HomeScreen(): JSX.Element {
   return (
     <Container>
       <ScreenHeader title="Home">
-        <Button startIcon={<PlayArrowIcon />} disabled={minerActive || !minerContext.profile} onClick={async () => startMiner()}>
+        <Button startIcon={<PlayArrowIcon />} disabled={minerActive || !profile} onClick={async () => startMiner()}>
           Start Miner
         </Button>
         <Button startIcon={<StopIcon />} disabled={!minerActive} onClick={async () => stopMiner()}>
           Stop Miner
         </Button>
-        <Button startIcon={<NextIcon />} disabled={!minerActive || !minerContext.profile} onClick={async () => nextCoin()}>
+        <Button startIcon={<NextIcon />} disabled={!minerActive || !profile} onClick={async () => nextCoin()}>
           Next Coin
         </Button>
         <Button startIcon={<RefreshIcon />} onClick={() => refreshData$.next(Date.now())}>
