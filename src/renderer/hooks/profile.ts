@@ -1,24 +1,16 @@
-import { useState, useEffect } from 'react';
-import { getAppSettings, watchers$ } from '../services/AppSettingsService';
+import { useState } from 'react';
+import { watchers$ } from '../services/AppSettingsService';
 import { useLoadData } from './loadData';
+import { useObservable } from './observable';
 
 export function useProfile() {
   const [profile, setProfile] = useState('');
 
-  useLoadData(async () => {
+  useLoadData(async ({ getAppSettings }) => {
     const appSettings = await getAppSettings();
     setProfile(appSettings.settings.defaultMiner);
   });
 
-  useEffect(() => {
-    const configSubscription = watchers$.settings.subscribe((appSettings) => {
-      setProfile(appSettings.settings.defaultMiner);
-    });
-
-    return () => {
-      configSubscription.unsubscribe();
-    };
-  }, []);
-
+  useObservable(watchers$.settings, (s) => setProfile(s.settings.defaultMiner));
   return profile;
 }
