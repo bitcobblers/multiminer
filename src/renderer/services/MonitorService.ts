@@ -1,7 +1,7 @@
 import { interval, withLatestFrom, map, filter } from 'rxjs';
 import { minerState$, API_PORT } from '../../models';
 import { minerApi } from '../../shared/MinerApi';
-import { lolminerMonitor, nbminerMonitor, trexminerMonitor, MinerMonitor } from './monitors';
+import { lolminerMonitor, nbminerMonitor, trexminerMonitor } from './monitors';
 
 const UPDATE_INTERVAL = 1000 * 5;
 const monitor$ = interval(UPDATE_INTERVAL);
@@ -13,17 +13,20 @@ export function enableMonitors() {
   monitor$
     .pipe(
       withLatestFrom(minerState$),
-      map(([, miner]) => ({ name: miner.miner, state: miner.state })),
-      filter(({ state }) => state === 'active'),
-      map(({ name }) => monitors.find((m) => m.name === name)),
-      filter((m): m is MinerMonitor => m !== undefined)
+      map(([, miner]) => ({ state: miner.state })),
+      filter(({ state }) => state === 'active')
     )
-    .subscribe((monitor) => {
-      minerApi.stats(API_PORT, monitor.statsUrl).then((result) => {
-        if (result !== '') {
-          monitor.update(result);
-        }
-      });
+    .subscribe(async () => {
+      const status = await minerApi.status();
+      const monitor = monitors.find((m) => m.name === status.miner);
+
+      if (monitor) {
+        minerApi.stats(API_PORT, monitor.statsUrl).then((result) => {
+          if (result !== '') {
+            monitor.update(result);
+          }
+        });
+      }
     });
 
   console.log(`Enabled miner monitor support for: ${monitorNames.join(', ')}.`);
