@@ -21,13 +21,9 @@ import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
-// Components.
 import { Toolbar } from './components/Toolbar';
-
-// Models.
 import { minerErrors$ } from '../models';
-
-// Screens.
+import { useObservable } from './hooks';
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 import { minerExited$, minerStarted$ } from './services/MinerService';
 import { getAppSettings, watchers$ } from './services/AppSettingsService';
@@ -75,29 +71,9 @@ function safeReverse<T>(items: Array<T>) {
 function AppContent() {
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    const startedSubscription = minerStarted$.subscribe(({ coin }) => {
-      enqueueSnackbar(`Miner is now mining ${coin}.`);
-    });
-
-    const stoppedSubscription = minerExited$.subscribe((code) => {
-      if (code) {
-        enqueueSnackbar(`Miner exited with code ${code}.`);
-      } else {
-        enqueueSnackbar('Miner exited.');
-      }
-    });
-
-    const alertSubscription = minerErrors$.subscribe((s) => {
-      enqueueSnackbar(s, { variant: 'error' });
-    });
-
-    return () => {
-      startedSubscription.unsubscribe();
-      stoppedSubscription.unsubscribe();
-      alertSubscription.unsubscribe();
-    };
-  }, [enqueueSnackbar]);
+  useObservable(minerStarted$, ({ coin }) => enqueueSnackbar(`Miner is now mining ${coin}`));
+  useObservable(minerExited$, () => enqueueSnackbar('Miner exited.'));
+  useObservable(minerErrors$, (s) => enqueueSnackbar(s, { variant: 'error' }));
 
   return (
     <Router>
