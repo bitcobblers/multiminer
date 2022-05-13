@@ -6,7 +6,8 @@ import { Line } from 'react-chartjs-2';
 
 import { Tabs, Tab } from '@mui/material';
 import { TabPanel } from '..';
-import { AlgorithmStat, UnmineableStats } from '../../services/UnmineableFeed';
+import { AlgorithmStat, unmineableWorkers$ } from '../../services/UnmineableFeed';
+import { useObservableState } from '../../hooks';
 
 function shrink<T>(items: T[]) {
   let result = items;
@@ -83,9 +84,9 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
   return <Line options={options} data={data} />;
 }
 
-export function WorkersGraphs(props: { workers: UnmineableStats | null }) {
-  const { workers } = props;
+export function WorkersGraphs() {
   const [tabIndex, setTabIndex] = useState(0);
+  const [workers] = useObservableState(unmineableWorkers$, null);
 
   useEffect(() => {
     ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);

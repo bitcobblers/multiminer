@@ -3,11 +3,11 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { LinearProgressWithLabel } from '..';
 import * as formatter from '../../services/Formatters';
-import { ConfiguredCoin } from '../../../models';
+import { enabledCoins$ } from '../../../models';
 import { unmineableApi } from '../../../shared/UnmineableApi';
+import { useObservableState } from '../../hooks';
 
 type CoinsTableProps = {
-  coins: ConfiguredCoin[];
   setCurrent: (coin: string) => void;
   stopCurrent: () => void;
 };
@@ -45,7 +45,8 @@ function CurrentIndicator(props: CurrentIndicatorProps) {
 }
 
 export function CoinsTable(props: CoinsTableProps) {
-  const { coins, setCurrent, stopCurrent } = props;
+  const { setCurrent, stopCurrent } = props;
+  const [coins] = useObservableState(enabledCoins$, []);
 
   return (
     <TableContainer>

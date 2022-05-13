@@ -6,11 +6,10 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
 
 // Services.
-import { enabledCoins$, refreshData$, minerState$ } from '../../models';
+import { refreshData$, minerState$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
-import { unmineableWorkers$ } from '../services/UnmineableFeed';
-import { gpuStatistics$, minerStatistics$ } from '../services/StatisticsAggregator';
 
+// Hooks.
 import { useProfile, useObservableState } from '../hooks';
 
 // Screens.
@@ -18,10 +17,6 @@ import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
-  const [configuredCoins] = useObservableState(enabledCoins$, []);
-  const [currentGpuStats] = useObservableState(gpuStatistics$, []);
-  const [currentMinerStats] = useObservableState(minerStatistics$, {});
-  const [workerStats] = useObservableState(unmineableWorkers$, null);
   const [minerState] = useObservableState(minerState$, null);
 
   const profile = useProfile();
@@ -46,19 +41,19 @@ export function HomeScreen(): JSX.Element {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="h5">GPUs</Typography>
-          <ComputeTable gpus={currentGpuStats} />
+          <ComputeTable />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">General</Typography>
-          <MinerTable miner={currentMinerStats} />
+          <MinerTable />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">Enabled Coins</Typography>
-          <CoinsTable coins={configuredCoins} setCurrent={(symbol) => nextCoin(symbol)} stopCurrent={stopMiner} />
+          <CoinsTable setCurrent={(symbol) => nextCoin(symbol)} stopCurrent={stopMiner} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5">Graphs</Typography>
-          <WorkersGraphs workers={workerStats} />
+          <WorkersGraphs />
         </Grid>
       </Grid>
     </Container>
