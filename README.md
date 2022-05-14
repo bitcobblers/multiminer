@@ -20,7 +20,8 @@ Multi-Miner is programmed using [Electron](https://www.electronjs.org/) and runs
 ### Configuring a Wallet
 The first step is to configure a wallet to use.  Click on the `Wallets` link on the left hand navigation and click `ADD WALLET`.
 
-![image](https://user-images.githubusercontent.com/5205466/160330956-41d2f68a-2c2a-4caa-92ed-dfcd496c489d.png)
+![image](https://user-images.githubusercontent.com/5205466/168444512-1ab9400a-9c69-4533-9d82-28d0155ca4e7.png)
+
 
 The following options are available:  
 | Field      | Required | Description                                                                                                                                      |
@@ -36,7 +37,7 @@ The following options are available:
 ### 2. Configuring Coins
 To configure a coin, click on the `Coins` link on the left navigation bar.  Find the coin in the list and click the pencil icon next to it to open up the editor.
 
-![image](https://user-images.githubusercontent.com/5205466/160332429-a7c2c9f8-6e4b-4b36-a6c1-5bc5b91ce7c8.png)
+![image](https://user-images.githubusercontent.com/5205466/168444538-1116af9c-f9dc-4677-bf6a-6dae2d26f8be.png)
 
 The following fields are available:
 | Field               | Required | Description                                                           |
@@ -51,7 +52,7 @@ Referral codes for each coin are baked into the application and are used to help
 ### Configuring Miners (optional)
 By default, Multi-Miner is configured to use [lolMiner](https://lolminer.site/) with its default settings so there is no need to modify them.  To add or modify miners, click on the `Miners` navigation link on the left navigation bar.  From here you can add new miners or modify existing ones.
 
-![image](https://user-images.githubusercontent.com/5205466/160333726-32ae1161-bcd0-4a68-a7a7-bc118fb25a96.png)
+![image](https://user-images.githubusercontent.com/5205466/168444567-68501d1e-93a8-4932-82f5-6323f4806c8b.png)
 
 The following fields are available:
 | Field      | Required | Description                                                                                                                          |
@@ -74,7 +75,7 @@ This screen enables modification of global settings related to Unmineable.  With
 ## Running The Miner
 To begin mining, navigate to the `Home` screen and click on the `START MINER` button at the top of the screen.  The configured miner can also be started/stopped by clicking on the :arrow_forward: button on the bottom-right corner of the screen.  The screen will begin to populate with statistics from the mining application.
 
-![image](https://user-images.githubusercontent.com/5205466/160339231-ec8cfd6e-9ea7-4704-a0cc-e9b0a814bf44.png)
+![image](https://user-images.githubusercontent.com/5205466/168444838-4ebba48c-33cf-4ce9-b742-9762d7953960.png)
 
 * Note.  It may take several minutes before the graphs begin to populate with information.  
 
@@ -86,11 +87,11 @@ Multi-Miner currently supports several popular mining applications with more in 
 
 | Miner        | Type | Supported          | Expected Release |
 |--------------|------|--------------------|------------------|
-| lolMiner     | GPU  | :white_check_mark: | Pre-Release      |
-| NBMiner      | GPU  | :white_check_mark: | Pre-Release      |
-| T-Rex Miner  | GPU  | :white_check_mark: | Pre-Release      |
-| PhoenixMiner | GPU  | :x:                | Official Release |
-| XMRig        | CPU  | :x:                | Official Release |
+| lolMiner     | GPU  | :white_check_mark: | 0.1.0            |
+| NBMiner      | GPU  | :white_check_mark: | 0.1.0            |
+| T-Rex Miner  | GPU  | :white_check_mark: | 0.1.0            |
+| GMiner       | GPU  | :x:                | 0.4.0            |
+| XMRig        | CPU  | :x:                | 0.4.0            |
 
 ## Make This Software Better
 While this application started its life as a couple of PowerShell scripts cobbled together over a weekend, it has grown into something much larger.  Although we strive to keep the application as free of defects as possible, it is very new and this is also our first time designing fully-fledged UI applications with Electron/React.  If you notice any issues, oddities, or things that "don't seem right", please [open an issue](https://github.com/bitcobblers/multiminer/issues/new) so we can fix them.
