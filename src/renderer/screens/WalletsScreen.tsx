@@ -31,6 +31,7 @@ export function WalletsScreen() {
     if (id !== '') {
       const updatedWallets = [...wallets.filter((w) => w.id !== id)];
       setWallets(updatedWallets);
+      await config.setWallets(updatedWallets);
       enqueueSnackbar(`Removed wallet ${name}.`, { variant: 'success' });
     }
   };
