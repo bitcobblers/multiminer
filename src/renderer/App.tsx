@@ -21,14 +21,9 @@ import MonitorIcon from '@mui/icons-material/Monitor';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
-// Components.
 import { Toolbar } from './components/Toolbar';
-
-// Context.
-import { MinerContext } from './MinerContext';
-import { MinerState, minerState$, minerErrors$ } from '../models';
-
-// Screens.
+import { minerErrors$ } from '../models';
+import { useObservable } from './hooks';
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 import { minerExited$, minerStarted$ } from './services/MinerService';
 import { getAppSettings, watchers$ } from './services/AppSettingsService';
@@ -74,77 +69,49 @@ function safeReverse<T>(items: Array<T>) {
 }
 
 function AppContent() {
-  const [managerState, setManagerState] = useState<MinerState>({ state: 'inactive', currentCoin: '' });
   const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    const stateSubscription = minerState$.subscribe((s) => {
-      setManagerState(s);
-    });
-
-    const startedSubscription = minerStarted$.subscribe(({ coin }) => {
-      enqueueSnackbar(`Miner is now mining ${coin}.`);
-    });
-
-    const stoppedSubscription = minerExited$.subscribe((code) => {
-      if (code) {
-        enqueueSnackbar(`Miner exited with code ${code}.`);
-      } else {
-        enqueueSnackbar('Miner exited.');
-      }
-    });
-
-    const alertSubscription = minerErrors$.subscribe((s) => {
-      enqueueSnackbar(s, { variant: 'error' });
-    });
-
-    return () => {
-      stateSubscription.unsubscribe();
-      startedSubscription.unsubscribe();
-      stoppedSubscription.unsubscribe();
-      alertSubscription.unsubscribe();
-    };
-  }, [enqueueSnackbar]);
+  useObservable(minerStarted$, ({ coin }) => enqueueSnackbar(`Miner is now mining ${coin}`));
+  useObservable(minerExited$, () => enqueueSnackbar('Miner exited.'));
+  useObservable(minerErrors$, (s) => enqueueSnackbar(s, { variant: 'error' }));
 
   return (
-    <MinerContext.Provider value={managerState}>
-      <Router>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <Drawer
-            style={{ width: drawerWidth, display: 'flex' }}
-            sx={{
-              '& .MuiPaper-root': {
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'stretch',
-              },
-            }}
-            variant="persistent"
-            open
-          >
-            <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
-            <div style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
-              <Button variant="text" size="small" startIcon={<BugReport />} onClick={() => aboutApi.openBrowser('https://github.com/bitcobblers/multiminer/issues/new/choose')}>
-                Report a bug
-              </Button>
-            </div>
-          </Drawer>
-          <Box
-            sx={{
-              marginBottom: '3.5rem',
+    <Router>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <Drawer
+          style={{ width: drawerWidth, display: 'flex' }}
+          sx={{
+            '& .MuiPaper-root': {
               flex: 1,
-              '& .MuiContainer-root': { ml: 0 },
-            }}
-          >
-            <Switch>{safeReverse(links).map(NavScreen)}</Switch>
-          </Box>
-          <Toolbar drawerWidth={drawerWidth} />
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'stretch',
+            },
+          }}
+          variant="persistent"
+          open
+        >
+          <List style={{ width: drawerWidth }}>{links.map(NavLink)}</List>
+          <div style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
+            <Button variant="text" size="small" startIcon={<BugReport />} onClick={() => aboutApi.openBrowser('https://github.com/bitcobblers/multiminer/issues/new/choose')}>
+              Report a bug
+            </Button>
+          </div>
+        </Drawer>
+        <Box
+          sx={{
+            marginBottom: '3.5rem',
+            flex: 1,
+            '& .MuiContainer-root': { ml: 0 },
+          }}
+        >
+          <Switch>{safeReverse(links).map(NavScreen)}</Switch>
         </Box>
-      </Router>
-    </MinerContext.Provider>
+        <Toolbar drawerWidth={drawerWidth} />
+      </Box>
+    </Router>
   );
 }
 

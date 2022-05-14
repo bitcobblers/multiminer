@@ -1,9 +1,10 @@
 import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
-import { GpuStatistic } from '../../../models';
 import * as formatter from '../../services/Formatters';
+import { gpuStatistics$ } from '../../services/StatisticsAggregator';
+import { useObservableState } from '../../hooks';
 
-export function ComputeTable(props: { gpus: GpuStatistic[] }) {
-  const { gpus } = props;
+export function ComputeTable() {
+  const [gpus] = useObservableState(gpuStatistics$, []);
 
   return (
     <TableContainer>

@@ -1,10 +1,11 @@
 import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
-import { MinerStatistic } from '../../../models';
 import * as formatter from '../../services/Formatters';
+import { minerStatistics$ } from '../../services/StatisticsAggregator';
+import { useObservableState } from '../../hooks';
 
-export function MinerTable(props: { miner: MinerStatistic }) {
-  const { miner } = props;
-  const { hashrate, accepted, rejected, power, efficiency, difficulty, uptime } = miner;
+export function MinerTable() {
+  const [miner] = useObservableState(minerStatistics$, null);
+  const { hashrate, accepted, rejected, power, efficiency, difficulty, uptime } = miner ?? {};
 
   return (
     <TableContainer>

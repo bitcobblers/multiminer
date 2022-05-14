@@ -1,14 +1,20 @@
+// Icons
 import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
+
+// Material UI.
 import { Box, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, Tooltip, Typography, useTheme } from '@mui/material';
-import { Miner, MinerState, minerState$, MinerStatistic } from 'models';
-import { useContext, useEffect, useState } from 'react';
-import { MinerContext } from 'renderer/MinerContext';
-import { getAppSettings, getMiners, setAppSettings, watchers$ } from 'renderer/services/AppSettingsService';
+import { Miner, minerState$ } from 'models';
+
+// Services.
+import { getAppSettings, setAppSettings, watchers$ } from 'renderer/services/AppSettingsService';
 import * as formatter from 'renderer/services/Formatters';
 import { nextCoin, startMiner, stopMiner } from 'renderer/services/MinerManager';
 import { minerStatistics$ } from 'renderer/services/StatisticsAggregator';
+
+// Hooks.
+import { useProfile, useObservableState, useLoadData } from '../hooks';
 
 function Separator() {
   const theme = useTheme();
@@ -16,32 +22,20 @@ function Separator() {
 }
 
 export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
-  const minerContext = useContext(MinerContext);
   const theme = useTheme();
+  const profile = useProfile();
 
-  const [minerState, setMinerState] = useState<MinerState>();
-  const [minerStatistic, setMinerStatistic] = useState<MinerStatistic>();
-  const [miners, setLoadedMiners] = useState(Array<Miner>());
+  const [minerState] = useObservableState(minerState$, null);
+  const [minerStatistic] = useObservableState(minerStatistics$, null);
+  const [miners, setLoadedMiners] = useObservableState(watchers$.miners, []);
 
   const minerActive = minerState?.state === 'active';
 
-  useEffect(() => {
-    const minerSubscription = minerState$.subscribe((s) => setMinerState(s));
-    const statsSubscription = minerStatistics$.subscribe((s) => setMinerStatistic(s));
-    const minerConfigSubscription = watchers$.miners.subscribe((s) => setLoadedMiners(s));
-
-    return () => {
-      minerSubscription.unsubscribe();
-      statsSubscription.unsubscribe();
-      minerConfigSubscription.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
+  useLoadData(async ({ getMiners }) => {
     getMiners()
       .then(setLoadedMiners)
       .catch((err) => console.error('Failed to load miners: ', err));
-  }, []);
+  });
 
   const setDefaultMiner = async (name: string) => {
     const appSettings = await getAppSettings();
@@ -74,8 +68,8 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
       <Stack direction="row" gap={1} alignItems="center">
         <FormControl size="small" sx={{ minWidth: '12rem' }}>
           <InputLabel id="miner-label">Miner</InputLabel>
-          <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={minerContext.profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
-            {miners
+          <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
+            {(miners ?? Array<Miner>())
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((miner) => (
                 <MenuItem key={miner.name} value={miner.name}>
@@ -91,7 +85,7 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
           <Separator />
           <Tooltip title="Next Coin">
             <span>
-              <IconButton disabled={!minerActive || minerContext.miner === null} onClick={() => nextCoin()}>
+              <IconButton disabled={!minerActive || !profile} onClick={() => nextCoin()}>
                 <NextIcon />
               </IconButton>
             </span>

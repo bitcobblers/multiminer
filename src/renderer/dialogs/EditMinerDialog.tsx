@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, Button } from '@mui/material';
@@ -8,8 +8,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo, MinerRelease } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
-import { getMinerReleases } from '../services/DownloadManager';
 import { aboutApi } from '../../shared/AboutApi';
+import { useLoadData } from '../hooks';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -50,12 +50,8 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return availableMiners.map((m) => AVAILABLE_MINERS.find((x) => x.name === m.name)).filter((m) => m !== undefined) as MinerInfo[];
   }, [availableMiners]);
 
-  useEffect(() => {
-    async function init() {
-      setAvailableMiners(await getMinerReleases());
-    }
-
-    init();
+  useLoadData(async ({ getMinerReleases }) => {
+    setAvailableMiners(await getMinerReleases());
   });
 
   const handleOnSave = handleSubmit((val) => {
