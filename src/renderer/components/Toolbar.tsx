@@ -21,15 +21,24 @@ function Separator() {
   return <span style={{ fontSize: '1.4rem', fontWeight: 'lighter', color: theme.palette.text.disabled, margin: '0 0.2rem' }}>|</span>;
 }
 
-export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
-  const theme = useTheme();
-  const profile = useProfile();
-
+function MinerSummary() {
   const [minerState] = useObservableState(minerState$, null);
   const [minerStatistic] = useObservableState(minerStatistics$, null);
-  const [miners, setLoadedMiners] = useObservableState(watchers$.miners, []);
-
   const minerActive = minerState?.state === 'active';
+
+  return (
+    <Box>
+      {minerActive && (
+        <Typography sx={{ mr: 2 }}>
+          <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
+        </Typography>
+      )}
+    </Box>
+  );
+}
+
+function MinerSelector() {
+  const [miners, setLoadedMiners] = useObservableState(watchers$.miners, []);
 
   useLoadData(async ({ getMiners }) => {
     getMiners()
@@ -37,10 +46,53 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
       .catch((err) => console.error('Failed to load miners: ', err));
   });
 
+  const profile = useProfile();
+
   const setDefaultMiner = async (name: string) => {
     const appSettings = await getAppSettings();
     await setAppSettings({ ...appSettings, settings: { ...appSettings.settings, defaultMiner: name } });
   };
+
+  return (
+    <FormControl size="small" sx={{ minWidth: '12rem' }}>
+      <InputLabel id="miner-label">Miner</InputLabel>
+      <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
+        {(miners ?? Array<Miner>())
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((miner) => (
+            <MenuItem key={miner.name} value={miner.name}>
+              {miner.name} ({miner.kind})
+            </MenuItem>
+          ))}
+      </Select>
+    </FormControl>
+  );
+}
+
+function MinerControls() {
+  const profile = useProfile();
+  const [minerState] = useObservableState(minerState$, null);
+  const minerActive = minerState?.state === 'active';
+
+  return (
+    <Stack justifyContent="space-around" alignItems="center" direction="row">
+      <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
+        <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <StopIcon color="error" /> : <PlayArrowIcon color="primary" />}</IconButton>
+      </Tooltip>
+      <Separator />
+      <Tooltip title="Next Coin">
+        <span>
+          <IconButton disabled={!minerActive || !profile} onClick={() => nextCoin()}>
+            <NextIcon />
+          </IconButton>
+        </span>
+      </Tooltip>
+    </Stack>
+  );
+}
+
+export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
+  const theme = useTheme();
 
   return (
     <Box
@@ -58,39 +110,10 @@ export function Toolbar({ drawerWidth }: { drawerWidth: number }) {
         borderTop: `2px solid ${theme.palette.divider}`,
       }}
     >
-      <Box>
-        {minerActive && (
-          <Typography sx={{ mr: 2 }}>
-            <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
-          </Typography>
-        )}
-      </Box>
+      <MinerSummary />
       <Stack direction="row" gap={1} alignItems="center">
-        <FormControl size="small" sx={{ minWidth: '12rem' }}>
-          <InputLabel id="miner-label">Miner</InputLabel>
-          <Select labelId="miner-label" sx={{ fontSize: '0.8rem' }} label="Miner" value={profile ?? ''} onChange={($event) => setDefaultMiner($event.target.value)}>
-            {(miners ?? Array<Miner>())
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((miner) => (
-                <MenuItem key={miner.name} value={miner.name}>
-                  {miner.name} ({miner.kind})
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-        <Stack justifyContent="space-around" alignItems="center" direction="row">
-          <Tooltip title={minerActive ? 'Stop Miner' : 'Start Miner'}>
-            <IconButton onClick={() => (minerActive ? stopMiner() : startMiner())}>{minerActive ? <StopIcon color="error" /> : <PlayArrowIcon color="primary" />}</IconButton>
-          </Tooltip>
-          <Separator />
-          <Tooltip title="Next Coin">
-            <span>
-              <IconButton disabled={!minerActive || !profile} onClick={() => nextCoin()}>
-                <NextIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-        </Stack>
+        <MinerSelector />
+        <MinerControls />
       </Stack>
     </Box>
   );
