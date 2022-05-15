@@ -5,15 +5,13 @@ import NextIcon from '@mui/icons-material/FastForward';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 
-import { minerState$ } from '../../../models';
-import { useObservableState, useProfile } from '../../hooks';
+import { useProfile, useMinerActive } from '../../hooks';
 import { stopMiner, startMiner, nextCoin } from '../../services/MinerManager';
 import { Separator } from '..';
 
 export function MinerControls() {
   const profile = useProfile();
-  const [minerState] = useObservableState(minerState$, null);
-  const minerActive = minerState?.state === 'active';
+  const minerActive = useMinerActive();
 
   return (
     <Stack justifyContent="space-around" alignItems="center" direction="row">

@@ -6,21 +6,19 @@ import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
 
 // Services.
-import { refreshData$, minerState$ } from '../../models';
+import { refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 
 // Hooks.
-import { useProfile, useObservableState } from '../hooks';
+import { useProfile, useMinerActive } from '../hooks';
 
 // Screens.
 import { ScreenHeader } from '../components';
 import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
-  const [minerState] = useObservableState(minerState$, null);
-
   const profile = useProfile();
-  const minerActive = minerState?.state === 'active';
+  const minerActive = useMinerActive();
 
   return (
     <Container>
