@@ -3,14 +3,10 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { LinearProgressWithLabel } from '..';
 import * as formatter from '../../services/Formatters';
+import { nextCoin, stopMiner } from '../../services/MinerManager';
 import { enabledCoins$ } from '../../../models';
 import { unmineableApi } from '../../../shared/UnmineableApi';
 import { useObservableState } from '../../hooks';
-
-type CoinsTableProps = {
-  setCurrent: (coin: string) => void;
-  stopCurrent: () => void;
-};
 
 type CurrentIndicatorProps = {
   current: boolean;
@@ -44,8 +40,7 @@ function CurrentIndicator(props: CurrentIndicatorProps) {
   );
 }
 
-export function CoinsTable(props: CoinsTableProps) {
-  const { setCurrent, stopCurrent } = props;
+export function CoinsTable() {
   const [coins] = useObservableState(enabledCoins$, []);
 
   return (
@@ -69,7 +64,7 @@ export function CoinsTable(props: CoinsTableProps) {
             .map((c) => (
               <TableRow key={c.symbol}>
                 <TableCell>
-                  <CurrentIndicator current={c.current} onStart={() => setCurrent(c.symbol)} onStop={() => stopCurrent()} />
+                  <CurrentIndicator current={c.current} onStart={() => nextCoin(c.symbol)} onStop={() => stopMiner()} />
                 </TableCell>
                 <TableCell>
                   <Button onClick={async () => openBrowser(c.symbol, c.address)} sx={{ minWidth: '5rem' }}>

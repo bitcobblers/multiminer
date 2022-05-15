@@ -22,6 +22,25 @@ export function HomeScreen(): JSX.Element {
   const profile = useProfile();
   const minerActive = minerState?.state === 'active';
 
+  const dashboards = [
+    {
+      header: 'GPUs',
+      component: <ComputeTable />,
+    },
+    {
+      header: 'General',
+      component: <MinerTable />,
+    },
+    {
+      header: 'Enabled Coins',
+      component: <CoinsTable />,
+    },
+    {
+      header: 'Graphs',
+      component: <WorkersGraphs />,
+    },
+  ];
+
   return (
     <Container>
       <ScreenHeader title="Home">
@@ -39,22 +58,12 @@ export function HomeScreen(): JSX.Element {
         </Button>
       </ScreenHeader>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h5">GPUs</Typography>
-          <ComputeTable />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5">General</Typography>
-          <MinerTable />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5">Enabled Coins</Typography>
-          <CoinsTable setCurrent={(symbol) => nextCoin(symbol)} stopCurrent={stopMiner} />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5">Graphs</Typography>
-          <WorkersGraphs />
-        </Grid>
+        {dashboards.map((d) => (
+          <Grid item xs={12}>
+            <Typography variant="h5">{d.header}</Typography>
+            {d.component}
+          </Grid>
+        ))}
       </Grid>
     </Container>
   );
