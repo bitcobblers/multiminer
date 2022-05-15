@@ -43,6 +43,10 @@ function CurrentIndicator(props: CurrentIndicatorProps) {
 export function CoinsTable() {
   const [coins] = useObservableState(enabledCoins$, []);
 
+  if (coins.length === 0) {
+    return <p>No configured coins.</p>;
+  }
+
   return (
     <TableContainer>
       <Table>

@@ -6,6 +6,10 @@ import { useObservableState } from '../../hooks';
 export function ComputeTable() {
   const [gpus] = useObservableState(gpuStatistics$, []);
 
+  if (gpus.length === 0) {
+    return <p>No data to display!</p>;
+  }
+
   return (
     <TableContainer>
       <Table>

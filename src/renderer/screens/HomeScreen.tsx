@@ -1,9 +1,10 @@
 // UI.
-import { Container, Grid, Button, Typography } from '@mui/material';
+import { Container, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMOre';
 
 // Services.
 import { refreshData$, minerState$ } from '../../models';
@@ -24,16 +25,16 @@ export function HomeScreen(): JSX.Element {
 
   const dashboards = [
     {
+      header: 'Coins',
+      component: <CoinsTable />,
+    },
+    {
       header: 'GPUs',
       component: <ComputeTable />,
     },
     {
       header: 'General',
       component: <MinerTable />,
-    },
-    {
-      header: 'Enabled Coins',
-      component: <CoinsTable />,
     },
     {
       header: 'Graphs',
@@ -57,14 +58,14 @@ export function HomeScreen(): JSX.Element {
           Refresh
         </Button>
       </ScreenHeader>
-      <Grid container spacing={4}>
-        {dashboards.map((d) => (
-          <Grid item xs={12}>
+      {dashboards.map((d) => (
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
             <Typography variant="h5">{d.header}</Typography>
-            {d.component}
-          </Grid>
-        ))}
-      </Grid>
+          </AccordionSummary>
+          <AccordionDetails>{d.component}</AccordionDetails>
+        </Accordion>
+      ))}
     </Container>
   );
 }

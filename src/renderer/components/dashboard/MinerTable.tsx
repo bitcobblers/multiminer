@@ -7,6 +7,10 @@ export function MinerTable() {
   const [miner] = useObservableState(minerStatistics$, null);
   const { hashrate, accepted, rejected, power, efficiency, difficulty, uptime } = miner ?? {};
 
+  if (miner === null || Object.values(miner).find((x) => x !== undefined) === undefined) {
+    return <p>No data to display!</p>;
+  }
+
   return (
     <TableContainer>
       <Table>
