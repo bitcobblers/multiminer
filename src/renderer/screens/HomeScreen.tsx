@@ -59,7 +59,7 @@ export function HomeScreen(): JSX.Element {
         </Button>
       </ScreenHeader>
       {dashboards.map((d) => (
-        <Accordion defaultExpanded>
+        <Accordion key={d.header} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
             <Typography variant="h5">{d.header}</Typography>
           </AccordionSummary>
