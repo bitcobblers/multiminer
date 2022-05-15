@@ -4,7 +4,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMOre';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // Services.
 import { refreshData$, minerState$ } from '../../models';
