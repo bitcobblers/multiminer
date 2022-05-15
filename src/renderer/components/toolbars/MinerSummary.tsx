@@ -11,11 +11,30 @@ export function MinerSummary() {
   const [minerStatistic] = useObservableState(minerStatistics$, null);
   const minerActive = useMinerActive();
 
+  const items = [
+    { title: 'Coin', content: minerState?.currentCoin },
+    { title: 'Hashrate', content: formatter.hashrate(minerStatistic?.hashrate) },
+  ];
+
   return (
     <Box>
       {minerActive && (
         <Typography sx={{ mr: 2 }}>
-          <strong>Coin</strong>: {minerState?.currentCoin} <Separator /> <strong>Hashrate</strong>: {formatter.hashrate(minerStatistic?.hashrate)}{' '}
+          {items
+            .map((item) => (
+              <>
+                <strong>{item.title}</strong>: {item.content}
+              </>
+            ))
+            .reduce((acc, x) =>
+              acc === null ? (
+                x
+              ) : (
+                <>
+                  {acc} <Separator /> {x}
+                </>
+              )
+            )}
         </Typography>
       )}
     </Box>
