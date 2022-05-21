@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
+import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Typography } from '@mui/material';
 import * as formatter from '../../services/Formatters';
 import { gpuStatistics$ } from '../../services/StatisticsAggregator';
 import { useObservableState } from '../../hooks';
@@ -7,7 +7,7 @@ export function ComputeTable() {
   const [gpus] = useObservableState(gpuStatistics$, []);
 
   if (gpus.length === 0) {
-    return <p>No data to display!</p>;
+    return <Typography>No data to display!</Typography>;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { Button, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tooltip, IconButton } from '@mui/material';
+import { Button, Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Tooltip, IconButton, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { LinearProgressWithLabel } from '..';
@@ -44,7 +44,7 @@ export function CoinsTable() {
   const [coins] = useObservableState(enabledCoins$, []);
 
   if (coins.length === 0) {
-    return <p>No configured coins.</p>;
+    return <Typography>No configured coins.</Typography>;
   }
 
   return (
