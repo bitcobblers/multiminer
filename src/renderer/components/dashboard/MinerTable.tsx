@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody } from '@mui/material';
+import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Typography } from '@mui/material';
 import * as formatter from '../../services/Formatters';
 import { minerStatistics$ } from '../../services/StatisticsAggregator';
 import { useObservableState } from '../../hooks';
@@ -6,6 +6,10 @@ import { useObservableState } from '../../hooks';
 export function MinerTable() {
   const [miner] = useObservableState(minerStatistics$, null);
   const { hashrate, accepted, rejected, power, efficiency, difficulty, uptime } = miner ?? {};
+
+  if (miner === null || Object.values(miner).find((x) => x !== undefined) === undefined) {
+    return <Typography>No data to display!</Typography>;
+  }
 
   return (
     <TableContainer>

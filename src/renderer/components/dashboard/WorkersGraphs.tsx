@@ -4,7 +4,7 @@ import dateFormat from 'dateformat';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, Typography } from '@mui/material';
 import { TabPanel } from '..';
 import { AlgorithmStat, unmineableWorkers$ } from '../../services/UnmineableFeed';
 import { useObservableState } from '../../hooks';
@@ -23,7 +23,7 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
   const { algorithm, stat } = props;
 
   if (stat === undefined || stat.workers === undefined || stat.chart === undefined) {
-    return <p>No data to display!</p>;
+    return <Typography>No data to display!</Typography>;
   }
 
   const options = {
