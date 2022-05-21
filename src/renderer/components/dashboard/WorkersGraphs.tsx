@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
 import dateFormat from 'dateformat';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Typography } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, Typography } from '@mui/material';
 import { TabPanel } from '..';
 import { AlgorithmStat, unmineableWorkers$ } from '../../services/UnmineableFeed';
 import { useObservableState } from '../../hooks';
