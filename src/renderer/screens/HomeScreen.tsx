@@ -1,9 +1,10 @@
 // UI.
-import { Container, Grid, Button, Typography } from '@mui/material';
+import { Container, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import RefreshIcon from '@mui/icons-material/Cached';
 import NextIcon from '@mui/icons-material/FastForward';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // Services.
 import { refreshData$ } from '../../models';
@@ -19,6 +20,25 @@ import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../componen
 export function HomeScreen(): JSX.Element {
   const profile = useProfile();
   const minerActive = useMinerActive();
+
+  const dashboards = [
+    {
+      header: 'Coins',
+      component: <CoinsTable />,
+    },
+    {
+      header: 'GPUs',
+      component: <ComputeTable />,
+    },
+    {
+      header: 'General',
+      component: <MinerTable />,
+    },
+    {
+      header: 'Graphs',
+      component: <WorkersGraphs />,
+    },
+  ];
 
   return (
     <Container>
@@ -36,24 +56,14 @@ export function HomeScreen(): JSX.Element {
           Refresh
         </Button>
       </ScreenHeader>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h5">GPUs</Typography>
-          <ComputeTable />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5">General</Typography>
-          <MinerTable />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5">Enabled Coins</Typography>
-          <CoinsTable setCurrent={(symbol) => nextCoin(symbol)} stopCurrent={stopMiner} />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5">Graphs</Typography>
-          <WorkersGraphs />
-        </Grid>
-      </Grid>
+      {dashboards.map((d) => (
+        <Accordion key={d.header} defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+            <Typography variant="h5">{d.header}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>{d.component}</AccordionDetails>
+        </Accordion>
+      ))}
     </Container>
   );
 }
