@@ -79,7 +79,14 @@ export function launch(exePath: string, args: string, handlers: LaunchHandlers) 
     return handlers.onError(`The miner is not executable: ${error}`);
   }
 
-  return handlers.onSuccess(spawn(exePath, args.split(' ')));
+  logger.debug('Executing: %s %s', exePath, args);
+
+  try {
+    const p = spawn(exePath, args.split(' '));
+    return handlers.onSuccess(p);
+  } catch (error) {
+    return handlers.onError(`Unable to launch application: ${error}`);
+  }
 }
 
 function getMinerProcesses(exe: string | undefined) {

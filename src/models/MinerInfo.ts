@@ -12,14 +12,16 @@ export type MinerInfo = {
 };
 
 export const AVAILABLE_MINERS: MinerInfo[] = [
-  // {
-  //   name: 'phoenixminer',
-  //   algorithms: ['ethash', 'etchash'],
-  //   owner: 'nanopool',
-  //   repo: 'phoenix-miner',
-  //   exe: 'phoenixminer.exe',
-  //   getArgs: (alg, cs, url) => `-pool ${url} -wal ${cs} -pass x${alg === 'etchash' ? ' -coin etc' : ''}`,
-  // },
+  {
+    name: 'gminer',
+    algorithms: ['ethash', 'etchash', 'kawpow'],
+    owner: 'develsoftware',
+    repo: 'GMinerRelease',
+    assetPattern: /^.+windows64\.zip$/,
+    optionsUrl: 'https://gminer.info/documentation/arguments/',
+    exe: 'miner.exe',
+    getArgs: (alg, cs, url) => `--algo ${alg} --server ${url} --user ${cs} -c 0 --api ${API_PORT}`,
+  },
   {
     name: 'lolminer',
     algorithms: ['ethash', 'etchash'],
