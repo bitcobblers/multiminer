@@ -12,3 +12,4 @@ export { TabPanel } from './TabPanel';
 export { UsedByCoinsProps, UsedByCoins } from './UsedByCoins';
 export { WalletMenuItemProps, WalletMenuItem } from './WalletMenuItem';
 export { ThemeToggle } from './ThemeToggle';
+export { Separator } from './Separator';
