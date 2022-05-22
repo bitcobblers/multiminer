@@ -10,6 +10,7 @@ import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
 import { aboutApi } from '../../shared/AboutApi';
 import { useLoadData } from '../hooks';
+import { getMinerReleases as getMinerReleasesOnline } from '../services/DownloadManager';
 
 type EditMinerDialogProps = {
   open: boolean;
@@ -51,7 +52,13 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   }, [availableMiners]);
 
   useLoadData(async ({ getMinerReleases }) => {
-    setAvailableMiners(await getMinerReleases());
+    const onlineMiners = await getMinerReleasesOnline();
+
+    if (onlineMiners.length > 0) {
+      setAvailableMiners(onlineMiners);
+    } else {
+      setAvailableMiners(await getMinerReleases());
+    }
   });
 
   const handleOnSave = handleSubmit((val) => {
