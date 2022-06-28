@@ -259,6 +259,14 @@ export const ALL_COINS: CoinDefinition[] = [
     referrals: ['7g14-zme4', 'tyh8-ow7f'],
   },
   {
+    id: 'gala',
+    icon: CoinIcons.Gala,
+    name: 'Gala',
+    symbol: 'GALA',
+    blockchains: ['ETH', 'BSC'],
+    referrals: ['8kn6-wy81'],
+  },
+  {
     id: 'gas',
     icon: CoinIcons.Gas,
     name: 'Gas',
