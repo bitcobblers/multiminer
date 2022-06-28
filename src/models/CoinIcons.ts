@@ -26,6 +26,7 @@ import EtcIcon from '../../assets/coins/etc.svg';
 import EthIcon from '../../assets/coins/eth.svg';
 import FtmIcon from '../../assets/coins/ftm.svg';
 import FunIcon from '../../assets/coins/fun.svg';
+import GalaIcon from '../../assets/coins/gala.svg';
 import GasIcon from '../../assets/coins/gas.svg';
 import HotIcon from '../../assets/coins/hot.svg';
 import IcxIcon from '../../assets/coins/icx.svg';
@@ -96,6 +97,7 @@ export const CoinIcons = {
   Eth: EthIcon,
   Ftm: FtmIcon,
   Fun: FunIcon,
+  Gala: GalaIcon,
   Gas: GasIcon,
   Hot: HotIcon,
   Icx: IcxIcon,
