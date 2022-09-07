@@ -22,7 +22,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
   // },
   {
     name: 'lolminer',
-    algorithms: ['ethash', 'etchash'],
+    algorithms: ['ethash', 'etchash', 'autolykos2'],
     owner: 'lolliedieb',
     repo: 'lolMiner-releases',
     assetPattern: /^.+Win64\.zip$/,
@@ -32,7 +32,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
   },
   {
     name: 'nbminer',
-    algorithms: ['ethash', 'etchash', 'kawpow'],
+    algorithms: ['ethash', 'etchash', 'kawpow', 'autolykos2'],
     owner: 'NebuTech',
     repo: 'NBMiner',
     assetPattern: /^NBMiner.+_Win\.zip$/,
@@ -42,7 +42,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
   },
   {
     name: 'trexminer',
-    algorithms: ['ethash', 'etchash', 'kawpow'],
+    algorithms: ['ethash', 'etchash', 'kawpow', 'autolykos2'],
     owner: 'trexminer',
     repo: 't-rex',
     assetPattern: /^t-rex-.+win.zip$/,

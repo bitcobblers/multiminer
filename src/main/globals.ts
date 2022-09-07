@@ -73,7 +73,7 @@ export const globalStore = new Store<SettingsSchemaType>({
           version: { type: 'string' },
           name: { type: 'string' },
           enabled: { type: 'boolean' },
-          algorithm: { type: 'string', enum: ['ethash', 'etchash', 'kawpow', 'randomx'] },
+          algorithm: { type: 'string', enum: ['ethash', 'etchash', 'kawpow', 'autolykos2', 'randomx'] },
           parameters: { type: 'string' },
         },
         required: [],
