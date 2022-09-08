@@ -62,10 +62,12 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   });
 
   const handleOnSave = handleSubmit((val) => {
-    if (watch('version') === '') {
+    const version = watch('version');
+
+    if (version === '' || minerTypeVersions.includes(version) === false) {
       onSave({ ...val, id: miner.id, version: minerTypeVersions[0] });
     } else {
-      onSave({ ...val, id: miner.id });
+      onSave({ ...val, id: miner.id, version });
     }
 
     if (autoReset) {
