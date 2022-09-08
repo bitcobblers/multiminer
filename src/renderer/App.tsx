@@ -22,7 +22,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
 import { Toolbar } from './components/Toolbar';
-import { minerErrors$ } from '../models';
+import { minerErrors$, appNotice$ } from '../models';
 import { useObservable } from './hooks';
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 import { minerExited$, minerStarted$ } from './services/MinerService';
@@ -71,9 +71,10 @@ function safeReverse<T>(items: Array<T>) {
 function AppContent() {
   const { enqueueSnackbar } = useSnackbar();
 
-  useObservable(minerStarted$, ({ coin }) => enqueueSnackbar(`Miner is now mining ${coin}`));
-  useObservable(minerExited$, () => enqueueSnackbar('Miner exited.'));
-  useObservable(minerErrors$, (s) => enqueueSnackbar(s, { variant: 'error' }));
+  useObservable(appNotice$, ({ variant, message }) => enqueueSnackbar(message, { variant }));
+  useObservable(minerStarted$, ({ coin }) => appNotice$.next({ variant: 'success', message: `Miner is now mining ${coin}` }));
+  useObservable(minerExited$, () => appNotice$.next({ variant: 'default', message: 'Miner exited.' }));
+  useObservable(minerErrors$, (s) => appNotice$.next({ variant: 'error', message: s }));
 
   return (
     <Router>
