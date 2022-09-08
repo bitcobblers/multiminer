@@ -22,7 +22,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import InfoIcon from '@mui/icons-material/Info';
 
 import { Toolbar } from './components/Toolbar';
-import { minerErrors$, appNotice$ } from '../models';
+import { appNotice$, addAppNotice } from '../models';
 import { useObservable } from './hooks';
 import { HomeScreen, WalletsScreen, CoinsScreen, MinersScreen, MonitorScreen, SettingsScreen, AboutScreen } from './screens';
 import { minerExited$, minerStarted$ } from './services/MinerService';
@@ -72,9 +72,8 @@ function AppContent() {
   const { enqueueSnackbar } = useSnackbar();
 
   useObservable(appNotice$, ({ variant, message }) => enqueueSnackbar(message, { variant }));
-  useObservable(minerStarted$, ({ coin }) => appNotice$.next({ variant: 'success', message: `Miner is now mining ${coin}` }));
-  useObservable(minerExited$, () => appNotice$.next({ variant: 'default', message: 'Miner exited.' }));
-  useObservable(minerErrors$, (s) => appNotice$.next({ variant: 'error', message: s }));
+  useObservable(minerStarted$, ({ coin }) => addAppNotice('success', `Miner is now mining ${coin}`));
+  useObservable(minerExited$, () => addAppNotice('default', 'Miner exited.'));
 
   return (
     <Router>
