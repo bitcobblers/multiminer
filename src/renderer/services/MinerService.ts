@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { minerApi } from '../../shared/MinerApi';
-import { minerErrors$, MinerInfo } from '../../models';
+import { addAppNotice, MinerInfo } from '../../models';
 
 export const stdout$ = new Subject<string>();
 export const minerExited$ = new Subject<number | void>();
@@ -11,7 +11,7 @@ export async function startMiner(profile: string, coin: string, miner: MinerInfo
   const error = await minerApi.start(profile, coin, { name: miner.name, exe: miner.exe }, version, args);
 
   if (error !== null) {
-    minerErrors$.next(error);
+    addAppNotice('error', error);
   }
 }
 
@@ -45,5 +45,5 @@ minerApi.exited((code: number | void) => {
 });
 
 minerApi.error((message: string) => {
-  minerErrors$.next(message);
+  addAppNotice('error', message);
 });

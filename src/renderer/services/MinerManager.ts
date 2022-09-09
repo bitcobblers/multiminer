@@ -3,7 +3,7 @@ import path from 'path-browserify';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
-import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, minerErrors$ } from '../../models';
+import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, addAppNotice } from '../../models';
 import { getMiners, getAppSettings, watchers$ as settingsWatcher$ } from './AppSettingsService';
 import { downloadMiner } from './DownloadManager';
 import * as coinStrategy from './strategies';
@@ -98,7 +98,7 @@ async function changeCoin(symbol: string | null) {
   selectCoin(
     symbol,
     (error) => {
-      minerErrors$.next(error);
+      addAppNotice('error', error);
     },
     async (selection) => {
       const appSettings = await config.getAppSettings();

@@ -1,5 +1,5 @@
 import AsyncLock from 'async-lock';
-import { AVAILABLE_MINERS, MinerInfo, MinerRelease } from '../../models';
+import { AVAILABLE_MINERS, MinerInfo, MinerRelease, addAppNotice } from '../../models';
 import { downloadApi } from '../../shared/DownloadApi';
 import * as config from './AppSettingsService';
 
@@ -69,5 +69,6 @@ export async function downloadMiner(name: string, version: string) {
     return downloadApi.downloadMiner(name, version, url);
   }
 
+  addAppNotice('error', `Unable to download miner '${name}': URL for version ${version} not found.`);
   return false;
 }

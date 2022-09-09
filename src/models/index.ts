@@ -11,6 +11,6 @@ export { MinerInfo, AVAILABLE_MINERS } from './MinerInfo';
 export { GpuStatistic, MinerStatistic } from './Aggregates';
 export { ConfiguredCoin } from './ConfiguredCoin';
 export { MinerState } from './MinerState';
-export { minerErrors$, minerState$, enabledCoins$, refreshData$ } from './Observables';
+export { appNotice$, minerState$, enabledCoins$, refreshData$, addAppNotice } from './Observables';
 export { DefaultSettings, SettingsSchemaType } from './DefaultSettings';
 export { MinerRelease } from './MinerRelease';
