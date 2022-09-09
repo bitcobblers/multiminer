@@ -18,6 +18,7 @@ export type AppSettings = {
     ethash: string;
     etchash: string;
     kawpow: string;
+    autolykos2: string;
     randomx: string;
   };
 };

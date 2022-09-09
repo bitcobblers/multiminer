@@ -19,6 +19,7 @@ describe('Profile Hook', () => {
       ethash: '',
       etchash: '',
       kawpow: '',
+      autolykos2: '',
       randomx: '',
     },
   };
@@ -51,6 +52,7 @@ describe('Profile Hook', () => {
         ethash: '',
         etchash: '',
         kawpow: '',
+        autolykos2: '',
         randomx: '',
       },
     };

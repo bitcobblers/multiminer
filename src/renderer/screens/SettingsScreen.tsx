@@ -186,6 +186,19 @@ export function SettingsScreen() {
               helperText={errors?.pools?.kawpow?.message}
             />
           </ConfigurableControl>
+          <ConfigurableControl description="The URL to use when connecting to a mining pool using the autolycos algorithm.">
+            <TextField
+              required
+              spellCheck="false"
+              label="Autolykos"
+              fullWidth
+              {...register('pools.autolykos2', {
+                required: 'A pool url must be specified.',
+              })}
+              error={!!errors?.pools?.autolykos2}
+              helperText={errors?.pools?.autolykos2?.message}
+            />
+          </ConfigurableControl>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the randomx algorithm.">
             <TextField
               required

@@ -19,6 +19,10 @@ export const AVAILABLE_ALGORITHMS: AlgorithmInfo[] = [
     kind: 'GPU',
   },
   {
+    name: 'autolykos2',
+    kind: 'GPU',
+  },
+  {
     name: 'randomx',
     kind: 'CPU',
   },

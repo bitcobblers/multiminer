@@ -86,6 +86,7 @@ describe('App Settings Service', () => {
           ethash: '',
           etchash: '',
           kawpow: '',
+          autolykos2: '',
           randomx: '',
         },
         appearance: {

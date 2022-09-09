@@ -105,7 +105,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
   };
 
   return (
-    <Dialog sx={{ '& .MuiDialog-paper': { width: '500px' } }} open={open} {...other}>
+    <Dialog sx={{ '& .MuiDialog-paper': { width: '550px' } }} open={open} {...other}>
       <DialogTitle sx={{ textAlign: 'center' }}>Edit Miner</DialogTitle>
       <DialogContent dividers>
         <form onSubmit={handleOnSave}>
