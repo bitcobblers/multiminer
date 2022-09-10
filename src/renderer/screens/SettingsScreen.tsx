@@ -147,19 +147,6 @@ export function SettingsScreen() {
           Connection URLs
         </Typography>
         <Stack direction="column" spacing={DefaultSpacing} sx={{ width: '25rem' }}>
-          <ConfigurableControl description="The URL to use when connecting to a mining pool using the ethash algorithm.">
-            <TextField
-              required
-              spellCheck="false"
-              label="Ethash"
-              fullWidth
-              {...register('pools.ethash', {
-                required: 'A pool url must be specified.',
-              })}
-              error={!!errors?.pools?.ethash}
-              helperText={errors?.pools?.ethash?.message}
-            />
-          </ConfigurableControl>
           <ConfigurableControl description="The URL to use when connecting to a mining pool using the etchash algorithm.">
             <TextField
               required

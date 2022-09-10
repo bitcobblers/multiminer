@@ -16,7 +16,6 @@ describe('Profile Hook', () => {
       theme: 'light',
     },
     pools: {
-      ethash: '',
       etchash: '',
       kawpow: '',
       autolykos2: '',
@@ -49,7 +48,6 @@ describe('Profile Hook', () => {
         theme: 'light',
       },
       pools: {
-        ethash: '',
         etchash: '',
         kawpow: '',
         autolykos2: '',

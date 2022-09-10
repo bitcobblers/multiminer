@@ -103,7 +103,6 @@ export function WorkersGraphs() {
   return (
     <div>
       <Tabs value={tabIndex} onChange={tabClicked}>
-        <Tab label="Ethash" />
         <Tab label="Etchash" />
         <Tab label="Kawpow" />
         <Tab label="Autolykos" />
@@ -111,15 +110,12 @@ export function WorkersGraphs() {
       </Tabs>
 
       <TabPanel value={tabIndex} index={0}>
-        <WorkersGraph algorithm="Ethash" stat={workers?.ethash} />
-      </TabPanel>
-      <TabPanel value={tabIndex} index={1}>
         <WorkersGraph algorithm="Etchash" stat={workers?.etchash} />
       </TabPanel>
-      <TabPanel value={tabIndex} index={2}>
+      <TabPanel value={tabIndex} index={1}>
         <WorkersGraph algorithm="Kawpow" stat={workers?.kawpow} />
       </TabPanel>
-      <TabPanel value={tabIndex} index={3}>
+      <TabPanel value={tabIndex} index={2}>
         <WorkersGraph algorithm="Autolykos" stat={workers?.autolykos} />
       </TabPanel>
       <TabPanel value={tabIndex} index={3}>

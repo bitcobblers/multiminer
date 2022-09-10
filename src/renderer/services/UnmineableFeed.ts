@@ -27,7 +27,6 @@ export type AlgorithmStat = {
 };
 
 export type UnmineableStats = {
-  ethash: AlgorithmStat;
   etchash: AlgorithmStat;
   kawpow: AlgorithmStat;
   autolykos: AlgorithmStat;
@@ -79,7 +78,6 @@ function updateWorkers(uuid: string) {
       const raw = JSON.parse(w);
 
       return {
-        ethash: raw.data.ethash,
         etchash: raw.data.etchash,
         kawpow: raw.data.kawpow,
         autolykos: raw.data.autolykos,
@@ -149,7 +147,6 @@ minerState$.pipe(filter((s) => s.state === 'active')).subscribe(() => {
   };
 
   unmineableWorkers$.next({
-    ethash: blankStat(),
     etchash: blankStat(),
     kawpow: blankStat(),
     autolykos: blankStat(),
