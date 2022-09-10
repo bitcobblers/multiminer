@@ -22,6 +22,7 @@ import DogeIcon from '../../assets/coins/doge.svg';
 import ElonIcon from '../../assets/coins/elon.svg';
 import EnjIcon from '../../assets/coins/enj.svg';
 import EosIcon from '../../assets/coins/eos.svg';
+import ErgIcon from '../../assets/coins/erg.svg';
 import EtcIcon from '../../assets/coins/etc.svg';
 import EthIcon from '../../assets/coins/eth.svg';
 import FtmIcon from '../../assets/coins/ftm.svg';
@@ -93,6 +94,7 @@ export const CoinIcons = {
   Elon: ElonIcon,
   Enj: EnjIcon,
   Eos: EosIcon,
+  Erg: ErgIcon,
   Etc: EtcIcon,
   Eth: EthIcon,
   Ftm: FtmIcon,

@@ -227,6 +227,14 @@ export const ALL_COINS: CoinDefinition[] = [
     referrals: ['amgj-xq2z'],
   },
   {
+    id: 'ergo',
+    icon: CoinIcons.Erg,
+    name: 'ERGO',
+    symbol: 'ERG',
+    blockchains: ['ERGO'],
+    referrals: ['mvs8-xbp9'],
+  },
+  {
     id: 'ethereum',
     icon: CoinIcons.Eth,
     name: 'Ethereum',

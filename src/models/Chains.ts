@@ -20,6 +20,7 @@ export const ALL_CHAINS: Chain[] = [
   { name: 'DGB', description: 'DigiByte', token_format: '^([DS][a-km-zA-HJ-NP-Z1-9]{25,34})|(dgb1[0-9A-Za-z]{39,59})$' },
   { name: 'DOGE', description: 'Dogecoin', token_format: '^[DA9][a-km-zA-HJ-NP-Z1-9]{33,34}$' },
   { name: 'EOS', description: 'EOS', token_format: '^[1-5a-z\\.]{1,12}$', memo_format: '^[0-9A-Za-z\\-_,]{1,120}$' },
+  { name: 'ERGO', description: 'Ergo', token_format: '^[9]{1}[A-Za-z0-9]{50}$' },
   { name: 'ETC', description: 'Ethereum Classic', token_format: '^0x[0-9A-Fa-f]{40}$' },
   { name: 'ETH', description: 'Ethereum', token_format: '^0x[0-9A-Fa-f]{40}$' },
   { name: 'FTM', description: 'Fantom', token_format: '^(0x)[0-9A-Fa-f]{40}$' },
