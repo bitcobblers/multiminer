@@ -7,10 +7,6 @@ export type AlgorithmInfo = {
 
 export const AVAILABLE_ALGORITHMS: AlgorithmInfo[] = [
   {
-    name: 'ethash',
-    kind: 'GPU',
-  },
-  {
     name: 'etchash',
     kind: 'GPU',
   },

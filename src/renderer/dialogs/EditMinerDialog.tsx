@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import { DialogTitle, DialogContent, TextField, Stack, MenuItem, FormControl, Divider, Button } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo, MinerRelease } from '../../models';
+import { AlgorithmName, AVAILABLE_ALGORITHMS, AVAILABLE_MINERS, Miner, MinerInfo, MinerRelease } from '../../models';
 import { AlgorithmMenuItem, MinerTypeMenuItem } from '../components';
 import { CustomDialogActions } from './CustomDialogActions';
 import { aboutApi } from '../../shared/AboutApi';
@@ -61,26 +61,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     }
   });
 
-  const handleOnSave = handleSubmit((val) => {
-    const version = watch('version');
-
-    if (version === '' || minerTypeVersions.includes(version) === false) {
-      onSave({ ...val, id: miner.id, version: minerTypeVersions[0] });
-    } else {
-      onSave({ ...val, id: miner.id, version });
-    }
-
-    if (autoReset) {
-      reset(miner);
-    }
-  });
-
-  const handleOnCancel = () => {
-    reset(miner);
-    onCancel();
-  };
-
-  const pickAlgorithm = (current: string) => {
+  const pickAlgorithm = (current: AlgorithmName) => {
     if (current !== undefined && minerTypeAlgorithms.find((alg) => alg.name === current)) {
       return current;
     }
@@ -94,6 +75,22 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     }
 
     return current;
+  };
+
+  const handleOnSave = handleSubmit((val) => {
+    const version = pickVersion(watch('version'));
+    const algorithm = pickAlgorithm(watch('algorithm'));
+
+    onSave({ ...val, id: miner.id, version, algorithm });
+
+    if (autoReset) {
+      reset(miner);
+    }
+  });
+
+  const handleOnCancel = () => {
+    reset(miner);
+    onCancel();
   };
 
   const openReference = () => {

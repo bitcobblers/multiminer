@@ -26,9 +26,9 @@ export const globalStore = new Store<SettingsSchemaType>({
         pools: {
           type: 'object',
           properties: {
-            ethash: { type: 'string' },
             etchash: { type: 'string' },
             kawpow: { type: 'string' },
+            autolykos2: { type: 'string' },
             randomx: { type: 'string' },
           },
           required: [],

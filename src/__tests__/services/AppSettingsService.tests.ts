@@ -57,7 +57,7 @@ describe('App Settings Service', () => {
           kind: 'lolminer',
           name: 'miner',
           version: '',
-          algorithm: 'ethash',
+          algorithm: 'etchash',
           parameters: '',
         },
       ];
@@ -83,7 +83,6 @@ describe('App Settings Service', () => {
           proxy: '',
         },
         pools: {
-          ethash: '',
           etchash: '',
           kawpow: '',
           autolykos2: '',

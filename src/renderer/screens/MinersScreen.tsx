@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table } from '@mui/material';
+import { Container, Box, Button, TableContainer, TableCell, TableHead, TableRow, TableBody, Table, Tooltip } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
+import ErrorIcon from '@mui/icons-material/Error';
 import { useSnackbar } from 'notistack';
 
-import { Miner } from '../../models';
+import { Miner, AVAILABLE_ALGORITHMS } from '../../models';
 import { setMiners, getAppSettings, setAppSettings } from '../services/AppSettingsService';
 
 import { ScreenHeader, EditMinerControls } from '../components';
@@ -14,7 +15,7 @@ import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 import { useLoadData, useProfile } from '../hooks';
 
 const getEmptyMiner = (): Miner => {
-  return { id: uuid(), kind: 'lolminer', name: '', version: '', algorithm: 'ethash', parameters: '' };
+  return { id: uuid(), kind: 'lolminer', name: '', version: '', algorithm: 'etchash', parameters: '' };
 };
 
 export function MinersScreen() {
@@ -57,6 +58,18 @@ export function MinersScreen() {
     enqueueSnackbar(`Miner ${miner.name} added.`, { variant: 'success' });
   };
 
+  const validateMiner = (miner: Miner) => {
+    if (AVAILABLE_ALGORITHMS.find((alg) => alg.name === miner.algorithm) === undefined) {
+      return (
+        <Tooltip title="The configured algorithm is not supported.">
+          <ErrorIcon color="error" />
+        </Tooltip>
+      );
+    }
+
+    return <></>;
+  };
+
   const removeMiner = async (name: string, id: string) => {
     const updatedMiners = [...miners.filter((m) => m.id !== id)];
 
@@ -97,6 +110,7 @@ export function MinersScreen() {
             <TableHead>
               <TableRow>
                 <TableCell />
+                <TableCell />
                 <TableCell>Default</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Miner</TableCell>
@@ -107,6 +121,7 @@ export function MinersScreen() {
             <TableBody>
               {miners.map((m) => (
                 <TableRow key={m.id}>
+                  <TableCell>{validateMiner(m)}</TableCell>
                   <TableCell>
                     <EditMinerControls miner={m} isDefault={profile === m.name} onSave={saveMiner} existingMiners={miners} onRemove={removeMiner} />
                   </TableCell>

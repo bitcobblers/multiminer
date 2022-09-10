@@ -3,7 +3,7 @@ import path from 'path-browserify';
 import * as miningService from './MinerService';
 import * as config from './AppSettingsService';
 import { minerApi } from '../../shared/MinerApi';
-import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, addAppNotice } from '../../models';
+import { ALL_COINS, CoinDefinition, AVAILABLE_MINERS, AVAILABLE_ALGORITHMS, Miner, Coin, MinerInfo, Wallet, MinerState, minerState$, addAppNotice } from '../../models';
 import { getMiners, getAppSettings, watchers$ as settingsWatcher$ } from './AppSettingsService';
 import { downloadMiner } from './DownloadManager';
 import * as coinStrategy from './strategies';
@@ -109,6 +109,11 @@ async function changeCoin(symbol: string | null) {
       const minerArgs = minerInfo.getArgs(miner.algorithm, cs, appSettings.pools[miner.algorithm]);
       const extraArgs = miner.parameters;
       const mergedArgs = `${minerArgs} ${extraArgs}`;
+
+      if (AVAILABLE_ALGORITHMS.find((alg) => alg.name === miner.algorithm) === undefined) {
+        addAppNotice('error', `Mining using the ${miner.algorithm} algorithm is not supported.`);
+        return;
+      }
 
       console.log(`Selected coin ${coin.symbol} to run for ${coin.duration} hours.  Path: ${filePath} -- Args: ${mergedArgs}`);
 
