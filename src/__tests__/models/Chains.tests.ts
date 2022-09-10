@@ -311,6 +311,27 @@ describe('Chains Format Validation', () => {
     });
   });
 
+  describe('ERGO', () => {
+    const cases = [
+      '9fFTJejWfApFYrBsE4k4rKSKAEK3qWVgvtanh5GYTjPSAK3qQho',
+      '9eYEwFmLxAZXSvsjAwLjv5jgJ8za12vTp9Jbe8o1wvYZsK5FvEV',
+      '9i1hoFifkmWPAFtEtUb3Yx2N6VJZuTudN5HtFDvjVSTLCtSm3gU',
+      '9fs99SejQxDjnjwrZ13YMZZ3fwMEVXFewpWWj63nMhZ6zDf2gif',
+      '9guzVpjR6xLaVGU56iGuuJohCt1xkfNV8csAk8t6rjuWGnddvpa',
+    ];
+
+    const chain = ALL_CHAINS.find((c) => c.name === 'ERGO')!;
+    const format = new RegExp(chain.token_format);
+
+    test.each(cases)('Should match %p', (address) => {
+      // Act.
+      const result = format.test(address);
+
+      // Assert.
+      expect(result).toBe(true);
+    });
+  });
+
   describe('ETC', () => {
     const cases = [
       '0x5756980e54d7cce3a2bc18fb58c8eb9863dd58e5',
