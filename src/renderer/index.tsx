@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { AboutApi } from '../shared/AboutApi';
 import { DialogApi } from '../shared/DialogApi';
@@ -30,4 +31,6 @@ window.addEventListener('load', () => {
   enableDataService();
 });
 
-render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container as Element);
+root.render(<App />);
