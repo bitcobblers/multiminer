@@ -11,9 +11,7 @@ import { EditWalletDialog } from '../dialogs/EditWalletDialog';
 import * as config from '../services/AppSettingsService';
 import { useLoadData } from '../hooks';
 
-const getEmptyWallet = (): Wallet => {
-  return { id: uuid(), name: '', network: 'ETH', address: '', memo: '' };
-};
+const getEmptyWallet = (): Wallet => ({ id: uuid(), name: '', network: 'ETH', address: '', memo: '' });
 
 export function WalletsScreen() {
   const { enqueueSnackbar } = useSnackbar();

@@ -78,9 +78,7 @@ export function SettingsScreen() {
     await loggingApi.openLogFolder();
   };
 
-  const pickCoinStrategy = (current: string) => {
-    return current === undefined ? 'normal' : current;
-  };
+  const pickCoinStrategy = (current: string) => (current === undefined ? 'normal' : current);
 
   const DefaultSpacing = 2;
 

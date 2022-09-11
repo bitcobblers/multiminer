@@ -123,7 +123,7 @@ async function changeCoin(symbol: string | null) {
         await miningService.stopMiner();
         await miningService.startMiner(miner.name, coin.symbol, minerInfo, miner.version, mergedArgs);
       }
-    }
+    },
   );
 }
 

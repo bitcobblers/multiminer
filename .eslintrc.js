@@ -1,5 +1,8 @@
 module.exports = {
-  extends: 'erb',
+  extends: [
+    'airbnb',
+    'airbnb-typescript',
+  ],
   rules: {
     // A temporary hack related to IDE not resolving correct package.json
     'import/no-extraneous-dependencies': 'off',
@@ -11,6 +14,12 @@ module.exports = {
     'promise/catch-or-return': 'off',
     'promise/always-return': 'off',
     'no-console': 'off',
+    'max-len': 'off',
+    'object-curly-newline': 'off',
+    'react/jsx-one-expression-per-line': 'off',
+    'react/jsx-no-useless-fragment': 'off',
+    'jest/no-commented-out-tests': 'off',
+    'react/function-component-definition': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

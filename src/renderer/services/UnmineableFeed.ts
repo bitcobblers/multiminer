@@ -112,7 +112,7 @@ updater$
   .pipe(
     withLatestFrom(minerState$, enabledCoins$),
     map(([, miner, coins]) => ({ state: miner.state, coins })),
-    filter(({ state }) => state === 'active')
+    filter(({ state }) => state === 'active'),
   )
   .subscribe(({ coins }) => {
     updateCoins(coins);
@@ -123,28 +123,26 @@ refreshData$
     throttleTime(REFRESH_THROTTLE),
     withLatestFrom(minerState$, enabledCoins$),
     map(([, miner, coins]) => ({ state: miner.state, coins })),
-    filter(({ state }) => state === 'active')
+    filter(({ state }) => state === 'active'),
   )
   .subscribe(({ coins }) => {
     updateCoins(coins);
   });
 
 minerState$.pipe(filter((s) => s.state === 'active')).subscribe(() => {
-  const blankStat = () => {
-    return {
-      workers: [],
-      chart: {
-        reported: {
-          data: [],
-          timestamps: [],
-        },
-        calculated: {
-          data: [],
-          timestamps: [],
-        },
+  const blankStat = () => ({
+    workers: [],
+    chart: {
+      reported: {
+        data: [],
+        timestamps: [],
       },
-    };
-  };
+      calculated: {
+        data: [],
+        timestamps: [],
+      },
+    },
+  });
 
   unmineableWorkers$.next({
     etchash: blankStat(),

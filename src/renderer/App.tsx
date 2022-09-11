@@ -40,7 +40,7 @@ const links = [
   { id: 6, to: '/about', icon: <InfoIcon />, text: 'About', screen: <AboutScreen /> },
 ];
 
-const NavLink = (props: { id: number; to: string; icon: JSX.Element; text: string }) => {
+function NavLink(props: { id: number; to: string; icon: JSX.Element; text: string }) {
   const { id, to, icon, text } = props;
   const theme = useTheme();
 
@@ -52,7 +52,7 @@ const NavLink = (props: { id: number; to: string; icon: JSX.Element; text: strin
       </ListItemButton>
     </Link>
   );
-};
+}
 
 function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
   const { id, to, screen } = props;
@@ -127,7 +127,7 @@ export function App() {
     const subscription = from(getAppSettings())
       .pipe(
         mergeWith(watchers$.settings),
-        map((settings) => settings.appearance.theme)
+        map((settings) => settings.appearance.theme),
       )
       .subscribe((theme) => setThemeMode(theme as PaletteMode));
     return () => subscription.unsubscribe();
@@ -146,9 +146,13 @@ export function App() {
     });
   }, [themeMode]);
 
+  const dismissButton = (key: SnackbarKey) => (
+    <Button onClick={closeSnack(key)}>Dismiss</Button>
+  );
+
   return (
     <ThemeProvider theme={mdTheme}>
-      <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} action={(key) => <Button onClick={closeSnack(key)}>Dismiss</Button>}>
+      <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} action={dismissButton}>
         <AppContent />
       </SnackbarProvider>
     </ThemeProvider>

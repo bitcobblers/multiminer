@@ -47,9 +47,7 @@ export function EditMinerDialog(props: EditMinerDialogProps) {
     return selectedMiner?.versions.map((r) => r.tag) ?? [];
   }, [availableMiners, kind]);
 
-  const availableMinersAsMinerInfo = useMemo(() => {
-    return availableMiners.map((m) => AVAILABLE_MINERS.find((x) => x.name === m.name)).filter((m) => m !== undefined) as MinerInfo[];
-  }, [availableMiners]);
+  const availableMinersAsMinerInfo = useMemo(() => availableMiners.map((m) => AVAILABLE_MINERS.find((x) => x.name === m.name)).filter((m) => m !== undefined) as MinerInfo[], [availableMiners]);
 
   useLoadData(async ({ getMinerReleases }) => {
     const onlineMiners = await getMinerReleasesOnline();

@@ -21,7 +21,5 @@ export function useLoadData(load: (settings: SettingsApi) => Promise<void>) {
     };
 
     load(settingsApi);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
