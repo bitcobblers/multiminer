@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { from } from 'rxjs';
 import { map, mergeWith } from 'rxjs/operators';
 import { aboutApi } from 'shared/AboutApi';
@@ -58,9 +58,7 @@ function NavScreen(props: { id: number; to: string; screen: JSX.Element }) {
   const { id, to, screen } = props;
 
   return (
-    <Route key={id} path={to}>
-      {screen}
-    </Route>
+    <Route key={id} path={to} element={screen} />
   );
 }
 
@@ -107,7 +105,7 @@ function AppContent() {
             '& .MuiContainer-root': { ml: 0 },
           }}
         >
-          <Switch>{safeReverse(links).map(NavScreen)}</Switch>
+          <Routes>{safeReverse(links).map(NavScreen)}</Routes>
         </Box>
         <Toolbar drawerWidth={drawerWidth} />
       </Box>
