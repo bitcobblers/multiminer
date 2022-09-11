@@ -12,8 +12,8 @@ describe('Screen Buffer Tests', () => {
     subscription.unsubscribe();
 
     // Assert.
-    expect(handler).toBeCalledTimes(2); // Additional call for initial state.
-    expect(handler).lastCalledWith('');
+    expect(handler).toHaveBeenCalledTimes(2); // Additional call for initial state.
+    expect(handler).toHaveBeenLastCalledWith('');
   });
 
   it('Should update content when called', () => {
@@ -27,7 +27,7 @@ describe('Screen Buffer Tests', () => {
     subscription.unsubscribe();
 
     // Assert.
-    expect(handler).lastCalledWith('expected');
+    expect(handler).toHaveBeenLastCalledWith('expected');
   });
 
   it('Calling twice should automatically create a newline', () => {
@@ -43,6 +43,6 @@ describe('Screen Buffer Tests', () => {
     subscription.unsubscribe();
 
     // Assert.
-    expect(handler).lastCalledWith(expected);
+    expect(handler).toHaveBeenLastCalledWith(expected);
   });
 });
