@@ -26,15 +26,13 @@ export function MinerSummary() {
                 <strong>{item.title}</strong>: {item.content}
               </>
             ))
-            .reduce((acc, x) =>
-              acc === null ? (
-                x
-              ) : (
-                <>
-                  {acc} <Separator /> {x}
-                </>
-              )
-            )}
+            .reduce((acc, x) => (acc === null ? (
+              x
+            ) : (
+              <>
+                {acc} <Separator /> {x}
+              </>
+            )))}
         </Typography>
       )}
     </Box>

@@ -14,7 +14,7 @@ export function enableMonitors() {
     .pipe(
       withLatestFrom(minerState$),
       map(([, miner]) => ({ state: miner.state })),
-      filter(({ state }) => state === 'active')
+      filter(({ state }) => state === 'active'),
     )
     .subscribe(async () => {
       const status = await minerApi.status();

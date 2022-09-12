@@ -30,13 +30,9 @@ export function EditWalletDialog(props: EditWalletDialogProps) {
 
   const chain = watch('network');
 
-  const chainInfo = useMemo(() => {
-    return ALL_CHAINS.find((c) => c.name === chain);
-  }, [chain]);
+  const chainInfo = useMemo(() => ALL_CHAINS.find((c) => c.name === chain), [chain]);
 
-  const shouldDisableBlockchainSelection = () => {
-    return coins.length !== 0;
-  };
+  const shouldDisableBlockchainSelection = () => coins.length !== 0;
 
   const blockchainLabel = () => {
     if (coins.length === 0) {

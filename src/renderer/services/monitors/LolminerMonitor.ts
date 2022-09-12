@@ -67,7 +67,7 @@ function updateStats(stats: MinerAppStatistics) {
         memTemperature: worker.Mem_Temp,
         fanSpeed: worker.Fan_Speed,
       };
-    })
+    }),
   );
 
   const totalHashrate = stats.Algorithms[0].Total_Performance;

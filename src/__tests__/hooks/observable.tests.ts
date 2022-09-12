@@ -1,4 +1,5 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
+import { act } from 'react-test-renderer';
 import { Subject } from 'rxjs';
 import { useObservable, useObservableState } from '../../renderer/hooks';
 
@@ -9,11 +10,9 @@ describe('Observable Hook', () => {
     let value = '';
 
     // Act.
-    renderHook(() =>
-      useObservable(observable, (s) => {
-        value = s;
-      })
-    );
+    renderHook(() => useObservable(observable, (s) => {
+      value = s;
+    }));
 
     observable.next('expected');
 
@@ -26,11 +25,11 @@ describe('Observable Hook', () => {
     const observable = new Subject<string>();
 
     // Act.
-    const { result } = renderHook(() => {
-      return useObservableState(observable, null);
-    });
+    const { result } = renderHook(() => useObservableState(observable, null));
 
-    observable.next('expected');
+    act(() => {
+      observable.next('expected');
+    });
 
     // Assert.
     const [value] = result.current;
@@ -42,9 +41,7 @@ describe('Observable Hook', () => {
     const observable = new Subject<string>();
 
     // Act.
-    const { result } = renderHook(() => {
-      return useObservableState(observable, 'expected');
-    });
+    const { result } = renderHook(() => useObservableState(observable, 'expected'));
 
     // Assert.
     const [value] = result.current;

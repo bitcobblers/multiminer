@@ -15,11 +15,7 @@ export function getResolveHtmlPath() {
     };
   }
 
-  return (htmlFileName: string) => {
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
-  };
+  return (htmlFileName: string) => `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
 }
 
-export const getAssetPath = (...paths: string[]): string => {
-  return path.join(getResourcesPath(), ...paths);
-};
+export const getAssetPath = (...paths: string[]): string => path.join(getResourcesPath(), ...paths);

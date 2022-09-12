@@ -1,5 +1,3 @@
-/* eslint-disable jest/no-commented-out-tests */
-
 // import { Miner, Coin, Wallet, minerState$, MinerState } from '../../models';
 // import * as settings from '../../renderer/services/AppSettingsService';
 // import * as manager from '../../renderer/services/MinerManager';

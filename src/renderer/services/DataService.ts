@@ -6,12 +6,10 @@ import { UnmineableCoin, unmineableCoins$ } from './UnmineableFeed';
 function minerStateChanged(state: MinerState) {
   console.log(`Miner state changed to ${state.state}`);
 
-  const updatedCoins = enabledCoins$.getValue().map((c) => {
-    return {
-      ...c,
-      current: state.state === 'active' ? state.currentCoin === c.symbol : false,
-    };
-  });
+  const updatedCoins = enabledCoins$.getValue().map((c) => ({
+    ...c,
+    current: state.state === 'active' ? state.currentCoin === c.symbol : false,
+  }));
 
   enabledCoins$.next(updatedCoins);
 }
@@ -119,6 +117,6 @@ export async function enableDataService() {
         duration: Number(c.duration),
         address: wallet?.address ?? '',
       };
-    })
+    }),
   );
 }

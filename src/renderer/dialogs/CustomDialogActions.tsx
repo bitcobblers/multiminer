@@ -9,7 +9,7 @@ interface CustomDialogActionsProps {
   primaryButtonDisabled?: boolean;
 }
 
-export const CustomDialogActions = (props: CustomDialogActionsProps) => {
+export function CustomDialogActions(props: CustomDialogActionsProps) {
   const { onConfirm, onCancel, buttonType, buttonText, secondaryButtonText, primaryButtonDisabled } = props;
 
   return (
@@ -22,7 +22,7 @@ export const CustomDialogActions = (props: CustomDialogActionsProps) => {
       </Button>
     </DialogActions>
   );
-};
+}
 
 CustomDialogActions.defaultProps = {
   onConfirm: undefined,

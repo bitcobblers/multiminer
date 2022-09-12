@@ -108,7 +108,7 @@ function updateStats(stats: MinerAppStatistics) {
         memTemperature: device.memory_temperature,
         fanSpeed: device.fan_speed,
       };
-    })
+    }),
   );
 
   const totalPower = stats.gpus.reduce((a, b) => a + b.power, 0);

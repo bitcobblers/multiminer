@@ -14,9 +14,7 @@ import { ScreenHeader, EditMinerControls } from '../components';
 import { EditMinerDialog } from '../dialogs/EditMinerDialog';
 import { useLoadData, useProfile } from '../hooks';
 
-const getEmptyMiner = (): Miner => {
-  return { id: uuid(), kind: 'lolminer', name: '', version: '', algorithm: 'etchash', parameters: '' };
-};
+const getEmptyMiner = (): Miner => ({ id: uuid(), kind: 'lolminer', name: '', version: '', algorithm: 'etchash', parameters: '' });
 
 export function MinersScreen() {
   const { enqueueSnackbar } = useSnackbar();
@@ -67,6 +65,7 @@ export function MinersScreen() {
       );
     }
 
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
   };
 

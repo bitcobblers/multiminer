@@ -23,27 +23,25 @@ async function cacheReleases(descriptors: MinerInfo[]) {
   const previouslyCachedReleases = await config.getMinerReleases();
 
   const miners = await Promise.all(
-    descriptors.map((info) => {
-      return downloadApi.getMinerReleases(info.owner, info.repo).then((r) => {
-        if (r === '') {
-          return null;
-        }
+    descriptors.map((info) => downloadApi.getMinerReleases(info.owner, info.repo).then((r) => {
+      if (r === '') {
+        return null;
+      }
 
-        const releases = (JSON.parse(r) as MinerReleaseData[]).slice(0, MAX_VERSION_HISTORY);
-        const data = {
-          name: info.name,
-          versions: releases
-            .map((release) => ({
-              tag: release.tag_name,
-              published: release.published_at,
-              url: release.assets.find((x) => info.assetPattern.test(x.name))?.browser_download_url ?? '',
-            }))
-            .filter((x) => x.url !== ''),
-        } as MinerRelease;
+      const releases = (JSON.parse(r) as MinerReleaseData[]).slice(0, MAX_VERSION_HISTORY);
+      const data = {
+        name: info.name,
+        versions: releases
+          .map((release) => ({
+            tag: release.tag_name,
+            published: release.published_at,
+            url: release.assets.find((x) => info.assetPattern.test(x.name))?.browser_download_url ?? '',
+          }))
+          .filter((x) => x.url !== ''),
+      } as MinerRelease;
 
-        return data;
-      });
-    })
+      return data;
+    })),
   );
 
   const allMiners = miners.filter((miner) => miner !== null) as MinerRelease[];

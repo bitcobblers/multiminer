@@ -22,8 +22,8 @@ describe('Miner Module', () => {
     minerModule.launch('path/to/unknown', 'ignored', handlers);
 
     // Assert.
-    expect(handlers.onError).toBeCalled();
-    expect(handlers.onSuccess).not.toBeCalled();
+    expect(handlers.onError).toHaveBeenCalled();
+    expect(handlers.onSuccess).not.toHaveBeenCalled();
   });
 
   it('Should call onError if the miner path is not an executable.', () => {
@@ -42,8 +42,8 @@ describe('Miner Module', () => {
     minerModule.launch('path/to/exe', 'ignored', handlers);
 
     // Assert.
-    expect(handlers.onError).toBeCalled();
-    expect(handlers.onSuccess).not.toBeCalled();
+    expect(handlers.onError).toHaveBeenCalled();
+    expect(handlers.onSuccess).not.toHaveBeenCalled();
   });
 
   it('Should call onSuccess if the miner started successfully.', () => {
@@ -60,8 +60,8 @@ describe('Miner Module', () => {
     minerModule.launch('path/to/exe', 'ignored', handlers);
 
     // Assert.
-    expect(handlers.onError).not.toBeCalled();
-    expect(handlers.onSuccess).toBeCalled();
+    expect(handlers.onError).not.toHaveBeenCalled();
+    expect(handlers.onSuccess).toHaveBeenCalled();
   });
 
   it('Should send an event when the error handler is called.', () => {

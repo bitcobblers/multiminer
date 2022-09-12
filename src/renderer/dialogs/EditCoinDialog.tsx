@@ -42,13 +42,9 @@ export function EditCoinDialog(props: EditCoinDialogProps) {
 
   const compatibleWallets = wallets.filter((w) => blockchains.includes(w.network));
 
-  const shouldDisableWalletSelection = () => {
-    return compatibleWallets.length === 0;
-  };
+  const shouldDisableWalletSelection = () => compatibleWallets.length === 0;
 
-  const walletLabel = () => {
-    return compatibleWallets.length === 0 ? 'No compatible wallets' : 'Wallet';
-  };
+  const walletLabel = () => (compatibleWallets.length === 0 ? 'No compatible wallets' : 'Wallet');
 
   const pickWallet = (current: string | null) => {
     if (current === null) {

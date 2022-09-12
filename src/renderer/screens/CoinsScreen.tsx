@@ -18,14 +18,12 @@ type CoinRecord = {
   coin: Coin;
 };
 
-const blankCoin = (symbol: string) => {
-  return {
-    symbol,
-    wallet: null,
-    enabled: false,
-    duration: 6,
-  };
-};
+const blankCoin = (symbol: string) => ({
+  symbol,
+  wallet: null,
+  enabled: false,
+  duration: 6,
+});
 
 async function loadCoins() {
   const loadedCoins = await getCoins();
@@ -52,16 +50,15 @@ export function CoinsScreen() {
   const [enabledOnly, setEnabledOnly] = useState(false);
   const [filter, setFilter] = useState<string>('');
   const filteredCoins = useMemo(
-    () =>
-      coins
-        .filter((c) => {
-          const isOptionallyEnabled = enabledOnly ? c.coin.enabled : true;
-          const isOptionallyFiltered = filter ? `${c.name} ${c.coin.symbol}`.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) : true;
-          return isOptionallyEnabled && isOptionallyFiltered;
-        })
-        .sort((a, b) => a.coin.symbol.localeCompare(b.coin.symbol))
-        .map((x) => x),
-    [coins, enabledOnly, filter]
+    () => coins
+      .filter((c) => {
+        const isOptionallyEnabled = enabledOnly ? c.coin.enabled : true;
+        const isOptionallyFiltered = filter ? `${c.name} ${c.coin.symbol}`.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) : true;
+        return isOptionallyEnabled && isOptionallyFiltered;
+      })
+      .sort((a, b) => a.coin.symbol.localeCompare(b.coin.symbol))
+      .map((x) => x),
+    [coins, enabledOnly, filter],
   );
 
   useLoadData(async ({ getWallets }) => {
@@ -74,7 +71,7 @@ export function CoinsScreen() {
       coins
         .filter((c) => c.isSet && c.coin.symbol !== coin.symbol)
         .map((c) => c.coin)
-        .concat(coin)
+        .concat(coin),
     );
 
     setLoadedCoins(await loadCoins());
