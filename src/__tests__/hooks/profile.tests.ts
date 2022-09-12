@@ -1,4 +1,5 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
+import { act } from 'react-test-renderer';
 import { AppSettings } from '../../models';
 import { useProfile } from '../../renderer/hooks';
 
@@ -28,14 +29,15 @@ describe('Profile Hook', () => {
     jest.spyOn(settings, 'getAppSettings').mockResolvedValue(defaultAppSettings);
 
     // Act.
-    const { result, waitForNextUpdate } = renderHook(() => useProfile());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useProfile());
 
     // Assert.
-    expect(result.current).toBe('default');
+    await waitFor(() => {
+      expect(result.current).toBe('default');
+    });
   });
 
-  it('Updates profile when configuration changes.', () => {
+  it('Updates profile when configuration changes.', async () => {
     // Arrange.
     const updatedSettings: AppSettings = {
       settings: {
@@ -59,9 +61,10 @@ describe('Profile Hook', () => {
 
     // Act.
     const { result } = renderHook(() => useProfile());
-    settings.watchers$.settings.next(updatedSettings);
+
+    act(() => settings.watchers$.settings.next(updatedSettings));
 
     // Assert.
-    expect(result.current).toBe('updated');
+    await waitFor(() => expect(result.current).toBe('updated'));
   });
 });

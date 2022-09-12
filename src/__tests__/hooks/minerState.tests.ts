@@ -1,9 +1,10 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
+import { act } from 'react-test-renderer';
 import { useMinerActive } from '../../renderer/hooks';
 import { minerState$ } from '../../models';
 
 describe('MinerActive Hook', () => {
-  it('Returns false if there is no state.', () => {
+  it('Returns false if there is no state.', async () => {
     // Act.
     const { result } = renderHook(() => useMinerActive());
 
@@ -17,20 +18,20 @@ describe('MinerActive Hook', () => {
       { given: 'inactive', expected: false },
     ];
 
-    test.each(cases)('State set to %p should be %p', ({ given, expected }) => {
+    test.each(cases)('State set to %p should be %p', async ({ given, expected }) => {
       // Arrange.
-      const { result, waitForNextUpdate } = renderHook(() => useMinerActive());
+      const { result } = renderHook(() => useMinerActive());
 
       // Act.
-      minerState$.next({
-        state: given as 'active' | 'inactive',
-        currentCoin: null,
+      act(() => {
+        minerState$.next({
+          state: given as 'active' | 'inactive',
+          currentCoin: null,
+        });
       });
 
-      waitForNextUpdate();
-
       // Assert.
-      expect(result.current).toBe(expected);
+      await waitFor(() => expect(result.current).toBe(expected));
     });
   });
 });

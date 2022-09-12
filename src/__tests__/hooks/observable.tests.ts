@@ -1,4 +1,5 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
+import { act } from 'react-test-renderer';
 import { Subject } from 'rxjs';
 import { useObservable, useObservableState } from '../../renderer/hooks';
 
@@ -26,7 +27,9 @@ describe('Observable Hook', () => {
     // Act.
     const { result } = renderHook(() => useObservableState(observable, null));
 
-    observable.next('expected');
+    act(() => {
+      observable.next('expected');
+    });
 
     // Assert.
     const [value] = result.current;
