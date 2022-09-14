@@ -54,9 +54,18 @@ export function attachHandlers(coin: string, proc: ChildProcessWithoutNullStream
     handleExit(coin, code, send);
   });
 
-  proc.stderr.setEncoding('utf-8').on('data', (data) => {
-    handleData(data, send);
+  proc.on('error', (error) => {
+    handleError(error, send);
   });
+
+  proc.stderr
+    .setEncoding('utf-8')
+    .on('error', (error) => {
+      handleError(error, send);
+    })
+    .on('data', (data) => {
+      handleData(data, send);
+    });
 
   proc.stdout
     .setEncoding('utf-8')

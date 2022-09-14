@@ -1,0 +1,33 @@
+{
+  "Algorithms": [
+    {
+      "Etchash": {
+        "CurrentPool": "etchash.unmineable.com:3333",
+        "GPU 0": {
+          "Accepted": 1,
+          "Denied": 0,
+          "Hashrate": "8.563422e+07"
+        },
+        "ReconnectionCount": 0,
+        "Total": {
+          "Accepted": 1,
+          "Denied": 0,
+          "Hashrate": "8.563422e+07"
+        }
+      }
+    }
+  ],
+  "Devices": [
+    {
+      "GPU 0": {
+        "Name": "NVIDIA GeForce RTX 3080",
+        "Platform": "CUDA",
+        "Pci": "2d:00.0",
+        "Fan": 58,
+        "Temperature": 72,
+        "Power": 319
+      }
+    }
+  ],
+  "WorkTime": 99
+}

@@ -69,7 +69,7 @@ export const globalStore = new Store<SettingsSchemaType>({
         type: 'object',
         properties: {
           id: { type: 'string' },
-          kind: { type: 'string', enum: ['phoenixminer', 'lolminer', 'nbminer', 'trexminer', 'xmrig'] },
+          kind: { type: 'string', enum: ['phoenixminer', 'lolminer', 'nbminer', 'trexminer', 'xmrig', 'nanominer', 'nanominer-cuda11'] },
           version: { type: 'string' },
           name: { type: 'string' },
           enabled: { type: 'boolean' },
