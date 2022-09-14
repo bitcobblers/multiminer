@@ -21,6 +21,16 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
   //   getArgs: (alg, cs, url) => `-pool ${url} -wal ${cs} -pass x${alg === 'etchash' ? ' -coin etc' : ''}`,
   // },
   {
+    name: 'gminer',
+    algorithms: ['etchash', 'autolykos2'],
+    owner: 'develsoftware',
+    repo: 'GMinerRelease',
+    assetPattern: /^.+_windows64\.zip$/,
+    optionsUrl: 'https://gminer.info/documentation/arguments/',
+    exe: 'miner.exe',
+    getArgs: (alg, cs, url) => `--algo ${alg} --server ${url} --user ${cs} --color 0 --api http://localhost:${API_PORT}`,
+  },
+  {
     name: 'lolminer',
     algorithms: ['etchash', 'autolykos2'],
     owner: 'lolliedieb',
