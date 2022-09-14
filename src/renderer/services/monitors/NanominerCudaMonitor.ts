@@ -1,13 +1,4 @@
-import { addGpuStats, addMinerStat } from '../StatisticsAggregator';
-import { MinerMonitor } from './MinerMonitor';
-
-type MinerAppStatistics = {
-  Algorithms: [
-  ],
-  Devices: [
-
-  ],
-};
+// import { MinerMonitor } from './MinerMonitor';
 
 // type MinerAppStatistics = {
 //   accepted_count: number;
@@ -97,45 +88,10 @@ type MinerAppStatistics = {
 //   };
 // };
 
-function updateStats(stats: MinerAppStatistics) {
-  const x = 5;
-  // addGpuStats(
-  //   stats.gpus.map((device) => {
-  //     const efficiency = device.power === 0 ? undefined : device.hashrate / 1000 / device.power;
+// function updateStats(stats: MinerAppStatistics) { }
 
-  //     return {
-  //       id: device.gpu_id.toString(),
-  //       name: device.name,
-  //       hashrate: device.hashrate / 1000000,
-  //       accepted: device.shares.accepted_count,
-  //       rejected: device.shares.rejected_count,
-  //       power: device.power,
-  //       efficiency,
-  //       coreClock: device.cclock,
-  //       memClock: device.mclock,
-  //       coreTemperature: device.temperature,
-  //       memTemperature: device.memory_temperature,
-  //       fanSpeed: device.fan_speed,
-  //     };
-  //   }),
-  // );
-
-  // const totalPower = stats.gpus.reduce((a, b) => a + b.power, 0);
-  // const totalEfficiency = totalPower === 0 ? undefined : stats.hashrate / 1000 / totalPower;
-
-  // addMinerStat({
-  //   hashrate: stats.hashrate / 1000000,
-  //   accepted: stats.accepted_count,
-  //   rejected: stats.rejected_count,
-  //   power: totalPower,
-  //   efficiency: totalEfficiency,
-  //   difficulty: stats.active_pool.difficulty,
-  //   uptime: stats.uptime,
-  // });
-}
-
-export const monitor: MinerMonitor = {
-  name: 'nanominer-cuda11',
-  statsUrl: 'stats',
-  update: (stats) => updateStats(JSON.parse(stats)),
-};
+// export const monitor: MinerMonitor = {
+//   name: 'nanominer-cuda11',
+//   statsUrl: 'stats',
+//   update: (stats) => updateStats(JSON.parse(stats)),
+// };
