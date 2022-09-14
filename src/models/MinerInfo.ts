@@ -28,7 +28,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     assetPattern: /^.+_windows64\.zip$/,
     optionsUrl: 'https://gminer.info/documentation/arguments/',
     exe: 'miner.exe',
-    getArgs: (alg, cs, url) => `--algo ${alg} --server ${url} --user ${cs} --color 0 --api http://localhost:${API_PORT}`,
+    getArgs: (alg, cs, url) => `--algo ${alg} --server ${url} --user ${cs} --color 0 --api ${API_PORT}`,
   },
   {
     name: 'lolminer',

@@ -79,7 +79,7 @@ export function launch(exePath: string, args: string, handlers: LaunchHandlers) 
     return handlers.onError(`The miner is not executable: ${error}`);
   }
 
-  return handlers.onSuccess(spawn(exePath, args.split(' ')));
+  return handlers.onSuccess(spawn(exePath, args.trim().split(' ')));
 }
 
 function getMinerProcesses(exe: string | undefined) {
@@ -117,7 +117,7 @@ function start(event: IpcMainInvokeEvent, profile: string, coin: string, miner: 
 
       attachHandlers(coin, proc, send);
       send('ipc-minerStarted', coin);
-      logger.info('Started miner with at %s with args = %s', exePath, args);
+      logger.info('Started miner with at %s with args = %o', exePath, args.trim().split(' '));
       return null;
     },
   });
