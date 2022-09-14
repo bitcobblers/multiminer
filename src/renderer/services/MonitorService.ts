@@ -1,13 +1,13 @@
 import { interval, withLatestFrom, map, filter } from 'rxjs';
 import { minerState$, API_PORT } from '../../models';
 import { minerApi } from '../../shared/MinerApi';
-import { lolminerMonitor, nanominerCudaMonitor, nbminerMonitor, trexminerMonitor } from './monitors';
+import { lolminerMonitor, nbminerMonitor, trexminerMonitor } from './monitors';
 
 const UPDATE_INTERVAL = 1000 * 5;
 const monitor$ = interval(UPDATE_INTERVAL);
 
 export function enableMonitors() {
-  const monitors = [nbminerMonitor, lolminerMonitor, trexminerMonitor, nanominerCudaMonitor];
+  const monitors = [nbminerMonitor, lolminerMonitor, trexminerMonitor];
   const monitorNames = monitors.map((m) => m.name);
 
   monitor$
