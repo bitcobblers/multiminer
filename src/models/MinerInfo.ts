@@ -1,4 +1,4 @@
-import { MinerName, AlgorithmName, API_PORT } from './Enums';
+import { MinerName, AlgorithmName, GPU_API_PORT, CPU_API_PORT } from './Enums';
 
 export type MinerInfo = {
   name: MinerName;
@@ -28,7 +28,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     assetPattern: /^.+Win64\.zip$/,
     optionsUrl: 'https://lolminer.site/documentation/arguments/',
     exe: 'lolminer.exe',
-    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor --apiport ${API_PORT}`,
+    getArgs: (alg, cs, url) => `--algo ${alg.toLocaleUpperCase()} --pool ${url} --user ${cs} --nocolor --apiport ${GPU_API_PORT}`,
   },
   {
     name: 'nbminer',
@@ -38,7 +38,7 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     assetPattern: /^NBMiner.+_Win\.zip$/,
     optionsUrl: 'https://nbminer.info/documentation/arguments/',
     exe: 'nbminer.exe',
-    getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} --no-color --cmd-output 1 --api 127.0.0.1:60090`,
+    getArgs: (alg, cs, url) => `-a ${alg} -o stratum+tcp://${url} -u ${cs} --no-color --cmd-output 1 --api 127.0.0.1:${GPU_API_PORT}`,
   },
   {
     name: 'trexminer',
@@ -48,14 +48,16 @@ export const AVAILABLE_MINERS: MinerInfo[] = [
     assetPattern: /^t-rex-.+win.zip$/,
     optionsUrl: 'https://trexminer.info/documentation/arguments/',
     exe: 't-rex.exe',
-    getArgs: (alg, cs, url) => `-a ${alg} -o ${url} -u ${cs} -p x --api-bind-http 127.0.0.1:60090 --api-read-only --no-color`,
+    getArgs: (alg, cs, url) => `-a ${alg} -o ${url} -u ${cs} -p x --api-bind-http 127.0.0.1:${GPU_API_PORT} --api-read-only --no-color`,
   },
-  // {
-  //   name: 'xmrig',
-  //   algorithms: ['randomx'],
-  //   owner: 'xmrig',
-  //   repo: 'xmrig',
-  //   exe: 'xmrig.exe',
-  //   getArgs: (_alg, cs, url) => `o ${url} -a rx -k -u ${cs} -p x`,
-  // },
+  {
+    name: 'xmrig',
+    algorithms: ['randomx'],
+    owner: 'xmrig',
+    repo: 'xmrig',
+    assetPattern: /^xmrig.+win64\.zip$/,
+    optionsUrl: 'https://xmrig.com/docs/miner/command-line-options',
+    exe: 'xmrig.exe',
+    getArgs: (_alg, cs, url) => `-o ${url} -a rx -k -u ${cs} -p x --http-host=127.0.0.1 --http-port=${CPU_API_PORT}`,
+  },
 ];
