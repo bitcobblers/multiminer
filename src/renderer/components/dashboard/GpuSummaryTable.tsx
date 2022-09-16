@@ -3,7 +3,7 @@ import * as formatter from '../../services/Formatters';
 import { minerStatistics$ } from '../../services/StatisticsAggregator';
 import { useObservableState } from '../../hooks';
 
-export function MinerTable() {
+export function GpuSummaryTable() {
   const [miner] = useObservableState(minerStatistics$, null);
   const { hashrate, accepted, rejected, power, efficiency, difficulty, uptime } = miner ?? {};
 

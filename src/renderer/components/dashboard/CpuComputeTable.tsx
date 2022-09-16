@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableCell, TableHead, TableRow, TableBody, Typography } from '@mui/material';
+import { Table, TableContainer, TableHead, TableRow, TableBody, Typography } from '@mui/material';
 // import * as formatter from '../../services/Formatters';
 import { gpuStatistics$ } from '../../services/StatisticsAggregator';
 import { useObservableState } from '../../hooks';
