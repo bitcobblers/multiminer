@@ -3,7 +3,7 @@ export { CoinDefinition, ALL_COINS } from './CoinDefinition';
 export { CoinSelection } from './CoinSelection';
 export { Wallet } from './Wallet';
 export { Coin } from './Coin';
-export { AlgorithmName, AlgorithmKind, MinerName, CoinSelectionStrategy, GPU_API_PORT, CPU_API_PORT } from './Enums';
+export { AlgorithmName, AlgorithmKind, MinerName, CoinSelectionStrategy, API_PORT } from './Enums';
 export { AlgorithmInfo, AVAILABLE_ALGORITHMS } from './AlgorithmInfo';
 export { GeneralSettings, AppSettings } from './AppSettings';
 export { Miner } from './Miner';
