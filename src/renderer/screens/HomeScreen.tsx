@@ -15,7 +15,7 @@ import { useProfile, useMinerActive } from '../hooks';
 
 // Screens.
 import { ScreenHeader } from '../components';
-import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
+import { CoinsTable, CpuComputeTable, GpuComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
   const profile = useProfile();
@@ -27,12 +27,16 @@ export function HomeScreen(): JSX.Element {
       component: <CoinsTable />,
     },
     {
-      header: 'GPUs',
-      component: <ComputeTable />,
-    },
-    {
       header: 'General',
       component: <MinerTable />,
+    },
+    {
+      header: 'CPUs',
+      component: <CpuComputeTable />,
+    },
+    {
+      header: 'GPUs',
+      component: <GpuComputeTable />,
     },
     {
       header: 'Graphs',

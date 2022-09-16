@@ -3,7 +3,7 @@ import * as formatter from '../../services/Formatters';
 import { gpuStatistics$ } from '../../services/StatisticsAggregator';
 import { useObservableState } from '../../hooks';
 
-export function ComputeTable() {
+export function GpuComputeTable() {
   const [gpus] = useObservableState(gpuStatistics$, []);
 
   if (gpus.length === 0) {
