@@ -29,7 +29,7 @@ function getRandom<T>(array: Array<T>) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function lookupAlgorithm(name?: AlgorithmName) {
+function lookupAlgorithm(name: AlgorithmName) {
   return AVAILABLE_ALGORITHMS.find((alg) => alg.name === name);
 }
 
@@ -133,7 +133,12 @@ async function changeCoin(symbol: string | null) {
 
 export async function setProfile(profile: string) {
   const miner = (await getMiners()).find((m) => m.name === profile);
-  updateState({ profile, miner: miner?.kind, algorithm: lookupAlgorithm(miner?.algorithm) });
+
+  if (miner !== undefined) {
+    updateState({ profile, miner: miner.kind, algorithm: lookupAlgorithm(miner.algorithm) });
+  } else {
+    updateState({ profile });
+  }
 }
 
 export async function nextCoin(symbol?: string) {
@@ -170,7 +175,7 @@ async function setInitialState() {
   if (minerState.state === 'active') {
     updateState({ state: 'active', currentCoin: minerState.currentCoin, miner: minerState.miner, profile: minerState.profile, algorithm: minerState.algorithm });
   } else {
-    updateState({ profile: defaultMiner?.name, miner: defaultMiner?.kind, algorithm: lookupAlgorithm(defaultMiner.algorithm) });
+    updateState({ profile: defaultMiner.name, miner: defaultMiner.kind, algorithm: lookupAlgorithm(defaultMiner.algorithm) });
   }
 
   miningService.minerExited$.subscribe(() => {
