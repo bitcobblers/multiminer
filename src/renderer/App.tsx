@@ -134,6 +134,16 @@ export function App() {
   const mdTheme = useMemo(() => {
     const isDark = themeMode === 'dark';
     return createTheme({
+      components: {
+        MuiChip: {
+          styleOverrides: {
+            root: {
+              marginLeft: '2px',
+              marginRight: '2px',
+            },
+          },
+        },
+      },
       palette: {
         primary: isDark ? lightGreen : teal,
         text: {
