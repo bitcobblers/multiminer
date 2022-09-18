@@ -86,6 +86,6 @@ function updateStats(stats: MinerAppStatistics) {
 
 export const monitor: MinerMonitor = {
   name: 'lolminer',
-  statsUrl: '',
-  update: (stats) => updateStats(JSON.parse(stats as string)),
+  statsUrls: [''],
+  update: (stats) => updateStats(JSON.parse(stats[0])),
 };

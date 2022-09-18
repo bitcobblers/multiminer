@@ -21,19 +21,11 @@ export function enableMonitors() {
       const monitor = monitors.find((m) => m.name === status.miner);
 
       if (monitor) {
-        if (typeof monitor.statsUrl === 'string') {
-          minerApi.stats(API_PORT, monitor.statsUrl).then((result) => {
-            if (result !== '') {
-              monitor.update(result);
-            }
-          });
-        } else {
-          const results = await Promise.allSettled(monitor.statsUrl.map(async (url) => minerApi.stats(API_PORT, url)));
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          const stats = results.filter(({ status }) => status === 'fulfilled').map((p) => (p as PromiseFulfilledResult<string>).value);
+        const results = await Promise.allSettled(monitor.statsUrls.map(async (url) => minerApi.stats(API_PORT, url)));
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        const stats = results.filter(({ status }) => status === 'fulfilled').map((p) => (p as PromiseFulfilledResult<string>).value);
 
-          monitor.update(stats);
-        }
+        monitor.update(stats);
       }
     });
 

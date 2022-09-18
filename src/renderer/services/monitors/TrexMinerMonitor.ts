@@ -127,6 +127,6 @@ function updateStats(stats: MinerAppStatistics) {
 
 export const monitor: MinerMonitor = {
   name: 'trexminer',
-  statsUrl: 'summary',
-  update: (stats) => updateStats(JSON.parse(stats as string)),
+  statsUrls: ['summary'],
+  update: (stats) => updateStats(JSON.parse(stats[0])),
 };

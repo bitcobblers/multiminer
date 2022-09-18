@@ -119,6 +119,6 @@ function updateStats(stats: string[]) {
 
 export const monitor: MinerMonitor = {
   name: 'xmrig',
-  statsUrl: ['2/backends', '2/summary'],
-  update: (stats) => updateStats(stats as string[]),
+  statsUrls: ['2/backends', '2/summary'],
+  update: (stats) => updateStats(stats),
 };
