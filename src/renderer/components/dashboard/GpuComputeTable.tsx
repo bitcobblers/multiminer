@@ -33,7 +33,7 @@ export function GpuComputeTable() {
             <TableRow key={gpu.id}>
               <TableCell>{gpu.id}</TableCell>
               <TableCell>{gpu.name}</TableCell>
-              <TableCell>{formatter.hashrate(gpu.hashrate)}</TableCell>
+              <TableCell>{formatter.hashrate(gpu.hashrate, 'M')}</TableCell>
               <TableCell>{formatter.shares(gpu.accepted, gpu.rejected)}</TableCell>
               <TableCell>{formatter.power(gpu.power)}</TableCell>
               <TableCell>{formatter.efficiency(gpu.efficiency)}</TableCell>

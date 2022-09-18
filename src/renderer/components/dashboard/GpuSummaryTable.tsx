@@ -27,7 +27,7 @@ export function GpuSummaryTable() {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell>{formatter.hashrate(hashrate)}</TableCell>
+            <TableCell>{formatter.hashrate(hashrate, 'M')}</TableCell>
             <TableCell>{formatter.found(accepted, rejected)}</TableCell>
             <TableCell>{formatter.shares(accepted, rejected)}</TableCell>
             <TableCell>{formatter.power(power)}</TableCell>

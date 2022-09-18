@@ -91,5 +91,5 @@ function updateStats(stats: MinerAppStatistics) {
 export const monitor: MinerMonitor = {
   name: 'nbminer',
   statsUrl: 'api/v1/status',
-  update: (stats) => updateStats(JSON.parse(stats)),
+  update: (stats) => updateStats(JSON.parse(stats as string)),
 };

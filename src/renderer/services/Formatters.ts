@@ -6,8 +6,18 @@ export function currency(value: number | undefined, maxDigits = 2) {
   return value === undefined ? 'N/A' : value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: maxDigits });
 }
 
-export function hashrate(value: number | undefined) {
-  return value === undefined ? 'N/A' : `${number(value, 2)}MH/s`;
+export function hashrate(value: number | undefined | null, scale?: 'M' | 'K') {
+  if (value === undefined || value === null) {
+    return 'N/A';
+  }
+
+  if (scale === 'M') {
+    return `${number(value, 2)}MH/s`;
+  } if (scale === 'K') {
+    return `${number(value / 1000, 2)}KH/s`;
+  }
+
+  return number(value);
 }
 
 export function shares(accepted: number | undefined, rejected: number | undefined) {

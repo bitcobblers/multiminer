@@ -8,7 +8,7 @@ export { AlgorithmInfo, AVAILABLE_ALGORITHMS } from './AlgorithmInfo';
 export { GeneralSettings, AppSettings } from './AppSettings';
 export { Miner } from './Miner';
 export { MinerInfo, AVAILABLE_MINERS } from './MinerInfo';
-export { GpuStatistic, MinerStatistic } from './Aggregates';
+export { CpuStatistic, GpuStatistic, MinerStatistic } from './Aggregates';
 export { ConfiguredCoin } from './ConfiguredCoin';
 export { MinerState } from './MinerState';
 export { appNotice$, minerState$, enabledCoins$, refreshData$, addAppNotice } from './Observables';

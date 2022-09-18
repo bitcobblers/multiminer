@@ -2,6 +2,6 @@ import { MinerName } from '../../../models';
 
 export type MinerMonitor = {
   name: MinerName;
-  statsUrl: string;
-  update: (stats: string) => void;
+  statsUrl: string | string[];
+  update: (stats: string | string[]) => void;
 };

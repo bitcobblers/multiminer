@@ -1,6 +1,47 @@
 import * as formatter from '../../renderer/services/Formatters';
 
 describe('Formatters Service', () => {
+  describe('Hashrate For Empty Values', () => {
+    const cases = [
+      null,
+      undefined,
+    ];
+
+    test.each(cases)('%p', (given) => {
+      // Act.
+      const result = formatter.hashrate(given);
+
+      // Assert.
+      expect(result).toBe('N/A');
+    });
+  });
+
+  describe('Hashrate Formatting', () => {
+    it('Should return raw number if no scale provided.', () => {
+      // Act.
+      const result = formatter.hashrate(10);
+
+      // Assert.
+      expect(result).toBe('10');
+    });
+
+    it('Should return unaltered suffix for M', () => {
+      // Act.
+      const result = formatter.hashrate(10, 'M');
+
+      // Assert.
+      expect(result).toBe('10MH/s');
+    });
+
+    it('Should return scaled number scaled by 1000 for K', () => {
+      // Act.
+      const result = formatter.hashrate(1000, 'K');
+
+      // Assert.
+      expect(result).toBe('1KH/s');
+    });
+  });
+
   describe('Uptime', () => {
     const cases = [
       { expected: 'N/A' },
