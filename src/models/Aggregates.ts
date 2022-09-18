@@ -14,6 +14,22 @@ export type GpuStatistic = {
   fanSpeed?: number;
 };
 
+export type CpuStatistic = {
+  hashrate?: number;
+  accepted?: number;
+  rejected?: number;
+  cores?: number;
+  threads?: number;
+  algorithm?: string;
+  difficulty?: number;
+  uptime?: number;
+  timings?: {
+    tenSeconds: number;
+    sixtySeconds: number;
+    fifteenMinutes: number;
+  }[],
+};
+
 export type MinerStatistic = {
   hashrate?: number;
   accepted?: number;

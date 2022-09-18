@@ -1,13 +1,13 @@
 import { interval, withLatestFrom, map, filter } from 'rxjs';
 import { minerState$, API_PORT } from '../../models';
 import { minerApi } from '../../shared/MinerApi';
-import { lolminerMonitor, nbminerMonitor, trexminerMonitor } from './monitors';
+import { lolminerMonitor, nbminerMonitor, trexminerMonitor, xmrigMonitor } from './monitors';
 
 const UPDATE_INTERVAL = 1000 * 5;
 const monitor$ = interval(UPDATE_INTERVAL);
 
 export function enableMonitors() {
-  const monitors = [nbminerMonitor, lolminerMonitor, trexminerMonitor];
+  const monitors = [nbminerMonitor, lolminerMonitor, trexminerMonitor, xmrigMonitor];
   const monitorNames = monitors.map((m) => m.name);
 
   monitor$
@@ -21,11 +21,11 @@ export function enableMonitors() {
       const monitor = monitors.find((m) => m.name === status.miner);
 
       if (monitor) {
-        minerApi.stats(API_PORT, monitor.statsUrl).then((result) => {
-          if (result !== '') {
-            monitor.update(result);
-          }
-        });
+        const results = await Promise.allSettled(monitor.statsUrls.map(async (url) => minerApi.stats(API_PORT, url)));
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        const stats = results.filter(({ status }) => status === 'fulfilled').map((p) => (p as PromiseFulfilledResult<string>).value);
+
+        monitor.update(stats);
       }
     });
 

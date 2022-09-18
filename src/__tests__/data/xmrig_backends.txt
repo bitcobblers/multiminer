@@ -1,0 +1,103 @@
+[
+    {
+        "type": "cpu",
+        "enabled": true,
+        "algo": "ghostrider",
+        "profile": "ghostrider",
+        "hw-aes": true,
+        "priority": -1,
+        "msr": true,
+        "asm": "ryzen",
+        "argon2-impl": null,
+        "hugepages": [96, 96],
+        "memory": 201326592,
+        "hashrate": [3065.79, 3031.67, 3309.3],
+        "threads": [
+            {
+                "intensity": 8,
+                "affinity": 0,
+                "av": 10,
+                "hashrate": [286.87, 276.27, 301.47]
+            },
+            {
+                "intensity": 8,
+                "affinity": 2,
+                "av": 10,
+                "hashrate": [323.45, 317.28, 332.19]
+            },
+            {
+                "intensity": 8,
+                "affinity": 4,
+                "av": 10,
+                "hashrate": [219.51, 216.18, 245.55]
+            },
+            {
+                "intensity": 8,
+                "affinity": 6,
+                "av": 10,
+                "hashrate": [231.16, 231.77, 255.63]
+            },
+            {
+                "intensity": 8,
+                "affinity": 8,
+                "av": 10,
+                "hashrate": [224.5, 223.17, 247.39]
+            },
+            {
+                "intensity": 8,
+                "affinity": 10,
+                "av": 10,
+                "hashrate": [233.65, 234.46, 257.13]
+            },
+            {
+                "intensity": 8,
+                "affinity": 12,
+                "av": 10,
+                "hashrate": [298.51, 292.81, 319.73]
+            },
+            {
+                "intensity": 8,
+                "affinity": 14,
+                "av": 10,
+                "hashrate": [330.11, 328.03, 345.28]
+            },
+            {
+                "intensity": 8,
+                "affinity": 16,
+                "av": 10,
+                "hashrate": [236.98, 236.34, 258.95]
+            },
+            {
+                "intensity": 8,
+                "affinity": 18,
+                "av": 10,
+                "hashrate": [222.84, 221.42, 242.7]
+            },
+            {
+                "intensity": 8,
+                "affinity": 20,
+                "av": 10,
+                "hashrate": [226.17, 222.77, 248.05]
+            },
+            {
+                "intensity": 8,
+                "affinity": 22,
+                "av": 10,
+                "hashrate": [231.99, 231.1, 255.18]
+            }
+        ]
+    },
+    {
+        "type": "opencl",
+        "enabled": false,
+        "algo": null,
+        "profile": null,
+        "platform": null
+    },
+    {
+        "type": "cuda",
+        "enabled": false,
+        "algo": null,
+        "profile": null
+    }
+]

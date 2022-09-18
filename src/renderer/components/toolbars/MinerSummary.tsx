@@ -4,16 +4,16 @@ import { Separator } from '../Separator';
 import { useObservableState, useMinerActive } from '../../hooks';
 import { minerState$ } from '../../../models';
 import * as formatter from '../../services/Formatters';
-import { minerStatistics$ } from '../../services/StatisticsAggregator';
+import { currentHashrate$ } from '../../services/StatisticsAggregator';
 
 export function MinerSummary() {
   const [minerState] = useObservableState(minerState$, null);
-  const [minerStatistic] = useObservableState(minerStatistics$, null);
+  const [currentHashrate] = useObservableState(currentHashrate$, null);
   const minerActive = useMinerActive();
 
   const items = [
     { title: 'Coin', content: minerState?.currentCoin },
-    { title: 'Hashrate', content: formatter.hashrate(minerStatistic?.hashrate) },
+    { title: 'Hashrate', content: formatter.hashrate(currentHashrate?.hashrate, currentHashrate?.scale) },
   ];
 
   return (

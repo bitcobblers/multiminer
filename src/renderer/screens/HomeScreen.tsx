@@ -7,36 +7,51 @@ import NextIcon from '@mui/icons-material/FastForward';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // Services.
-import { refreshData$ } from '../../models';
+import { minerState$, refreshData$ } from '../../models';
 import { startMiner, stopMiner, nextCoin } from '../services/MinerManager';
 
 // Hooks.
-import { useProfile, useMinerActive } from '../hooks';
+import { useProfile, useMinerActive, useObservableState } from '../hooks';
 
 // Screens.
 import { ScreenHeader } from '../components';
-import { CoinsTable, ComputeTable, MinerTable, WorkersGraphs } from '../components/dashboard';
+import { CoinsTable, CpuComputeTable, CpuSummaryTable, GpuComputeTable, GpuSummaryTable, WorkersGraphs } from '../components/dashboard';
 
 export function HomeScreen(): JSX.Element {
   const profile = useProfile();
   const minerActive = useMinerActive();
+  const [minerState] = useObservableState(minerState$, null);
 
   const dashboards = [
     {
       header: 'Coins',
       component: <CoinsTable />,
+      show: () => true,
+    },
+    {
+      header: 'Summary',
+      component: <GpuSummaryTable />,
+      show: () => minerState?.algorithm?.kind === 'GPU',
+    },
+    {
+      header: 'Summary',
+      component: <CpuSummaryTable />,
+      show: () => minerState?.algorithm?.kind === 'CPU',
+    },
+    {
+      header: 'CPUs',
+      component: <CpuComputeTable />,
+      show: () => minerState?.algorithm?.kind === 'CPU',
     },
     {
       header: 'GPUs',
-      component: <ComputeTable />,
-    },
-    {
-      header: 'General',
-      component: <MinerTable />,
+      component: <GpuComputeTable />,
+      show: () => minerState?.algorithm?.kind === 'GPU',
     },
     {
       header: 'Graphs',
       component: <WorkersGraphs />,
+      show: () => true,
     },
   ];
 
@@ -56,7 +71,7 @@ export function HomeScreen(): JSX.Element {
           Refresh
         </Button>
       </ScreenHeader>
-      {dashboards.map((d) => (
+      {dashboards.filter((x) => x.show()).map((d) => (
         <Accordion key={d.header} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
             <Typography variant="h5">{d.header}</Typography>

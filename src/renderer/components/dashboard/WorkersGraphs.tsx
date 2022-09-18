@@ -19,8 +19,8 @@ function shrink<T>(items: T[]) {
   return result;
 }
 
-function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefined }) {
-  const { algorithm, stat } = props;
+function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefined, scale: string; }) {
+  const { algorithm, stat, scale } = props;
 
   if (stat === undefined || stat.workers === undefined || stat.chart === undefined) {
     return <Typography>No data to display!</Typography>;
@@ -47,7 +47,7 @@ function WorkersGraph(props: { algorithm: string; stat: AlgorithmStat | undefine
       y: {
         title: {
           display: true,
-          text: 'Hashrate (MH/s)',
+          text: `Hashrate ${scale}`,
         },
       },
     },
@@ -110,16 +110,16 @@ export function WorkersGraphs() {
       </Tabs>
 
       <TabPanel value={tabIndex} index={0}>
-        <WorkersGraph algorithm="Etchash" stat={workers?.etchash} />
+        <WorkersGraph algorithm="Etchash" stat={workers?.etchash} scale="MH/s" />
       </TabPanel>
       <TabPanel value={tabIndex} index={1}>
-        <WorkersGraph algorithm="Kawpow" stat={workers?.kawpow} />
+        <WorkersGraph algorithm="Kawpow" stat={workers?.kawpow} scale="MH/s" />
       </TabPanel>
       <TabPanel value={tabIndex} index={2}>
-        <WorkersGraph algorithm="Autolykos" stat={workers?.autolykos} />
+        <WorkersGraph algorithm="Autolykos" stat={workers?.autolykos} scale="MH/s" />
       </TabPanel>
       <TabPanel value={tabIndex} index={3}>
-        <WorkersGraph algorithm="RandomX" stat={workers?.randomx} />
+        <WorkersGraph algorithm="RandomX" stat={workers?.randomx} scale="H/s" />
       </TabPanel>
     </div>
   );
