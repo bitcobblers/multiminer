@@ -1,6 +1,6 @@
 {
   "name": "multiminer",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Front-end application for manage multiple coin mining with Unmineable.",
   "main": "./dist/main/main.js",
   "author": {
