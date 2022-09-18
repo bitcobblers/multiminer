@@ -85,14 +85,12 @@ You can also view the raw output from the configured miner by navigating to the 
 ## Supported Miners
 Multi-Miner currently supports several popular mining applications with more in the works.  See the table below for more information.  Don't see your preferred mining application?  Request it [here](https://github.com/bitcobblers/multiminer/issues/new?assignees=&labels=enhancement&template=3-Feature_request.md).
 
-| Miner        | Type | Supported          | Expected Release |
-|--------------|------|--------------------|------------------|
-| lolMiner     | GPU  | :white_check_mark: | 0.1.0            |
-| NBMiner      | GPU  | :white_check_mark: | 0.1.0            |
-| T-Rex Miner  | GPU  | :white_check_mark: | 0.1.0            |
-| Nanominer    | GPU  | :x:                | 0.6.0            |
-| GMiner       | GPU  | :x:                | 0.6.0            |
-| XMRig        | CPU  | :x:                | TBD              |
+| Miner        | Type | Supported          |
+|--------------|------|--------------------|
+| lolMiner     | GPU  | :white_check_mark: |
+| NBMiner      | GPU  | :white_check_mark: |
+| T-Rex Miner  | GPU  | :white_check_mark: |
+| XMRig        | CPU  | :white_check_mark: |
 
 ## Make This Software Better
 While this application started its life as a couple of PowerShell scripts cobbled together over a weekend, it has grown into something much larger.  Although we strive to keep the application as free of defects as possible, it is very new and this is also our first time designing fully-fledged UI applications with Electron/React.  If you notice any issues, oddities, or things that "don't seem right", please [open an issue](https://github.com/bitcobblers/multiminer/issues/new) so we can fix them.
