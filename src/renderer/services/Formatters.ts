@@ -17,7 +17,7 @@ export function hashrate(value: number | undefined | null, scale?: 'M' | 'K') {
     return `${number(value / 1000, 2)}KH/s`;
   }
 
-  return number(value);
+  return number(value, 0);
 }
 
 export function shares(accepted: number | undefined, rejected: number | undefined) {
