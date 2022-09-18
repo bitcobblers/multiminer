@@ -5,7 +5,6 @@ import { useObservableState } from '../../hooks';
 
 export function CpuSummaryTable() {
   const [cpu] = useObservableState(cpuStatistics$, null);
-  // const { hashrate, accepted, rejected, power, efficiency, difficulty, uptime } = miner ?? {};
   const { hashrate, accepted, rejected, cores, threads, algorithm, difficulty, uptime } = cpu ?? { };
 
   if (cpu === null || Object.values(cpu).find((x) => x !== undefined) === undefined) {

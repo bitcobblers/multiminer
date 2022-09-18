@@ -1,4 +1,4 @@
-import { addCpuStat, addGpuStats, addMinerStat } from '../StatisticsAggregator';
+import { addCpuStat } from '../StatisticsAggregator';
 import { MinerMonitor } from './MinerMonitor';
 
 type SummaryStatistics = {
@@ -76,8 +76,29 @@ type SummaryStatistics = {
   hugepages: number[];
 };
 
+type BackendStatistics = {
+  type: string;
+  enabled: true;
+  algo: string;
+  profile: string;
+  priority: number;
+  msr: boolean;
+  asm: string;
+  homepages: number[];
+  memory: number;
+  hashrate: number;
+  threads: {
+    intensity: number;
+    affinity: number;
+    av: number;
+    hashrate: number[];
+  }[];
+};
+
 function updateStats(stats: string[]) {
+  const backends = JSON.parse(stats[0]);
   const summary = JSON.parse(stats[1]) as SummaryStatistics;
+  const cpu = backends[0] as BackendStatistics;
 
   addCpuStat({
     hashrate: summary.hashrate.total[0],
@@ -88,6 +109,11 @@ function updateStats(stats: string[]) {
     algorithm: summary.algo,
     difficulty: summary.connection.diff,
     uptime: summary.uptime,
+    timings: cpu.threads?.map((x) => ({
+      tenSeconds: x.hashrate[0],
+      sixtySeconds: x.hashrate[1],
+      fifteenMinutes: x.hashrate[2],
+    })) ?? [],
   });
 }
 
