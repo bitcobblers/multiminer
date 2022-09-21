@@ -20,7 +20,7 @@ export function AutoScrollTextArea(props: AutoScrollTextAreaProps) {
   }, [isPaused, props.value]);
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return <textarea {...domProps} ref={textRef} style={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.secondary, height: 'calc(100vh - 13.5rem)', resize: 'none' }} />;
+  return <textarea {...domProps} ref={textRef} style={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.secondary, height: 'calc(100vh - 14.5rem)', resize: 'none' }} />;
 }
 
 AutoScrollTextArea.propTypes = {

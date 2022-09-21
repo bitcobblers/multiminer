@@ -99,9 +99,9 @@ function AppContent() {
         </Drawer>
         <Box
           sx={{
-            marginBottom: '3.5rem',
+            marginBottom: '4.5rem',
             flex: 1,
-            '& .MuiContainer-root': { ml: 0 },
+            '& .MuiContainer-root': { ml: 0, maxWidth: '99%' },
           }}
         >
           <Routes>{safeReverse(links).map(NavScreen)}</Routes>
