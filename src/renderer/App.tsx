@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { from } from 'rxjs';
 import { map, mergeWith } from 'rxjs/operators';
@@ -76,7 +76,6 @@ function AppContent() {
   return (
     <Router>
       <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
         <Drawer
           style={{ width: drawerWidth, display: 'flex' }}
           sx={{
@@ -161,6 +160,7 @@ export function App() {
   return (
     <ThemeProvider theme={mdTheme}>
       <SnackbarProvider maxSnack={5} ref={snackRef} anchorOrigin={{ vertical: 'top', horizontal: 'right' }} action={dismissButton}>
+        <CssBaseline />
         <AppContent />
       </SnackbarProvider>
     </ThemeProvider>
