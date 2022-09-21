@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Paper, Table } from '@mui/material';
+import { Button, Container, TableContainer, TableCell, TableHead, TableRow, TableBody, Box, Table } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useSnackbar } from 'notistack';
 
@@ -85,7 +85,7 @@ export function WalletsScreen() {
         }}
       >
         <EditWalletDialog key="edit-new-wallet" open={isEditingNew} onSave={handleOnAddWalletSave} onCancel={handleOnAddWalletCancel} wallet={newWallet} isNew existingWallets={wallets} coins={[]} />
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table aria-label="Wallets">
             <TableHead>
               <TableRow>
